@@ -1,0 +1,4 @@
+build/
+debug/
+external/
+.vimspector.json
