@@ -9,6 +9,8 @@ project(${PROJECT_NAME} VERSION ${arena_version} LANGUAGES CXX C)
 
 set(SOURCES
     src/main.cpp
+    src/core/window.cpp
+    src/graphics/renderer.cpp
     external/glad/glad.c
 )
 

@@ -1,17 +1,18 @@
 #include <stdio.h>
 
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-
-#include <glad/glad.h>
+#include "global.h"
 
 int main () {
-    glfwInit();
+    auto window_options = core::WindowOptions {
+        .width = 1280,
+        .height = 720,
+        .window_name = "Arena"
+    };
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-       printf("Couldnt setup GLAD\n");
-   }
+    global.window = new core::Window(window_options);
 
-    printf("Hello\n");
+    while(true) {
+
+    }
     return 0;
 }
