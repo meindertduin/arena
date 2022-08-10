@@ -12,7 +12,7 @@ namespace core {
 
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        GLFWwindow* window = glfwCreateWindow(options.width, options.height, options.window_name.c_str(), nullptr, nullptr);
+        window = glfwCreateWindow(options.width, options.height, options.window_name.c_str(), nullptr, nullptr);
         if (window == nullptr) {
             glfwTerminate();
         }
@@ -35,5 +35,15 @@ namespace core {
     Window::~Window() {
         glfwDestroyWindow(window);
         glfwTerminate();
+    }
+
+
+    bool Window::close_requested() const  {
+        return glfwWindowShouldClose(window);
+    }
+
+    void Window::end_frame() const {
+        glfwSwapBuffers(window);
+        glfwPollEvents();
     }
 }

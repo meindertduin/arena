@@ -11,8 +11,8 @@ int main () {
 
     global.window = new core::Window(window_options);
 
-    while(true) {
-
+    while(!global.window->close_requested()) {
+        global.window->end_frame();
     }
     return 0;
 }

@@ -18,6 +18,9 @@ namespace core {
         Window(const WindowOptions &options);
         ~Window();
 
+        bool close_requested() const;
+        void end_frame() const;
+
         WindowOptions win_options;
     private:
         GLFWwindow *window;
