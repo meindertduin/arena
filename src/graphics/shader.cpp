@@ -86,32 +86,32 @@ namespace graphics {
         glUniformBlockBinding(program, lightsBlockIndex, 1);
     }
 
-    void ShaderProgram::setProperty(std::string properyName, int value) const {
+    void ShaderProgram::set_property(std::string properyName, int value) const {
         uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
         glUniform1i(uniformLock, value);
     }
 
-    void ShaderProgram::setProperty(std::string properyName, float value) const {
+    void ShaderProgram::set_property(std::string properyName, float value) const {
         uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
         glUniform1f(uniformLock, value);
     }
 
-    void ShaderProgram::setProperty(std::string properyName, glm::vec3 &&v) const {
+    void ShaderProgram::set_property(std::string properyName, glm::vec3 &&v) const {
         uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
         glUniform3f(uniformLock, v.x, v.y, v.z);
     }
 
-    void ShaderProgram::setProperty(std::string properyName, glm::mat4 &&m) const {
+    void ShaderProgram::set_property(std::string properyName, glm::mat4 &&m) const {
         uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
         glUniformMatrix4fv(uniformLock, 1, GL_FALSE, glm::value_ptr(m));
     }
 
-    void ShaderProgram::setProperty(std::string properyName, glm::vec3 &v) const {
+    void ShaderProgram::set_property(std::string properyName, glm::vec3 &v) const {
         uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
         glUniform3f(uniformLock, v.x, v.y, v.z);
     }
 
-    void ShaderProgram::setProperty(std::string properyName, glm::mat4 &m) const {
+    void ShaderProgram::set_property(std::string properyName, glm::mat4 &m) const {
         uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
         glUniformMatrix4fv(uniformLock, 1, GL_FALSE, glm::value_ptr(m));
     }

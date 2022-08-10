@@ -22,10 +22,10 @@ namespace graphics {
         auto model = global.mesh->transform.get_transform_4x4();
 
         shader.use();
-        shader.setProperty("color", { 0.5f, 0, 0 });
-        shader.setProperty("projection", global.camera.projection);
-        shader.setProperty("view", global.camera.get_view_4x4());
-        shader.setProperty("model", model);
+        shader.set_property("color", { 0.5f, 0, 0 });
+        shader.set_property("projection", global.camera.projection);
+        shader.set_property("view", global.camera.get_view_4x4());
+        shader.set_property("model", model);
 
         global.mesh->render();
     }

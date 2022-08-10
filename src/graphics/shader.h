@@ -41,11 +41,11 @@ namespace graphics {
         void use() const;
         void link() const;
 
-        void setProperty(std::string properyName, int) const;
-        void setProperty(std::string properyName, float) const;
-        void setProperty(std::string properyName, glm::vec3&&) const;
-        void setProperty(std::string properyName, glm::mat4&&) const;
-        void setProperty(std::string properyName, glm::vec3&) const;
-        void setProperty(std::string properyName, glm::mat4&) const;
+        void set_property(std::string properyName, int) const;
+        void set_property(std::string properyName, float) const;
+        void set_property(std::string properyName, glm::vec3&&) const;
+        void set_property(std::string properyName, glm::mat4&&) const;
+        void set_property(std::string properyName, glm::vec3&) const;
+        void set_property(std::string properyName, glm::mat4&) const;
     };
 }
