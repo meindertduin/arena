@@ -1,17 +1,25 @@
 #include <stdio.h>
 
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
+#include "global.h"
 
-#include <glad/glad.h>
+Global global;
 
 int main () {
-    glfwInit();
+    auto window_options = core::WindowOptions {
+        .width = 1280,
+        .height = 720,
+        .window_name = "Arena"
+    };
 
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-       printf("Couldnt setup GLAD\n");
-   }
+    global.window = new core::Window(window_options);
+    global.renderer = new graphics::Renderer(window_options.width, window_options.height);
 
-    printf("Hello\n");
+    global.mesh = new graphics::Mesh();
+
+    while(!global.window->close_requested()) {
+        global.renderer->render();
+        global.window->end_frame();
+    }
+
     return 0;
 }
