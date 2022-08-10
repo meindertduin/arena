@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include "../entity/transform.h"
 
 namespace graphics {
     struct Mesh {
@@ -13,6 +14,7 @@ namespace graphics {
         Mesh& operator=(Mesh&&) = delete;
 
         void render();
+        entity::Transform transform;
     private:
         uint32_t VAO;
         uint32_t VBO;
