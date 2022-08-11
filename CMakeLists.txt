@@ -14,6 +14,7 @@ set(SOURCES
     src/graphics/renderer.cpp
     src/graphics/shader.cpp
     external/glad/glad.c
+    src/entity/entity.cpp
 )
 
 set(HEADERS include)

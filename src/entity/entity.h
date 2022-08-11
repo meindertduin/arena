@@ -41,7 +41,7 @@ namespace entity {
     struct ComponentArray : IComponentArray {
     public:
         void insert(Entity entity, T component) {
-            if (entity_index_map.find(entity) == entity_index_map.end()) {
+            if (entity_index_map.find(entity) != entity_index_map.end()) {
                 throw std::runtime_error("Cannot insert entity that does not exist");
             }
 
@@ -101,7 +101,7 @@ namespace entity {
         template<typename T>
         void register_component() {
             auto type_name = typeid(T).name();
-            if (component_types.find(type_name) == component_types.end()) {
+            if (component_types.find(type_name) != component_types.end()) {
                 throw std::runtime_error("Registered ComponentType more than once");
             }
 
@@ -134,7 +134,7 @@ namespace entity {
 
         template<typename T>
         T& get_component(Entity entity) {
-            get_component_array<T>()->get(entity);
+            return get_component_array<T>()->get(entity);
         }
 
         void entity_destroyed(Entity entity) {
