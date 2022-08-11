@@ -8,6 +8,8 @@ namespace entity {
     struct System {
     public:
         std::set<Entity> entities;
+
+        virtual void update() = 0;
     };
 
     struct SystemsManager {
