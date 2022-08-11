@@ -3,11 +3,12 @@
 #include <stdint.h>
 #include "../entity/transform.h"
 
+#include "gpu_buffer.h"
+
 namespace graphics {
     struct Mesh {
     public:
         Mesh();
-        ~Mesh();
         Mesh(const Mesh&) = delete;
         Mesh(Mesh&&) = delete;
         Mesh& operator=(const Mesh&) = delete;
@@ -16,8 +17,8 @@ namespace graphics {
         void render();
         entity::Transform transform;
     private:
-        uint32_t VAO;
-        uint32_t VBO;
+        VertexBuffer vertex_buffer { 3 * sizeof(float) };
+        ArrayBuffer buffer_array;
     };
 }
 

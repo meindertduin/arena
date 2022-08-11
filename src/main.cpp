@@ -33,7 +33,7 @@ int main () {
     global.ecs.add_component(global.entity, entity_transform);
 
     while(!global.window->close_requested()) {
-        move_system->update();
+        // move_system->update();
 
         global.renderer->render();
         global.window->end_frame();

@@ -12,6 +12,7 @@ set(SOURCES
     src/core/window.cpp
     src/graphics/mesh.cpp
     src/graphics/renderer.cpp
+    src/graphics/gpu_buffer.cpp
     src/graphics/shader.cpp
     external/glad/glad.c
     src/entity/entity.cpp
