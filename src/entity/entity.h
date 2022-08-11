@@ -7,8 +7,10 @@
 #include <unordered_map>
 #include <memory>
 
+
 namespace entity {
     const uint32_t MAX_ENTITIES = 2000;
+
     using Entity = uint32_t;
 
     using ComponentType = uint8_t;

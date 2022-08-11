@@ -19,7 +19,7 @@ namespace graphics {
 
         global.camera.transform.pos = { -3, 0, 0 };
 
-        auto transform = global.component_manager->get_component<entity::Transform>(global.entity);
+        auto transform = global.ecs.get_component<entity::Transform>(global.entity);
 
         shader.use();
         shader.set_property("color", { 0.5f, 0, 0 });

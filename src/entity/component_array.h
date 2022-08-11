@@ -54,11 +54,10 @@ namespace entity {
         }
 
         void entity_destroyed(Entity entity) override {
-            if (entity_index_map.find(entity) != entity_index_map.end()) {
-                remove(entity);
-            }
+            remove(entity);
         }
     private:
+        // Not very memory efficient with alot of components
         std::array<T, MAX_ENTITIES> components;
 
         // TODO, make this an array for performance bonus

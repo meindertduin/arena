@@ -4,8 +4,7 @@
 #include "graphics/mesh.h"
 #include "graphics/renderer.h"
 #include "entity/camera.h"
-#include "entity/entity.h"
-#include "entity/component_manager.h"
+#include "entity/ecs.h"
 
 #include <memory>
 
@@ -18,15 +17,12 @@ struct Global {
     graphics::Renderer *renderer;
     entity::Camera camera;
 
-    entity::ComponentManager *component_manager;
-    entity::EntityManager *entity_manager;
+    entity::Ecs ecs;
 
     ~Global() {
         delete window;
         delete renderer;
         delete mesh;
-        delete component_manager;
-        delete entity_manager;
     }
 };
 
