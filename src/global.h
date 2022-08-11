@@ -5,6 +5,7 @@
 #include "graphics/renderer.h"
 #include "entity/camera.h"
 #include "entity/entity.h"
+#include "entity/component_manager.h"
 
 #include <memory>
 
