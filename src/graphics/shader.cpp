@@ -8,7 +8,7 @@
 
 namespace graphics {
     // TODO move this to a different namespace and tidy up
-    std::string readFileContens(std::string path) {
+    std::string read_file_contents(std::string path) {
         std::ifstream ifs { path };
 
         if (ifs.fail()) {
@@ -29,7 +29,7 @@ namespace graphics {
         else
             id = glCreateShader(GL_VERTEX_SHADER);
 
-        auto data = readFileContens(path);
+        auto data = read_file_contents(path);
         const char* charData = data.c_str();
 
         glShaderSource(id, 1, &charData, nullptr);
@@ -78,12 +78,6 @@ namespace graphics {
             std::cout << infoLog;
             throw std::runtime_error("GL ERROR: Failed to compile shader.");
         }
-
-        uint32_t matricesBlockIndex = glGetUniformBlockIndex(program, "Matrices");
-        glUniformBlockBinding(program, matricesBlockIndex, 0);
-
-        int32_t lightsBlockIndex = glGetUniformBlockIndex(program, "Lights");
-        glUniformBlockBinding(program, lightsBlockIndex, 1);
     }
 
     void ShaderProgram::set_property(std::string properyName, int value) const {

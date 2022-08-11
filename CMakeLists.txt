@@ -14,6 +14,8 @@ set(SOURCES
     src/graphics/renderer.cpp
     src/graphics/shader.cpp
     external/glad/glad.c
+    src/entity/entity.cpp
+    src/entity/move_system.cpp
 )
 
 set(HEADERS include)
