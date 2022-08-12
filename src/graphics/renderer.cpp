@@ -7,6 +7,7 @@
 namespace graphics {
     Renderer::Renderer(uint32_t width, uint32_t height) : width(width), height(height) {
         shader.link();
+        screen_shader.link();
 
         screen_vertex_buffer.add_vertex_attribute({ 2, GL_FLOAT, sizeof(float), false });
         screen_vertex_buffer.add_vertex_attribute({ 2, GL_FLOAT, sizeof(float), false });
@@ -55,7 +56,7 @@ namespace graphics {
         auto transform = global.ecs.get_component<entity::Transform>(global.entity);
 
         shader.use();
-        shader.set_property("color", { 0.5f, 0, 0 });
+        shader.set_property("color", { 1.0f, 1.0f, 0 });
         shader.set_property("projection", global.camera.projection);
         shader.set_property("view", global.camera.get_view_4x4());
         shader.set_property("model", transform.get_transform_4x4());

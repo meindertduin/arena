@@ -21,6 +21,5 @@ namespace graphics {
         uint32_t framebuffer;
         uint32_t texture_color_buffer;
         uint32_t render_buffer_object;
-
     };
 }

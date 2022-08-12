@@ -48,9 +48,7 @@ namespace graphics {
     };
 
     Mesh::Mesh() {
-        this->buffer_array.bind();
         this->buffer_array.set_data(0, sizeof(vertices), vertices);
-
         this->vertex_buffer.add_vertex_attribute({ 3, GL_FLOAT, sizeof(float), false });
     }
 
