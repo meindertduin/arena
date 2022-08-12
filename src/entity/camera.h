@@ -13,6 +13,7 @@ namespace entity {
         Transform transform;
 
         Camera() {
+            transform.pos = { 0 , 5, 0 };
             projection = glm::perspective(glm::radians(45.0f), (float) 1280 / (float) 720, 0.1f, 1000.0f);
             view = glm::lookAt(transform.pos, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
         }
