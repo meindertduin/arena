@@ -53,7 +53,7 @@ namespace graphics {
     }
 
     void Mesh::render() {
-        this->buffer_array.set_data(0, sizeof(vertices), vertices);
+        this->buffer_array.bind();
 
         // TODO binding new vertex array and setting the vertex-attributes is quite expensive
         this->vertex_buffer.bind();

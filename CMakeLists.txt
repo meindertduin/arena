@@ -14,6 +14,7 @@ set(SOURCES
     src/graphics/renderer.cpp
     src/graphics/gpu_buffer.cpp
     src/graphics/shader.cpp
+    src/graphics/render_target.cpp
     external/glad/glad.c
     src/entity/entity.cpp
     src/entity/move_system.cpp
