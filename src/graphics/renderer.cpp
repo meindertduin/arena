@@ -7,10 +7,8 @@
 namespace graphics {
     Renderer::Renderer(uint32_t width, uint32_t height) : width(width), height(height) {
         shader.link();
-        render_target = new RenderTarget { width, height };
+        render_target = std::make_unique<RenderTarget>(width, height);
     }
-
-    Renderer::~Renderer() {  }
 
     void Renderer::render() {
         render_target->bind();
@@ -27,7 +25,6 @@ namespace graphics {
         shader.set_property("model", transform.get_transform_4x4());
 
         global.mesh->render();
-
 
         render_target->unbind();
         render_target->render();
