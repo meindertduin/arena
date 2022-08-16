@@ -16,6 +16,7 @@ int main () {
     global.renderer = new graphics::Renderer(window_options.width, window_options.height);
 
     global.mesh = new graphics::Mesh();
+    global.texture = new graphics::Texture("assets/container.png");
 
     // setting up the ecs
     global.ecs.register_component<entity::Transform>();

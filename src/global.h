@@ -3,6 +3,7 @@
 #include "core/window.h"
 #include "graphics/mesh.h"
 #include "graphics/renderer.h"
+#include "graphics/texture.h"
 #include "entity/camera.h"
 #include "entity/ecs.h"
 
@@ -12,6 +13,7 @@ struct Global {
     core::Window *window;
 
     graphics::Mesh *mesh;
+    graphics::Texture *texture;
     entity::Entity entity;
 
     graphics::Renderer *renderer;
@@ -21,8 +23,10 @@ struct Global {
 
     ~Global() {
         delete window;
-        delete renderer;
         delete mesh;
+        delete texture;
+
+        delete renderer;
     }
 };
 
