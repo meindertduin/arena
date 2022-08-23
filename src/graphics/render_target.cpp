@@ -2,6 +2,8 @@
 
 #include <glad/glad.h>
 
+#include "../global.h"
+
 constexpr static float quad_vertices[] = {
      -1.0f,  1.0f, 0.0f, 1.0f,
      -1.0f, -1.0f, 0.0f, 0.0f,
@@ -13,7 +15,7 @@ constexpr static float quad_vertices[] = {
 
 
 namespace graphics {
-    RenderTarget::RenderTarget(GraphicOptions options) : options(options) {
+    RenderTarget::RenderTarget() {
         screen_shader.link();
 
         screen_vertex_buffer.add_vertex_attribute({ 2, GL_FLOAT, sizeof(float), false });
@@ -31,7 +33,8 @@ namespace graphics {
 
         glGenRenderbuffers(1, &render_buffer_object);
         glBindRenderbuffer(GL_RENDERBUFFER, render_buffer_object);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, options.screen_dimensions.x, options.screen_dimensions.y);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, global.graphic_options->screen_dimensions.x,
+                global.graphic_options->screen_dimensions.y);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, render_buffer_object);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -40,7 +43,8 @@ namespace graphics {
         // setup texture for framebuffer
         glGenTextures(1, &texture_color_buffer);
         glBindTexture(GL_TEXTURE_2D, texture_color_buffer);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, options.screen_dimensions.x, options.screen_dimensions.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y,
+                0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_color_buffer, 0);

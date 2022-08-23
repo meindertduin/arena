@@ -12,8 +12,15 @@ int main () {
         .window_name = "Arena"
     };
 
+    global.graphic_options = new graphics::GraphicOptions {
+        true,
+        { window_options.width, window_options.height },
+    };
+
     global.window = new core::Window(window_options);
-    global.renderer = new graphics::Renderer(window_options.width, window_options.height);
+    global.renderer = new graphics::Renderer();
+
+    global.camera = new entity::Camera { window_options.width, window_options.height };
 
     global.mesh = new graphics::Mesh();
     global.texture = new graphics::Texture("assets/container.png");

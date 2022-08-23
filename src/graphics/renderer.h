@@ -11,12 +11,11 @@
 namespace graphics {
     struct Renderer {
     public:
-        Renderer(uint32_t width, uint32_t height);
+        Renderer();
 
         void render();
         ShaderProgram shader { "shaders/texture_basic.vs", "shaders/texture_basic.fs" };
     private:
-        GraphicOptions options;
         std::unique_ptr<RenderTarget> render_target;
     };
 }
