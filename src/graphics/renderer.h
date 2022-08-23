@@ -13,7 +13,7 @@ namespace graphics {
         Renderer(uint32_t width, uint32_t height);
 
         void render();
-        ShaderProgram shader { "shaders/basic.vs", "shaders/basic.fs" };
+        ShaderProgram shader { "shaders/texture_basic.vs", "shaders/texture_basic.fs" };
     private:
         uint32_t width, height;
         std::unique_ptr<RenderTarget> render_target;

@@ -17,7 +17,7 @@ namespace graphics {
         void render();
         entity::Transform transform;
     private:
-        VertexBuffer vertex_buffer { 3 * sizeof(float) };
+        VertexBuffer vertex_buffer { 8 * sizeof(float) };
         ArrayBuffer buffer_array;
     };
 }
