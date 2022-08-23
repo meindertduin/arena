@@ -6,6 +6,7 @@
 #include "shader.h"
 #include "gpu_buffer.h"
 #include "render_target.h"
+#include "graphic_options.h"
 
 namespace graphics {
     struct Renderer {
@@ -15,7 +16,7 @@ namespace graphics {
         void render();
         ShaderProgram shader { "shaders/texture_basic.vs", "shaders/texture_basic.fs" };
     private:
-        uint32_t width, height;
+        GraphicOptions options;
         std::unique_ptr<RenderTarget> render_target;
     };
 }

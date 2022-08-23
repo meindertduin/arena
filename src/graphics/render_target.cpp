@@ -13,7 +13,7 @@ constexpr static float quad_vertices[] = {
 
 
 namespace graphics {
-    RenderTarget::RenderTarget(uint32_t width, uint32_t height) : width(width), height(height) {
+    RenderTarget::RenderTarget(GraphicOptions options) : options(options) {
         screen_shader.link();
 
         screen_vertex_buffer.add_vertex_attribute({ 2, GL_FLOAT, sizeof(float), false });
@@ -31,7 +31,7 @@ namespace graphics {
 
         glGenRenderbuffers(1, &render_buffer_object);
         glBindRenderbuffer(GL_RENDERBUFFER, render_buffer_object);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, options.screen_dimensions.x, options.screen_dimensions.y);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, render_buffer_object);
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -40,7 +40,7 @@ namespace graphics {
         // setup texture for framebuffer
         glGenTextures(1, &texture_color_buffer);
         glBindTexture(GL_TEXTURE_2D, texture_color_buffer);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, options.screen_dimensions.x, options.screen_dimensions.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture_color_buffer, 0);

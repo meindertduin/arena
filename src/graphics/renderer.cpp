@@ -5,9 +5,10 @@
 #include "../global.h"
 
 namespace graphics {
-    Renderer::Renderer(uint32_t width, uint32_t height) : width(width), height(height) {
+    Renderer::Renderer(uint32_t width, uint32_t height) {
         shader.link();
-        render_target = std::make_unique<RenderTarget>(width, height);
+        options = { .antialiasing = true, .screen_dimensions = { width, height } };
+        render_target = std::make_unique<RenderTarget>(options);
     }
 
     void Renderer::render() {

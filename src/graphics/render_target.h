@@ -2,11 +2,12 @@
 
 #include "gpu_buffer.h"
 #include "shader.h"
+#include "graphic_options.h"
 
 namespace graphics {
     struct RenderTarget {
     public:
-        RenderTarget(uint32_t width, uint32_t height);
+        RenderTarget(GraphicOptions options);
         ~RenderTarget();
 
         RenderTarget(const RenderTarget&) = delete;
@@ -20,7 +21,7 @@ namespace graphics {
         void clear();
         void render();
     private:
-        uint32_t width, height;
+        GraphicOptions options;
 
         VertexBuffer screen_vertex_buffer { 4 * sizeof(float) };
         ArrayBuffer screen_array_buffer;
