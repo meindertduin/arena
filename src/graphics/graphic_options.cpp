@@ -13,7 +13,7 @@ namespace graphics {
         event.event_type = core::Event::EventType::SettingChangeEvent;
         event.option_type = OptionChangeEvent::OptionType::Antialiasing;
         event.new_value = new_value;
-        dispatcher->emitEvent(event);
+        dispatcher->emit_event(event);
     }
 
     void GraphicOptions::set_screen_dimensions(glm::u32vec2 new_value) {
@@ -26,7 +26,7 @@ namespace graphics {
         event.event_type = core::Event::EventType::SettingChangeEvent;
         event.option_type = OptionChangeEvent::OptionType::ScreenResize;
         event.new_screen_dimensions = new_value;
-        dispatcher->emitEvent(event);
+        dispatcher->emit_event(event);
     }
 
 }

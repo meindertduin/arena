@@ -20,13 +20,13 @@ namespace core {
         EventDispatcher(EventDispatcher&&) = delete;
         EventDispatcher& operator=(EventDispatcher&&) = delete;
 
-        void emitEvent(const T &event);
+        void emit_event(const T &event);
 
-        void addEventHandler(EventHandler<T> *eventHandler) {
+        void add_event_handler(EventHandler<T> *eventHandler) {
             eventHandlers.push_back(eventHandler);
         }
 
-        void removeEventHandler(EventHandler<T> *eventHandler) {
+        void remove_event_handler(EventHandler<T> *eventHandler) {
             // TODO IMPLEMENT
         }
 
@@ -53,7 +53,7 @@ namespace core {
 
         ~EventHandler() {
             if (eventDispatcher)
-                eventDispatcher->removeEventHandler(this);
+                eventDispatcher->remove_event_handler(this);
         }
 
         EventHandler(const EventHandler&) = delete;
@@ -74,14 +74,14 @@ namespace core {
     };
 
     template<typename T>
-    void EventDispatcher<T>::emitEvent(const T &event) {
+    void EventDispatcher<T>::emit_event(const T &event) {
         for (const auto eventHandler : eventHandlers) {
             eventHandler->callback(event);
         }
     }
 
     template<typename T>
-    EventHandler<T> createEventHandler(std::function<void(const T &event)> callback) {
+    EventHandler<T> create_event_handler(std::function<void(const T &event)> callback) {
         auto eventHandler = EventHandler<T>(callback);
         EventDispatcher<T>::instance()->addEventHandler(eventHandler);
 
@@ -89,10 +89,10 @@ namespace core {
     }
 
     template<typename T>
-    std::unique_ptr<EventHandler<T>> createUniqueEventHandler(std::function<void(const T &event)> callback) {
-        auto eventHandler = std::make_unique<EventHandler>(callback);
-        EventDispatcher<T>::instance()->addEventHandler(eventHandler);
+    std::unique_ptr<EventHandler<T>> create_unique_event_handler(std::function<void(const T &event)> callback) {
+        auto event_handler = std::make_unique<EventHandler<T>>(callback);
+        EventDispatcher<T>::instance()->add_event_handler(event_handler.get());
 
-        return eventHandler;
+        return event_handler;
     }
 }
