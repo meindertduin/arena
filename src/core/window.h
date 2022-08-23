@@ -22,7 +22,7 @@ namespace core {
         void end_frame() const;
 
         WindowOptions win_options;
-    private:
+
         GLFWwindow *window;
     };
 }

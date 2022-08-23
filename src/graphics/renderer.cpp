@@ -14,8 +14,6 @@ namespace graphics {
         render_target->bind();
         render_target->clear();
 
-        global.camera->transform.pos = { -3, 0, 0 };
-
         auto transform = global.ecs.get_component<entity::Transform>(global.entity);
 
         shader.use();

@@ -3,8 +3,8 @@
 namespace core {
     struct Event {
         enum class EventType {
-            ScreenResizeEvent,
             SettingChangeEvent,
+            InputEvent,
         } event_type;
     };
 }

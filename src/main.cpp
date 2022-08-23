@@ -2,6 +2,7 @@
 #include "entity/move_system.h"
 
 #include "global.h"
+#include "input/input.h"
 
 Global global;
 
@@ -18,6 +19,8 @@ int main () {
     };
 
     global.window = new core::Window(window_options);
+    input::initialize_input(*global.window);
+
     global.renderer = new graphics::Renderer();
 
     global.camera = new entity::Camera { window_options.width, window_options.height };
@@ -37,11 +40,12 @@ int main () {
     // setting up the entity
     global.entity = global.ecs.create_entity();
     entity::Transform entity_transform;
-    entity_transform.pos = { 0, 0, -9.0f };
+    entity_transform.pos = { 0, 0, -2.0f };
     global.ecs.add_component(global.entity, entity_transform);
 
     while(!global.window->close_requested()) {
         // move_system->update();
+        global.camera->update();
 
         global.renderer->render();
         global.window->end_frame();

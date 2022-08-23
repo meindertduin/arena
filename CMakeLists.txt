@@ -19,6 +19,7 @@ set(SOURCES
     external/glad/glad.c
     src/entity/entity.cpp
     src/entity/move_system.cpp
+    src/input/input.cpp
 )
 
 set(HEADERS include)
