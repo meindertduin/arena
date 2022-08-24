@@ -58,8 +58,9 @@ namespace graphics {
     };
 
     struct SharedDataBuffer : GpuBuffer {
-        public:
+            int offset = 0;
             std::size_t size;
+
             SharedDataBuffer(int binding_block, std::size_t size);
             ~SharedDataBuffer() override;
 
@@ -74,7 +75,5 @@ namespace graphics {
         
             void bind() const override;
             void unbind() const override;
-        private:
-            int offset = 0;
     };
 }
