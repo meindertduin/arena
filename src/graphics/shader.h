@@ -9,6 +9,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 namespace graphics {
+    constexpr int MATRICES_BLOCK_BINDING = 0;
+    constexpr int LIGHTS_BLOCK_BINDING = 0;
+
     enum class ShaderType {
         Vertex,
         Fragment,

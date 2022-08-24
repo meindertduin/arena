@@ -2,3 +2,5 @@ build/
 debug/
 external/
 .vimspector.json
+~
+.ccls-cache/

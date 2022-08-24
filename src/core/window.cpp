@@ -37,7 +37,6 @@ namespace core {
         glfwTerminate();
     }
 
-
     bool Window::close_requested() const  {
         return glfwWindowShouldClose(window);
     }

@@ -12,10 +12,15 @@ set(SOURCES
     src/core/window.cpp
     src/graphics/mesh.cpp
     src/graphics/renderer.cpp
+    src/graphics/texture.cpp
+    src/graphics/gpu_buffer.cpp
     src/graphics/shader.cpp
+    src/graphics/render_target.cpp
     external/glad/glad.c
     src/entity/entity.cpp
     src/entity/move_system.cpp
+    src/input/input.cpp
+    src/assets/obj_loader.cpp
 )
 
 set(HEADERS include)

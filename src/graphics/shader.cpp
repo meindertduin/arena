@@ -78,6 +78,13 @@ namespace graphics {
             std::cout << infoLog;
             throw std::runtime_error("GL ERROR: Failed to compile shader.");
         }
+
+        // set the block bindings
+        uint32_t matrices_block_index = glGetUniformBlockIndex(id, "Matrices");
+        glUniformBlockBinding(id, matrices_block_index, MATRICES_BLOCK_BINDING);
+
+        uint32_t lights_block_index = glGetUniformBlockIndex(id, "Lights");
+        glUniformBlockBinding(id, matrices_block_index, LIGHTS_BLOCK_BINDING);
     }
 
     void ShaderProgram::set_property(std::string properyName, int value) const {

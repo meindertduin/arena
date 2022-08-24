@@ -3,11 +3,22 @@
 #include <stdint.h>
 #include "../entity/transform.h"
 
+#include "gpu_buffer.h"
+
 namespace graphics {
+    struct Vertex {
+        glm::vec3 pos;
+        glm::vec3 normal;
+        glm::u16vec2 textcoords;
+    };
+
+    struct MeshData {
+        std::vector<Vertex> vertices;
+    };
+
     struct Mesh {
     public:
         Mesh();
-        ~Mesh();
         Mesh(const Mesh&) = delete;
         Mesh(Mesh&&) = delete;
         Mesh& operator=(const Mesh&) = delete;
@@ -16,8 +27,8 @@ namespace graphics {
         void render();
         entity::Transform transform;
     private:
-        uint32_t VAO;
-        uint32_t VBO;
+        VertexBuffer vertex_buffer { sizeof(Vertex) };
+        ArrayBuffer buffer_array;
     };
 }
 
