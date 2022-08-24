@@ -63,4 +63,41 @@ namespace graphics {
         current_size += to_add_size;
         vertex_attributes.push_back(attribute);
     }
+
+    SharedDataBuffer::SharedDataBuffer(int binding_block, std::size_t size) {
+        glBindBuffer(GL_UNIFORM_BUFFER, id);
+        glBufferData(GL_UNIFORM_BUFFER, size, nullptr, GL_STATIC_DRAW);
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+  
+        // define the range of the buffer that links to a uniform binding point
+        glBindBufferRange(GL_UNIFORM_BUFFER, binding_block, id, 0, size);
+  
+        this->size = size;
+    }
+
+    SharedDataBuffer::~SharedDataBuffer() {
+        glDeleteBuffers(1, &id);
+    }
+
+    void SharedDataBuffer::set_data(int format_size, std::size_t size, const void *data) {
+        glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
+        offset += format_size;
+    }
+
+    void SharedDataBuffer::reset() {
+        offset = 0;
+    }
+
+    void SharedDataBuffer::set_offset(int offset) {
+        this->offset = offset;
+    }
+
+    void SharedDataBuffer::bind() const {
+        glBindBuffer(GL_UNIFORM_BUFFER, id);
+    }
+
+    void SharedDataBuffer::unbind() const {
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+    }
+
 }

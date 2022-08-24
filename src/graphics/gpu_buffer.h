@@ -8,8 +8,8 @@ namespace graphics {
     public:
         virtual ~GpuBuffer() = default;
 
-        virtual void bind() const= 0;
-        virtual void unbind() const= 0;
+        virtual void bind() const = 0;
+        virtual void unbind() const = 0;
     protected:
         uint32_t id;
     };
@@ -55,5 +55,26 @@ namespace graphics {
         std::size_t current_size;
 
         std::vector<VertexAttribute> vertex_attributes;
+    };
+
+    struct SharedDataBuffer : GpuBuffer {
+        public:
+            std::size_t size;
+            SharedDataBuffer(int binding_block, std::size_t size);
+            ~SharedDataBuffer() override;
+
+            SharedDataBuffer(const SharedDataBuffer&) = delete;
+            SharedDataBuffer(SharedDataBuffer&&) = delete;
+            SharedDataBuffer& operator=(const SharedDataBuffer&) = delete;
+            SharedDataBuffer& operator=(SharedDataBuffer&&) = delete;
+        
+            void set_data(int format_size, std::size_t size, const void *data);
+            void reset();
+            void set_offset(int offset);
+        
+            void bind() const override;
+            void unbind() const override;
+        private:
+            int offset = 0;
     };
 }
