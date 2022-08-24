@@ -20,6 +20,7 @@ set(SOURCES
     src/entity/entity.cpp
     src/entity/move_system.cpp
     src/input/input.cpp
+    src/assets/obj_loader.cpp
 )
 
 set(HEADERS include)

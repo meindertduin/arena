@@ -22,6 +22,7 @@ namespace entity {
         std::unique_ptr<core::EventHandler<input::KeyEvent>> keyEventHandler;
 
         Camera(uint32_t screen_width, uint32_t screen_height) {
+            transform.pos.z += 10;
             set_projection(screen_width, screen_height);
             view = glm::lookAt(transform.pos, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 

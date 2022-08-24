@@ -6,6 +6,16 @@
 #include "gpu_buffer.h"
 
 namespace graphics {
+    struct Vertex {
+        glm::vec3 pos;
+        glm::vec3 normal;
+        glm::vec2 textcoords;
+    };
+
+    struct MeshData {
+        std::vector<Vertex> vertices;
+    };
+
     struct Mesh {
     public:
         Mesh();
