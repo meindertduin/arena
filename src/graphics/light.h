@@ -15,7 +15,7 @@ namespace graphics {
 
     class Light {
     public:
-        virtual void setData(SharedDataBuffer &buffer) = 0;
+        virtual void set_data(SharedDataBuffer &buffer) = 0;
 
         glm::vec3 ambient;
         glm::vec3 diffuse;

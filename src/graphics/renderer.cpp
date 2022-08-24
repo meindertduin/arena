@@ -17,8 +17,8 @@ namespace graphics {
         ubo_matrices.reset();
 
         ubo_matrices.bind();
-        ubo_matrices.set_data(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(global.camera->projection));
-        ubo_matrices.set_data(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(global.camera->get_view_4x4()));
+        ubo_matrices.set_data(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(global.game->camera->projection));
+        ubo_matrices.set_data(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(global.game->camera->get_view_4x4()));
         ubo_matrices.unbind();
 
         auto transform = global.ecs.get_component<entity::Transform>(global.entity);

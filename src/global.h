@@ -8,6 +8,8 @@
 #include "entity/ecs.h"
 #include "graphics/graphic_options.h"
 
+#include "entity/game_state.h"
+
 #include <memory>
 
 struct Global {
@@ -17,10 +19,9 @@ struct Global {
     graphics::Mesh *mesh;
     graphics::Texture *texture;
     entity::Entity entity;
+    entity::GameState *game;
 
     graphics::Renderer *renderer;
-    entity::Camera *camera;
-
     entity::Ecs ecs;
 
     ~Global() {
@@ -29,6 +30,7 @@ struct Global {
         delete graphic_options;
         delete mesh;
         delete texture;
+        delete game;
 
         delete renderer;
     }

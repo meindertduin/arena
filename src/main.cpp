@@ -23,7 +23,8 @@ int main () {
 
     global.renderer = new graphics::Renderer();
 
-    global.camera = new entity::Camera { window_options.width, window_options.height };
+    global.game = new entity::GameState();
+    global.game->camera = new entity::Camera { window_options.width, window_options.height };
 
     global.mesh = new graphics::Mesh();
     global.texture = new graphics::Texture("assets/container.png");
@@ -45,7 +46,7 @@ int main () {
 
     while(!global.window->close_requested()) {
         // move_system->update();
-        global.camera->update();
+        global.game->camera->update();
 
         global.renderer->render();
         global.window->end_frame();

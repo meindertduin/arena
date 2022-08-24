@@ -21,6 +21,7 @@ namespace entity {
         std::unique_ptr<core::EventHandler<input::MouseEvent>> mouseEventHandler;
         std::unique_ptr<core::EventHandler<input::KeyEvent>> keyEventHandler;
 
+        Camera() = default;
         Camera(uint32_t screen_width, uint32_t screen_height) {
             transform.pos.z += 10;
             set_projection(screen_width, screen_height);
