@@ -9,7 +9,7 @@ namespace graphics {
     struct Vertex {
         glm::vec3 pos;
         glm::vec3 normal;
-        glm::vec2 textcoords;
+        glm::u16vec2 textcoords;
     };
 
     struct MeshData {
@@ -27,7 +27,7 @@ namespace graphics {
         void render();
         entity::Transform transform;
     private:
-        VertexBuffer vertex_buffer { 8 * sizeof(float) };
+        VertexBuffer vertex_buffer { sizeof(Vertex) };
         ArrayBuffer buffer_array;
     };
 }

@@ -23,7 +23,7 @@ namespace assets {
         auto mesh_data = std::unique_ptr<graphics::MeshData>(new graphics::MeshData {  });
 
         std::vector<glm::vec3> vertices;
-        std::vector<glm::vec2> textcoords;
+        std::vector<glm::u16vec2> textcoords;
         std::vector<glm::vec3> normals;
 
         if (!fs.is_open())
@@ -52,7 +52,7 @@ namespace assets {
                 float x, y;
                 ss >> x >> y;
 
-                textcoords.push_back(glm::vec2(x, y));
+                textcoords.push_back(glm::u16vec2(x * 65535.0f, y * 65535.0f));
             }
 
             if (first_token == "vn") {
