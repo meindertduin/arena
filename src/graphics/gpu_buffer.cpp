@@ -65,6 +65,7 @@ namespace graphics {
     }
 
     SharedDataBuffer::SharedDataBuffer(int binding_block, std::size_t size) {
+        glGenBuffers(1, &id);
         glBindBuffer(GL_UNIFORM_BUFFER, id);
         glBufferData(GL_UNIFORM_BUFFER, size, nullptr, GL_STATIC_DRAW);
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
