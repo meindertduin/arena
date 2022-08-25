@@ -16,7 +16,8 @@ namespace graphics {
         Renderer();
 
         void render();
-        ShaderProgram shader { "shaders/texture_basic.vs", "shaders/texture_basic.fs" };
+        void set_ubo_data();
+        ShaderProgram shader { "shaders/light_shader.vs", "shaders/light_shader.fs" };
     private:
         std::unique_ptr<RenderTarget> render_target;
         SharedDataBuffer ubo_matrices { 0, 2 * sizeof(glm::mat4) };

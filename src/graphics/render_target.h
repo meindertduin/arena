@@ -27,7 +27,10 @@ namespace graphics {
 
         uint32_t framebuffer;
         uint32_t texture_color_buffer;
+        uint32_t texture_color_buffer_multi_sampled;
         uint32_t render_buffer_object;
+
+        uint32_t intermediate_fbo;
     };
 }
 
