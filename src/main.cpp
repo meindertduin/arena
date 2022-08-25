@@ -31,7 +31,7 @@ int main () {
 
     global.material = {
         .ambient = { 0.2f, 0.2f, 0.2f },
-        .diffuse = { 0.5f, 0.5f, 0.5f },
+        .diffuse = { 0.6f, 0.6f, 0.6f },
         .specular = { 0.2f, 0.2f, 0 },
         .shininess = 0.2f,
     };
@@ -52,7 +52,7 @@ int main () {
     global.ecs.add_component(global.entity, entity_transform);
 
     while(!global.window->close_requested()) {
-        move_system->update();
+        // move_system->update();
         global.game->camera->update();
 
         global.renderer->render();
