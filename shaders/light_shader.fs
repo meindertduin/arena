@@ -68,7 +68,7 @@ vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 pixel
     diffuse  *= attenuation;
     specular *= attenuation;
 
-    return ambient + diffuse + specular;
+    return ambient + diffuse;
 }
 
 vec3 CalulateDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 pixel) {

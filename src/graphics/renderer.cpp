@@ -62,6 +62,10 @@ namespace graphics {
         ubo_lights.set_offset(uboFilledSizeBefore + (DIR_LIGHT_STD140_SIZE * MAX_DIR_LIGHTS));
         ubo_lights.set_data(16, sizeof(int), &point_lights_count);
 
+        for (auto &light : global.game->point_lights) {
+            light.set_data(ubo_lights);
+        }
+
         ubo_lights.unbind();
     }
 }
