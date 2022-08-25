@@ -46,6 +46,10 @@ namespace graphics {
         shader.set_property("color", { 1.0f, 1.0f, 0 });
         shader.set_property("model", transform.get_transform_4x4());
 
+        shader.set_property("diffuse", global.material.diffuse);
+        shader.set_property("specular", global.material.specular);
+        shader.set_property("shininess", global.material.shininess);
+
         global.mesh->render();
 
         render_target->unbind();

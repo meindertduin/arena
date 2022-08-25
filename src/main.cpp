@@ -29,6 +29,13 @@ int main () {
     global.mesh = new graphics::Mesh();
     global.texture = new graphics::Texture("assets/container.png");
 
+    global.material = {
+        .ambient = { 0.2f, 0.2f, 0.2f },
+        .diffuse = { 0.5f, 0.5f, 0.5f },
+        .specular = { 0.2f, 0.2f, 0 },
+        .shininess = 0.2f,
+    };
+
     // setting up the ecs
     global.ecs.register_component<entity::Transform>();
 

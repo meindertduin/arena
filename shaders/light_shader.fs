@@ -9,8 +9,6 @@ uniform sampler2D ourTexture;
 uniform vec3 viewPos;
 
 struct Material {
-    sampler2D specularMap;
-
     vec3 diffuse;
     vec3 specular;
     float shininess;
@@ -61,7 +59,7 @@ vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 pixel
     // specular
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
-    vec3 specular = light.specular * spec * texture(material.specularMap, TexCoord).rgb;
+    vec3 specular = light.specular * spec;
 
     float distance    = length(light.position - FragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
