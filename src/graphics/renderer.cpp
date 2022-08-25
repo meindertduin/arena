@@ -14,6 +14,31 @@ namespace graphics {
         render_target->bind();
         render_target->clear();
 
+        set_ubo_data();
+
+        auto transform = global.ecs.get_component<entity::Transform>(global.entity);
+        auto model_4x4 = transform.get_transform_4x4();
+
+        shader.use();
+        global.texture->bind(0);
+        shader.set_property("color", { 1.0f, 1.0f, 0 });
+        shader.set_property("model", model_4x4);
+
+        shader.set_property("diffuse", global.material.diffuse);
+        shader.set_property("specular", global.material.specular);
+        shader.set_property("shininess", global.material.shininess);
+
+        shader.set_property("viewPos", global.game->camera->transform.pos);
+
+        shader.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
+
+        global.mesh->render();
+
+        render_target->unbind();
+        render_target->render();
+    }
+
+    void Renderer::set_ubo_data() {
         ubo_matrices.reset();
         ubo_lights.reset();
 
@@ -38,22 +63,6 @@ namespace graphics {
         ubo_lights.set_data(16, sizeof(int), &point_lights_count);
 
         ubo_lights.unbind();
-
-        auto transform = global.ecs.get_component<entity::Transform>(global.entity);
-
-        shader.use();
-        global.texture->bind(0);
-        shader.set_property("color", { 1.0f, 1.0f, 0 });
-        shader.set_property("model", transform.get_transform_4x4());
-
-        shader.set_property("diffuse", global.material.diffuse);
-        shader.set_property("specular", global.material.specular);
-        shader.set_property("shininess", global.material.shininess);
-
-        global.mesh->render();
-
-        render_target->unbind();
-        render_target->render();
     }
 }
 

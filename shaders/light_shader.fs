@@ -1,11 +1,11 @@
-#version 330 coreshader
+#version 330 core
 out vec4 FragColor;
 
 in vec2 TexCoord;
 in vec3 Normal;
 in vec3 FragPos;
 
-uniform sampler2D ourTexture;
+uniform sampler2D baseTexture;
 uniform vec3 viewPos;
 
 struct Material {
@@ -82,12 +82,12 @@ vec3 CalulateDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 pixel) {
     vec3 diffuse = light.diffuse * diff * pixel;
     vec3 specular = light.specular * spec  * pixel;
 
-    return (ambient + diffuse + specular);
+    return (ambient + diffuse);
 }
 
 void main()
 {
-    vec3 texturePixel = vec3(texture(ourTexture, TexCoord));
+    vec3 texturePixel = vec3(texture(baseTexture, TexCoord));
 
     vec3 normal = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
