@@ -16,7 +16,7 @@ namespace graphics {
 
         set_ubo_data();
 
-        auto transform = global.ecs.get_component<entity::Transform>(global.entity);
+        auto transform = global.entity.get<entity::Transform>();
         auto model_4x4 = transform.get_transform_4x4();
 
         shader.use();

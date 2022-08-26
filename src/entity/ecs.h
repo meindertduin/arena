@@ -11,6 +11,8 @@ namespace entity {
             component_manager = std::make_unique<ComponentManager>();
             systems_manager = std::make_unique<SystemsManager>();
             entity_manager = std::make_unique<EntityManager>();
+
+            entity_manager->initialize_entities(component_manager.get());
         }
 
         Ecs(const Ecs &) = delete;

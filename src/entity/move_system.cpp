@@ -5,7 +5,7 @@
 namespace entity {
     void MoveSystem::update() {
         for (auto &entity : entities) {
-            auto &transform = global.ecs.get_component<Transform>(entity);
+            auto &transform = entity.get<Transform>();
 
             transform.rotate(1, { 0, 1, 0 });
         }

@@ -1,9 +1,14 @@
 #include "entity.h"
 
+#include "component_manager.h"
+
 namespace entity {
     EntityManager::EntityManager() {
-        for (auto entity = 0; entity < MAX_ENTITIES; ++entity) {
-            available_entries.push(entity);
+    }
+
+    void EntityManager::initialize_entities(ComponentManager *manager) {
+        for (auto entity = 0u; entity < MAX_ENTITIES; ++entity) {
+            available_entries.push({ Entity { entity, manager }});
         }
     }
 
@@ -20,25 +25,25 @@ namespace entity {
     }
 
     void EntityManager::destroy(Entity entity) {
-        if (entity > MAX_ENTITIES) {
+        if (entity.id > MAX_ENTITIES) {
             throw std::runtime_error("Entity cannot be above the MAX_ENTITIES amount");
         }
 
-        signatures[entity].reset();
+        signatures[entity.id].reset();
         available_entries.push(entity);
 
         active_entities_count--;
     }
 
     void EntityManager::set_signature(Entity entity, Signature signature) {
-        if (entity > MAX_ENTITIES) {
+        if (entity.id > MAX_ENTITIES) {
             throw std::runtime_error("Entity cannot be above the MAX_ENTITIES amount");
         }
 
-        signatures[entity] = signature;
+        signatures[entity.id] = signature;
     }
 
     Signature EntityManager::get_signature(Entity entity) const {
-        return signatures[entity];
+        return signatures[entity.id];
     }
 }
