@@ -12,7 +12,7 @@ namespace entity {
             systems_manager = std::make_unique<SystemsManager>();
             entity_manager = std::make_unique<EntityManager>();
 
-            entity_manager->initialize_entities(component_manager.get());
+            entity_manager->initialize_entities(this);
         }
 
         Ecs(const Ecs &) = delete;
@@ -75,6 +75,10 @@ namespace entity {
         template<typename T>
         void set_system_signature(Signature signature) {
             systems_manager->set_signature<T>(signature);
+        }
+
+        Signature get_signature(Entity entity) {
+            return entity_manager->get_signature(entity);
         }
 
     private:

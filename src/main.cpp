@@ -49,7 +49,7 @@ int main () {
     global.entity = global.ecs.create_entity();
     entity::Transform entity_transform;
     entity_transform.pos = { 0, 0, -2.0f };
-    global.ecs.add_component(global.entity, entity_transform);
+    global.entity.add(entity_transform);
 
     while(!global.window->close_requested()) {
         move_system->update();

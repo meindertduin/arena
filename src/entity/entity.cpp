@@ -1,12 +1,12 @@
 #include "entity.h"
 
-#include "component_manager.h"
+#include "ecs.h"
 
 namespace entity {
     EntityManager::EntityManager() {
     }
 
-    void EntityManager::initialize_entities(ComponentManager *manager) {
+    void EntityManager::initialize_entities(Ecs *manager) {
         for (auto entity = 0u; entity < MAX_ENTITIES; ++entity) {
             available_entries.push({ Entity { entity, manager }});
         }

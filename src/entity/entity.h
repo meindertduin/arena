@@ -11,7 +11,11 @@
 namespace entity {
     const uint32_t MAX_ENTITIES = 2000;
 
-    struct ComponentManager;
+    struct Ecs;
+
+    using ComponentType = uint8_t;
+    const ComponentType MAX_COMPONENTS = 32;
+    using Signature = std::bitset<MAX_COMPONENTS>;
 
     template<typename T>
     struct Object {
@@ -26,6 +30,16 @@ namespace entity {
             return this->p->template get_component<C>(*this);
         }
 
+        template<typename C>
+        inline void add(C component) const {
+            this->p->template add_component<C>(*this, component);
+        }
+
+        template<typename C>
+        inline void remove() {
+            this->p->template remove_component<C>(*this);
+        }
+
         inline auto operator==(const Object &rhs) const {
             return this->id == rhs.id;
         }
@@ -33,20 +47,24 @@ namespace entity {
         inline auto operator<=>(const Object &rhs) const {
             return this->id <=> rhs.id;
         }
+
+        inline void destory() const {
+            this->p->template destory_entity(*this); 
+        }
+
+        inline Signature& signature() const {
+            return this->p->template get_signature(*this);
+        } 
+
     };
 
-    using Entity = Object<ComponentManager>;
-
-    using ComponentType = uint8_t;
-    const ComponentType MAX_COMPONENTS = 32;
-
-    using Signature = std::bitset<MAX_COMPONENTS>;
+    using Entity = Object<Ecs>;
 
     struct EntityManager {
     public:
         EntityManager();
 
-        void initialize_entities(ComponentManager *manager);
+        void initialize_entities(Ecs *manager);
         Entity create_entity();
         void destroy(Entity entity);
 
