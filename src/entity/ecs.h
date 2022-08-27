@@ -3,6 +3,7 @@
 #include "entity.h"
 #include "component_manager.h"
 #include "system.h"
+#include "event_manager.h"
 
 namespace entity {
     struct Ecs {
@@ -13,6 +14,8 @@ namespace entity {
             entity_manager = std::make_unique<EntityManager>();
 
             entity_manager->initialize_entities(this);
+
+            event_manager = std::make_unique<EventManager>();
         }
 
         Ecs(const Ecs &) = delete;
@@ -80,6 +83,8 @@ namespace entity {
         Signature get_signature(Entity entity) {
             return entity_manager->get_signature(entity);
         }
+
+        std::unique_ptr<EventManager> event_manager;
 
     private:
         std::unique_ptr<SystemsManager> systems_manager;

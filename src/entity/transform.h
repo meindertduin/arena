@@ -4,14 +4,17 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 
+#include "component.h"
+
 namespace entity {
-    struct Transform {
+    struct Transform : public ComponentBase {
         glm::vec3 pos;
         glm::quat rotation;
 
         float scale = 1.0f;
 
         constexpr Transform(): pos(0.0f, 0.0f, 0.0f), rotation(1.0f, 0.0f, 0.0f, 0.0f) {}
+
         constexpr Transform(const glm::vec3 &pos, const glm::quat &rotation)
             : pos(pos), rotation(rotation) {  }
         constexpr Transform(glm::vec3 &&pos, glm::quat &&rotation)

@@ -39,6 +39,9 @@ int main () {
     // setting up the ecs
     global.ecs.register_component<entity::Transform>();
 
+    global.ecs.event_manager->register_event<entity::PositionChangeEvent>();
+    global.ecs.event_manager->register_event<entity::TickEvent>();
+
     auto move_system = global.ecs.register_system<entity::MoveSystem>();
 
     entity::Signature signature;
@@ -49,6 +52,7 @@ int main () {
     global.entity = global.ecs.create_entity();
     entity::Transform entity_transform;
     entity_transform.pos = { 0, 0, -2.0f };
+
     global.entity.add(entity_transform);
 
     while(!global.window->close_requested()) {

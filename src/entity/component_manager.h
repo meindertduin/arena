@@ -19,6 +19,7 @@ namespace entity {
             next_component_type++;
         }
 
+        // used for setting the component in a signature
         template<typename T>
         ComponentType get_component_type() {
             auto type_name = typeid(T).name();
@@ -32,6 +33,7 @@ namespace entity {
 
         template<typename T>
         void add_component(Entity entity, T component) {
+            component.entity_id = entity.id;
             get_component_array<T>()->insert(entity, component);
         }
 

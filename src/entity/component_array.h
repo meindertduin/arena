@@ -17,6 +17,7 @@ namespace entity {
                 throw std::runtime_error("Cannot insert entity that does not exist");
             }
 
+            // insert a new component at the back of the empty components array
             auto new_index = size;
             entity_index_map[entity.id] = new_index;
             index_entity_map[new_index] = entity.id;
@@ -32,6 +33,8 @@ namespace entity {
 
             auto removed_entity_index = entity_index_map[entity.id];
             auto last_element_index = size - 1;
+            
+            // replace the removed component with the last element
             components[removed_entity_index] = components[last_element_index];
 
 		    // Update map to point to moved spot
