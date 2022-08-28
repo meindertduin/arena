@@ -72,11 +72,15 @@ namespace entity {
 
         template<typename E>
         void dispatch(E* event) {
+            auto event_type = EventManager::get_event_type<E>();
+            if (event_handlers.find(event_type) == event_handlers.end()) {
+                // TODO throw an error if components are bound to the events aswell
+                return;
+            }
             for (auto &component : components) {
-                event_handlers[EventManager::get_event_type<E>()](component, event);
+                event_handlers[event_type](&component, event);
             }
         }
-
     private:
         // Not very memory efficient with alot of components
         std::array<T, MAX_ENTITIES> components;

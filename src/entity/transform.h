@@ -5,6 +5,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "component.h"
+#include "event_manager.h"
 
 namespace entity {
     struct Transform : public ComponentBase {
@@ -54,6 +55,10 @@ namespace entity {
 
         glm::vec3 get_down() {
             return glm::inverse(rotation) * glm::vec3(0.0, -1.0, 0.0);
+        }
+
+        void on_tick(TickEvent event) {
+            rotate(1, { 0, 1, 0 });
         }
     };
 }

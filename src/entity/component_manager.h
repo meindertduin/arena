@@ -58,6 +58,11 @@ namespace entity {
             get_component_array<T>()->dispatch(event);
         }
 
+        template<typename C, typename E, typename F>
+        void add_event_handler(F &&f) {
+            get_component_array<C>()->template add_event_handler<E>(f);
+        }
+
     private:
         std::unordered_map<const char*, ComponentType> component_types;
         std::unordered_map<const char*, std::shared_ptr<IComponentArray>> component_arrays;

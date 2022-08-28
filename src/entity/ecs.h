@@ -87,6 +87,11 @@ namespace entity {
             component_manager->dispatch_event<C>(event);
         }
 
+        template<typename C, typename E, typename F>
+        void add_event_handler(F &&f) {
+            component_manager->add_event_handler<C, E>(f);
+        }
+
     private:
         std::unique_ptr<SystemsManager> systems_manager;
         std::unique_ptr<EntityManager> entity_manager;
