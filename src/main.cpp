@@ -39,8 +39,7 @@ int main () {
     // setting up the ecs
     global.ecs.register_component<entity::Transform>();
 
-    global.ecs.event_manager->register_event<entity::PositionChangeEvent>();
-    global.ecs.event_manager->register_event<entity::TickEvent>();
+    entity::EventManager::register_event<entity::TickEvent>();
 
     auto move_system = global.ecs.register_system<entity::MoveSystem>();
 
@@ -55,8 +54,10 @@ int main () {
 
     global.entity.add(entity_transform);
 
+    entity::TickEvent tick_event;
+
     while(!global.window->close_requested()) {
-        move_system->update();
+        // move_system->update();
         global.game->camera->update();
 
         global.renderer->render();

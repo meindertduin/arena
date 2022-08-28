@@ -52,6 +52,12 @@ namespace entity {
                 pair.second->entity_destroyed(entity);
             }
         }
+
+        template<typename T, typename E>
+        void dispatch_event(E *event) {
+            get_component_array<T>()->dispatch(event);
+        }
+
     private:
         std::unordered_map<const char*, ComponentType> component_types;
         std::unordered_map<const char*, std::shared_ptr<IComponentArray>> component_arrays;

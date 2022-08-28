@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entity.h"
+#include "event_manager.h"
 
 namespace entity {
     struct IComponentArray {
@@ -59,6 +60,23 @@ namespace entity {
         void entity_destroyed(Entity entity) override {
             remove(entity);
         }
+
+        template<typename E, typename F>
+        void add_event_handler(F &&f) {
+            auto handler = [f = std::forward<F>(f)](void *c, void *e) {
+                ((reinterpret_cast<T*>(c)->*f)(*reinterpret_cast<const E*>(e)));
+            };
+            
+            event_handlers[EventManager::get_event_type<E>()] = handler;
+        }
+
+        template<typename E>
+        void dispatch(E* event) {
+            for (auto &component : components) {
+                event_handlers[EventManager::get_event_type<E>()](component, event);
+            }
+        }
+
     private:
         // Not very memory efficient with alot of components
         std::array<T, MAX_ENTITIES> components;
@@ -66,6 +84,8 @@ namespace entity {
         // TODO, make this an array for performance bonus
         std::unordered_map<uint32_t, size_t> entity_index_map;
         std::unordered_map<uint32_t, size_t> index_entity_map;
+
+        std::unordered_map<EventType, std::function<void(T*, void*)>> event_handlers;
 
         size_t size;
     };

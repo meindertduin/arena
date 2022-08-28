@@ -14,8 +14,6 @@ namespace entity {
             entity_manager = std::make_unique<EntityManager>();
 
             entity_manager->initialize_entities(this);
-
-            event_manager = std::make_unique<EventManager>();
         }
 
         Ecs(const Ecs &) = delete;
@@ -84,7 +82,10 @@ namespace entity {
             return entity_manager->get_signature(entity);
         }
 
-        std::unique_ptr<EventManager> event_manager;
+        template<typename C, typename E>
+        void dispatch_event(E *event) {
+            component_manager->dispatch_event<C>(event);
+        }
 
     private:
         std::unique_ptr<SystemsManager> systems_manager;

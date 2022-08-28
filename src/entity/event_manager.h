@@ -19,44 +19,37 @@ namespace entity {
     struct TickEvent : EcsEventBase {
     };
 
-    struct EventListener {
-    public:
-        void dispatch(EcsEventBase event) {
-            for (auto &callback : callbacks) {
-                callback(event);
-            }   
-        }
-    private:
-        // vector is not very fast
-        std::vector<std::function<void(EcsEventBase)>> callbacks;
-    };
+    using EventType = uint32_t;
 
     struct EventManager {
     public:
+
     template<typename T>
-    void register_event() {
-        auto event_name = typeid(T).name();
-        if (event_listeners.find(event_name) != event_listeners.end()) {
-            throw std::runtime_error("Registered event multiple times");
+    static void register_event() {
+        auto type_name = typeid(T).name();
+        if (event_map.find(type_name) != event_map.end()) {
+            throw std::runtime_error("Eventtype already registered!");
         }
 
-        event_listeners.insert({ event_name, new EventListener() });
+        event_map.insert({ type_name, current_type++ });
     }
 
     template<typename T>
-    void dispatch_event(T event) {
-        auto event_name = typeid(T).name();
+    static  EventType get_event_type() {
+        auto type_name = typeid(T).name();
 
-        if (event_listeners.find(event_name) == event_listeners.end()) {
-            throw std::runtime_error("Could not find listeners for event type");
+        if (event_map.find(type_name) == event_map.end()) {
+            throw std::runtime_error("EventType is not registered");
         }
-        // TODO dispatch should store the events in a queue so that after each tick/frame they can be handled all at once
-        auto listener = event_listeners[event_name];
-        listener->dispatch(event);
+
+        return event_map[type_name];
     }
 
     private:
-        std::unordered_map<const char*, EventListener*> event_listeners;
+        static std::unordered_map<const char*, EventType> event_map;
+        static EventType current_type;
     };
-    
+ 
+    inline std::unordered_map<const char*, EventType> EventManager::event_map;
+    inline EventType EventManager::current_type = 0;
 }
