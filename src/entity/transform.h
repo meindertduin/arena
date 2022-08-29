@@ -14,7 +14,8 @@ namespace entity {
 
         float scale = 1.0f;
 
-        constexpr Transform(): pos(0.0f, 0.0f, 0.0f), rotation(1.0f, 0.0f, 0.0f, 0.0f) {}
+        constexpr Transform(): pos(0.0f, 0.0f, 0.0f), rotation(1.0f, 0.0f, 0.0f, 0.0f) { 
+        }
 
         constexpr Transform(const glm::vec3 &pos, const glm::quat &rotation)
             : pos(pos), rotation(rotation) {  }

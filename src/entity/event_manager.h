@@ -25,7 +25,6 @@ namespace entity {
 
     struct EventManager {
     public:
-
     template<typename T>
     static void register_event() {
         if (event_map.find(T::_id) != event_map.end()) {

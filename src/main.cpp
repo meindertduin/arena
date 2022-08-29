@@ -36,8 +36,6 @@ int main () {
         .shininess = 0.2f,
     };
 
-    global.ecs.add_event_handler<entity::Transform, entity::TickEvent>(&entity::Transform::on_tick);
-
     auto move_system = global.ecs.register_system<entity::MoveSystem>();
 
     entity::Signature signature;

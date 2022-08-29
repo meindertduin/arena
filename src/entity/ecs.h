@@ -1,9 +1,9 @@
 #pragma once
 
+#include "event_manager.h"
 #include "entity.h"
 #include "component_manager.h"
 #include "system.h"
-#include "event_manager.h"
 
 namespace entity {
     struct Ecs {
@@ -85,11 +85,6 @@ namespace entity {
         template<typename C, typename E>
         void dispatch_event(E *event) {
             component_manager->dispatch_event<C>(event);
-        }
-
-        template<typename C, typename E, typename F>
-        void add_event_handler(F &&f) {
-            component_manager->add_event_handler<C, E>(f);
         }
 
     private:

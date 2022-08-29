@@ -13,7 +13,10 @@ namespace entity {
             }
 
             component_types.insert({T::_id, next_component_type});
-            component_arrays.insert({T::_id, std::make_shared<ComponentArray<T>>()});
+            auto component_array = std::make_shared<ComponentArray<T>>();
+            component_arrays.insert({T::_id, component_array});
+
+            T::_p = component_array.get();
 
             next_component_type++;
         }
@@ -53,11 +56,6 @@ namespace entity {
         template<typename T, typename E>
         void dispatch_event(E *event) {
             get_component_array<T>()->dispatch(event);
-        }
-
-        template<typename C, typename E, typename F>
-        void add_event_handler(F &&f) {
-            get_component_array<C>()->template add_event_handler<E>(f);
         }
 
     private:
