@@ -8,6 +8,7 @@ namespace entity {
     public:
         virtual ~IComponentArray() = default;
         virtual void entity_destroyed(Entity entity) = 0;
+        virtual void dispatch(void *e, uint32_t event_id) = 0;
     };
 
     template<typename T>
@@ -70,18 +71,17 @@ namespace entity {
             event_handlers[E::_id] = handler;
         }
 
-        template<typename E>
-        void dispatch(E* event) {
-            if (event_handlers.find(E::_id) == event_handlers.end()) {
-                // TODO throw an error if components are bound to the events aswell
+        void dispatch(void *e, uint32_t event_id) override {
+            auto event = reinterpret_cast<EventBase*>(e);
+            if (event_handlers.find(event_id) == event_handlers.end()) {
                 return;
             }
             if (event->entity != nullptr) {
                 auto &component = components[event->entity->id];
-                event_handlers[E::_id](&component, event);
+                event_handlers[event_id](&component, event);
             } else {
                 for (auto &component : components) {
-                    event_handlers[E::_id](&component, event);
+                    event_handlers[event_id](&component, event);
                 }
             }
         }

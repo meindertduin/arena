@@ -53,11 +53,12 @@ namespace entity {
             }
         }
 
-        template<typename T, typename E>
+        template<typename E>
         void dispatch_event(E *event) {
-            get_component_array<T>()->dispatch(event);
+            for (auto &component : component_arrays) {
+                component.second->dispatch(event, E::_id);
+            }
         }
-
     private:
         std::unordered_map<uint32_t, ComponentType> component_types;
         std::unordered_map<uint32_t, std::shared_ptr<IComponentArray>> component_arrays;

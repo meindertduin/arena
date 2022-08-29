@@ -82,9 +82,9 @@ namespace entity {
             return entity_manager->get_signature(entity);
         }
 
-        template<typename C, typename E>
+        template<typename E>
         void dispatch_event(E *event) {
-            component_manager->dispatch_event<C>(event);
+            component_manager->dispatch_event(event);
         }
 
     private:

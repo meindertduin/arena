@@ -9,10 +9,13 @@
 #include "entity.h"
 
 namespace entity {
-    template<typename T>
-    struct Event {
-        inline static uint32_t _id;
+    struct EventBase {
         Entity *entity = nullptr;
+    };
+
+    template<typename T>
+    struct Event : public EventBase {
+        inline static uint32_t _id;
     };
 
     // TODO remove for testing purposes
