@@ -62,5 +62,5 @@ namespace entity {
         }
     };
 
-    DECL_COMPONENT_HADER(Transform);
+    DECL_COMPONENT_HEADER(Transform);
 }

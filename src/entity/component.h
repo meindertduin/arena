@@ -24,7 +24,7 @@ namespace entity {
         }
     };
 
-#define DECL_COMPONENT_HADER(_c) \
+#define DECL_COMPONENT_HEADER(_c) \
     template<> uint32_t ComponentBase<_c>::_id; \
     template<> Ecs* ComponentBase<_c>::_p; \
     struct __##_c##_init : InitComponent<_c> {}
@@ -34,5 +34,4 @@ namespace entity {
     template <> uint32_t ComponentBase<_c>::_id = 0; \
     template <> Ecs* ComponentBase<_c>::_p = nullptr; \
     static __##_c##_init _c##_initializer;
-
 }
