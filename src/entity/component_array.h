@@ -67,18 +67,22 @@ namespace entity {
                 ((reinterpret_cast<T*>(c)->*f)(*reinterpret_cast<const E*>(e)));
             };
             
-            event_handlers[EventManager::get_event_type<E>()] = handler;
+            event_handlers[E::_id] = handler;
         }
 
         template<typename E>
         void dispatch(E* event) {
-            auto event_type = EventManager::get_event_type<E>();
-            if (event_handlers.find(event_type) == event_handlers.end()) {
+            if (event_handlers.find(E::_id) == event_handlers.end()) {
                 // TODO throw an error if components are bound to the events aswell
                 return;
             }
-            for (auto &component : components) {
-                event_handlers[event_type](&component, event);
+            if (event->entity != nullptr) {
+                auto &component = components[event->entity->id];
+                event_handlers[E::_id](&component, event);
+            } else {
+                for (auto &component : components) {
+                    event_handlers[E::_id](&component, event);
+                }
             }
         }
     private:

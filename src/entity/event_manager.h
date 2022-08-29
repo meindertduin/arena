@@ -6,18 +6,21 @@
 
 #include <functional>
 
+#include "entity.h"
+
 namespace entity {
     template<typename T>
     struct Event {
         inline static uint32_t _id;
+        Entity *entity = nullptr;
     };
 
     // TODO remove for testing purposes
-    struct PositionChangeEvent : Event<PositionChangeEvent> {
+    struct PositionChangeEvent : public Event<PositionChangeEvent> {
 
     };
 
-    struct TickEvent : Event<TickEvent> {
+    struct TickEvent : public Event<TickEvent> {
 
     };
 
@@ -32,15 +35,6 @@ namespace entity {
         }
 
         event_map.insert({ T::_id, current_type++ });
-    }
-
-    template<typename T>
-    static  EventType get_event_type() {
-        if (event_map.find(T::_id) == event_map.end()) {
-            throw std::runtime_error("EventType is not registered");
-        }
-
-        return event_map[T::_id];
     }
 
     private:

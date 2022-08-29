@@ -50,6 +50,7 @@ int main () {
     global.entity.add(entity_transform);
 
     entity::TickEvent tick_event;
+    tick_event.entity = &global.entity;
 
     while(!global.window->close_requested()) {
         global.ecs.dispatch_event<entity::Transform, entity::TickEvent>(&tick_event);
