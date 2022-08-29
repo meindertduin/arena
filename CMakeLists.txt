@@ -18,6 +18,7 @@ set(SOURCES
     src/graphics/render_target.cpp
     external/glad/glad.c
     src/entity/entity.cpp
+    src/entity/transform.cpp
     src/entity/move_system.cpp
     src/input/input.cpp
     src/assets/obj_loader.cpp

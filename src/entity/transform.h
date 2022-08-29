@@ -8,7 +8,7 @@
 #include "event_manager.h"
 
 namespace entity {
-    struct Transform : public ComponentBase {
+    struct Transform : public ComponentBase<Transform> {
         glm::vec3 pos;
         glm::quat rotation;
 
@@ -61,4 +61,6 @@ namespace entity {
             rotate(1, { 0, 1, 0 });
         }
     };
+
+    DECL_COMPONENT_HADER(Transform);
 }
