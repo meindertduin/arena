@@ -8,13 +8,12 @@ namespace entity {
     public:
         template<typename T>
         void register_component() {
-            auto type_name = typeid(T).name();
-            if (component_types.find(type_name) != component_types.end()) {
+            if (component_types.find(T::_id) != component_types.end()) {
                 throw std::runtime_error("Registered ComponentType more than once");
             }
 
-            component_types.insert({type_name, next_component_type});
-            component_arrays.insert({type_name, std::make_shared<ComponentArray<T>>()});
+            component_types.insert({T::_id, next_component_type});
+            component_arrays.insert({T::_id, std::make_shared<ComponentArray<T>>()});
 
             next_component_type++;
         }
@@ -22,13 +21,11 @@ namespace entity {
         // used for setting the component in a signature
         template<typename T>
         ComponentType get_component_type() {
-            auto type_name = typeid(T).name();
-
-            if (component_types.find(type_name) == component_types.end()) {
+            if (component_types.find(T::_id) == component_types.end()) {
                 throw std::runtime_error("Could not find component type.");
             }
 
-            return component_types[type_name];
+            return component_types[T::_id];
         }
 
         template<typename T>
@@ -64,20 +61,18 @@ namespace entity {
         }
 
     private:
-        std::unordered_map<const char*, ComponentType> component_types;
-        std::unordered_map<const char*, std::shared_ptr<IComponentArray>> component_arrays;
+        std::unordered_map<uint32_t, ComponentType> component_types;
+        std::unordered_map<uint32_t, std::shared_ptr<IComponentArray>> component_arrays;
 
         ComponentType next_component_type;
 
         template<typename T>
         std::shared_ptr<ComponentArray<T>> get_component_array() {
-            auto type_name = typeid(T).name();
-
-            if (component_types.find(type_name) == component_types.end()) {
+            if (component_types.find(T::_id) == component_types.end()) {
                 throw std::runtime_error("Could not find component type.");
             }
 
-            return std::static_pointer_cast<ComponentArray<T>>(component_arrays[type_name]);
+            return std::static_pointer_cast<ComponentArray<T>>(component_arrays[T::_id]);
         }
     };
 }

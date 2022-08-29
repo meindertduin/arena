@@ -14,10 +14,13 @@ namespace entity {
         inline static Ecs* _p;
     };
 
+    inline static uint32_t next_component = 0;
+
     template<typename T>
     struct InitComponent {
         InitComponent() {
-            printf("hello world\n");
+            T::_id = next_component++;
+            Ecs::register_component<T>();
         }
     };
 
@@ -25,10 +28,11 @@ namespace entity {
     template<> uint32_t ComponentBase<_c>::_id; \
     template<> Ecs* ComponentBase<_c>::_p; \
     struct __##_c##_init : InitComponent<_c> {}
-}
 
 #define DECL_COMPONENT_INIT(_c) \
     template struct ComponentBase<_c>; \
-    template <> uint32_t ComponentBase<_c>::_id = __COUNTER__; \
+    template <> uint32_t ComponentBase<_c>::_id = 0; \
     template <> Ecs* ComponentBase<_c>::_p = nullptr; \
     static __##_c##_init _c##_initializer;
+
+}

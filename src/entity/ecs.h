@@ -32,7 +32,7 @@ namespace entity {
         }
 
         template<typename T>
-        void register_component() {
+        static void register_component() {
             component_manager->register_component<T>();
         }
 
@@ -95,6 +95,8 @@ namespace entity {
     private:
         std::unique_ptr<SystemsManager> systems_manager;
         std::unique_ptr<EntityManager> entity_manager;
-        std::unique_ptr<ComponentManager> component_manager;
+        static std::unique_ptr<ComponentManager> component_manager;
     };
+
+    inline std::unique_ptr<ComponentManager> Ecs::component_manager = std::make_unique<ComponentManager>();
 }

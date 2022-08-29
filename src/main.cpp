@@ -36,9 +36,6 @@ int main () {
         .shininess = 0.2f,
     };
 
-    // setting up the ecs
-    global.ecs.register_component<entity::Transform>();
-
     entity::EventManager::register_event<entity::TickEvent>();
     global.ecs.add_event_handler<entity::Transform, entity::TickEvent>(&entity::Transform::on_tick);
 
