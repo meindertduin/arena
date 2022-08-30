@@ -22,6 +22,7 @@ set(SOURCES
     src/entity/transform.cpp
     src/entity/move_system.cpp
     src/entity/event_manager.cpp
+    src/entity/ec_command.cpp
     src/input/input.cpp
     src/assets/obj_loader.cpp
 )

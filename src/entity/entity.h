@@ -55,7 +55,6 @@ namespace entity {
         inline Signature& signature() const {
             return this->p->template get_signature(*this);
         } 
-
     };
 
     using Entity = Object<Ecs>;

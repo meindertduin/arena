@@ -83,7 +83,7 @@ namespace entity {
         }
 
         template<typename E>
-        void dispatch_event(E *event) {
+        constexpr void dispatch_event(E *event) {
             component_manager->dispatch_event(event);
         }
 

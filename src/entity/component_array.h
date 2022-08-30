@@ -8,7 +8,7 @@ namespace entity {
     public:
         virtual ~IComponentArray() = default;
         virtual void entity_destroyed(Entity entity) = 0;
-        virtual void dispatch(void *e, uint32_t event_id) = 0;
+        virtual constexpr void dispatch(void *e, uint32_t event_id) = 0;
     };
 
     template<typename T>
@@ -71,7 +71,8 @@ namespace entity {
             event_handlers[E::_id] = handler;
         }
 
-        void dispatch(void *e, uint32_t event_id) override {
+        // could not make this a template function, thats why e is type void*
+        constexpr void dispatch(void *e, uint32_t event_id) override {
             auto event = reinterpret_cast<EventBase*>(e);
             if (event_handlers.find(event_id) == event_handlers.end()) {
                 return;

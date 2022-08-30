@@ -9,7 +9,6 @@ namespace graphics {
         int width;
         int height;
 
-
         Texture(std::string path);
         Texture(std::vector<std::string> faces);
         ~Texture();

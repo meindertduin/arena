@@ -6,7 +6,7 @@
 
 namespace entity {
     template<typename T>
-    struct ComponentBase {
+    struct Component {
         uint32_t entity_id;
 
         inline static uint32_t _id;
@@ -29,13 +29,13 @@ namespace entity {
     };
 
 #define DECL_COMPONENT_HEADER(_c) \
-    template<> uint32_t ComponentBase<_c>::_id; \
-    template<> ComponentArray<_c>* ComponentBase<_c>::_p; \
+    template<> uint32_t Component<_c>::_id; \
+    template<> ComponentArray<_c>* Component<_c>::_p; \
     struct __##_c##_init : InitComponent<_c> {}
 
 #define DECL_COMPONENT_INIT(_c) \
-    template struct ComponentBase<_c>; \
-    template <> uint32_t ComponentBase<_c>::_id = 0; \
-    template <> ComponentArray<_c>* ComponentBase<_c>::_p = nullptr; \
+    template struct Component<_c>; \
+    template <> uint32_t Component<_c>::_id = 0; \
+    template <> ComponentArray<_c>* Component<_c>::_p = nullptr; \
     template <> void InitComponent<_c>::init()
 }
