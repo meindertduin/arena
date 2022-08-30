@@ -53,8 +53,8 @@ int main () {
     tick_event.entity = &global.entity;
 
     while(!global.window->close_requested()) {
+        global.input_manager.update();
         global.ecs.dispatch_event<entity::TickEvent>(&tick_event);
-        global.game->camera->update();
 
         global.renderer->render();
         global.window->end_frame();

@@ -14,6 +14,22 @@ namespace entity {
         void execute(Entity entity) override;
     };
 
+    struct MoveForwardCommand : public ECCommand {
+        void execute(Entity entity) override;
+    };
+
+    struct MoveBackwardCommand : public ECCommand {
+        void execute(Entity entity) override;
+    };
+
+    struct MoveLeftCommand : public ECCommand {
+        void execute(Entity entity) override;
+    };
+
+    struct MoveRightCommand : public ECCommand {
+        void execute(Entity entity) override;
+    };
+
     struct RotateCommand : public ECCommand {
         float degrees_x;
         float degrees_y;

@@ -1,5 +1,7 @@
 #include "input_manager.h"
 #include "input.h"
+#include "../global.h"
+#include "../entity/ec_command.h"
 
 namespace input {
     InputManager::InputManager() {
@@ -11,7 +13,7 @@ namespace input {
     }
 
     void InputManager::update() {
-        
+        this->player_input.update();
     }
 
     void InputManager::on_mouse_movement(float mouse_x_offset, float mouse_y_offset) {
@@ -26,15 +28,15 @@ namespace input {
 
     void PlayerInput::update() {
         if (moves_forward && !moves_backward) {
-
+            entity::MoveForwardCommand().execute(global.game->player);
         } else if (moves_backward && !moves_forward) {
-
+            entity::MoveBackwardCommand().execute(global.game->player);
         }
 
         if (moves_right && !moves_left) {
-
+            entity::MoveRightCommand().execute(global.game->player);
         } else if (moves_left && !moves_right) {
-
+            entity::MoveLeftCommand().execute(global.game->player);
         }
     }
 

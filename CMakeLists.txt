@@ -23,6 +23,8 @@ set(SOURCES
     src/entity/move_system.cpp
     src/entity/event_manager.cpp
     src/entity/ec_command.cpp
+    src/entity/ec_player.cpp
+    src/entity/game_state.cpp
     src/input/input.cpp
     src/input/input_manager.cpp
     src/assets/obj_loader.cpp
