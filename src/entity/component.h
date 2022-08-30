@@ -13,12 +13,14 @@ namespace entity {
         inline static ComponentArray<T>* _p;
     };
 
-    inline static uint32_t next_component = 0;
+    inline uint32_t next_component = 0;
 
     template<typename T>
     struct InitComponent {
         InitComponent() {
-            T::_id = next_component++;
+            T::_id = next_component;
+
+            next_component += 1;
             Ecs::register_component<T>();
 
             init();

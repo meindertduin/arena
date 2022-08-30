@@ -47,7 +47,7 @@ namespace entity {
     inline std::unordered_map<uint32_t, EventType> EventManager::event_map;
     inline EventType EventManager::current_type = 0;
 
-    inline static uint32_t next_event = 0;
+    inline uint32_t next_event = 0;
 
     template<typename T>
     struct InitEvent {

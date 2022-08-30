@@ -19,5 +19,5 @@ namespace entity {
 
     }
 
-    // __ECFirstPersonCamera_init init;
+    __ECFirstPersonCamera_init camera_init;
 }
