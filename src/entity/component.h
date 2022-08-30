@@ -7,7 +7,7 @@
 namespace entity {
     template<typename T>
     struct Component {
-        uint32_t entity_id;
+        Entity entity;
 
         inline static uint32_t _id;
         inline static ComponentArray<T>* _p;
@@ -17,7 +17,6 @@ namespace entity {
 
     template<typename T>
     struct InitComponent {
-
         InitComponent() {
             T::_id = next_component++;
             Ecs::register_component<T>();

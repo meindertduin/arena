@@ -33,7 +33,7 @@ namespace entity {
 
         template<typename T>
         void add_component(Entity entity, T component) {
-            component.entity_id = entity.id;
+            component.entity = entity;
             get_component_array<T>()->insert(entity, component);
         }
 

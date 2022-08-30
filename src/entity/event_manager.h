@@ -19,9 +19,8 @@ namespace entity {
     };
 
     // TODO remove for testing purposes
-    struct PositionChangeEvent : public Event<PositionChangeEvent> {
-
-    };
+    struct PositionChangeEvent : public Event<PositionChangeEvent> {  };
+    struct RotationChangeEvent : public Event<PositionChangeEvent> {  };
 
     struct TickEvent : public Event<TickEvent> {
 
@@ -68,4 +67,6 @@ namespace entity {
     static __##_c##_init _c##_initializer;
 
     DECL_EVENT_HEADER(TickEvent);
+    DECL_EVENT_HEADER(PositionChangeEvent);
+    DECL_EVENT_HEADER(RotationChangeEvent);
 }

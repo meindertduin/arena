@@ -24,6 +24,7 @@ set(SOURCES
     src/entity/event_manager.cpp
     src/entity/ec_command.cpp
     src/entity/ec_player.cpp
+    src/entity/ec_first_person_camera.cpp
     src/entity/game_state.cpp
     src/input/input.cpp
     src/input/input_manager.cpp
