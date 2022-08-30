@@ -1,5 +1,7 @@
 #pragma once
 
+#include "input/input_manager.h"
+
 #include "core/window.h"
 #include "entity/camera.h"
 #include "entity/ecs.h"
@@ -16,6 +18,8 @@
 
 struct Global {
     core::Window *window;
+
+    input::InputManager input_manager;
 
     graphics::GraphicOptions *graphic_options;
     graphics::Mesh *mesh;

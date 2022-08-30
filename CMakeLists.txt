@@ -24,6 +24,7 @@ set(SOURCES
     src/entity/event_manager.cpp
     src/entity/ec_command.cpp
     src/input/input.cpp
+    src/input/input_manager.cpp
     src/assets/obj_loader.cpp
 )
 
