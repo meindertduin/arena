@@ -73,20 +73,24 @@ namespace entity {
         }
 
         // could not make this a template function, thats why e is type void*
-        constexpr void dispatch(void *e, uint32_t event_id) override {
+        void dispatch(void *e, uint32_t event_id) override {
             if (event_handlers.find(event_id) == event_handlers.end()) {
                 return;
             }
-            for (auto &component : components) {
-                // DO check if it component is not used
+
+            for (const auto &[key, value] : entity_index_map) {
+                auto &component = components[value];
                 event_handlers[event_id](&component, e);
             }
         }
 
         constexpr void dispatch(void *e, uint32_t event_id, Entity entity) override {
-            if (event_handlers.find(event_id) == event_handlers.end()) {
+            if (event_handlers.find(event_id) == event_handlers.end())
                 return;
-            }
+
+            if (entity_index_map.find(entity.id) == entity_index_map.end())
+                return;
+            
             // DO check if it component is not used
             auto &component = components[entity.id];
             event_handlers[event_id](&component, e);

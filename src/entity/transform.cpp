@@ -2,9 +2,7 @@
 #include "../global.h"
 
 namespace entity {
-    DECL_COMPONENT_INIT(Transform) {
-        Transform::_p->add_event_handler<Transform, TickEvent>(&Transform::on_tick);
-    };
+    DECL_COMPONENT_INIT(Transform) {};
 
     void Transform::rotate(float degrees, const glm::vec3 &v) {
         rotation = glm::rotate(rotation, glm::radians(degrees), v);
