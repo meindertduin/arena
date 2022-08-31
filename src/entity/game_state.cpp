@@ -22,7 +22,7 @@ namespace entity {
         point_lights.push_back(pointLight);
 
         ECPlayer ec_player;
-        this->player = ec_player.create(global.ecs.create_entity());
+        this->player = ec_player.create(global.ecs->create_entity());
     }
 
     GameState::~GameState() {

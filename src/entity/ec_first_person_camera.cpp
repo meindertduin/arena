@@ -5,10 +5,10 @@
 namespace entity {
     DECL_COMPONENT_INIT(ECFirstPersonCamera) {
         ECFirstPersonCamera::_p->
-            add_event_handler<PositionChangeEvent>(&ECFirstPersonCamera::on_position_change);
+            add_event_handler<ECFirstPersonCamera, PositionChangeEvent>(&ECFirstPersonCamera::on_position_change);
 
         ECFirstPersonCamera::_p->
-            add_event_handler<RotationChangeEvent>(&ECFirstPersonCamera::on_rotation_change);
+            add_event_handler<ECFirstPersonCamera, RotationChangeEvent>(&ECFirstPersonCamera::on_rotation_change);
     }
 
     void ECFirstPersonCamera::on_position_change(PositionChangeEvent event) {

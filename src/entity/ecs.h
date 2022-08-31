@@ -8,19 +8,19 @@
 namespace entity {
     struct Ecs {
     public:
-        Ecs() {
-            component_manager = std::make_unique<ComponentManager>();
-            systems_manager = std::make_unique<SystemsManager>();
-            entity_manager = std::make_unique<EntityManager>();
-
-            entity_manager->initialize_entities(this);
-        }
-
         Ecs(const Ecs &) = delete;
         Ecs(Ecs &&) = delete;
         Ecs& operator=(const Ecs &) = delete;
         Ecs& operator=(Ecs &&) = delete;
+        
+        static Ecs* instance() {
+            if (ecs == nullptr) {
+                ecs = new Ecs();
+            }
 
+            return ecs;
+        }
+        
         Entity create_entity() {
             return entity_manager->create_entity();
         }
@@ -33,6 +33,7 @@ namespace entity {
 
         template<typename T>
         static void register_component() {
+            T::_p = instance();
             component_manager->register_component<T>();
         }
 
@@ -92,11 +93,26 @@ namespace entity {
             component_manager->dispatch_event(event);
         }
 
+        template<typename C, typename E, typename F>
+        void add_event_handler(F && f) {
+            component_manager->add_event_handler<C, E>(f);
+        }
+    protected:
+        Ecs() {
+            component_manager = std::make_unique<ComponentManager>();
+            systems_manager = std::make_unique<SystemsManager>();
+            entity_manager = std::make_unique<EntityManager>();
+
+            entity_manager->initialize_entities(this);
+        }
     private:
         std::unique_ptr<SystemsManager> systems_manager;
         std::unique_ptr<EntityManager> entity_manager;
         static std::unique_ptr<ComponentManager> component_manager;
+
+        static Ecs *ecs;
     };
 
+    inline Ecs* Ecs::ecs;
     inline std::unique_ptr<ComponentManager> Ecs::component_manager = std::make_unique<ComponentManager>();
 }

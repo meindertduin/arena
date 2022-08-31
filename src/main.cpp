@@ -13,6 +13,8 @@ int main () {
         .window_name = "Arena"
     };
 
+    global.ecs = entity::Ecs::instance();
+
     global.graphic_options = new graphics::GraphicOptions {
         true,
         { window_options.width, window_options.height },
@@ -36,14 +38,14 @@ int main () {
         .shininess = 0.2f,
     };
 
-    auto move_system = global.ecs.register_system<entity::MoveSystem>();
+    auto move_system = global.ecs->register_system<entity::MoveSystem>();
 
     entity::Signature signature;
-    signature.set(global.ecs.get_component_type<entity::Transform>());
-    global.ecs.set_system_signature<entity::MoveSystem>(signature);
+    signature.set(global.ecs->get_component_type<entity::Transform>());
+    global.ecs->set_system_signature<entity::MoveSystem>(signature);
 
     // setting up the entity
-    global.entity = global.ecs.create_entity();
+    global.entity = global.ecs->create_entity();
     entity::Transform entity_transform;
     entity_transform.pos = { 0, 0, -2.0f };
 
@@ -54,7 +56,7 @@ int main () {
 
     while(!global.window->close_requested()) {
         global.input_manager.update();
-        global.ecs.dispatch_event<entity::TickEvent>(&tick_event);
+        global.ecs->dispatch_event<entity::TickEvent>(&tick_event);
 
         global.renderer->render();
         global.window->end_frame();

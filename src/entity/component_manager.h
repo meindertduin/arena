@@ -16,8 +16,6 @@ namespace entity {
             auto component_array = std::make_shared<ComponentArray<T>>();
             component_arrays.insert({T::_id, component_array});
 
-            T::_p = component_array.get();
-
             next_component_type++;
         }
 
@@ -65,6 +63,11 @@ namespace entity {
             for (auto &component : component_arrays) {
                 component.second->dispatch(event, E::_id, entity);
             }
+        }
+
+        template<typename C, typename E, typename F>
+        void add_event_handler(F && f) {
+            get_component_array<C>()->template add_event_handler<E>(f);
         }
     private:
         std::unordered_map<uint32_t, ComponentType> component_types;

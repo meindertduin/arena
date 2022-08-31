@@ -28,7 +28,7 @@ struct Global {
     graphics::Material material;
     entity::Entity entity;
 
-    entity::Ecs ecs;
+    entity::Ecs *ecs;
 
     ~Global() {
         delete window;

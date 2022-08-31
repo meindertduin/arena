@@ -3,7 +3,7 @@
 
 namespace entity {
     DECL_COMPONENT_INIT(Transform) {
-        Transform::_p->add_event_handler<TickEvent>(&Transform::on_tick);
+        Transform::_p->add_event_handler<Transform, TickEvent>(&Transform::on_tick);
     };
 
     void Transform::rotate(float degrees, const glm::vec3 &v) {
@@ -11,7 +11,7 @@ namespace entity {
 
         RotationChangeEvent event { rotation };
         event.entity = &this->entity;
-        global.ecs.dispatch_event(&event, this->entity);
+        global.ecs->dispatch_event(&event, this->entity);
     }
 
 
@@ -21,7 +21,7 @@ namespace entity {
         // TODO make sending events a little bit more elegant
         PositionChangeEvent event;
         event.entity = &this->entity;
-        global.ecs.dispatch_event(&event, this->entity);
+        global.ecs->dispatch_event(&event, this->entity);
     }
 
     __Transform_init init;
