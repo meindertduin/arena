@@ -87,6 +87,11 @@ namespace entity {
             component_manager->dispatch_event(event);
         }
 
+        template<typename E>
+        constexpr void dispatch_event(E *event, Entity entity) {
+            component_manager->dispatch_event(event);
+        }
+
     private:
         std::unique_ptr<SystemsManager> systems_manager;
         std::unique_ptr<EntityManager> entity_manager;

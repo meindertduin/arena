@@ -8,6 +8,9 @@
 
 #include "entity.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtx/quaternion.hpp>
+
 namespace entity {
     struct EventBase {
         Entity *entity = nullptr;
@@ -20,7 +23,11 @@ namespace entity {
 
     // TODO remove for testing purposes
     struct PositionChangeEvent : public Event<PositionChangeEvent> {  };
-    struct RotationChangeEvent : public Event<PositionChangeEvent> {  };
+    struct RotationChangeEvent : public Event<RotationChangeEvent> { 
+        glm::quat rotation;
+
+        RotationChangeEvent(glm::quat rotation) : rotation(rotation) {  }
+    };
 
     struct TickEvent : public Event<TickEvent> {
 

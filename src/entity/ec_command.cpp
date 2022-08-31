@@ -33,6 +33,6 @@ namespace entity {
         auto &transform = entity.get<Transform>();
 
         transform.rotate(degrees_x, glm::vec3(0, 1, 0));
-        transform.rotate(-degrees_y, glm::vec3(0, 1, 0));
+        transform.rotate(-degrees_y, transform.get_right());
     }
 }

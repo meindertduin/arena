@@ -26,13 +26,8 @@ namespace entity {
             return glm::translate(glm::identity<glm::mat4>(), pos) * glm::mat4_cast(rotation);
         }
 
-        void rotate(float degrees, const glm::vec3 &v) {
-            rotation = glm::rotate(rotation, glm::radians(degrees), v);
-        }
-
-        void move(const glm::vec3 &dir, float amount) {
-            pos = pos + (dir * amount);
-        }
+        void rotate(float degrees, const glm::vec3 &v);
+        void move(const glm::vec3 &dir, float amount);
 
         glm::vec3 get_forward() {
             return glm::inverse(rotation) * glm::vec3(0.0, 0.0, -1.0);
@@ -59,7 +54,7 @@ namespace entity {
         }
 
         void on_tick(TickEvent event) {
-            rotate(1, { 0, 1, 0 });
+            // rotate(1, { 0, 1, 0 });
         }
     };
 

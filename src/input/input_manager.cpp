@@ -41,11 +41,11 @@ namespace input {
     }
 
     void PlayerInput::on_mouse_movement(float mouse_x_offset, float mouse_y_offset) {
-        auto xoffset = mouse_x_offset;
-        auto yoffset = mouse_y_offset;
+        entity::RotateCommand command;
+        command.degrees_x = mouse_x_offset * settings.mouse_sensitivity;
+        command.degrees_y = mouse_y_offset * settings.mouse_sensitivity;
 
-        xoffset *= settings.mouse_sensitivity;
-        yoffset *= settings.mouse_sensitivity;
+        command.execute(global.game->player);
     }
 
     void PlayerInput::on_key_press(int key, int mod_mask, int action) {

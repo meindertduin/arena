@@ -9,6 +9,7 @@ namespace entity {
         virtual ~IComponentArray() = default;
         virtual void entity_destroyed(Entity entity) = 0;
         virtual constexpr void dispatch(void *e, uint32_t event_id) = 0;
+        virtual constexpr void dispatch(void *e, uint32_t event_id, Entity entity) = 0;
     };
 
     template<typename T>
@@ -73,18 +74,22 @@ namespace entity {
 
         // could not make this a template function, thats why e is type void*
         constexpr void dispatch(void *e, uint32_t event_id) override {
-            auto event = reinterpret_cast<EventBase*>(e);
             if (event_handlers.find(event_id) == event_handlers.end()) {
                 return;
             }
-            if (event->entity != nullptr) {
-                auto &component = components[event->entity->id];
-                event_handlers[event_id](&component, event);
-            } else {
-                for (auto &component : components) {
-                    event_handlers[event_id](&component, event);
-                }
+            for (auto &component : components) {
+                // DO check if it component is not used
+                event_handlers[event_id](&component, e);
             }
+        }
+
+        constexpr void dispatch(void *e, uint32_t event_id, Entity entity) override {
+            if (event_handlers.find(event_id) == event_handlers.end()) {
+                return;
+            }
+            // DO check if it component is not used
+            auto &component = components[entity.id];
+            event_handlers[event_id](&component, e);
         }
     private:
         // Not very memory efficient with alot of components
