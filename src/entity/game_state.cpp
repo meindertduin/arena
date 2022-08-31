@@ -21,11 +21,15 @@ namespace entity {
 
         point_lights.push_back(pointLight);
 
-        ECPlayer ec_player;
-        this->player = ec_player.create(global.ecs->create_entity());
+        this->camera = new entity::Camera { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y };
     }
 
     GameState::~GameState() {
         delete camera;
+    }
+
+    void GameState::init() {
+        ECPlayer ec_player;
+        this->player = ec_player.create(global.ecs->create_entity());
     }
 }

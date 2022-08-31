@@ -7,6 +7,8 @@ namespace entity {
     Entity ECPlayer::create(Entity e) const {
         e.add(Transform());
         e.add(ECFirstPersonCamera());
+        auto &camera_component = e.get<ECFirstPersonCamera>();
+        camera_component.position_camera();
 
         return e;
     }

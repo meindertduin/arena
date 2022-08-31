@@ -26,7 +26,7 @@ int main () {
     global.renderer = new graphics::Renderer();
 
     global.game = new entity::GameState();
-    global.game->camera = new entity::Camera { window_options.width, window_options.height };
+    global.game->init();
 
     global.mesh = new graphics::Mesh();
     global.texture = new graphics::Texture("assets/container.png");

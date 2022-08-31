@@ -16,6 +16,8 @@ namespace entity {
         std::vector<graphics::DirLight> dir_lights;
         std::vector<graphics::PointLight> point_lights;
 
+        void init();
+
         Camera *camera;
         Entity player;
     };

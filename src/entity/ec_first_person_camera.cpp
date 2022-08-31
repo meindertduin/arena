@@ -11,6 +11,11 @@ namespace entity {
             add_event_handler<ECFirstPersonCamera, RotationChangeEvent>(&ECFirstPersonCamera::on_rotation_change);
     }
 
+    void ECFirstPersonCamera::position_camera() {
+        auto &entity_transform = this->entity.get<Transform>();
+        global.game->camera->transform.pos = entity_transform.pos;
+    }
+
     void ECFirstPersonCamera::on_position_change(PositionChangeEvent event) {
         auto &entity_transform = this->entity.get<Transform>();
         global.game->camera->transform.pos = entity_transform.pos;

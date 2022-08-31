@@ -90,8 +90,7 @@ namespace entity {
 
             if (entity_index_map.find(entity.id) == entity_index_map.end())
                 return;
-            
-            // DO check if it component is not used
+
             auto &component = components[entity.id];
             event_handlers[event_id](&component, e);
         }
