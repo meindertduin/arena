@@ -21,6 +21,4 @@ namespace entity {
         event.entity = &this->entity;
         global.ecs->dispatch_event(&event, this->entity);
     }
-
-    __Transform_init init;
 }

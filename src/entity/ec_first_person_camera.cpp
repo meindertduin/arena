@@ -21,6 +21,4 @@ namespace entity {
     void ECFirstPersonCamera::on_rotation_change(RotationChangeEvent event) {
         global.game->camera->transform.rotation = event.rotation;
     }
-
-    __ECFirstPersonCamera_init camera_init;
 }

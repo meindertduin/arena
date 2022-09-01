@@ -38,5 +38,6 @@ namespace entity {
     template struct Component<_c>; \
     template <> uint32_t Component<_c>::_id = 0; \
     template <> Ecs* Component<_c>::_p = nullptr; \
+    __##_c##_init _c##__COUNTER__; \
     template <> void InitComponent<_c>::init()
 }
