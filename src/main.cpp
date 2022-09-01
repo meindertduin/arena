@@ -41,12 +41,12 @@ int main () {
     auto move_system = global.ecs->register_system<entity::MoveSystem>();
 
     entity::Signature signature;
-    signature.set(global.ecs->get_component_type<entity::Transform>());
+    signature.set(global.ecs->get_component_type<entity::ECTransform>());
     global.ecs->set_system_signature<entity::MoveSystem>(signature);
 
     // setting up the entity
     global.entity = global.ecs->create_entity();
-    entity::Transform entity_transform;
+    entity::ECTransform entity_transform;
     entity_transform.pos = { 0, 0, -2.0f };
 
     global.entity.add(entity_transform);

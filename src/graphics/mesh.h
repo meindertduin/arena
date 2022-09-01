@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include "../entity/transform.h"
+#include "../entity/ec_transform.h"
 
 #include "gpu_buffer.h"
 
@@ -25,7 +25,7 @@ namespace graphics {
         Mesh& operator=(Mesh&&) = delete;
 
         void render();
-        entity::Transform transform;
+        entity::ECTransform transform;
     private:
         VertexBuffer vertex_buffer { sizeof(Vertex) };
         ArrayBuffer buffer_array;

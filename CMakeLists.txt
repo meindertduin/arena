@@ -18,8 +18,9 @@ set(SOURCES
     src/graphics/render_target.cpp
     external/glad/glad.c
     src/entity/event_manager.cpp
+    src/entity/move_system.cpp
     src/entity/entity.cpp
-    src/entity/transform.cpp
+    src/entity/ec_transform.cpp
     src/entity/ec_first_person_camera.cpp
     src/entity/ec_command.cpp
     src/entity/ec_player.cpp

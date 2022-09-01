@@ -1,6 +1,6 @@
 #pragma once
 
-#include "transform.h"
+#include "ec_transform.h"
 #include "../graphics/events.h"
 
 namespace entity {
@@ -9,7 +9,7 @@ namespace entity {
         glm::mat4 view;
         glm::mat4 projection;
 
-        Transform transform;
+        ECTransform transform;
 
         Camera() = default;
         Camera(uint32_t screen_width, uint32_t screen_height) {
