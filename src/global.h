@@ -23,10 +23,8 @@ struct Global {
     graphics::Renderer *renderer;
 
     graphics::GraphicOptions *graphic_options;
-    graphics::Mesh *mesh;
     graphics::Texture *texture;
     graphics::Material material;
-    entity::Entity entity;
 
     entity::Ecs *ecs;
 
@@ -34,7 +32,6 @@ struct Global {
         delete window;
 
         delete graphic_options;
-        delete mesh;
         delete texture;
         delete game;
 

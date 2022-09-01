@@ -22,5 +22,6 @@ namespace entity {
         assets::Cache cache;
         Camera *camera;
         Entity player;
+        Entity cube;
     };
 }

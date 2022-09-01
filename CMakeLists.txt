@@ -24,6 +24,7 @@ set(SOURCES
     src/entity/ec_command.cpp
     src/entity/ec_player.cpp
     src/entity/game_state.cpp
+    src/entity/static_render_system.cpp
     src/entity/ec_static_mesh_renderer.cpp
     src/input/input.cpp
     src/input/input_manager.cpp

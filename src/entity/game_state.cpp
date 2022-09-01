@@ -2,6 +2,9 @@
 #include "../global.h"
 #include "ec_player.h"
 
+#include "ec_transform.h"
+#include "ec_static_mesh_renderer.h"
+
 namespace entity {
     GameState::GameState() {
         graphics::DirLight dir_light;                
@@ -34,5 +37,8 @@ namespace entity {
 
         ECPlayer ec_player;
         this->player = ec_player.create(global.ecs->create_entity());
+        this->cube = global.ecs->create_entity();
+        this->cube.add(EcStaticMeshRenderer());
+        this->cube.add(ECTransform({ 0, 0, -10 }, {}));
     }
 }

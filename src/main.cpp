@@ -2,6 +2,8 @@
 
 #include "global.h"
 #include "input/input.h"
+#include "entity/static_render_system.h"
+#include "entity/ec_static_mesh_renderer.h"
 
 Global global;
 
@@ -23,6 +25,12 @@ int main () {
 
     global.ecs = entity::Ecs::instance();
 
+
+    auto static_render_system = global.ecs->register_system<entity::StaticRenderSystem>();
+    entity::Signature signature;
+    signature.set(global.ecs->get_component_type<entity::EcStaticMeshRenderer>());
+    global.ecs->set_system_signature<entity::StaticRenderSystem>(signature);
+
     global.material = {
         .ambient = { 0.2f, 0.2f, 0.2f },
         .diffuse = { 0.6f, 0.6f, 0.6f },
@@ -34,23 +42,15 @@ int main () {
     global.game = new entity::GameState();
     global.game->init();
 
-    global.mesh = global.game->cache.get_mesh("assets/cube.obj");
-
-    // setting up the entity
-    global.entity = global.ecs->create_entity();
-    entity::ECTransform entity_transform;
-    entity_transform.pos = { 0, 0, -2.0f };
-
-    global.entity.add(entity_transform);
-
-    entity::TickEvent tick_event;
-    tick_event.entity = &global.entity;
-
     while(!global.window->close_requested()) {
         global.input_manager.update();
-        global.ecs->dispatch_event<entity::TickEvent>(&tick_event);
+        
+        global.renderer->before_render();
+        
+        // render the different systems
+        static_render_system->update();
 
-        global.renderer->render();
+        global.renderer->after_render();
         global.window->end_frame();
     }
 

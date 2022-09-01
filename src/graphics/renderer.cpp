@@ -10,13 +10,14 @@ namespace graphics {
         render_target = std::make_unique<RenderTarget>();
     }
 
-    void Renderer::render() {
+    void Renderer::before_render() {
         render_target->bind();
         render_target->clear();
 
         set_ubo_data();
+    }
 
-        auto transform = global.entity.get<entity::ECTransform>();
+    void Renderer::render(Mesh *mesh, entity::ECTransform &transform) {
         auto model_4x4 = transform.get_transform_4x4();
 
         shader.use();
@@ -32,8 +33,10 @@ namespace graphics {
 
         shader.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
-        global.mesh->render();
+        mesh->render();
+    }
 
+    void Renderer::after_render() {
         render_target->unbind();
         render_target->render();
     }
