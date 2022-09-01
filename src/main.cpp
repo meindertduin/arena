@@ -12,23 +12,16 @@ int main () {
         .window_name = "Arena"
     };
 
-    global.ecs = entity::Ecs::instance();
-
     global.graphic_options = new graphics::GraphicOptions {
         true,
         { window_options.width, window_options.height },
     };
 
     global.window = new core::Window(window_options);
+    global.renderer = new graphics::Renderer();
     input::initialize_input(*global.window);
 
-    global.renderer = new graphics::Renderer();
-
-    global.game = new entity::GameState();
-    global.game->init();
-
-    global.mesh = new graphics::Mesh();
-    global.texture = new graphics::Texture("assets/container.png");
+    global.ecs = entity::Ecs::instance();
 
     global.material = {
         .ambient = { 0.2f, 0.2f, 0.2f },
@@ -36,6 +29,12 @@ int main () {
         .specular = { 0.2f, 0.2f, 0 },
         .shininess = 0.2f,
     };
+    global.texture = new graphics::Texture("assets/container.png");
+
+    global.game = new entity::GameState();
+    global.game->init();
+
+    global.mesh = global.game->cache.get_mesh("assets/cube.obj");
 
     // setting up the entity
     global.entity = global.ecs->create_entity();

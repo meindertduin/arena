@@ -29,6 +29,9 @@ namespace entity {
     }
 
     void GameState::init() {
+        // TODO for testing purpose this is placed here temporarily
+        this->cache.load_asset<graphics::Mesh>("assets/cube.obj");
+
         ECPlayer ec_player;
         this->player = ec_player.create(global.ecs->create_entity());
     }

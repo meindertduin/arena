@@ -18,7 +18,7 @@ namespace graphics {
 
     struct Mesh {
     public:
-        Mesh();
+        Mesh(MeshData *mesh_data);
         Mesh(const Mesh&) = delete;
         Mesh(Mesh&&) = delete;
         Mesh& operator=(const Mesh&) = delete;
@@ -27,6 +27,7 @@ namespace graphics {
         void render();
         entity::ECTransform transform;
     private:
+        std::size_t size;
         VertexBuffer vertex_buffer { sizeof(Vertex) };
         ArrayBuffer buffer_array;
     };

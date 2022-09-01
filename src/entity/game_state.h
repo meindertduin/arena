@@ -2,6 +2,7 @@
 
 #include "../graphics/light.h"
 #include "camera.h"
+#include "../assets/cache.h"
 
 namespace entity {
     struct GameState {
@@ -18,6 +19,7 @@ namespace entity {
 
         void init();
 
+        assets::Cache cache;
         Camera *camera;
         Entity player;
     };
