@@ -4,6 +4,7 @@
 #include "entity.h"
 #include "component_manager.h"
 #include "system.h"
+#include "../utils/types.h"
 
 namespace entity {
     struct Ecs {
@@ -93,7 +94,11 @@ namespace entity {
             component_manager->dispatch_event(event);
         }
 
-        template<typename C, typename E, typename F>
+        template<
+            typename F,
+            typename M = types::member_function_traits<F>,
+            typename C = typename M::instance_type,
+            typename E = typename M::first_argument>
         void add_event_handler(F && f) {
             component_manager->add_event_handler<C, E>(f);
         }
