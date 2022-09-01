@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "entity/move_system.h"
 
 #include "global.h"
 #include "input/input.h"
@@ -37,12 +36,6 @@ int main () {
         .specular = { 0.2f, 0.2f, 0 },
         .shininess = 0.2f,
     };
-
-    auto move_system = global.ecs->register_system<entity::MoveSystem>();
-
-    entity::Signature signature;
-    signature.set(global.ecs->get_component_type<entity::ECTransform>());
-    global.ecs->set_system_signature<entity::MoveSystem>(signature);
 
     // setting up the entity
     global.entity = global.ecs->create_entity();
