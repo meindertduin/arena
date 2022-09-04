@@ -32,13 +32,14 @@ namespace entity {
     }
 
     void GameState::init() {
-        // TODO for testing purpose this is placed here temporarily
         this->cache.load_asset<graphics::Mesh>("assets/cube.obj");
 
         ECPlayer ec_player;
         this->player = ec_player.create(global.ecs->create_entity());
         this->cube = global.ecs->create_entity();
-        this->cube.add(EcStaticMeshRenderer());
+        auto mesh_renderer = EcStaticMeshRenderer();
+        mesh_renderer.init("assets/cube.obj");
+        this->cube.add(mesh_renderer);
         this->cube.add(ECTransform({ 0, 0, -10 }, {}));
     }
 }

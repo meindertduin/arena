@@ -26,7 +26,6 @@ namespace assets {
 
         graphics::Mesh* get_mesh(std::string filename) const;
         void save_mesh(std::string filename, std::unique_ptr<graphics::Mesh> mesh);
-
     private:
         std::unordered_map<std::string, std::unique_ptr<graphics::Mesh>> meshses;
     };

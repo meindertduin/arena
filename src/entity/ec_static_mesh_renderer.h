@@ -9,10 +9,13 @@
 namespace entity {
     struct EcStaticMeshRenderer : public Component<EcStaticMeshRenderer> {
     public:
-        EcStaticMeshRenderer();
-        graphics::Mesh *mesh;
-        graphics::Material *material;
-        graphics::Texture *texture;
+        graphics::Mesh *mesh = nullptr;
+        graphics::Material *material = nullptr;
+        graphics::Texture *texture = nullptr;
+
+        EcStaticMeshRenderer() = default;
+
+        void init(std::string filename);
     };
 
     DECL_COMPONENT_HEADER(EcStaticMeshRenderer);
