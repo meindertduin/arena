@@ -3,7 +3,7 @@
 #include "ec_player.h"
 
 #include "ec_transform.h"
-#include "ec_static_mesh_renderer.h"
+#include "ec_static_mesh.h"
 
 namespace entity {
     GameState::GameState() {

@@ -30,4 +30,15 @@ namespace assets {
         std::unordered_map<std::string, std::unique_ptr<graphics::Mesh>> meshses;
     };
 
+    template<typename T>
+    struct AssetHandle {
+    public:
+        AssetHandle() = default;
+        AssetHandle(std::string filename) : filename(filename) {  }
+        T* get() {
+            throw std::runtime_error("specialization of type T not implemented.");
+        }
+    private:
+        std::string filename;
+    };
 }

@@ -3,15 +3,16 @@
 #include "../graphics/mesh.h"
 #include "../graphics/material.h"
 #include "../graphics/texture.h"
+#include "../assets/cache.h"
 
 #include "component.h"
 
 namespace entity {
     struct EcStaticMeshRenderer : public Component<EcStaticMeshRenderer> {
     public:
-        graphics::Mesh *mesh = nullptr;
         graphics::Material *material = nullptr;
         graphics::Texture *texture = nullptr;
+        assets::AssetHandle<graphics::Mesh> mesh;
 
         EcStaticMeshRenderer() = default;
 

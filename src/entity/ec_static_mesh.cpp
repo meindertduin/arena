@@ -1,4 +1,4 @@
-#include "ec_static_mesh_renderer.h"
+#include "ec_static_mesh.h"
 
 #include "../global.h"
 
@@ -6,7 +6,7 @@ namespace entity {
     DECL_COMPONENT_INIT(EcStaticMeshRenderer) {}
 
     void EcStaticMeshRenderer::init(std::string filename) {
-        this->mesh = global.game->cache.get_mesh("assets/cube.obj");
+        this->mesh = { filename };
         this->material = &global.material;
         this->texture = global.texture;
     }

@@ -3,7 +3,7 @@
 #include "global.h"
 #include "input/input.h"
 #include "entity/static_render_system.h"
-#include "entity/ec_static_mesh_renderer.h"
+#include "entity/ec_static_mesh.h"
 
 Global global;
 
@@ -24,7 +24,6 @@ int main () {
     input::initialize_input(*global.window);
 
     global.ecs = entity::Ecs::instance();
-
 
     auto static_render_system = global.ecs->register_system<entity::StaticRenderSystem>();
     entity::Signature signature;
