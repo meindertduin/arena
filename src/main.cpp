@@ -5,6 +5,8 @@
 #include "entity/static_render_system.h"
 #include "entity/ec_static_mesh.h"
 
+#include "logging.h"
+
 Global global;
 
 int main () {
