@@ -8,6 +8,11 @@
 #include <vector>
 #include <stdexcept>
 
+#include "../graphics/mesh.h"
+#include <memory>
+
+#include "cache.h"
+
 namespace assets {
     struct ObjIndex {
         int vertex_index;
@@ -17,7 +22,7 @@ namespace assets {
 
     ObjIndex parse_object_index(std::string token, graphics::MeshData *meshData);
 
-    std::unique_ptr<graphics::MeshData> load_obj(std::string filename) {
+    void load_obj(std::string filename, Cache *cache) {
         std::ifstream fs(filename);
 
         auto mesh_data = std::unique_ptr<graphics::MeshData>(new graphics::MeshData {  });
@@ -27,7 +32,7 @@ namespace assets {
         std::vector<glm::vec3> normals;
 
         if (!fs.is_open())
-            throw std::runtime_error("IO ERROR: Could not open filename: " + filename);
+            THROW_ERROR("IO ERROR, could not open filename %s", filename);
 
         while(!fs.eof()) {
             char line[128];
@@ -93,7 +98,8 @@ namespace assets {
 
         fs.close();
 
-        return std::move(mesh_data);
+        auto mesh = std::make_unique<graphics::Mesh>(mesh_data.get());
+        cache->save_mesh(filename, std::move(mesh));
     }
 
     ObjIndex parse_object_index(std::string token, graphics::MeshData *mesh_data) {

@@ -9,13 +9,19 @@
 #include "graphic_options.h"
 
 #include "light.h"
+#include "../entity/ec_transform.h"
 
 namespace graphics {
+    struct Mesh;
+
     struct Renderer {
     public:
         Renderer();
+        
+        void before_render();
+        void render(Mesh *mesh, entity::ECTransform &transform);
+        void after_render();
 
-        void render();
         void set_ubo_data();
         ShaderProgram shader { "shaders/light_shader.vs", "shaders/light_shader.fs" };
     private:

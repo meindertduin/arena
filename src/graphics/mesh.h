@@ -1,7 +1,7 @@
 #pragma once
 
 #include <stdint.h>
-#include "../entity/transform.h"
+#include "../entity/ec_transform.h"
 
 #include "gpu_buffer.h"
 
@@ -18,15 +18,16 @@ namespace graphics {
 
     struct Mesh {
     public:
-        Mesh();
+        Mesh(MeshData *mesh_data);
         Mesh(const Mesh&) = delete;
         Mesh(Mesh&&) = delete;
         Mesh& operator=(const Mesh&) = delete;
         Mesh& operator=(Mesh&&) = delete;
 
         void render();
-        entity::Transform transform;
+        entity::ECTransform transform;
     private:
+        std::size_t size;
         VertexBuffer vertex_buffer { sizeof(Vertex) };
         ArrayBuffer buffer_array;
     };

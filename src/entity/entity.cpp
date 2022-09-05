@@ -1,15 +1,21 @@
 #include "entity.h"
 
+#include "ecs.h"
+#include "../logging.h"
+
 namespace entity {
     EntityManager::EntityManager() {
-        for (auto entity = 0; entity < MAX_ENTITIES; ++entity) {
-            available_entries.push(entity);
+    }
+
+    void EntityManager::initialize_entities(Ecs *manager) {
+        for (auto entity = 0u; entity < MAX_ENTITIES; ++entity) {
+            available_entries.push({ Entity { entity, manager }});
         }
     }
 
     Entity EntityManager::create_entity() {
         if (active_entities_count > MAX_ENTITIES) {
-            throw std::runtime_error("Max amount of entities exceeded");
+            THROW_ERROR("Max amount of entities exceeded");
         }
         auto id = available_entries.front();
         available_entries.pop();
@@ -20,25 +26,25 @@ namespace entity {
     }
 
     void EntityManager::destroy(Entity entity) {
-        if (entity > MAX_ENTITIES) {
-            throw std::runtime_error("Entity cannot be above the MAX_ENTITIES amount");
+        if (entity.id > MAX_ENTITIES) {
+            THROW_ERROR("Entity cannot be above the MAX_ENTITIES amount");
         }
 
-        signatures[entity].reset();
+        signatures[entity.id].reset();
         available_entries.push(entity);
 
         active_entities_count--;
     }
 
     void EntityManager::set_signature(Entity entity, Signature signature) {
-        if (entity > MAX_ENTITIES) {
-            throw std::runtime_error("Entity cannot be above the MAX_ENTITIES amount");
+        if (entity.id > MAX_ENTITIES) {
+            THROW_ERROR("Entity cannot be above the MAX_ENTITIES amount");
         }
 
-        signatures[entity] = signature;
+        signatures[entity.id] = signature;
     }
 
     Signature EntityManager::get_signature(Entity entity) const {
-        return signatures[entity];
+        return signatures[entity.id];
     }
 }

@@ -3,7 +3,7 @@
 #include "system.h"
 
 namespace entity {
-    struct MoveSystem : public System {
+    struct StaticRenderSystem : public System {
         void update() override;
     };
 }

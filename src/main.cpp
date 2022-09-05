@@ -1,8 +1,9 @@
 #include <stdio.h>
-#include "entity/move_system.h"
 
 #include "global.h"
 #include "input/input.h"
+#include "entity/static_render_system.h"
+#include "entity/ec_static_mesh.h"
 
 Global global;
 
@@ -19,15 +20,15 @@ int main () {
     };
 
     global.window = new core::Window(window_options);
+    global.renderer = new graphics::Renderer();
     input::initialize_input(*global.window);
 
-    global.renderer = new graphics::Renderer();
+    global.ecs = entity::Ecs::instance();
 
-    global.game = new entity::GameState();
-    global.game->camera = new entity::Camera { window_options.width, window_options.height };
-
-    global.mesh = new graphics::Mesh();
-    global.texture = new graphics::Texture("assets/container.png");
+    auto static_render_system = global.ecs->register_system<entity::StaticRenderSystem>();
+    entity::Signature signature;
+    signature.set(entity::EcStaticMeshRenderer::_id);
+    global.ecs->set_system_signature<entity::StaticRenderSystem>(signature);
 
     global.material = {
         .ambient = { 0.2f, 0.2f, 0.2f },
@@ -35,27 +36,20 @@ int main () {
         .specular = { 0.2f, 0.2f, 0 },
         .shininess = 0.2f,
     };
+    global.texture = new graphics::Texture("assets/container.png");
 
-    // setting up the ecs
-    global.ecs.register_component<entity::Transform>();
-
-    auto move_system = global.ecs.register_system<entity::MoveSystem>();
-
-    entity::Signature signature;
-    signature.set(global.ecs.get_component_type<entity::Transform>());
-    global.ecs.set_system_signature<entity::MoveSystem>(signature);
-
-    // setting up the entity
-    global.entity = global.ecs.create_entity();
-    entity::Transform entity_transform;
-    entity_transform.pos = { 0, 0, -2.0f };
-    global.ecs.add_component(global.entity, entity_transform);
+    global.game = new entity::GameState();
+    global.game->init();
 
     while(!global.window->close_requested()) {
-        // move_system->update();
-        global.game->camera->update();
+        global.input_manager.update();
+        
+        global.renderer->before_render();
+        
+        // render the different systems
+        static_render_system->update();
 
-        global.renderer->render();
+        global.renderer->after_render();
         global.window->end_frame();
     }
 

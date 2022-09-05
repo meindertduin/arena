@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entity.h"
+#include "../logging.h"
 
 #include <set>
 
@@ -19,7 +20,7 @@ namespace entity {
                 auto type_name = typeid(T).name();
 
                 if (systems.find(type_name) != systems.end()) {
-                    throw std::runtime_error("System already registered");
+                    THROW_ERROR("System of type %s was already registered.", type_name);
                 }
 
                 auto system = std::make_shared<T>();
@@ -33,7 +34,7 @@ namespace entity {
             auto type_name = typeid(T).name();
 
             if (systems.find(type_name) == systems.end()) {
-                throw std::runtime_error("System was not registered");
+                THROW_ERROR("System of type %s was not registered.", type_name);
             }
 
             signatures.insert({type_name, signature});

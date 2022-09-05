@@ -2,9 +2,7 @@
 
 #include <string>
 
-#include "../graphics/mesh.h"
-#include <memory>
-
 namespace assets {
-    std::unique_ptr<graphics::MeshData> load_obj(std::string filename);
+    struct Cache;
+    void load_obj(std::string filename, Cache *cache);
 }

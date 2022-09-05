@@ -2,36 +2,26 @@
 
 #include "entity.h"
 #include "component_array.h"
+#include "../logging.h"
 
 namespace entity {
     struct ComponentManager {
     public:
         template<typename T>
         void register_component() {
-            auto type_name = typeid(T).name();
-            if (component_types.find(type_name) != component_types.end()) {
-                throw std::runtime_error("Registered ComponentType more than once");
+            if (component_arrays.find(T::_id) != component_arrays.end()) {
+                THROW_ERROR("Registered Component of type: %s more than once.", typeid(T).name());
             }
 
-            component_types.insert({type_name, next_component_type});
-            component_arrays.insert({type_name, std::make_shared<ComponentArray<T>>()});
+            auto component_array = std::make_shared<ComponentArray<T>>();
+            component_arrays.insert({T::_id, component_array});
 
             next_component_type++;
         }
 
         template<typename T>
-        ComponentType get_component_type() {
-            auto type_name = typeid(T).name();
-
-            if (component_types.find(type_name) == component_types.end()) {
-                throw std::runtime_error("Could not find component type.");
-            }
-
-            return component_types[type_name];
-        }
-
-        template<typename T>
         void add_component(Entity entity, T component) {
+            component.entity = entity;
             get_component_array<T>()->insert(entity, component);
         }
 
@@ -50,21 +40,37 @@ namespace entity {
                 pair.second->entity_destroyed(entity);
             }
         }
-    private:
-        std::unordered_map<const char*, ComponentType> component_types;
-        std::unordered_map<const char*, std::shared_ptr<IComponentArray>> component_arrays;
 
-        ComponentType next_component_type;
+        template<typename E>
+        void dispatch_event(E *event) {
+            for (auto &component : component_arrays) {
+                component.second->dispatch(event, E::_id);
+            }
+        }
+
+        template<typename E>
+        void dispatch_event(E *event, Entity entity) {
+            for (auto &component : component_arrays) {
+                component.second->dispatch(event, E::_id, entity);
+            }
+        }
+
+        template<typename C, typename E, typename F>
+        void add_event_handler(F && f) {
+            get_component_array<C>()->template add_event_handler<E>(f);
+        }
+    private:
+        std::unordered_map<uint32_t, std::shared_ptr<IComponentArray>> component_arrays;
+
+        uint32_t next_component_type;
 
         template<typename T>
         std::shared_ptr<ComponentArray<T>> get_component_array() {
-            auto type_name = typeid(T).name();
-
-            if (component_types.find(type_name) == component_types.end()) {
-                throw std::runtime_error("Could not find component type.");
+            if (component_arrays.find(T::_id) == component_arrays.end()) {
+                THROW_ERROR("Could not find component of type: %s.", typeid(T).name());
             }
 
-            return std::static_pointer_cast<ComponentArray<T>>(component_arrays[type_name]);
+            return std::static_pointer_cast<ComponentArray<T>>(component_arrays[T::_id]);
         }
     };
 }
