@@ -7,14 +7,12 @@
 #include <unordered_map>
 #include <memory>
 
-
 namespace entity {
     const uint32_t MAX_ENTITIES = 2000;
 
     struct Ecs;
 
-    using ComponentType = uint8_t;
-    const ComponentType MAX_COMPONENTS = 32;
+    constexpr uint32_t MAX_COMPONENTS = 32;
     using Signature = std::bitset<MAX_COMPONENTS>;
 
     template<typename T>

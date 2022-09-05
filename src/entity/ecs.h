@@ -43,7 +43,7 @@ namespace entity {
             component_manager->add_component<T>(entity, component);
 
             auto signature = entity_manager->get_signature(entity);
-            signature.set(component_manager->get_component_type<T>(), true);
+            signature.set(T::_id, true);
             entity_manager->set_signature(entity, signature);
 
             systems_manager->entity_signature_changed(entity, signature);
@@ -54,7 +54,7 @@ namespace entity {
             component_manager->remove_component<T>(entity);
 
             auto signature = entity_manager->get_signature(entity);
-            signature.set(component_manager->get_component_type<T>(), false);
+            signature.set(T::_id, false);
             entity_manager->set_signature(entity, signature);
 
             systems_manager->entity_signature_changed(entity, signature);
@@ -63,11 +63,6 @@ namespace entity {
         template<typename T>
         T& get_component(Entity entity) {
             return component_manager->get_component<T>(entity);
-        }
-
-        template<typename T>
-        ComponentType get_component_type() {
-            return component_manager->get_component_type<T>();
         }
 
         template<typename T>

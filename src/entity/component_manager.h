@@ -9,25 +9,14 @@ namespace entity {
     public:
         template<typename T>
         void register_component() {
-            if (component_types.find(T::_id) != component_types.end()) {
+            if (component_arrays.find(T::_id) != component_arrays.end()) {
                 THROW_ERROR("Registered Component of type: %s more than once.", typeid(T).name());
             }
 
-            component_types.insert({T::_id, next_component_type});
             auto component_array = std::make_shared<ComponentArray<T>>();
             component_arrays.insert({T::_id, component_array});
 
             next_component_type++;
-        }
-
-        // used for setting the component in a signature
-        template<typename T>
-        ComponentType get_component_type() {
-            if (component_types.find(T::_id) == component_types.end()) {
-                THROW_ERROR("Could not find component of type: %s.", typeid(T).name());
-            }
-
-            return component_types[T::_id];
         }
 
         template<typename T>
@@ -71,14 +60,13 @@ namespace entity {
             get_component_array<C>()->template add_event_handler<E>(f);
         }
     private:
-        std::unordered_map<uint32_t, ComponentType> component_types;
         std::unordered_map<uint32_t, std::shared_ptr<IComponentArray>> component_arrays;
 
-        ComponentType next_component_type;
+        uint32_t next_component_type;
 
         template<typename T>
         std::shared_ptr<ComponentArray<T>> get_component_array() {
-            if (component_types.find(T::_id) == component_types.end()) {
+            if (component_arrays.find(T::_id) == component_arrays.end()) {
                 THROW_ERROR("Could not find component of type: %s.", typeid(T).name());
             }
 

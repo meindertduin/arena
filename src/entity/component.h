@@ -5,6 +5,7 @@
 #include "ecs.h"
 
 namespace entity {
+
     template<typename T>
     struct Component {
         Entity entity;
@@ -18,6 +19,9 @@ namespace entity {
     template<typename T>
     struct InitComponent {
         InitComponent() {
+            if (next_component >= MAX_COMPONENTS)
+                THROW_ERROR("Max components of %s exceeded.", std::to_string(MAX_COMPONENTS));
+
             T::_id = next_component;
 
             next_component += 1;

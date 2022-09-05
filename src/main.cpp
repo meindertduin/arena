@@ -26,9 +26,8 @@ int main () {
     global.ecs = entity::Ecs::instance();
 
     auto static_render_system = global.ecs->register_system<entity::StaticRenderSystem>();
-    static_render_system = global.ecs->register_system<entity::StaticRenderSystem>();
     entity::Signature signature;
-    signature.set(global.ecs->get_component_type<entity::EcStaticMeshRenderer>());
+    signature.set(entity::EcStaticMeshRenderer::_id);
     global.ecs->set_system_signature<entity::StaticRenderSystem>(signature);
 
     global.material = {

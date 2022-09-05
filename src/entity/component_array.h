@@ -97,6 +97,7 @@ namespace entity {
         }
     private:
         // Not very memory efficient with alot of components
+        // could be managed with a memory allocator?
         std::array<T, MAX_ENTITIES> components;
 
         // TODO, make this an array for performance bonus
