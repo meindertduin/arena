@@ -38,7 +38,7 @@ int main () {
     };
     global.texture = new graphics::Texture("assets/container.png");
 
-    global.game = new entity::GameState();
+    global.game = new game::GameState();
     global.game->init();
 
     while(!global.window->close_requested()) {

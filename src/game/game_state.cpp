@@ -1,11 +1,11 @@
 #include "game_state.h"
 #include "../global.h"
-#include "ec_player.h"
+#include "../entity/ec_player.h"
 
-#include "ec_transform.h"
-#include "ec_static_mesh.h"
+#include "../entity/ec_transform.h"
+#include "../entity/ec_static_mesh.h"
 
-namespace entity {
+namespace game {
     GameState::GameState() {
         graphics::DirLight dir_light;                
         dir_light.direction = { 0, -1.0f, -1.0f };  
@@ -34,12 +34,12 @@ namespace entity {
     void GameState::init() {
         this->cache.load_asset<graphics::Mesh>("assets/cube.obj");
 
-        ECPlayer ec_player;
+        entity::ECPlayer ec_player;
         this->player = ec_player.create(global.ecs->create_entity());
         this->cube = global.ecs->create_entity();
-        auto mesh_renderer = EcStaticMeshRenderer();
+        auto mesh_renderer = entity::EcStaticMeshRenderer();
         mesh_renderer.init("assets/cube.obj");
         this->cube.add(mesh_renderer);
-        this->cube.add(ECTransform({ 0, 0, -10 }, {}));
+        this->cube.add(entity::ECTransform({ 0, 0, -10 }, {}));
     }
 }

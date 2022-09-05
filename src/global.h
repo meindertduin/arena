@@ -4,7 +4,7 @@
 
 #include "core/window.h"
 #include "entity/camera.h"
-#include "entity/game_state.h"
+#include "game/game_state.h"
 #include "entity/ecs.h"
 
 #include "graphics/graphic_options.h"
@@ -19,7 +19,7 @@ struct Global {
     core::Window *window;
 
     input::InputManager input_manager;
-    entity::GameState *game;
+    game::GameState *game;
     graphics::Renderer *renderer;
 
     graphics::GraphicOptions *graphic_options;

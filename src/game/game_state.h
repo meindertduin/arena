@@ -1,10 +1,10 @@
 #pragma once
 
 #include "../graphics/light.h"
-#include "camera.h"
+#include "../entity/camera.h"
 #include "../assets/cache.h"
 
-namespace entity {
+namespace game {
     struct GameState {
         GameState();
         ~GameState();
@@ -20,8 +20,8 @@ namespace entity {
         void init();
 
         assets::Cache cache;
-        Camera *camera;
-        Entity player;
-        Entity cube;
+        entity::Camera *camera;
+        entity::Entity player;
+        entity::Entity cube;
     };
 }
