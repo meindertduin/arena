@@ -23,7 +23,7 @@ namespace assets {
     }
 
     template<>
-    graphics::Mesh* AssetHandle<graphics::Mesh>::get()  {
+    graphics::Mesh* AssetHandle<graphics::Mesh>::get() const {
        return global.game->cache.get_mesh(filename);
     }
 }

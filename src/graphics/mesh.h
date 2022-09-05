@@ -24,7 +24,7 @@ namespace graphics {
         Mesh& operator=(const Mesh&) = delete;
         Mesh& operator=(Mesh&&) = delete;
 
-        void render();
+        void render() const;
         entity::ECTransform transform;
     private:
         std::size_t size;

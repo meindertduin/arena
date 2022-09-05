@@ -45,7 +45,7 @@ int main () {
         global.input_manager.update();
         
         global.renderer->before_render();
-        
+        global.game->map->render_background();
         // render the different systems
         static_render_system->update();
 

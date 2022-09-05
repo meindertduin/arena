@@ -19,7 +19,7 @@ namespace graphics {
         Renderer();
         
         void before_render();
-        void render(Mesh *mesh, entity::ECTransform &transform);
+        void render(const Mesh *mesh, const entity::ECTransform &transform);
         void after_render();
 
         void set_ubo_data();

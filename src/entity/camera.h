@@ -9,7 +9,7 @@ namespace entity {
         glm::mat4 view;
         glm::mat4 projection;
 
-        ECTransform transform;
+        ECTransform transform {  };
 
         Camera() = default;
         Camera(uint32_t screen_width, uint32_t screen_height) {

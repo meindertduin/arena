@@ -4,15 +4,15 @@
 #include "../entity/camera.h"
 #include "../assets/cache.h"
 
+#include "map.h"
+
 namespace game {
     struct GameState {
         GameState();
         ~GameState();
 
         GameState(const GameState&) = delete;
-        GameState(GameState&&) = delete;
         GameState& operator=(const GameState&) = delete;
-        GameState& operator=(GameState&&) = delete;
 
         std::vector<graphics::DirLight> dir_lights;
         std::vector<graphics::PointLight> point_lights;
@@ -23,5 +23,7 @@ namespace game {
         entity::Camera *camera;
         entity::Entity player;
         entity::Entity cube;
+
+        std::unique_ptr<Map> map;
     };
 }

@@ -36,10 +36,12 @@ namespace assets {
     public:
         AssetHandle() = default;
         AssetHandle(std::string filename) : filename(filename) {  }
-        T* get() {
+        T* get() const {
             THROW_ERROR("specialization of type %s not implemented for cache get()", typeid(T).name());
         }
     private:
         std::string filename;
     };
+
+    using MeshHandle = AssetHandle<graphics::Mesh>;
 }

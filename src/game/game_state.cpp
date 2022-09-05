@@ -32,7 +32,12 @@ namespace game {
     }
 
     void GameState::init() {
+        // loading assets
         this->cache.load_asset<graphics::Mesh>("assets/cube.obj");
+        this->cache.load_asset<graphics::Mesh>("assets/valley.obj");
+
+       // loading map
+        this->map = std::make_unique<Map>();
 
         entity::ECPlayer ec_player;
         this->player = ec_player.create(global.ecs->create_entity());

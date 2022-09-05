@@ -17,7 +17,7 @@ namespace graphics {
         set_ubo_data();
     }
 
-    void Renderer::render(Mesh *mesh, entity::ECTransform &transform) {
+    void Renderer::render(const Mesh *mesh, const entity::ECTransform &transform) {
         auto model_4x4 = transform.get_transform_4x4();
 
         shader.use();

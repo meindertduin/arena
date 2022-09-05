@@ -14,7 +14,7 @@ namespace graphics {
         this->size = mesh_data->vertices.size();
     }
 
-    void Mesh::render() {
+    void Mesh::render() const {
         this->buffer_array.bind();
 
         // TODO binding new vertex array and setting the vertex-attributes is quite expensive
