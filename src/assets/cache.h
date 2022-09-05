@@ -4,6 +4,7 @@
 #include <unordered_map>
 
 #include "../graphics/mesh.h"
+#include "../logging.h"
 #include "obj_loader.h"
 
 namespace assets {
@@ -36,7 +37,7 @@ namespace assets {
         AssetHandle() = default;
         AssetHandle(std::string filename) : filename(filename) {  }
         T* get() {
-            throw std::runtime_error("specialization of type T not implemented.");
+            THROW_ERROR("specialization of type %s not implemented for cache get()", typeid(T).name());
         }
     private:
         std::string filename;

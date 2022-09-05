@@ -20,6 +20,7 @@ namespace graphics {
     struct Shader {
         uint32_t id;
         ShaderType type;
+        std::string path;
 
         Shader(ShaderType type, std::string path);
         ~Shader();

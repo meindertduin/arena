@@ -32,7 +32,7 @@ namespace assets {
         std::vector<glm::vec3> normals;
 
         if (!fs.is_open())
-            throw std::runtime_error("IO ERROR: Could not open filename: " + filename);
+            THROW_ERROR("IO ERROR, could not open filename %s", filename);
 
         while(!fs.eof()) {
             char line[128];

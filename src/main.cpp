@@ -5,8 +5,6 @@
 #include "entity/static_render_system.h"
 #include "entity/ec_static_mesh.h"
 
-#include "logging.h"
-
 Global global;
 
 int main () {
@@ -28,6 +26,7 @@ int main () {
     global.ecs = entity::Ecs::instance();
 
     auto static_render_system = global.ecs->register_system<entity::StaticRenderSystem>();
+    static_render_system = global.ecs->register_system<entity::StaticRenderSystem>();
     entity::Signature signature;
     signature.set(global.ecs->get_component_type<entity::EcStaticMeshRenderer>());
     global.ecs->set_system_signature<entity::StaticRenderSystem>(signature);

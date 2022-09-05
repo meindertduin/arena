@@ -2,6 +2,7 @@
 
 #include "entity.h"
 #include "event_manager.h"
+#include "../logging.h"
 
 namespace entity {
     struct IComponentArray {
@@ -17,7 +18,7 @@ namespace entity {
     public:
         void insert(Entity entity, T component) {
             if (entity_index_map.find(entity.id) != entity_index_map.end()) {
-                throw std::runtime_error("Cannot insert entity that does not exist");
+                THROW_ERROR("Cannot insert entity that does not exist");
             }
 
             // insert a new component at the back of the empty components array
@@ -31,7 +32,7 @@ namespace entity {
 
         void remove(Entity entity) {
             if (entity_index_map.find(entity.id) == entity_index_map.end()) {
-                throw std::runtime_error("Cannot remove entity that does not exist");
+                THROW_ERROR("Cannot remove entity that does not exist");
             }
 
             auto removed_entity_index = entity_index_map[entity.id];
@@ -53,7 +54,7 @@ namespace entity {
 
         T& get(Entity entity) {
             if (entity_index_map.find(entity.id) == entity_index_map.end()) {
-                throw std::runtime_error("Cannot retrieve entity that does not exist");
+                THROW_ERROR("Cannot retrieve entity that does not exist");
             }
 
             return components[entity_index_map[entity.id]];

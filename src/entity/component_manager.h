@@ -2,6 +2,7 @@
 
 #include "entity.h"
 #include "component_array.h"
+#include "../logging.h"
 
 namespace entity {
     struct ComponentManager {
@@ -9,7 +10,7 @@ namespace entity {
         template<typename T>
         void register_component() {
             if (component_types.find(T::_id) != component_types.end()) {
-                throw std::runtime_error("Registered ComponentType more than once");
+                THROW_ERROR("Registered Component of type: %s more than once.", typeid(T).name());
             }
 
             component_types.insert({T::_id, next_component_type});
@@ -23,7 +24,7 @@ namespace entity {
         template<typename T>
         ComponentType get_component_type() {
             if (component_types.find(T::_id) == component_types.end()) {
-                throw std::runtime_error("Could not find component type.");
+                THROW_ERROR("Could not find component of type: %s.", typeid(T).name());
             }
 
             return component_types[T::_id];
@@ -78,7 +79,7 @@ namespace entity {
         template<typename T>
         std::shared_ptr<ComponentArray<T>> get_component_array() {
             if (component_types.find(T::_id) == component_types.end()) {
-                throw std::runtime_error("Could not find component type.");
+                THROW_ERROR("Could not find component of type: %s.", typeid(T).name());
             }
 
             return std::static_pointer_cast<ComponentArray<T>>(component_arrays[T::_id]);

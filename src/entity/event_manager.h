@@ -7,6 +7,7 @@
 #include <functional>
 
 #include "entity.h"
+#include "../logging.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -40,7 +41,7 @@ namespace entity {
     template<typename T>
     static void register_event() {
         if (event_map.find(T::_id) != event_map.end()) {
-            throw std::runtime_error("Eventtype already registered!");
+            THROW_ERROR("Event of type %s already registered!", typeid(T).name());
         }
 
         event_map.insert({ T::_id, current_type++ });

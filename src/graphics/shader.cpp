@@ -6,13 +6,15 @@
 
 #include <iostream>
 
+#include "../logging.h"
+
 namespace graphics {
     // TODO move this to a different namespace and tidy up
     std::string read_file_contents(std::string path) {
         std::ifstream ifs { path };
 
         if (ifs.fail()) {
-            throw std::runtime_error("IO ERROR: Shader file: " + path + " does not exist.");
+            THROW_ERROR("IO ERROR: Shader file: %s does not exist", path);
         }
 
         std::stringstream sstream;
@@ -23,7 +25,7 @@ namespace graphics {
         return sstream.str();
     }
 
-    Shader::Shader(ShaderType type, std::string path) : type(type) {
+    Shader::Shader(ShaderType type, std::string path) : type(type), path(path) {
         if (type == ShaderType::Fragment)
             id = glCreateShader(GL_FRAGMENT_SHADER);
         else
@@ -41,7 +43,7 @@ namespace graphics {
             GLchar infoLog[1024];
             glGetShaderInfoLog(id, 1024, NULL, infoLog);
             std::cout << infoLog;
-            throw std::runtime_error("GL ERROR: Failed to compile shader.");
+            THROW_ERROR("GL ERROR: Failed to compile shader with path: %s", path);
         }
     }
 
@@ -76,7 +78,7 @@ namespace graphics {
             GLchar infoLog[1024];
             glGetProgramInfoLog(program, 1024, NULL, infoLog);
             std::cout << infoLog;
-            throw std::runtime_error("GL ERROR: Failed to compile shader.");
+            THROW_ERROR("GL ERROR: Failed to link shaders with paths: %s, %s", vertexShader->path, fragmentShader->path);
         }
 
         // set the block bindings

@@ -1,6 +1,7 @@
 #include "entity.h"
 
 #include "ecs.h"
+#include "../logging.h"
 
 namespace entity {
     EntityManager::EntityManager() {
@@ -14,7 +15,7 @@ namespace entity {
 
     Entity EntityManager::create_entity() {
         if (active_entities_count > MAX_ENTITIES) {
-            throw std::runtime_error("Max amount of entities exceeded");
+            THROW_ERROR("Max amount of entities exceeded");
         }
         auto id = available_entries.front();
         available_entries.pop();
@@ -26,7 +27,7 @@ namespace entity {
 
     void EntityManager::destroy(Entity entity) {
         if (entity.id > MAX_ENTITIES) {
-            throw std::runtime_error("Entity cannot be above the MAX_ENTITIES amount");
+            THROW_ERROR("Entity cannot be above the MAX_ENTITIES amount");
         }
 
         signatures[entity.id].reset();
@@ -37,7 +38,7 @@ namespace entity {
 
     void EntityManager::set_signature(Entity entity, Signature signature) {
         if (entity.id > MAX_ENTITIES) {
-            throw std::runtime_error("Entity cannot be above the MAX_ENTITIES amount");
+            THROW_ERROR("Entity cannot be above the MAX_ENTITIES amount");
         }
 
         signatures[entity.id] = signature;
