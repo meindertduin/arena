@@ -22,13 +22,7 @@ namespace entity {
 
         ECCollisionBox() = default;
 
-        ECCollisionBox(float min_x, float max_x, float min_y, float max_y, float min_z, float max_z) 
-            : min_x(min_x), max_x(max_x), min_y(min_y), max_y(max_y), min_z(min_z), max_z(max_z) {  }
-
-        ECCollisionBox(float min_x, float max_x, float min_y, float max_y, float min_z, float max_z, const ECTransform &transform) 
-            : min_x(transform.pos.x  + min_x), max_x(transform.pos.x + max_x), 
-            min_y(transform.pos.y + min_y), max_y(transform.pos.y + max_y), 
-            min_z(transform.pos.z + min_z), max_z(transform.pos.z + max_z) {  }
+        ECCollisionBox(float min_x, float max_x, float min_y, float max_y, float min_z, float max_z);
 
         constexpr bool is_inside(glm::vec3 point) {
             return min_x <= point.x && max_x >= point.x &&

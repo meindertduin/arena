@@ -9,7 +9,7 @@ namespace entity {
         auto transform = ECTransform();
         e.add(transform);
         e.add(ECFirstPersonCamera());
-        e.add(ECCollisionBox(-1, 1, -1, 1, -1, 1, transform));
+        e.add(ECCollisionBox(-1, 1, -1, 1, -1, 1));
 
         auto &camera_component = e.get<ECFirstPersonCamera>();
         camera_component.position_camera();
