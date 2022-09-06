@@ -23,7 +23,7 @@ struct Global {
     graphics::Renderer *renderer;
 
     graphics::GraphicOptions *graphic_options;
-    graphics::Texture *texture;
+    graphics::GpuTexture *texture;
     graphics::Material material;
 
     entity::Ecs *ecs;

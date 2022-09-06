@@ -46,7 +46,7 @@ int main () {
         .specular = { 0.2f, 0.2f, 0 },
         .shininess = 0.2f,
     };
-    global.texture = new graphics::Texture("assets/container.png");
+    global.texture = new graphics::GpuTexture("assets/container.png");
 
     // initalize game state
     global.game = new game::GameState();

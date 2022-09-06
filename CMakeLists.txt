@@ -11,6 +11,7 @@ set(SOURCES
     src/main.cpp
     src/core/window.cpp
     src/graphics/mesh.cpp
+    src/graphics/terrain.cpp
     src/graphics/renderer.cpp
     src/graphics/texture.cpp
     src/graphics/gpu_buffer.cpp

@@ -11,7 +11,7 @@ namespace entity {
     struct EcStaticMeshRenderer : public Component<EcStaticMeshRenderer> {
     public:
         graphics::Material *material = nullptr;
-        graphics::Texture *texture = nullptr;
+        graphics::GpuTexture *texture = nullptr;
         assets::AssetHandle<graphics::Mesh> mesh;
 
         EcStaticMeshRenderer() = default;
