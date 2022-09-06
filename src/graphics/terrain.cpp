@@ -8,8 +8,8 @@ namespace graphics {
         
         MeshData mesh_data;
 
-        for (auto y = 0; y < this->sprite->height; y++)
-            for (auto x = 0; x < this->sprite->width; x++) {
+        for (auto y = 0; y < this->sprite->height - 1; y++)
+            for (auto x = 0; x < this->sprite->width - 1; x++) {
                 Vertex v1;
                 v1.pos.x = x;
                 v1.pos.y = ((float)this->sprite->get_pixel(x, y) /  65535.0f) * (MAX_HEIGHT - MIN_HEIGHT) + MIN_HEIGHT; 
