@@ -3,7 +3,7 @@
 namespace physics {
 
 int Plane3D::get_intersect(Parametric3D &line, float &t, glm::vec3 &p_intersect) const {
-    float plane_dot = glm::dot(line.v, n);
+    float plane_dot = glm::dot(line.v, normal);
 
     if (std::fabs(plane_dot) <= 0.00005f) {
         if (std::fabs(compute_point(line.p0))) {
@@ -13,8 +13,8 @@ int Plane3D::get_intersect(Parametric3D &line, float &t, glm::vec3 &p_intersect)
         }
     }
 
-    t = - (n.x * line.p0.x + n.y * line.p0.y + n.z * line.p0.z -
-            n.x * p0.x - n.y * p0.y - n.z * p0.z) / plane_dot;
+    t = - (normal.x * line.p0.x + normal.y * line.p0.y + normal.z * line.p0.z -
+            normal.x * coord.x - normal.y * coord.y - normal.z * coord.z) / plane_dot;
 
     p_intersect.x = line.p0.x + line.v.x * t;
     p_intersect.y = line.p0.y + line.v.y * t;

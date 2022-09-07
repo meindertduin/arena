@@ -3,6 +3,8 @@
 #include "../global.h"
 #include "../physics/parametrics.h"
 
+#include <glm/gtx/intersect.hpp>
+
 namespace graphics {
     Terrain::Terrain(std::string heightmap_path) {
         this->sprite = std::make_unique<Sprite16>(heightmap_path);
@@ -15,7 +17,10 @@ namespace graphics {
                 touch_vertices[j][i] = 0;
             }
         }
-        Vertex vertices[this->sprite->width][this->sprite->height];
+
+        this->vertices = new Vertex*[this->sprite->height];
+        for (int i = 0; i < this->sprite->height; i++)
+            this->vertices[i] = new Vertex[this->sprite->width];
     
         // setting all the vertices
         for (auto y = 0; y < this->sprite->height; y++) {
@@ -104,25 +109,19 @@ namespace graphics {
         global.renderer->render(this->mesh.get(), transform);
     }
 
-    float Terrain::get_height(float x, float z) const {
-        auto xmin = (int) x;
-        auto ymin = (int) z;
+    bool Terrain::get_intersect(const glm::vec3 &pos, glm::vec3 &intersect) const {
+        auto xmin = (int) (pos.x - this->transform.pos.x);
+        auto ymin = (int) (pos.z - this->transform.pos.z);
 
-        auto v1 = map_points[xmin][ymin];
-        auto v2 = map_points[xmin + 1][ymin];
-        auto v3 = map_points[xmin][ymin + 1];
+        auto v1 = vertices[xmin][ymin];
+        auto v2 = vertices[xmin + 1][ymin];
+        auto v3 = vertices[xmin][ymin + 1];
 
-        auto line1 = v3 - v2;
-        auto line2 = v3 - v1;
-        auto normal = glm::cross(line1, line2);
+        glm::vec3 origin = pos - transform.pos;
+        glm::vec3 dir = { 0, -1, 0 };
+        auto did_intersect = glm::intersectLineTriangle(origin, dir, v3.pos, v2.pos, v1.pos, intersect);
 
-        auto par = physics::Parametric3D({ x, 10000, z }, { x, -10000, z });
-        auto plane = physics::Plane3D({0, 0, 0}, normal, 1);
-
-        float t;
-        glm::vec3 intersect;
-        plane.get_intersect(par, t, intersect);
-
-        return intersect.y;
+        intersect.y += this->transform.pos.y;
+        return did_intersect;
     }
 }

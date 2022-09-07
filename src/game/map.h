@@ -15,7 +15,6 @@ namespace game {
         }
 
         void render_background();
-    private:
         std::unique_ptr<graphics::Terrain> terrain;
     };
 }

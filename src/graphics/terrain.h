@@ -19,12 +19,12 @@ namespace graphics {
         Terrain(std::string heightmap_path);
         void render();
 
-        float get_height(float x, float z) const;
+        bool get_intersect(const glm::vec3 &pos, glm::vec3 &intersect) const;
     private:
         std::unique_ptr<Sprite16> sprite;
         std::unique_ptr<Mesh> mesh;
         entity::ECTransform transform;
 
-        glm::vec3 **map_points;
+        Vertex **vertices;
     };
 }

@@ -25,12 +25,12 @@ struct Parametric3D {
 
 
 struct Plane3D {
-    glm::vec3 p0; // point of plane
-    glm::vec3 n; // normal of the plane
+    glm::vec3 coord; // point of plane
+    glm::vec3 normal; // normal of the plane
 
     Plane3D() = default;
     Plane3D(const glm::vec3 &p0, glm::vec3 &normal, int normalise)
-        : p0(p0), n(normalise ? glm::normalize(normal) : normal) {}
+        : coord(p0), normal(normalise ? glm::normalize(normal) : normal) {}
 
     float point_in_plane(const glm::vec3 &p) const;
     Parametric3D parm_line(const glm::vec3 &p, float t) const;
@@ -41,7 +41,7 @@ struct Plane3D {
      * Returns > 0 if point lies in positive half space
      * */
     constexpr float compute_point(const glm::vec3 &point) const {
-        return n.x * (point.x - p0.x) + n.y * (point.y - p0.y) + n.z * (point.z - p0.z);
+        return normal.x * (point.x - coord.x) + normal.y * (point.y - coord.y) + normal.z * (point.z - coord.z);
     }
 
     /*
@@ -51,6 +51,18 @@ struct Plane3D {
      * Returns 2 when intersection takes everywhere (most likely due to line and plain being parallel)
      * */
     int get_intersect(Parametric3D &line, float &t, glm::vec3 &p_intersect) const;
+
+    bool get_intersect(glm::vec3 &contact, glm::vec3 ray, glm::vec3 ray_origin) const {
+        float d = glm::dot(normal, coord);
+
+        if (glm::dot(normal, ray) == 0) {
+            return false;
+        }
+
+        float x = (d - glm::dot(normal, ray_origin)) / glm::dot(normal, ray);
+        contact = ray_origin + glm::normalize(ray) * x;
+        return true;
+    };
 
 };
 
