@@ -30,7 +30,6 @@ set(SOURCES
     src/entity/ec_static_mesh.cpp
     src/game/game_state.cpp
     src/game/map.cpp
-    src/physics/parametrics.cpp
     src/input/input.cpp
     src/input/input_manager.cpp
     src/assets/obj_loader.cpp
