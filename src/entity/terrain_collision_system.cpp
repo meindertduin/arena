@@ -9,14 +9,14 @@ namespace entity {
             auto &collision_box = entity.get<ECCollisionBox>();
             auto &transform = entity.get<ECTransform>();
 
-            glm::vec3 intersect;
-            auto pos = transform.pos;
-            pos.y -= 1;
-            auto did_intersect = global.game->map->terrain->get_intersect(transform.pos, intersect);
+            float height;
+            auto did_intersect = global.game->map->terrain->fast_height(transform.pos.x, transform.pos.z, height);
 
-            if (did_intersect && intersect.y > transform.pos.y - 1) {
-                intersect.y += 1;
-                transform.pos = intersect;
+            if (did_intersect) {
+                printf("%f\n", height);
+            }
+            if (did_intersect && height > transform.pos.y - 1) {
+                transform.pos.y = height + 1;
             }
 
         }

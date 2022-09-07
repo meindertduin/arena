@@ -20,6 +20,8 @@ namespace graphics {
         void render();
 
         bool get_intersect(const glm::vec3 &pos, glm::vec3 &intersect) const;
+        bool get_height(float x, float z, float &height) const; 
+        bool fast_height(float x, float z, float &height) const;
     private:
         std::unique_ptr<Sprite16> sprite;
         std::unique_ptr<Mesh> mesh;

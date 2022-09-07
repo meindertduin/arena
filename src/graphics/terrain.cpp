@@ -1,7 +1,6 @@
 #include "terrain.h"
 
 #include "../global.h"
-#include "../physics/parametrics.h"
 
 #include <glm/gtx/intersect.hpp>
 
@@ -123,5 +122,44 @@ namespace graphics {
 
         intersect.y += this->transform.pos.y;
         return did_intersect;
+    }
+
+    bool Terrain::get_height(float x, float z, float &height) const {
+        auto xmin = (int) (x - this->transform.pos.x);
+        auto ymin = (int) (z - this->transform.pos.z);
+
+        auto v1 = vertices[xmin][ymin];
+        auto v2 = vertices[xmin + 1][ymin];
+        auto v3 = vertices[xmin][ymin + 1];
+
+        glm::vec3 origin = glm::vec3 { x - transform.pos.x, 1000, z - transform.pos.z };
+        glm::vec3 dir = { 0, -1, 0 };
+        glm::vec3 intersect;
+        auto did_intersect = glm::intersectLineTriangle(origin, dir, v1.pos, v2.pos, v3.pos, intersect);
+
+        height = intersect.y + this->transform.pos.y;
+        return did_intersect;
+    
+        // height = (v1.pos.y + v2.pos.y + v3.pos.y) * 0.3333 + this->transform.pos.y;
+        // return true;
+    }
+
+    bool Terrain::fast_height(float x, float z, float &height) const {
+        auto xmin = (int) (x - this->transform.pos.x);
+        auto ymin = (int) (z - this->transform.pos.z);
+
+        Vertex v1, v2, v3;
+        if (x > z) {
+            v1 = vertices[xmin][ymin];
+            v2 = vertices[xmin + 1][ymin];
+            v3 = vertices[xmin + 1][ymin + 1];
+        } else {
+            v1 = vertices[xmin][ymin];
+            v2 = vertices[xmin + 1][ymin];
+            v3 = vertices[xmin][ymin + 1];
+        }
+
+        height = (v1.pos.y + v2.pos.y + v3.pos.y) * 0.3333 + this->transform.pos.y;
+        return true;
     }
 }
