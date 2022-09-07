@@ -1,6 +1,7 @@
 #include "terrain.h"
 
 #include "../global.h"
+#include "../physics/parametrics.h"
 
 namespace graphics {
     Terrain::Terrain(std::string heightmap_path) {
@@ -16,6 +17,7 @@ namespace graphics {
         }
         Vertex vertices[this->sprite->width][this->sprite->height];
     
+        // setting all the vertices
         for (auto y = 0; y < this->sprite->height; y++) {
             for (auto x = 0; x < this->sprite->width; x++) {
                 Vertex v;
@@ -29,6 +31,7 @@ namespace graphics {
             }
         }
 
+        // dividing heightmap into grid and triangles and calculating normals of vertices
         for (auto y = 0; y < this->sprite->height - 1; y++) {
             for (auto x = 0; x < this->sprite->width - 1; x++) {
                 auto &v1 = vertices[x][y];
@@ -62,6 +65,7 @@ namespace graphics {
             }
         }
 
+        // normalizing vector normals
         for (auto y = 0; y < this->sprite->height; y++) {
             for (auto x = 0; x < this->sprite->width; x++) {
                 if (touch_vertices[x][y] >= 0) {
@@ -72,6 +76,7 @@ namespace graphics {
             }
         }
 
+        // deviding vertices into polygons and adding to the mesh_data
         for (auto y = 0; y < this->sprite->height - 1; y++) {
             for (auto x = 0; x < this->sprite->width - 1; x++) {
                 auto &v1 = vertices[x][y];
@@ -91,9 +96,33 @@ namespace graphics {
         
         this->mesh = std::make_unique<Mesh>(&mesh_data);
         this->transform.pos.y = -20;
+        this->transform.pos.x = -200;
+        this->transform.pos.z = -200;
     }
 
     void Terrain::render() {
         global.renderer->render(this->mesh.get(), transform);
+    }
+
+    float Terrain::get_height(float x, float z) const {
+        auto xmin = (int) x;
+        auto ymin = (int) z;
+
+        auto v1 = map_points[xmin][ymin];
+        auto v2 = map_points[xmin + 1][ymin];
+        auto v3 = map_points[xmin][ymin + 1];
+
+        auto line1 = v3 - v2;
+        auto line2 = v3 - v1;
+        auto normal = glm::cross(line1, line2);
+
+        auto par = physics::Parametric3D({ x, 10000, z }, { x, -10000, z });
+        auto plane = physics::Plane3D({0, 0, 0}, normal, 1);
+
+        float t;
+        glm::vec3 intersect;
+        plane.get_intersect(par, t, intersect);
+
+        return intersect.y;
     }
 }
