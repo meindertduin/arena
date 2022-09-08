@@ -120,17 +120,25 @@ namespace graphics {
             v1 = vertices[xmin][ymin + 1]; // bottom left
             v2 = vertices[xmin + 1][ymin]; // top right
             v3 = vertices[xmin + 1][ymin + 1]; // bottom right
+
+            y = barry_centric(v1.pos, v2.pos, v3.pos, { x - this->transform.pos.x, z - this->transform.pos.z});
         } else {
             v1 = vertices[xmin][ymin]; // top left
             v2 = vertices[xmin + 1][ymin]; // top right
             v3 = vertices[xmin][ymin + 1]; // bottom left
+
+            y = barry_centric(v1.pos, v2.pos, v3.pos, { x - this->transform.pos.x, z - this->transform.pos.z});
         }
 
-        y = (v1.pos.y + v2.pos.y + v3.pos.y) * 0.3333f + this->transform.pos.y;
+        y += this->transform.pos.y;
         return true;
     }
 
     float Terrain::barry_centric(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec2 &pos) {
-        return 0;
+        float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
+        float l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.y - p3.z)) / det;
+        float l2 = ((p3.z - p1.z) * (pos.x - p3.x) + (p1.x - p3.x) * (pos.y - p3.z)) / det;
+        float l3 = 1.0f - l1 - l2;
+        return l1 * p1.y + l2 * p2.y + l3 * p3.y;
     }
 }
