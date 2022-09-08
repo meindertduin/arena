@@ -1,11 +1,9 @@
 #include "input.h"
 
-
 #include "../core/event_dispatcher.h"
 #include "events.h"
 
 namespace input {
-    static bool first_mouse = false;
     static float mouse_x;
     static float mouse_y;
 
@@ -27,7 +25,7 @@ namespace input {
                 keyboard_state[key] = 0;
             }
 
-            KeyEvent event;
+            KeyEvent event{};
             event.event_type = core::Event::EventType::InputEvent;
             event.key = key;
             event.mods = mods;
@@ -37,17 +35,10 @@ namespace input {
         });
 
         glfwSetCursorPosCallback(window.window,
-                [](GLFWwindow* window, double xposIn, double yposIn)
+                [](GLFWwindow* window, double xpos_in, double ypos_in)
         {
-            float xpos = static_cast<float>(xposIn);
-            float ypos = static_cast<float>(yposIn);
-
-            if (first_mouse)
-            {
-                mouse_x = xpos;
-                mouse_y = ypos;
-                first_mouse = false;
-            }
+            auto xpos = static_cast<float>(xpos_in);
+            auto ypos = static_cast<float>(ypos_in);
 
             mouse_x_offset = xpos - mouse_x;
             mouse_y_offset = mouse_y - ypos; // reversed since y-coordinates go from bottom to top
@@ -56,7 +47,7 @@ namespace input {
             mouse_y = ypos;
 
             auto dispatcher = core::EventDispatcher<MouseEvent>::instance();
-            MouseEvent event;
+            MouseEvent event{};
             event.event_type = core::Event::EventType::InputEvent;
             event.mouse_x = mouse_x;
             event.mouse_y = mouse_y;
@@ -69,13 +60,13 @@ namespace input {
     }
 
     void get_mouse_position(int &xPos, int &yPos) {
-        xPos = mouse_x;
-        yPos = mouse_y;
+        xPos = static_cast<int>(mouse_x);
+        yPos = static_cast<int>(mouse_y);
     }
 
     void get_mouse_movement(int &dx, int &dy) {
-        dx = mouse_x_offset;
-        dy = mouse_y_offset;
+        dx = static_cast<int>(mouse_x_offset);
+        dy = static_cast<int>(mouse_y_offset);
     }
 
     int get_pressed_keys() {

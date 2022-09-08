@@ -4,5 +4,5 @@
 
 namespace assets {
     struct Cache;
-    void load_obj(std::string filename, Cache *cache);
+    void load_obj(const std::string& filename, Cache *cache);
 }

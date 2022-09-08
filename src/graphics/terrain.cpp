@@ -2,10 +2,8 @@
 
 #include "../global.h"
 
-#include <glm/gtx/intersect.hpp>
-
 namespace graphics {
-    Terrain::Terrain(std::string heightmap_path) {
+    Terrain::Terrain(const std::string& heightmap_path) {
         this->sprite = std::make_unique<Sprite16>(heightmap_path);
         this->width = sprite->width;
         this->height = sprite->height;
@@ -26,10 +24,10 @@ namespace graphics {
         // setting all the vertices
         for (auto y = 0; y < this->sprite->height; y++) {
             for (auto x = 0; x < this->sprite->width; x++) {
-                Vertex v;
-                v.pos.x = x;
+                Vertex v{};
+                v.pos.x = (float)x;
                 v.pos.y = ((float)this->sprite->get_pixel(x, y) /  65535.0f) * (MAX_HEIGHT - MIN_HEIGHT) + MIN_HEIGHT; 
-                v.pos.z = y;
+                v.pos.z = (float)y;
                 v.normal = { 0, 0, 0 };
                 v.textcoords = { 0, 0 };
 
@@ -128,7 +126,11 @@ namespace graphics {
             v3 = vertices[xmin][ymin + 1]; // bottom left
         }
 
-        y = (v1.pos.y + v2.pos.y + v3.pos.y) * 0.3333 + this->transform.pos.y;
+        y = (v1.pos.y + v2.pos.y + v3.pos.y) * 0.3333f + this->transform.pos.y;
         return true;
+    }
+
+    float Terrain::barry_centric(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec2 &pos) {
+        return 0;
     }
 }

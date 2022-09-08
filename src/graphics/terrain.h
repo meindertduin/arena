@@ -16,7 +16,7 @@ namespace graphics {
         int width;
         int height;
 
-        Terrain(std::string heightmap_path);
+        Terrain(const std::string& heightmap_path);
         void render();
 
         bool fast_height(float x, float z, float &y) const;
@@ -25,6 +25,7 @@ namespace graphics {
         std::unique_ptr<Mesh> mesh;
         entity::ECTransform transform;
 
+        static float barry_centric(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec2 &pos);
         Vertex **vertices;
     };
 }

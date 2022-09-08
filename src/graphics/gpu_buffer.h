@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 #include <vector>
 
 namespace graphics {
@@ -43,7 +43,7 @@ namespace graphics {
         VertexBuffer& operator=(const VertexBuffer&) = delete;
         VertexBuffer& operator=(VertexBuffer&&) = delete;
 
-        VertexBuffer(int total_size);
+        explicit VertexBuffer(int total_size);
         ~VertexBuffer() override;
 
         void bind() const override;
