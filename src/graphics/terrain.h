@@ -26,6 +26,7 @@ namespace graphics {
         entity::ECTransform transform;
 
         static float barry_centric(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec2 &pos);
-        Vertex **vertices;
+
+        std::vector<std::vector<glm::vec3>> positions;
     };
 }

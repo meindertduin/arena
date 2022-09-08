@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 #include "../entity/ec_transform.h"
 
 #include "gpu_buffer.h"

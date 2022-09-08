@@ -17,10 +17,13 @@ namespace graphics {
             }
         }
 
-        this->vertices = new Vertex*[this->sprite->height];
-        for (int i = 0; i < this->sprite->height; i++)
-            this->vertices[i] = new Vertex[this->sprite->width];
-    
+        this->positions = std::vector<std::vector<glm::vec3>>(this->sprite->height);
+        for (auto & position : this->positions) {
+            position = std::vector<glm::vec3>(this->sprite->width);
+        }
+
+        Vertex vertices[this->sprite->width][this->sprite->height];
+
         // setting all the vertices
         for (auto y = 0; y < this->sprite->height; y++) {
             for (auto x = 0; x < this->sprite->width; x++) {
@@ -32,6 +35,7 @@ namespace graphics {
                 v.textcoords = { 0, 0 };
 
                 vertices[x][y] = v;
+                positions[x][y] = v.pos;
             }
         }
 
@@ -80,13 +84,18 @@ namespace graphics {
             }
         }
 
-        // deviding vertices into polygons and adding to the mesh_data
+        // dividing vertices into polygons and adding to the mesh_data
         for (auto y = 0; y < this->sprite->height - 1; y++) {
             for (auto x = 0; x < this->sprite->width - 1; x++) {
                 auto &v1 = vertices[x][y];
                 auto &v2 = vertices[x + 1][y];
                 auto &v3 = vertices[x][y + 1];
                 auto &v4 = vertices[x + 1][y + 1];
+
+                v1.textcoords = { 0 * 65535.0f, 0 * 65535.0f };
+                v2.textcoords = { 1 * 65535.0f, 0 * 65535.0f };
+                v3.textcoords = { 0 * 65535.0f, 1 * 65535.0f };
+                v4.textcoords = { 1 * 65535.0f, 1 * 65535.0f };
 
                 mesh_data.vertices.push_back(v3);
                 mesh_data.vertices.push_back(v2);
@@ -115,19 +124,19 @@ namespace graphics {
         if (xmin > this->width - 2 || xmin < 0 || ymin > this->height - 2 || ymin < 0)
             return false;
 
-        Vertex v1, v2, v3;
+        glm::vec3 v1, v2, v3;
         if (x >= 1 - z) {
-            v1 = vertices[xmin][ymin + 1]; // bottom left
-            v2 = vertices[xmin + 1][ymin]; // top right
-            v3 = vertices[xmin + 1][ymin + 1]; // bottom right
+            v1 = this->positions[xmin][ymin + 1]; // bottom left
+            v2 = this->positions[xmin + 1][ymin]; // top right
+            v3 = this->positions[xmin + 1][ymin + 1]; // bottom right
 
-            y = barry_centric(v1.pos, v2.pos, v3.pos, { x - this->transform.pos.x, z - this->transform.pos.z});
+            y = barry_centric(v1, v2, v3, { x - this->transform.pos.x, z - this->transform.pos.z});
         } else {
-            v1 = vertices[xmin][ymin]; // top left
-            v2 = vertices[xmin + 1][ymin]; // top right
-            v3 = vertices[xmin][ymin + 1]; // bottom left
+            v1 = this->positions[xmin][ymin]; // top left
+            v2 = this->positions[xmin + 1][ymin]; // top right
+            v3 = this->positions[xmin][ymin + 1]; // bottom left
 
-            y = barry_centric(v1.pos, v2.pos, v3.pos, { x - this->transform.pos.x, z - this->transform.pos.z});
+            y = barry_centric(v1, v2, v3, { x - this->transform.pos.x, z - this->transform.pos.z});
         }
 
         y += this->transform.pos.y;

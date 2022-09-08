@@ -1,7 +1,5 @@
 #include "renderer.h"
 
-#include <glad/glad.h>
-
 #include "../global.h"
 
 namespace graphics {
@@ -17,7 +15,7 @@ namespace graphics {
         set_ubo_data();
     }
 
-    void Renderer::render(const Mesh *mesh, const entity::ECTransform &transform) {
+    void Renderer::render(const Mesh *mesh, const entity::ECTransform &transform) const {
         auto model_4x4 = transform.get_transform_4x4();
 
         shader.use();
