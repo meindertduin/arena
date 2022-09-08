@@ -116,7 +116,7 @@ namespace graphics {
             return false;
 
         Vertex v1, v2, v3;
-        if (x > z) {
+        if (x >= 1 - z) {
             v1 = vertices[xmin][ymin + 1]; // bottom left
             v2 = vertices[xmin + 1][ymin]; // top right
             v3 = vertices[xmin + 1][ymin + 1]; // bottom right
