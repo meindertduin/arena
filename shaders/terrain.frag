@@ -1,4 +1,4 @@
-#version 330 core
+#version 400 core
 out vec4 FragColor;
 
 in vec2 TexCoord;
@@ -94,7 +94,6 @@ void main()
     vec4 bTextureColor = texture(bTexture, tiledCoords) * blendMapColor.b;
 
     vec3 texturePixel = vec3(backgroundTextureColor + rTextureColor + gTextureColor + bTextureColor);
-    texturePixel = vec3(texture(blendMap, tiledCoords));
 
     vec3 normal = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);

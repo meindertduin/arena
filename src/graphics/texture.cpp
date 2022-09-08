@@ -5,6 +5,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
+#include <utility>
+
 #include "../logging.h"
 
 namespace graphics {
@@ -27,20 +29,21 @@ namespace graphics {
     GpuTexture::GpuTexture(std::string path) {
         glGenTextures(1, &id);
 
+        Sprite16 sprite { std::move(path) };
+        this->width = sprite.width;
+        this->height = sprite.height;
+
         glBindTexture(GL_TEXTURE_2D, id);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_SHORT, sprite.get_buffer());
+        glGenerateMipmap(GL_TEXTURE_2D);
+
         // set the texture wrapping/filtering options (on the currently bound texture object)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         // set texture filtering parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        Sprite16 sprite { path };
-        this->width = sprite.width;
-        this->height = sprite.height;
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_SHORT, sprite.get_buffer());
-        glGenerateMipmap(GL_TEXTURE_2D);
     }
 
     GpuTexture::~GpuTexture() {

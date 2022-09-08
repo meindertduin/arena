@@ -51,5 +51,7 @@ namespace graphics {
         void set_property(std::string properyName, glm::mat4&&) const;
         void set_property(std::string properyName, glm::vec3&) const;
         void set_property(std::string properyName, glm::mat4&) const;
+
+        void set_uniform_loc(const std::string& name, int index) const;
     };
 }
