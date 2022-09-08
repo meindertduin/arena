@@ -14,7 +14,7 @@ namespace game {
             terrain = std::make_unique<graphics::Terrain>("assets/heightmap.png");
         }
 
-        void render_background();
+        void render_background() const;
         std::unique_ptr<graphics::Terrain> terrain;
     };
 }

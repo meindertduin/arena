@@ -21,6 +21,7 @@ struct Global {
     input::InputManager input_manager;
     game::GameState *game;
     graphics::Renderer *renderer;
+    graphics::TerrainRenderer *terrain_renderer;
 
     graphics::GraphicOptions *graphic_options;
     graphics::GpuTexture *texture;
@@ -36,6 +37,7 @@ struct Global {
         delete game;
 
         delete renderer;
+        delete terrain_renderer;
     }
 };
 

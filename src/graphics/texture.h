@@ -32,11 +32,15 @@ namespace graphics {
         int height;
 
         GpuTexture(std::string path);
-        GpuTexture(std::vector<std::string> faces);
+
+        // TODO implement
+        GpuTexture(const GpuTexture &other) = delete;
+        GpuTexture& operator=(const GpuTexture &other) = delete;
+
         ~GpuTexture();
 
         void bind(int slot) const;
     private:
-        uint32_t id;
+        uint32_t id { };
     };
 }

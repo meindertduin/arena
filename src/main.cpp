@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include "global.h"
 #include "input/input.h"
 #include "entity/static_render_system.h"
@@ -25,6 +23,8 @@ int main () {
 
     global.window = new core::Window(window_options);
     global.renderer = new graphics::Renderer();
+    global.terrain_renderer = new graphics::TerrainRenderer();
+
     input::initialize_input(*global.window);
 
     // setting up ecs and systems
@@ -48,7 +48,7 @@ int main () {
     };
     global.texture = new graphics::GpuTexture("assets/container.png");
 
-    // initalize game state
+    // initialize game state
     global.game = new game::GameState();
     global.game->init();
 

@@ -69,5 +69,26 @@ namespace graphics {
 
         ubo_lights.unbind();
     }
-}
 
+    TerrainRenderer::TerrainRenderer() {
+        shader.link();
+    }
+
+    void TerrainRenderer::render(const Terrain &terrain) const {
+        auto model_4x4 = terrain.transform.get_transform_4x4();
+
+        shader.use();
+        terrain.textures.bind();
+        shader.set_property("model", model_4x4);
+
+        shader.set_property("diffuse", global.material.diffuse);
+        shader.set_property("specular", global.material.specular);
+        shader.set_property("shininess", global.material.shininess);
+
+        shader.set_property("viewPos", global.game->camera->transform.pos);
+
+        shader.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
+
+        terrain.mesh->render();
+    }
+}

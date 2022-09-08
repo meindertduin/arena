@@ -1,38 +1,60 @@
 #include "terrain.h"
 
+#include <glad/glad.h>
 #include "../global.h"
 
 namespace graphics {
+    TerrainTexturePack::TerrainTexturePack() {
+        background_texture = std::make_unique<GpuTexture>("assets/bricks.png");
+        blendmap = std::make_unique<GpuTexture>("assets/blendmap.png");
+
+        r_texture = std::make_unique<GpuTexture>("assets/bricks.png");
+        g_texture = std::make_unique<GpuTexture>("assets/container.png");
+        b_texture = std::make_unique<GpuTexture>("assets/blendmap.png");
+    }
+
+    void TerrainTexturePack::bind() const {
+        int i = 0;
+        background_texture->bind(i++);
+        blendmap->bind(i++);
+
+        r_texture->bind(i++);
+        g_texture->bind(i++);
+        b_texture->bind(i);
+    }
+
     Terrain::Terrain(const std::string& heightmap_path) {
-        this->sprite = std::make_unique<Sprite16>(heightmap_path);
-        this->width = sprite->width;
-        this->height = sprite->height;
+        Sprite16 sprite { heightmap_path };
+        this->width = sprite.width;
+        this->height = sprite.height;
         
         MeshData mesh_data;
         
-        int touch_vertices[this->sprite->width][this->sprite->height];
-        for (int i = 0; i < this->sprite->height; i++) {
-            for (int j = 0; j < this->sprite->width; j++) {
+        int touch_vertices[sprite.width][sprite.height];
+        for (int i = 0; i < sprite.height; i++) {
+            for (int j = 0; j < sprite.width; j++) {
                 touch_vertices[j][i] = 0;
             }
         }
 
-        this->positions = std::vector<std::vector<glm::vec3>>(this->sprite->height);
+        this->positions = std::vector<std::vector<glm::vec3>>(sprite.height);
         for (auto & position : this->positions) {
-            position = std::vector<glm::vec3>(this->sprite->width);
+            position = std::vector<glm::vec3>(sprite.width);
         }
 
-        Vertex vertices[this->sprite->width][this->sprite->height];
+        Vertex vertices[sprite.width][sprite.height];
 
         // setting all the vertices
-        for (auto y = 0; y < this->sprite->height; y++) {
-            for (auto x = 0; x < this->sprite->width; x++) {
+        for (auto y = 0; y < sprite.height; y++) {
+            for (auto x = 0; x < sprite.width; x++) {
                 Vertex v{};
                 v.pos.x = (float)x;
-                v.pos.y = ((float)this->sprite->get_pixel(x, y) /  65535.0f) * (MAX_HEIGHT - MIN_HEIGHT) + MIN_HEIGHT; 
+                v.pos.y = ((float)sprite.get_pixel(x, y) /  65535.0f) * (MAX_HEIGHT - MIN_HEIGHT) + MIN_HEIGHT;
                 v.pos.z = (float)y;
                 v.normal = { 0, 0, 0 };
-                v.textcoords = { 0, 0 };
+                auto tx = ((float) x / (float) sprite.width) * 66535.0f;
+                auto ty = ((float) y / (float) sprite.height) * 65535.0f;
+                v.textcoords = { tx, ty };
 
                 vertices[x][y] = v;
                 positions[x][y] = v.pos;
@@ -40,8 +62,8 @@ namespace graphics {
         }
 
         // dividing heightmap into grid and triangles and calculating normals of vertices
-        for (auto y = 0; y < this->sprite->height - 1; y++) {
-            for (auto x = 0; x < this->sprite->width - 1; x++) {
+        for (auto y = 0; y < sprite.height - 1; y++) {
+            for (auto x = 0; x < sprite.width - 1; x++) {
                 auto &v1 = vertices[x][y];
                 auto &v2 = vertices[x + 1][y];
                 auto &v3 = vertices[x][y + 1];
@@ -74,8 +96,8 @@ namespace graphics {
         }
 
         // normalizing vector normals
-        for (auto y = 0; y < this->sprite->height; y++) {
-            for (auto x = 0; x < this->sprite->width; x++) {
+        for (auto y = 0; y < sprite.height; y++) {
+            for (auto x = 0; x < sprite.width; x++) {
                 if (touch_vertices[x][y] >= 0) {
                     auto &v1 = vertices[x][y];
                     v1.normal /= touch_vertices[x][y];
@@ -85,17 +107,13 @@ namespace graphics {
         }
 
         // dividing vertices into polygons and adding to the mesh_data
-        for (auto y = 0; y < this->sprite->height - 1; y++) {
-            for (auto x = 0; x < this->sprite->width - 1; x++) {
+        for (auto y = 0; y < sprite.height - 1; y++) {
+            for (auto x = 0; x < sprite.width - 1; x++) {
                 auto &v1 = vertices[x][y];
                 auto &v2 = vertices[x + 1][y];
                 auto &v3 = vertices[x][y + 1];
                 auto &v4 = vertices[x + 1][y + 1];
 
-                v1.textcoords = { 0 * 65535.0f, 0 * 65535.0f };
-                v2.textcoords = { 1 * 65535.0f, 0 * 65535.0f };
-                v3.textcoords = { 0 * 65535.0f, 1 * 65535.0f };
-                v4.textcoords = { 1 * 65535.0f, 1 * 65535.0f };
 
                 mesh_data.vertices.push_back(v3);
                 mesh_data.vertices.push_back(v2);
@@ -111,10 +129,6 @@ namespace graphics {
         this->transform.pos.y = -20;
         this->transform.pos.x = -200;
         this->transform.pos.z = -200;
-    }
-
-    void Terrain::render() {
-        global.renderer->render(this->mesh.get(), transform);
     }
 
     bool Terrain::fast_height(float x, float z, float &y) const {
@@ -150,4 +164,5 @@ namespace graphics {
         float l3 = 1.0f - l1 - l2;
         return l1 * p1.y + l2 * p2.y + l3 * p3.y;
     }
+
 }
