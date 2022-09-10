@@ -23,9 +23,10 @@ namespace graphics {
     }
 
     Terrain::Terrain(const TerrainFile &file) : textures(file), min_height(file.min_height), max_height(file.max_height) {
-        this->transform.pos = file.pos;
         this->width = file.width;
         this->height = file.height;
+
+        this->transform.pos = file.pos;
 
         Sprite16 sprite { file.heightmap };
 
