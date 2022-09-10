@@ -5,7 +5,7 @@
 
 #include "../graphics/mesh.h"
 #include "../logging.h"
-#include "obj_loader.h"
+#include "loaders.h"
 
 namespace assets {
     struct Cache;

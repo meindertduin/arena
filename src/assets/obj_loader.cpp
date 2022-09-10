@@ -1,4 +1,4 @@
-#include "obj_loader.h"
+#include "loaders.h"
 
 #include <glm/glm.hpp>
 
@@ -11,6 +11,7 @@
 #include "../graphics/mesh.h"
 
 #include "cache.h"
+#include "file_reader.h"
 
 namespace assets {
     struct ObjIndex {
@@ -22,7 +23,7 @@ namespace assets {
     ObjIndex parse_object_index(std::string token, graphics::MeshData *meshData);
 
     void load_obj(const std::string &filename, Cache *cache) {
-        std::ifstream fs(filename);
+        FileReader file_reader { filename };
 
         auto mesh_data = std::make_unique<graphics::MeshData>(graphics::MeshData{});
 
@@ -30,14 +31,8 @@ namespace assets {
         std::vector<glm::u16vec2> textcoords;
         std::vector<glm::vec3> normals;
 
-        if (!fs.is_open())
-            THROW_ERROR("IO ERROR, could not open filename %s", filename);
-
-        while (!fs.eof()) {
-            char line[128];
-
-            fs.getline(line, sizeof(line));
-
+        std::string line;
+        while(file_reader.next_line(line)) {
             std::stringstream ss;
             std::vector<std::string> tokens;
             ss << line;
@@ -92,9 +87,6 @@ namespace assets {
                 }
             }
         }
-
-
-        fs.close();
 
         auto mesh = std::make_unique<graphics::Mesh>(mesh_data.get());
         cache->save_mesh(filename, std::move(mesh));

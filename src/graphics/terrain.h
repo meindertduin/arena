@@ -10,7 +10,6 @@
 #include "texture.h"
 
 namespace graphics {
-
     struct TerrainTexturePack {
     public:
         TerrainTexturePack();

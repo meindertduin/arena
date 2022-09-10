@@ -1,6 +1,6 @@
 #include "cache.h"
 
-#include "obj_loader.h"
+#include "loaders.h"
 #include "../global.h"
 #include "../game/game_state.h"
 

@@ -32,9 +32,10 @@ set(SOURCES
     src/game/map.cpp
     src/input/input.cpp
     src/input/input_manager.cpp
-    src/assets/obj_loader.cpp
-    src/assets/cache.cpp
-)
+        src/assets/obj_loader.cpp
+        src/assets/cache.cpp
+        src/assets/terrain_loader.cpp
+        src/assets/file_reader.cpp)
 
 set(HEADERS include)
 

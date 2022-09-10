@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <glad/glad.h>
-#include "../assets/obj_loader.h"
+#include "../assets/loaders.h"
 
 namespace graphics {
     Mesh::Mesh(MeshData *mesh_data) {
