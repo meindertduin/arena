@@ -6,15 +6,17 @@
 #include "../entity/ec_transform.h"
 #include "../entity/ec_static_mesh.h"
 
+#include "../assets/cache.h"
+
 namespace game {
     struct Map {
     public:
         // TODO load map data from file
         Map() {
-            terrain = std::make_unique<graphics::Terrain>("assets/heightmap.png");
+            terrain = { "assets/terrain.ter" };
         }
 
         void render_background() const;
-        std::unique_ptr<graphics::Terrain> terrain;
+        assets::AssetHandle<graphics::Terrain> terrain;
     };
 }

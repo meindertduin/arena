@@ -22,8 +22,12 @@ namespace graphics {
         b_texture->bind(i);
     }
 
-    Terrain::Terrain(const std::string& heightmap_path) {
-        Sprite16 sprite { heightmap_path };
+    Terrain::Terrain(const TerrainFile &file) {
+        this->min_height = file.min_height;
+        this->max_height = file.max_height;
+
+        Sprite16 sprite { file.heightmap };
+
         this->width = sprite.width;
         this->height = sprite.height;
         
@@ -48,7 +52,7 @@ namespace graphics {
             for (auto x = 0; x < sprite.width; x++) {
                 Vertex v{};
                 v.pos.x = (float)x;
-                v.pos.y = ((float)sprite.get_pixel(x, y) /  65535.0f) * (MAX_HEIGHT - MIN_HEIGHT) + MIN_HEIGHT;
+                v.pos.y = ((float)sprite.get_pixel(x, y) /  65535.0f) * (max_height - min_height) + min_height;
                 v.pos.z = (float)y;
                 v.normal = { 0, 0, 0 };
                 auto tx = ((float) x / (float) sprite.width) * 66535.0f;

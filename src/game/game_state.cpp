@@ -33,6 +33,7 @@ namespace game {
         // loading assets
         this->cache.load_asset<graphics::Mesh>("assets/cube.obj");
         this->cache.load_asset<graphics::Mesh>("assets/valley.obj");
+        this->cache.load_asset<graphics::Terrain>("assets/terrain.ter");
 
        // loading map
         this->map = std::make_unique<Map>();

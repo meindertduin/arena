@@ -11,7 +11,7 @@ namespace entity {
             auto &transform = entity.get<ECTransform>();
 
             float height;
-            auto in_terrain_range = global.game->map->terrain->fast_height(transform.pos.x, transform.pos.z, height);
+            auto in_terrain_range = global.game->map->terrain.get()->fast_height(transform.pos.x, transform.pos.z, height);
 
             if (in_terrain_range && height > transform.pos.y - 1) {
                 transform.pos.y = height + 1;
