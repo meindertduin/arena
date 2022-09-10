@@ -5,6 +5,7 @@
 
 #include "entity/ec_static_mesh.h"
 #include "entity/ec_collision_box.h"
+#include "game/game_state.h"
 
 Global global;
 

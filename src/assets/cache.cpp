@@ -2,6 +2,7 @@
 
 #include "obj_loader.h"
 #include "../global.h"
+#include "../game/game_state.h"
 
 namespace assets {
 

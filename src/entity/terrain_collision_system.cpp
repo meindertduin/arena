@@ -2,6 +2,7 @@
 
 #include "ec_collision_box.h"
 #include "../global.h"
+#include "../game/game_state.h"
 
 namespace entity {
     void TerrainCollisionSystem::update() {

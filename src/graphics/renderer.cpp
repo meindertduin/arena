@@ -1,6 +1,7 @@
 #include "renderer.h"
 
 #include "../global.h"
+#include "../game/game_state.h"
 
 namespace graphics {
     Renderer::Renderer() {

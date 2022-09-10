@@ -1,6 +1,5 @@
 #include "terrain.h"
 
-#include <glad/glad.h>
 #include "../global.h"
 
 namespace graphics {
@@ -164,5 +163,4 @@ namespace graphics {
         float l3 = 1.0f - l1 - l2;
         return l1 * p1.y + l2 * p2.y + l3 * p3.y;
     }
-
 }

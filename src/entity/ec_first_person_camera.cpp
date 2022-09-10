@@ -1,6 +1,7 @@
 #include "ec_first_person_camera.h"
 
 #include "../global.h"
+#include "../game/game_state.h"
 
 namespace entity {
     DECL_COMPONENT_INIT(ECFirstPersonCamera) {

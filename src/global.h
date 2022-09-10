@@ -1,10 +1,7 @@
 #pragma once
 
-#include "input/input_manager.h"
-
 #include "core/window.h"
 #include "entity/camera.h"
-#include "game/game_state.h"
 #include "entity/ecs.h"
 
 #include "graphics/graphic_options.h"
@@ -12,8 +9,13 @@
 #include "graphics/renderer.h"
 #include "graphics/texture.h"
 #include "graphics/material.h"
+#include "input/input_manager.h"
 
 #include <memory>
+
+namespace game {
+    struct GameState;
+}
 
 struct Global {
     core::Window *window;
@@ -34,7 +36,6 @@ struct Global {
 
         delete graphic_options;
         delete texture;
-        delete game;
 
         delete renderer;
         delete terrain_renderer;
