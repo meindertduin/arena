@@ -74,17 +74,19 @@ namespace graphics {
 
     TerrainRenderer::TerrainRenderer() {
         shader.link();
+        shader.use();
+
+        shader.set_uniform_loc("baseTexture", 0);
+        shader.set_uniform_loc("blendMap", 1);
+        shader.set_uniform_loc("rTexture", 2);
+        shader.set_uniform_loc("gTexture", 3);
+        shader.set_uniform_loc("bTexture", 4);
     }
 
     void TerrainRenderer::render(const Terrain &terrain) const {
         auto model_4x4 = terrain.transform.get_transform_4x4();
 
         shader.use();
-        shader.set_uniform_loc("baseTexture", 0);
-        shader.set_uniform_loc("blendMap", 1);
-        shader.set_uniform_loc("rTexture", 2);
-        shader.set_uniform_loc("gTexture", 3);
-        shader.set_uniform_loc("bTexture", 4);
 
         terrain.textures.bind();
         shader.set_property("model", model_4x4);
