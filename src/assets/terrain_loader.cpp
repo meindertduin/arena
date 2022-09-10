@@ -27,7 +27,7 @@ namespace assets {
             if (first_token == "bm")
                 ss >> terrain_file.blendmap;
 
-            if (first_token == "bt")
+            if (first_token == "dt")
                 ss >> terrain_file.background_texture;
 
             if (first_token == "rt")
@@ -36,8 +36,9 @@ namespace assets {
             if (first_token == "gt")
                 ss >> terrain_file.g_texture;
 
-            if (first_token == "bt")
+            if (first_token == "bt") {
                 ss >> terrain_file.b_texture;
+            }
 
             if (first_token == "p") {
                 float x, y, z;

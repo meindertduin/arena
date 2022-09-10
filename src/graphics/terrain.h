@@ -28,7 +28,7 @@ namespace graphics {
 
     struct TerrainTexturePack {
     public:
-        TerrainTexturePack();
+        TerrainTexturePack(const TerrainFile &file);
         void bind() const;
     private:
         std::unique_ptr<GpuTexture> background_texture;
@@ -40,8 +40,8 @@ namespace graphics {
 
     struct Terrain {
     public:
-        int max_height = 20;
-        int min_height = -20;
+        float max_height = 20;
+        float min_height = -20;
 
         int width;
         int height;

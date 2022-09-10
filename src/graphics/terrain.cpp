@@ -3,13 +3,13 @@
 #include "../global.h"
 
 namespace graphics {
-    TerrainTexturePack::TerrainTexturePack() {
-        background_texture = std::make_unique<GpuTexture>("assets/grass.png");
-        blendmap = std::make_unique<GpuTexture>("assets/blendmap.png");
+    TerrainTexturePack::TerrainTexturePack(const TerrainFile &file) {
+        background_texture = std::make_unique<GpuTexture>(file.background_texture);
+        blendmap = std::make_unique<GpuTexture>(file.blendmap);
 
-        r_texture = std::make_unique<GpuTexture>("assets/bricks.png");
-        g_texture = std::make_unique<GpuTexture>("assets/dirt.png");
-        b_texture = std::make_unique<GpuTexture>("assets/bricks.png");
+        r_texture = std::make_unique<GpuTexture>(file.r_texture);
+        g_texture = std::make_unique<GpuTexture>(file.g_texture);
+        b_texture = std::make_unique<GpuTexture>(file.b_texture);
     }
 
     void TerrainTexturePack::bind() const {
@@ -22,9 +22,8 @@ namespace graphics {
         b_texture->bind(i);
     }
 
-    Terrain::Terrain(const TerrainFile &file) {
-        this->min_height = file.min_height;
-        this->max_height = file.max_height;
+    Terrain::Terrain(const TerrainFile &file) : textures(file), min_height(file.min_height), max_height(file.max_height) {
+        this->transform.pos = file.pos;
 
         Sprite16 sprite { file.heightmap };
 
@@ -129,9 +128,6 @@ namespace graphics {
         }
         
         this->mesh = std::make_unique<Mesh>(&mesh_data);
-        this->transform.pos.y = -20;
-        this->transform.pos.x = -200;
-        this->transform.pos.z = -200;
     }
 
     bool Terrain::fast_height(float x, float z, float &y) const {

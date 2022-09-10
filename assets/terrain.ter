@@ -1,9 +1,9 @@
 hm assets/heightmap.png
 bm assets/blendmap.png
-bt assets/grass.png
+dt assets/grass.png
 rt assets/bricks.png
 gt assets/dirt.png
-bt assets/container.png
+bt assets/bricks.png
 
 p -200 -20 -200
 mh -20 20
