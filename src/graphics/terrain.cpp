@@ -4,12 +4,12 @@
 
 namespace graphics {
     TerrainTexturePack::TerrainTexturePack() {
-        background_texture = std::make_unique<GpuTexture>("assets/bricks.png");
+        background_texture = std::make_unique<GpuTexture>("assets/grass.png");
         blendmap = std::make_unique<GpuTexture>("assets/blendmap.png");
 
         r_texture = std::make_unique<GpuTexture>("assets/bricks.png");
-        g_texture = std::make_unique<GpuTexture>("assets/container.png");
-        b_texture = std::make_unique<GpuTexture>("assets/blendmap.png");
+        g_texture = std::make_unique<GpuTexture>("assets/dirt.png");
+        b_texture = std::make_unique<GpuTexture>("assets/bricks.png");
     }
 
     void TerrainTexturePack::bind() const {
