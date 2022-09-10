@@ -17,11 +17,11 @@ namespace graphics {
         Sprite16(Sprite16 &other) = delete;
         Sprite16& operator=(Sprite16 &other) = delete;
 
-        constexpr unsigned short get_pixel(int x, int y) const {
+        [[nodiscard]] constexpr unsigned short get_pixel(int x, int y) const {
             return data[4 * (y * width + x) + 0];
         }
         
-        unsigned short* get_buffer() const;
+        [[nodiscard]] unsigned short* get_buffer() const;
     private:
         unsigned short *data;
     };

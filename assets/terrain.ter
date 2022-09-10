@@ -5,6 +5,7 @@ rt assets/bricks.png
 gt assets/dirt.png
 bt assets/bricks.png
 
-p -200 -20 -200
+p 0 -20 0
+wh 256 256
 mh -20 20
 mt assets/terrain.mat

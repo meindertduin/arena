@@ -24,38 +24,43 @@ namespace graphics {
 
     Terrain::Terrain(const TerrainFile &file) : textures(file), min_height(file.min_height), max_height(file.max_height) {
         this->transform.pos = file.pos;
+        this->width = file.width;
+        this->height = file.height;
 
         Sprite16 sprite { file.heightmap };
 
-        this->width = sprite.width;
-        this->height = sprite.height;
-        
         MeshData mesh_data;
         
-        int touch_vertices[sprite.width][sprite.height];
-        for (int i = 0; i < sprite.height; i++) {
-            for (int j = 0; j < sprite.width; j++) {
+        int touch_vertices[width][height];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 touch_vertices[j][i] = 0;
             }
         }
 
-        this->positions = std::vector<std::vector<glm::vec3>>(sprite.height);
+        this->positions = std::vector<std::vector<glm::vec3>>(height);
         for (auto & position : this->positions) {
-            position = std::vector<glm::vec3>(sprite.width);
+            position = std::vector<glm::vec3>(width);
         }
 
-        Vertex vertices[sprite.width][sprite.height];
+        auto vertices = std::vector<std::vector<Vertex>>(height);
+        for (auto &v_vector : vertices) {
+            v_vector = std::vector<Vertex>(width);
+        }
 
         // setting all the vertices
-        for (auto y = 0; y < sprite.height; y++) {
-            for (auto x = 0; x < sprite.width; x++) {
+        for (auto y = 0; y < height; y++) {
+            for (auto x = 0; x < width; x++) {
                 Vertex v{};
                 v.pos.x = (float)x;
-                v.pos.y = ((float)sprite.get_pixel(x, y) /  65535.0f) * (max_height - min_height) + min_height;
+                auto sprite_x = (float)x * ((float)sprite.width / (float)width);
+                auto sprite_y = (float)y * ((float)sprite.height / (float)height);
+                // TODO blend the heights when up- or down-scaling
+                v.pos.y = ((float)sprite.get_pixel(sprite_x, sprite_y) /  65535.0f) * (max_height - min_height) + min_height;
                 v.pos.z = (float)y;
                 v.normal = { 0, 0, 0 };
-                auto tx = ((float) x / (float) sprite.width) * 66535.0f;
-                auto ty = ((float) y / (float) sprite.height) * 65535.0f;
+                auto tx = ((float) x / (float) width) * 66535.0f;
+                auto ty = ((float) y / (float) height) * 65535.0f;
                 v.textcoords = { tx, ty };
 
                 vertices[x][y] = v;
@@ -64,8 +69,8 @@ namespace graphics {
         }
 
         // dividing heightmap into grid and triangles and calculating normals of vertices
-        for (auto y = 0; y < sprite.height - 1; y++) {
-            for (auto x = 0; x < sprite.width - 1; x++) {
+        for (auto y = 0; y < height - 1; y++) {
+            for (auto x = 0; x < width - 1; x++) {
                 auto &v1 = vertices[x][y];
                 auto &v2 = vertices[x + 1][y];
                 auto &v3 = vertices[x][y + 1];
@@ -98,8 +103,8 @@ namespace graphics {
         }
 
         // normalizing vector normals
-        for (auto y = 0; y < sprite.height; y++) {
-            for (auto x = 0; x < sprite.width; x++) {
+        for (auto y = 0; y < height; y++) {
+            for (auto x = 0; x < width; x++) {
                 if (touch_vertices[x][y] >= 0) {
                     auto &v1 = vertices[x][y];
                     v1.normal /= touch_vertices[x][y];
@@ -109,8 +114,8 @@ namespace graphics {
         }
 
         // dividing vertices into polygons and adding to the mesh_data
-        for (auto y = 0; y < sprite.height - 1; y++) {
-            for (auto x = 0; x < sprite.width - 1; x++) {
+        for (auto y = 0; y < height - 1; y++) {
+            for (auto x = 0; x < width - 1; x++) {
                 auto &v1 = vertices[x][y];
                 auto &v2 = vertices[x + 1][y];
                 auto &v3 = vertices[x][y + 1];

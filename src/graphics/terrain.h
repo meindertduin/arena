@@ -22,6 +22,8 @@ namespace graphics {
 
         float min_height;
         float max_height;
+        int width;
+        int height;
 
         std::string material;
     };

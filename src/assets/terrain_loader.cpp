@@ -47,6 +47,14 @@ namespace assets {
                 terrain_file.pos = {x, y, z };
             }
 
+            if (first_token == "wh") {
+                int width, height;
+                ss >> width >> height;
+
+                terrain_file.width = width;
+                terrain_file.height = height;
+            }
+
             if (first_token == "mh") {
                 float min_height, max_height;
                 ss >> min_height >> max_height;
