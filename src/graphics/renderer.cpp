@@ -1,6 +1,7 @@
 #include "renderer.h"
 
 #include "../global.h"
+#include "material.h"
 #include "../game/game_state.h"
 
 namespace graphics {
@@ -24,9 +25,9 @@ namespace graphics {
         shader.set_property("color", { 1.0f, 1.0f, 0 });
         shader.set_property("model", model_4x4);
 
-        shader.set_property("diffuse", global.material.diffuse);
-        shader.set_property("specular", global.material.specular);
-        shader.set_property("shininess", global.material.shininess);
+        shader.set_property("diffuse", global.material->diffuse);
+        shader.set_property("specular", global.material->specular);
+        shader.set_property("shininess", global.material->shininess);
 
         shader.set_property("viewPos", global.game->camera->transform.pos);
 
@@ -88,9 +89,9 @@ namespace graphics {
         terrain.textures.bind();
         shader.set_property("model", model_4x4);
 
-        shader.set_property("diffuse", global.material.diffuse);
-        shader.set_property("specular", global.material.specular);
-        shader.set_property("shininess", global.material.shininess);
+        shader.set_property("diffuse", global.material->diffuse);
+        shader.set_property("specular", global.material->specular);
+        shader.set_property("shininess", global.material->shininess);
 
         shader.set_property("viewPos", global.game->camera->transform.pos);
 

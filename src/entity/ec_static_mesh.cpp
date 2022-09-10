@@ -7,7 +7,7 @@ namespace entity {
 
     void EcStaticMeshRenderer::init(std::string filename) {
         this->mesh = { filename };
-        this->material = &global.material;
+        this->material = global.material;
         this->texture = global.texture;
     }
 }

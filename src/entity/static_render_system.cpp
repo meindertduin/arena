@@ -1,6 +1,8 @@
 #include "static_render_system.h"
 #include "ec_static_mesh.h"
+
 #include "../global.h"
+#include "../graphics/renderer.h"
 
 namespace entity {
     void StaticRenderSystem::update() {

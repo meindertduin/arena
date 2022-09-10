@@ -1,20 +1,27 @@
 #pragma once
 
-#include "core/window.h"
-#include "entity/camera.h"
-#include "entity/ecs.h"
-
-#include "graphics/graphic_options.h"
-#include "graphics/mesh.h"
-#include "graphics/renderer.h"
-#include "graphics/texture.h"
-#include "graphics/material.h"
 #include "input/input_manager.h"
 
 #include <memory>
 
+namespace core {
+    struct Window;
+}
+
 namespace game {
     struct GameState;
+}
+
+namespace graphics {
+    struct Renderer;
+    struct TerrainRenderer;
+    struct GpuTexture;
+    struct Material;
+    struct GraphicOptions;
+}
+
+namespace entity {
+    struct Ecs;
 }
 
 struct Global {
@@ -27,19 +34,9 @@ struct Global {
 
     graphics::GraphicOptions *graphic_options;
     graphics::GpuTexture *texture;
-    graphics::Material material;
+    graphics::Material *material;
 
     entity::Ecs *ecs;
-
-    ~Global() {
-        delete window;
-
-        delete graphic_options;
-        delete texture;
-
-        delete renderer;
-        delete terrain_renderer;
-    }
 };
 
 extern Global global;

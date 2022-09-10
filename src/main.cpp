@@ -1,5 +1,10 @@
 #include "global.h"
+
+#include "core/window.h"
+#include "graphics/renderer.h"
+#include "graphics/texture.h"
 #include "input/input.h"
+
 #include "entity/static_render_system.h"
 #include "entity/terrain_collision_system.h"
 
@@ -41,12 +46,7 @@ int main () {
     col_signature.set(entity::ECCollisionBox::_id);
     global.ecs->set_system_signature<entity::TerrainCollisionSystem>(col_signature);
 
-    global.material = {
-        .ambient = { 0.2f, 0.2f, 0.2f },
-        .diffuse = { 0.6f, 0.6f, 0.6f },
-        .specular = { 0.2f, 0.2f, 0 },
-        .shininess = 0.2f,
-    };
+    global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
     global.texture = new graphics::GpuTexture("assets/container.png");
 
     // initialize game state

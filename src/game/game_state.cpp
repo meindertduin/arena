@@ -1,9 +1,7 @@
 #include "game_state.h"
 #include "../global.h"
 #include "../entity/ec_player.h"
-
-#include "../entity/ec_transform.h"
-#include "../entity/ec_static_mesh.h"
+#include "../graphics/graphic_options.h"
 
 namespace game {
     GameState::GameState() {
