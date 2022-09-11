@@ -23,7 +23,7 @@ namespace graphics {
     private:
         VertexBuffer screen_vertex_buffer { 4 * sizeof(float) };
         ArrayBuffer screen_array_buffer;
-        ShaderProgram screen_shader { "shaders/screen.vs", "shaders/screen.fs" };
+        ShaderProgram screen_shader { "shaders/screen.vert", "shaders/screen.frag" };
 
         uint32_t framebuffer;
         uint32_t texture_color_buffer;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 #include "../entity/ec_transform.h"
 
 #include "gpu_buffer.h"
@@ -24,7 +24,7 @@ namespace graphics {
         Mesh& operator=(const Mesh&) = delete;
         Mesh& operator=(Mesh&&) = delete;
 
-        void render();
+        void render() const;
         entity::ECTransform transform;
     private:
         std::size_t size;

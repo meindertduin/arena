@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <glad/glad.h>
-#include "../assets/obj_loader.h"
+#include "../assets/loaders.h"
 
 namespace graphics {
     Mesh::Mesh(MeshData *mesh_data) {
@@ -14,7 +14,7 @@ namespace graphics {
         this->size = mesh_data->vertices.size();
     }
 
-    void Mesh::render() {
+    void Mesh::render() const {
         this->buffer_array.bind();
 
         // TODO binding new vertex array and setting the vertex-attributes is quite expensive

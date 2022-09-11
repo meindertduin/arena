@@ -1,18 +1,18 @@
 #pragma once
 
 #include "../graphics/light.h"
-#include "camera.h"
+#include "../entity/camera.h"
 #include "../assets/cache.h"
 
-namespace entity {
+#include "map.h"
+
+namespace game {
     struct GameState {
         GameState();
         ~GameState();
 
         GameState(const GameState&) = delete;
-        GameState(GameState&&) = delete;
         GameState& operator=(const GameState&) = delete;
-        GameState& operator=(GameState&&) = delete;
 
         std::vector<graphics::DirLight> dir_lights;
         std::vector<graphics::PointLight> point_lights;
@@ -20,8 +20,10 @@ namespace entity {
         void init();
 
         assets::Cache cache;
-        Camera *camera;
-        Entity player;
-        Entity cube;
+        entity::Camera *camera;
+        entity::Entity player;
+        entity::Entity cube;
+
+        std::unique_ptr<Map> map;
     };
 }

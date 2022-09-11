@@ -4,6 +4,6 @@
 
 namespace entity {
     struct ECPlayer {
-        Entity create(Entity e) const;
+        [[nodiscard]] static Entity create(Entity e);
     };
 }

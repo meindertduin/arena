@@ -2,6 +2,7 @@
 #include "input.h"
 #include "../global.h"
 #include "../entity/ec_command.h"
+#include "../game/game_state.h"
 
 namespace input {
     InputManager::InputManager() {
@@ -26,7 +27,7 @@ namespace input {
         this->player_input.on_key_press(key, mods_mask, action);
     }
 
-    void PlayerInput::update() {
+    void PlayerInput::update() const {
         if (moves_forward && !moves_backward) {
             entity::MoveForwardCommand().execute(global.game->player);
         } else if (moves_backward && !moves_forward) {

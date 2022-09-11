@@ -13,7 +13,6 @@ constexpr static float quad_vertices[] = {
       1.0f,  1.0f, 1.0f, 1.0f
  };
 
-
 namespace graphics {
     RenderTarget::RenderTarget() {
         screen_shader.link();

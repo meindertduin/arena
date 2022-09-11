@@ -119,4 +119,8 @@ namespace graphics {
         uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
         glUniformMatrix4fv(uniformLock, 1, GL_FALSE, glm::value_ptr(m));
     }
+
+    void ShaderProgram::set_uniform_loc(const std::string& name, int index) const {
+        glUniform1i(glGetUniformLocation(program, name.c_str()), index);
+    }
 }

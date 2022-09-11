@@ -1,0 +1,11 @@
+hm assets/heightmap.png
+bm assets/blendmap.png
+dt assets/grass.png
+rt assets/bricks.png
+gt assets/dirt.png
+bt assets/bricks.png
+
+p -128 -20 -128
+wh 256 256
+mh -20 20
+mt assets/terrain.mat

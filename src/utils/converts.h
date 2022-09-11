@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace utils {
     constexpr int pack_int_2_10_10_10_rev(float x, float y, float z, float w) {
         const int xs = x < 0;

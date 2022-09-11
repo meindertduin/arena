@@ -15,7 +15,7 @@ inline void log_error(std::string error, Args... args) {
 }
 
 template<>
-inline void log_error(std::string error) {
+inline void log_error(const std::string error) {
     throw std::runtime_error(error);
 }
 

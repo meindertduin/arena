@@ -1,13 +1,24 @@
-#include <stdio.h>
-
 #include "global.h"
+
+#include "core/window.h"
+#include "graphics/renderer.h"
+#include "graphics/texture.h"
 #include "input/input.h"
+
 #include "entity/static_render_system.h"
+#include "entity/terrain_collision_system.h"
+
 #include "entity/ec_static_mesh.h"
+#include "entity/ec_collision_box.h"
+#include "entity/ec_physics.h"
+#include "game/game_state.h"
+
+#include "physics/physics_system.h"
 
 Global global;
 
 int main () {
+    // setting up application core components
     auto window_options = core::WindowOptions {
         .width = 1280,
         .height = 720,
@@ -21,31 +32,32 @@ int main () {
 
     global.window = new core::Window(window_options);
     global.renderer = new graphics::Renderer();
+    global.terrain_renderer = new graphics::TerrainRenderer();
+
     input::initialize_input(*global.window);
 
+    // setting up ecs and systems
     global.ecs = entity::Ecs::instance();
 
-    auto static_render_system = global.ecs->register_system<entity::StaticRenderSystem>();
-    entity::Signature signature;
-    signature.set(entity::EcStaticMeshRenderer::_id);
-    global.ecs->set_system_signature<entity::StaticRenderSystem>(signature);
+    auto static_render_system = global.ecs->create_system<entity::StaticRenderSystem>({ entity::EcStaticMeshRenderer::_id });
+    auto physics_system = global.ecs->create_system<physics::PhysicsSystem>({ entity::ECPhysics::_id });
+    auto terrain_collision_system = global.ecs->create_system<entity::TerrainCollisionSystem>({ entity::ECCollisionBox::_id });
 
-    global.material = {
-        .ambient = { 0.2f, 0.2f, 0.2f },
-        .diffuse = { 0.6f, 0.6f, 0.6f },
-        .specular = { 0.2f, 0.2f, 0 },
-        .shininess = 0.2f,
-    };
-    global.texture = new graphics::Texture("assets/container.png");
+    global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
+    global.texture = new graphics::GpuTexture("assets/container.png");
 
-    global.game = new entity::GameState();
+    // initialize game state
+    global.game = new game::GameState();
     global.game->init();
 
     while(!global.window->close_requested()) {
         global.input_manager.update();
+        physics_system->update();
+
+        terrain_collision_system->update();
         
         global.renderer->before_render();
-        
+        global.game->map->render_background();
         // render the different systems
         static_render_system->update();
 

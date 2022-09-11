@@ -1,4 +1,6 @@
 build/
+cmake-build-debug/
+.idea/
 debug/
 external/
 .vimspector.json

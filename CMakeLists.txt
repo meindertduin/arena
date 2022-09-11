@@ -11,6 +11,7 @@ set(SOURCES
     src/main.cpp
     src/core/window.cpp
     src/graphics/mesh.cpp
+    src/graphics/terrain.cpp
     src/graphics/renderer.cpp
     src/graphics/texture.cpp
     src/graphics/gpu_buffer.cpp
@@ -19,18 +20,24 @@ set(SOURCES
     external/glad/glad.c
     src/entity/event_manager.cpp
     src/entity/entity.cpp
+    src/entity/ec_component_inits.cpp
     src/entity/ec_transform.cpp
+    src/entity/ec_collision_box.cpp
+        src/entity/ec_physics.h
     src/entity/ec_first_person_camera.cpp
     src/entity/ec_command.cpp
     src/entity/ec_player.cpp
-    src/entity/game_state.cpp
     src/entity/static_render_system.cpp
+    src/entity/terrain_collision_system.cpp
     src/entity/ec_static_mesh.cpp
+    src/game/game_state.cpp
+    src/game/map.cpp
     src/input/input.cpp
     src/input/input_manager.cpp
-    src/assets/obj_loader.cpp
-    src/assets/cache.cpp
-)
+        src/assets/obj_loader.cpp
+        src/assets/cache.cpp
+        src/assets/terrain_loader.cpp
+        src/assets/file_reader.cpp src/physics/physics_system.h src/physics/physics_system.cpp )
 
 set(HEADERS include)
 

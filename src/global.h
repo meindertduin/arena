@@ -2,41 +2,41 @@
 
 #include "input/input_manager.h"
 
-#include "core/window.h"
-#include "entity/camera.h"
-#include "entity/game_state.h"
-#include "entity/ecs.h"
-
-#include "graphics/graphic_options.h"
-#include "graphics/mesh.h"
-#include "graphics/renderer.h"
-#include "graphics/texture.h"
-#include "graphics/material.h"
-
 #include <memory>
+
+namespace core {
+    struct Window;
+}
+
+namespace game {
+    struct GameState;
+}
+
+namespace graphics {
+    struct Renderer;
+    struct TerrainRenderer;
+    struct GpuTexture;
+    struct Material;
+    struct GraphicOptions;
+}
+
+namespace entity {
+    struct Ecs;
+}
 
 struct Global {
     core::Window *window;
 
     input::InputManager input_manager;
-    entity::GameState *game;
+    game::GameState *game;
     graphics::Renderer *renderer;
+    graphics::TerrainRenderer *terrain_renderer;
 
     graphics::GraphicOptions *graphic_options;
-    graphics::Texture *texture;
-    graphics::Material material;
+    graphics::GpuTexture *texture;
+    graphics::Material *material;
 
     entity::Ecs *ecs;
-
-    ~Global() {
-        delete window;
-
-        delete graphic_options;
-        delete texture;
-        delete game;
-
-        delete renderer;
-    }
 };
 
 extern Global global;

@@ -1,8 +1,8 @@
 #include "renderer.h"
 
-#include <glad/glad.h>
-
 #include "../global.h"
+#include "material.h"
+#include "../game/game_state.h"
 
 namespace graphics {
     Renderer::Renderer() {
@@ -17,7 +17,7 @@ namespace graphics {
         set_ubo_data();
     }
 
-    void Renderer::render(Mesh *mesh, entity::ECTransform &transform) {
+    void Renderer::render(const Mesh *mesh, const entity::ECTransform &transform) const {
         auto model_4x4 = transform.get_transform_4x4();
 
         shader.use();
@@ -25,9 +25,9 @@ namespace graphics {
         shader.set_property("color", { 1.0f, 1.0f, 0 });
         shader.set_property("model", model_4x4);
 
-        shader.set_property("diffuse", global.material.diffuse);
-        shader.set_property("specular", global.material.specular);
-        shader.set_property("shininess", global.material.shininess);
+        shader.set_property("diffuse", global.material->diffuse);
+        shader.set_property("specular", global.material->specular);
+        shader.set_property("shininess", global.material->shininess);
 
         shader.set_property("viewPos", global.game->camera->transform.pos);
 
@@ -71,5 +71,34 @@ namespace graphics {
 
         ubo_lights.unbind();
     }
-}
 
+    TerrainRenderer::TerrainRenderer() {
+        shader.link();
+        shader.use();
+
+        shader.set_uniform_loc("baseTexture", 0);
+        shader.set_uniform_loc("blendMap", 1);
+        shader.set_uniform_loc("rTexture", 2);
+        shader.set_uniform_loc("gTexture", 3);
+        shader.set_uniform_loc("bTexture", 4);
+    }
+
+    void TerrainRenderer::render(const Terrain &terrain) const {
+        auto model_4x4 = terrain.transform.get_transform_4x4();
+
+        shader.use();
+
+        terrain.textures.bind();
+        shader.set_property("model", model_4x4);
+
+        shader.set_property("diffuse", global.material->diffuse);
+        shader.set_property("specular", global.material->specular);
+        shader.set_property("shininess", global.material->shininess);
+
+        shader.set_property("viewPos", global.game->camera->transform.pos);
+
+        shader.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
+
+        terrain.mesh->render();
+    }
+}
