@@ -47,7 +47,7 @@ namespace entity {
         }
 
         inline void destory() const {
-            this->p->template destory_entity(*this); 
+            this->p->template destroy_entity(*this);
         }
 
         inline Signature& signature() const {

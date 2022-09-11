@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <unordered_map>
+#include <utility>
 
 #include "../graphics/mesh.h"
 #include "../graphics/terrain.h"
@@ -43,9 +44,13 @@ namespace assets {
     struct AssetHandle {
     public:
         AssetHandle() = default;
-        AssetHandle(std::string filename) : filename(filename) {  }
+        AssetHandle(std::string filename) : filename(std::move(filename)) {  }
         T* get() const {
             THROW_ERROR("specialization of type %s not implemented for cache get()", typeid(T).name())
+        }
+
+        T* operator->() {
+            this->get();
         }
     private:
         std::string filename;

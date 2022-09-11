@@ -26,7 +26,7 @@ namespace entity {
             return entity_manager->create_entity();
         }
 
-        void destory_entity(Entity entity) {
+        void destroy_entity(Entity entity) {
             entity_manager->destroy(entity);
             component_manager->entity_destroyed(entity);
             systems_manager->entity_destroyed(entity);
