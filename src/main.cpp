@@ -39,20 +39,9 @@ int main () {
     // setting up ecs and systems
     global.ecs = entity::Ecs::instance();
 
-    auto static_render_system = global.ecs->register_system<entity::StaticRenderSystem>();
-    entity::Signature signature;
-    signature.set(entity::EcStaticMeshRenderer::_id);
-    global.ecs->set_system_signature<entity::StaticRenderSystem>(signature);
-
-    auto physics_system = global.ecs->register_system<physics::PhysicsSystem>();
-    entity::Signature phy_signature;
-    phy_signature.set(entity::ECPhysics::_id);
-    global.ecs->set_system_signature<physics::PhysicsSystem>(phy_signature);
-
-    auto terrain_collision_system = global.ecs->register_system<entity::TerrainCollisionSystem>();
-    entity::Signature col_signature;
-    col_signature.set(entity::ECCollisionBox::_id);
-    global.ecs->set_system_signature<entity::TerrainCollisionSystem>(col_signature);
+    auto static_render_system = global.ecs->create_system<entity::StaticRenderSystem>({ entity::EcStaticMeshRenderer::_id });
+    auto physics_system = global.ecs->create_system<physics::PhysicsSystem>({ entity::ECPhysics::_id });
+    auto terrain_collision_system = global.ecs->create_system<entity::TerrainCollisionSystem>({ entity::ECCollisionBox::_id });
 
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
     global.texture = new graphics::GpuTexture("assets/container.png");

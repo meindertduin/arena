@@ -71,6 +71,19 @@ namespace entity {
         }
 
         template<typename T>
+        std::shared_ptr<T> create_system(const std::set<uint32_t>& component_ids) {
+            auto system = register_system<T>();
+
+            entity::Signature col_signature;
+            for (auto id : component_ids) {
+                col_signature.set(id);
+            }
+
+            set_system_signature<T>(col_signature);
+            return system;
+        }
+
+        template<typename T>
         void set_system_signature(Signature signature) {
             systems_manager->set_signature<T>(signature);
         }
