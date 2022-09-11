@@ -10,7 +10,6 @@ namespace input {
     static float mouse_x_offset;
     static float mouse_y_offset;
 
-
     void initialize_input(const core::Window &window) {
         keyboard_state.fill(0);
 
