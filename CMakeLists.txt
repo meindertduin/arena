@@ -20,9 +20,10 @@ set(SOURCES
     external/glad/glad.c
     src/entity/event_manager.cpp
     src/entity/entity.cpp
+    src/entity/ec_component_inits.cpp
     src/entity/ec_transform.cpp
     src/entity/ec_collision_box.cpp
-        src/entity/ec_physics.cpp src/entity/ec_physics.h
+        src/entity/ec_physics.h
     src/entity/ec_first_person_camera.cpp
     src/entity/ec_command.cpp
     src/entity/ec_player.cpp
