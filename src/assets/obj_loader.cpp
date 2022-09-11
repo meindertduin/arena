@@ -21,7 +21,7 @@ namespace assets {
 
     ObjIndex parse_object_index(std::string token, graphics::MeshData *meshData);
 
-    void load_obj(const std::string &filename, Cache *cache) {
+    std::shared_ptr<graphics::Mesh> load_obj(const std::string &filename, Cache *cache) {
         FileReader file_reader { filename };
 
         auto mesh_data = std::make_unique<graphics::MeshData>(graphics::MeshData{});
@@ -87,8 +87,7 @@ namespace assets {
             }
         }
 
-        auto mesh = std::make_unique<graphics::Mesh>(mesh_data.get());
-        cache->save_mesh(filename, std::move(mesh));
+        return std::make_shared<graphics::Mesh>(mesh_data.get());
     }
 
     ObjIndex parse_object_index(std::string token, graphics::MeshData *mesh_data) {

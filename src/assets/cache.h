@@ -25,36 +25,27 @@ namespace assets {
         Cache& operator=(Cache &&other) = delete;
 
         template<typename T>
-        void load_asset(const std::string& filename) {
-            THROW_ERROR("specialization of type %s not implemented for cache get()", typeid(T).name())
+        std::shared_ptr<T> load_asset(const std::string& filename) {
+            THROW_ERROR("specialization for function 'load_asset' of type %s not implemented for cache get()", typeid(T).name())
         }
 
-        graphics::Mesh* get_mesh(std::string filename) const;
-        void save_mesh(std::string filename, std::unique_ptr<graphics::Mesh> mesh);
-
-        graphics::Terrain* get_terrain(std::string filename) const;
-        void save_terrain(std::string filename, std::unique_ptr<graphics::Terrain> terrain);
+        template<typename T>
+        std::shared_ptr<T> get_resource(const std::string &filename) {
+            THROW_ERROR("specialization for function 'get_resource' of type %s not implemented for cache get()", typeid(T).name())
+        }
 
     private:
-        std::unordered_map<std::string, std::unique_ptr<graphics::Mesh>> meshses;
-        std::unordered_map<std::string, std::unique_ptr<graphics::Terrain>> terrains;
-    };
+        std::unordered_map<std::string, std::weak_ptr<graphics::Mesh>> meshes;
+        std::unordered_map<std::string, std::weak_ptr<graphics::Terrain>> terrains;
 
-    template<typename T>
-    struct AssetHandle {
-    public:
-        AssetHandle() = default;
-        AssetHandle(std::string filename) : filename(std::move(filename)) {  }
-        T* get() const {
-            THROW_ERROR("specialization of type %s not implemented for cache get()", typeid(T).name())
+        template<typename T>
+        std::shared_ptr<T> get_shared_asset(std::weak_ptr<T> &resource, const std::string &filename) {
+            auto loaded_resource = resource.lock();
+            if (loaded_resource) {
+                return loaded_resource;
+            }
+
+            return load_asset<T>(filename);
         }
-
-        T* operator->() {
-            this->get();
-        }
-    private:
-        std::string filename;
     };
-
-    using MeshHandle = AssetHandle<graphics::Mesh>;
 }

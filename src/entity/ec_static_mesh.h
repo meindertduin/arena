@@ -12,11 +12,11 @@ namespace entity {
     public:
         graphics::Material *material = nullptr;
         graphics::GpuTexture *texture = nullptr;
-        assets::AssetHandle<graphics::Mesh> mesh;
+        std::shared_ptr<graphics::Mesh> mesh;
 
         EcStaticMeshRenderer() = default;
 
-        void init(std::string filename);
+        void init(const std::string& filename);
     };
 
     DECL_COMPONENT_HEADER(EcStaticMeshRenderer);

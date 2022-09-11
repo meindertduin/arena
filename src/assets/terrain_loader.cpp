@@ -7,7 +7,7 @@
 #include "cache.h"
 
 namespace assets {
-    void load_terrain(const std::string &filename, Cache *cache) {
+    std::shared_ptr<graphics::Terrain> load_terrain(const std::string &filename, Cache *cache) {
         FileReader file_reader { filename };
         graphics::TerrainFile terrain_file;
 
@@ -68,7 +68,6 @@ namespace assets {
             }
         }
 
-        auto terrain = std::make_unique<graphics::Terrain>(terrain_file);
-        cache->save_terrain(filename, std::move(terrain));
+        return std::make_shared<graphics::Terrain>(terrain_file);
     }
 }
