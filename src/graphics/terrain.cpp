@@ -136,7 +136,7 @@ namespace graphics {
         this->mesh = std::make_unique<Mesh>(&mesh_data);
     }
 
-    bool Terrain::fast_height(float x, float z, float &y) const {
+    bool Terrain::get_height(float x, float z, float &y) const {
         auto xmin = (int) (x - this->transform.pos.x);
         auto ymin = (int) (z - this->transform.pos.z);
 

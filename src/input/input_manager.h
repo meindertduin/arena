@@ -20,7 +20,7 @@ namespace input {
 
         PlayerInput() = default;
 
-        void update();
+        void update() const;
         void on_mouse_movement(float mouse_x_offset, float mouse_y_offset);
         void on_key_press(int key, int mod_mask, int action);
     private:

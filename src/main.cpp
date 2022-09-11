@@ -10,7 +10,10 @@
 
 #include "entity/ec_static_mesh.h"
 #include "entity/ec_collision_box.h"
+#include "entity/ec_physics.h"
 #include "game/game_state.h"
+
+#include "physics/physics_system.h"
 
 Global global;
 
@@ -41,6 +44,11 @@ int main () {
     signature.set(entity::EcStaticMeshRenderer::_id);
     global.ecs->set_system_signature<entity::StaticRenderSystem>(signature);
 
+    auto physics_system = global.ecs->register_system<physics::PhysicsSystem>();
+    entity::Signature phy_signature;
+    phy_signature.set(entity::ECPhysics::_id);
+    global.ecs->set_system_signature<physics::PhysicsSystem>(phy_signature);
+
     auto terrain_collision_system = global.ecs->register_system<entity::TerrainCollisionSystem>();
     entity::Signature col_signature;
     col_signature.set(entity::ECCollisionBox::_id);
@@ -55,6 +63,7 @@ int main () {
 
     while(!global.window->close_requested()) {
         global.input_manager.update();
+        physics_system->update();
 
         terrain_collision_system->update();
         

@@ -50,7 +50,7 @@ namespace graphics {
 
         Terrain(const TerrainFile &file);
 
-        bool fast_height(float x, float z, float &y) const;
+        bool get_height(float x, float z, float &y) const;
     private:
         friend class TerrainRenderer;
 

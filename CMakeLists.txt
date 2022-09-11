@@ -22,6 +22,7 @@ set(SOURCES
     src/entity/entity.cpp
     src/entity/ec_transform.cpp
     src/entity/ec_collision_box.cpp
+        src/entity/ec_physics.cpp src/entity/ec_physics.h
     src/entity/ec_first_person_camera.cpp
     src/entity/ec_command.cpp
     src/entity/ec_player.cpp
@@ -35,7 +36,7 @@ set(SOURCES
         src/assets/obj_loader.cpp
         src/assets/cache.cpp
         src/assets/terrain_loader.cpp
-        src/assets/file_reader.cpp)
+        src/assets/file_reader.cpp src/physics/physics_system.h src/physics/physics_system.cpp )
 
 set(HEADERS include)
 

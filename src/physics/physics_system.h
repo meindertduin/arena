@@ -1,8 +1,9 @@
-//
-// Created by meindert on 9/10/22.
-//
+#pragma once
 
-#ifndef ARENA_PHYSICS_SYSTEM_H
-#define ARENA_PHYSICS_SYSTEM_H
+#include "../entity/system.h"
 
-#endif //ARENA_PHYSICS_SYSTEM_H
+namespace physics {
+    struct PhysicsSystem : public entity::System {
+        void update() override;
+    };
+}

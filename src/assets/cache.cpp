@@ -6,13 +6,13 @@
 
 namespace assets {
     template<>
-    void Cache::load_asset<graphics::Mesh>(std::string filename) {
+    void Cache::load_asset<graphics::Mesh>(const std::string& filename) {
         if (meshses.find(filename) == meshses.end())
             load_obj(filename, this);
     }
 
     template<>
-    void Cache::load_asset<graphics::Terrain>(std::string filename) {
+    void Cache::load_asset<graphics::Terrain>(const std::string& filename) {
         if (terrains.find(filename) == terrains.end())
             load_terrain(filename, this);
     }

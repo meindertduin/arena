@@ -24,7 +24,7 @@ namespace assets {
         Cache& operator=(Cache &&other) = delete;
 
         template<typename T>
-        void load_asset(std::string filename) {
+        void load_asset(const std::string& filename) {
             THROW_ERROR("specialization of type %s not implemented for cache get()", typeid(T).name())
         }
 
