@@ -25,18 +25,17 @@ namespace assets {
         Cache& operator=(Cache &&other) = delete;
 
         template<typename T>
-        std::shared_ptr<T> load_asset(const std::string& filename) {
-            THROW_ERROR("specialization for function 'load_asset' of type %s not implemented for cache get()", typeid(T).name())
-        }
-
-        template<typename T>
         std::shared_ptr<T> get_resource(const std::string &filename) {
             THROW_ERROR("specialization for function 'get_resource' of type %s not implemented for cache get()", typeid(T).name())
         }
-
     private:
         std::unordered_map<std::string, std::weak_ptr<graphics::Mesh>> meshes;
         std::unordered_map<std::string, std::weak_ptr<graphics::Terrain>> terrains;
+
+        template<typename T>
+        std::shared_ptr<T> load_asset(const std::string& filename) {
+            THROW_ERROR("specialization for function 'load_asset' of type %s not implemented for cache get()", typeid(T).name())
+        }
 
         template<typename T>
         std::shared_ptr<T> get_shared_asset(std::weak_ptr<T> &resource, const std::string &filename) {

@@ -13,3 +13,4 @@ namespace game {
         global.terrain_renderer->render(*terrain);
     }
 }
+
