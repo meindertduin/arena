@@ -44,7 +44,9 @@ namespace graphics {
             position = std::vector<glm::vec3>(width);
         }
 
-        auto vertices = std::vector<std::vector<Vertex>>(height);
+        core::StdAllocator<std::vector<Vertex>> allocator { &global.allocator };
+        std::vector<std::vector<Vertex>, core::StdAllocator<std::vector<Vertex>>> vertices(height, allocator);
+
         for (auto &v_vector : vertices) {
             v_vector = std::vector<Vertex>(width);
         }

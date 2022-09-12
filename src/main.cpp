@@ -33,6 +33,7 @@ int main () {
     global.window = new core::Window(window_options);
     global.renderer = new graphics::Renderer();
     global.terrain_renderer = new graphics::TerrainRenderer();
+    global.allocator.init();
 
     input::initialize_input(*global.window);
 

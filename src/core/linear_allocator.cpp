@@ -14,14 +14,14 @@ namespace core {
 
     void LinearAllocator::init() {
         if (start_pointer != nullptr) {
-            free_mem(start_pointer);
+            free(start_pointer);
         }
 
         start_pointer = malloc(total_size);
         offset = 0;
     }
 
-    void* LinearAllocator::allocate_mem(std::size_t size, std::size_t alignment) {
+    void* LinearAllocator::allocate(std::size_t size, std::size_t alignment) {
         std::size_t padding = 0;
         std::size_t current_address = (std::size_t)start_pointer + offset;
 
@@ -43,7 +43,7 @@ namespace core {
         return (void*) next_address;
     }
 
-    void LinearAllocator::free_mem(void *ptr) {
+    void LinearAllocator::deallocate(void *ptr) {
 
     }
 
@@ -53,7 +53,7 @@ namespace core {
         peak = 0;
     }
 
-    std::size_t LinearAllocator::calculate_padding(std::size_t base_address, std::size_t alignment) const {
+    std::size_t LinearAllocator::calculate_padding(std::size_t base_address, std::size_t alignment) {
         const std::size_t multiplier = (base_address / alignment) + 1;
         const std::size_t aligned_address = multiplier * alignment;
         const std::size_t padding = aligned_address - base_address;
