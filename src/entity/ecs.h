@@ -107,9 +107,10 @@ namespace entity {
             typename M = types::member_function_traits<F>,
             typename C = typename M::instance_type,
             typename E = typename M::first_argument>
-        void add_event_handler(F && f) {
+        void add_event_handler(F &&f) {
             component_manager->add_event_handler<C, E>(f);
         }
+
     protected:
         Ecs() {
             component_manager = std::make_unique<ComponentManager>();
