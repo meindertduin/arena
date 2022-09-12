@@ -21,22 +21,12 @@ namespace core {
     public:
         Allocator *allocator = nullptr;
 
-        template<typename Tp1>
-        struct rebind
-        {
-            typedef StdAllocator<Tp1> other;
-        };
-
-        constexpr T* allocate(std::size_t n)
-        {
-            fprintf(stderr, "Alloc %d bytes.\n", n*sizeof(T));
-            return std::allocator<T>::allocate(n);
+        constexpr T* allocate(std::size_t n) {
+            return reinterpret_cast<T*>(this->allocator->allocate(n));
         }
 
-        constexpr void deallocate(T* p, std::size_t n)
-        {
-            fprintf(stderr, "Dealloc %d bytes (%p).\n", n*sizeof(T), p);
-            return std::allocator<T>::deallocate(p, n);
+        constexpr void deallocate(T* p, std::size_t n) {
+            this->allocator->deallocate(p);
         }
 
         StdAllocator() = delete;
