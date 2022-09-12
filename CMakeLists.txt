@@ -10,6 +10,7 @@ project(${PROJECT_NAME} VERSION ${arena_version} LANGUAGES CXX C)
 set(SOURCES
     src/main.cpp
     src/core/window.cpp
+        src/core/linear_allocator.h src/core/linear_allocator.cpp
     src/graphics/mesh.cpp
     src/graphics/terrain.cpp
     src/graphics/renderer.cpp
@@ -37,7 +38,7 @@ set(SOURCES
         src/assets/obj_loader.cpp
         src/assets/cache.cpp
         src/assets/terrain_loader.cpp
-        src/assets/file_reader.cpp src/physics/physics_system.h src/physics/physics_system.cpp )
+        src/assets/file_reader.cpp src/physics/physics_system.h src/physics/physics_system.cpp src/core/allocator.h)
 
 set(HEADERS include)
 
