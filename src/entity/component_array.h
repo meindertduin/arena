@@ -100,7 +100,6 @@ namespace entity {
         // could be managed with a memory allocator?
         std::array<T, MAX_ENTITIES> components;
 
-        // TODO, make this an array for performance bonus
         std::unordered_map<uint32_t, size_t> entity_index_map;
         std::unordered_map<uint32_t, size_t> index_entity_map;
 

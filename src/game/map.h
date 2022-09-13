@@ -11,7 +11,6 @@
 namespace game {
     struct Map {
     public:
-        // TODO load map data from file
         Map();
 
         void render_background() const;

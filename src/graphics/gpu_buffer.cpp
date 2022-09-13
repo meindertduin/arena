@@ -38,14 +38,14 @@ namespace graphics {
 
     void VertexBuffer::bind() const {
         glBindVertexArray(id);
-        std::size_t current_size = 0;
+        std::size_t size = 0;
         for (int i = 0; i < vertex_attributes.size(); i++) {
             const auto &attribute = vertex_attributes[i];
 
             glEnableVertexAttribArray(i);
-            glVertexAttribPointer(i, attribute.amount, attribute.type, attribute.normalized ? GL_TRUE : GL_FALSE, total_size, (void*) current_size);
+            glVertexAttribPointer(i, attribute.amount, attribute.type, attribute.normalized ? GL_TRUE : GL_FALSE, total_size, (void*) size);
 
-            current_size += attribute.amount * attribute.size_type;
+            size += attribute.amount * attribute.size_type;
         }
     }
 

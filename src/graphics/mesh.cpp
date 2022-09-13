@@ -17,7 +17,6 @@ namespace graphics {
     void Mesh::render() const {
         this->buffer_array.bind();
 
-        // TODO binding new vertex array and setting the vertex-attributes is quite expensive
         this->vertex_buffer.bind();
         glDrawArrays(GL_TRIANGLES, 0, this->size);
     }
