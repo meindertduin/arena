@@ -26,7 +26,7 @@ namespace assets {
 
         template<typename T>
         std::shared_ptr<T> get_resource(const std::string &filename) {
-            THROW_ERROR("specialization for function 'get_resource' of type %s not implemented for cache get()", typeid(T).name())
+            THROW_ERROR("specialization for function 'get_resource' of type %s not implemented for cache get()", typeid(T).name());
         }
     private:
         std::unordered_map<std::string, std::weak_ptr<graphics::Mesh>> meshes;
@@ -34,7 +34,7 @@ namespace assets {
 
         template<typename T>
         std::shared_ptr<T> load_asset(const std::string& filename) {
-            THROW_ERROR("specialization for function 'load_asset' of type %s not implemented for cache get()", typeid(T).name())
+            THROW_ERROR("specialization for function 'load_asset' of type %s not implemented for cache get()", typeid(T).name());
         }
 
         template<typename T>

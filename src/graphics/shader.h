@@ -1,6 +1,6 @@
 #pragma once
 
-#include <stdint.h>
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <memory>
@@ -22,7 +22,7 @@ namespace graphics {
         ShaderType type;
         std::string path;
 
-        Shader(ShaderType type, std::string path);
+        Shader(ShaderType type, const std::string& path);
         ~Shader();
 
         Shader(const Shader &other) = delete;
@@ -33,24 +33,24 @@ namespace graphics {
     };
 
     struct ShaderProgram {
-        uint32_t id;
+        uint32_t id{};
         uint32_t program;
 
         std::unique_ptr<Shader> vertexShader;
         std::unique_ptr<Shader> fragmentShader;
 
-        ShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath);
+        ShaderProgram(const std::string& vertex_shader_path, const std::string& fragment_shader_path);
         ~ShaderProgram();
 
         void use() const;
         void link() const;
 
-        void set_property(std::string properyName, int) const;
-        void set_property(std::string properyName, float) const;
-        void set_property(std::string properyName, glm::vec3&&) const;
-        void set_property(std::string properyName, glm::mat4&&) const;
-        void set_property(std::string properyName, glm::vec3&) const;
-        void set_property(std::string properyName, glm::mat4&) const;
+        void set_property(const std::string& property_name, int) const;
+        void set_property(const std::string& property_name, float) const;
+        void set_property(const std::string& property_name, glm::vec3&&) const;
+        void set_property(const std::string& property_name, glm::mat4&&) const;
+        void set_property(const std::string& property_name, glm::vec3&) const;
+        void set_property(const std::string& property_name, glm::mat4&) const;
 
         void set_uniform_loc(const std::string& name, int index) const;
     };

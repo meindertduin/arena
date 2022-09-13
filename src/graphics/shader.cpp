@@ -1,37 +1,24 @@
 #include "shader.h"
 
 #include <glad/glad.h>
-#include <fstream>
-#include <sstream>
+#include <memory>
 
 #include <iostream>
 
 #include "../logging.h"
+#include "../assets/file_reader.h"
 
 namespace graphics {
-    // TODO move this to a different namespace and tidy up
-    std::string read_file_contents(std::string path) {
-        std::ifstream ifs { path };
 
-        if (ifs.fail()) {
-            THROW_ERROR("IO ERROR: Shader file: %s does not exist", path);
-        }
-
-        std::stringstream sstream;
-
-        sstream << ifs.rdbuf();
-        ifs.close();
-
-        return sstream.str();
-    }
-
-    Shader::Shader(ShaderType type, std::string path) : type(type), path(path) {
+    Shader::Shader(ShaderType type, const std::string& path) : type(type), path(path) {
         if (type == ShaderType::Fragment)
             id = glCreateShader(GL_FRAGMENT_SHADER);
         else
             id = glCreateShader(GL_VERTEX_SHADER);
 
-        auto data = read_file_contents(path);
+        assets::FileReader file_reader { path };
+        auto data = file_reader.get_file_content();
+
         const char* charData = data.c_str();
 
         glShaderSource(id, 1, &charData, nullptr);
@@ -41,7 +28,7 @@ namespace graphics {
         glGetShaderiv(id, GL_COMPILE_STATUS, &success);
         if (!success) {
             GLchar infoLog[1024];
-            glGetShaderInfoLog(id, 1024, NULL, infoLog);
+            glGetShaderInfoLog(id, 1024, nullptr, infoLog);
             std::cout << infoLog;
             THROW_ERROR("GL ERROR: Failed to compile shader with path: %s", path);
         }
@@ -55,11 +42,11 @@ namespace graphics {
         glDeleteProgram(program);
     }
 
-    ShaderProgram::ShaderProgram(std::string vertexShaderPath, std::string fragmentShaderPath) {
+    ShaderProgram::ShaderProgram(const std::string& vertex_shader_path, const std::string& fragment_shader_path) {
         program = glCreateProgram();
 
-        vertexShader = std::unique_ptr<Shader>(new Shader { ShaderType::Vertex, vertexShaderPath});
-        fragmentShader = std::unique_ptr<Shader>(new Shader { ShaderType::Fragment, fragmentShaderPath });
+        vertexShader = std::make_unique<Shader>(ShaderType::Vertex, vertex_shader_path);
+        fragmentShader = std::make_unique<Shader>(ShaderType::Fragment, fragment_shader_path );
 
         glAttachShader(program, vertexShader->id);
         glAttachShader(program, fragmentShader->id);
@@ -76,7 +63,7 @@ namespace graphics {
         glGetProgramiv(program, GL_LINK_STATUS, &success);
         if (!success) {
             GLchar infoLog[1024];
-            glGetProgramInfoLog(program, 1024, NULL, infoLog);
+            glGetProgramInfoLog(program, 1024, nullptr, infoLog);
             std::cout << infoLog;
             THROW_ERROR("GL ERROR: Failed to link shaders with paths: %s, %s", vertexShader->path, fragmentShader->path);
         }
@@ -90,34 +77,34 @@ namespace graphics {
 
     }
 
-    void ShaderProgram::set_property(std::string properyName, int value) const {
-        uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
-        glUniform1i(uniformLock, value);
+    void ShaderProgram::set_property(const std::string& property_name, int value) const {
+        int uniform_lock = glGetUniformLocation(program, property_name.c_str());
+        glUniform1i(uniform_lock, value);
     }
 
-    void ShaderProgram::set_property(std::string properyName, float value) const {
-        uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
-        glUniform1f(uniformLock, value);
+    void ShaderProgram::set_property(const std::string& property_name, float value) const {
+        int uniform_lock = glGetUniformLocation(program, property_name.c_str());
+        glUniform1f(uniform_lock, value);
     }
 
-    void ShaderProgram::set_property(std::string properyName, glm::vec3 &&v) const {
-        uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
-        glUniform3f(uniformLock, v.x, v.y, v.z);
+    void ShaderProgram::set_property(const std::string& property_name, glm::vec3 &&v) const {
+        int uniform_lock = glGetUniformLocation(program, property_name.c_str());
+        glUniform3f(uniform_lock, v.x, v.y, v.z);
     }
 
-    void ShaderProgram::set_property(std::string properyName, glm::mat4 &&m) const {
-        uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
-        glUniformMatrix4fv(uniformLock, 1, GL_FALSE, glm::value_ptr(m));
+    void ShaderProgram::set_property(const std::string& property_name, glm::mat4 &&m) const {
+        int uniform_lock = glGetUniformLocation(program, property_name.c_str());
+        glUniformMatrix4fv(uniform_lock, 1, GL_FALSE, glm::value_ptr(m));
     }
 
-    void ShaderProgram::set_property(std::string properyName, glm::vec3 &v) const {
-        uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
-        glUniform3f(uniformLock, v.x, v.y, v.z);
+    void ShaderProgram::set_property(const std::string& property_name, glm::vec3 &v) const {
+        int uniform_lock = glGetUniformLocation(program, property_name.c_str());
+        glUniform3f(uniform_lock, v.x, v.y, v.z);
     }
 
-    void ShaderProgram::set_property(std::string properyName, glm::mat4 &m) const {
-        uint32_t uniformLock = glGetUniformLocation(program, properyName.c_str());
-        glUniformMatrix4fv(uniformLock, 1, GL_FALSE, glm::value_ptr(m));
+    void ShaderProgram::set_property(const std::string& property_name, glm::mat4 &m) const {
+        int uniform_lock = glGetUniformLocation(program, property_name.c_str());
+        glUniformMatrix4fv(uniform_lock, 1, GL_FALSE, glm::value_ptr(m));
     }
 
     void ShaderProgram::set_uniform_loc(const std::string& name, int index) const {

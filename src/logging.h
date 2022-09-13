@@ -19,5 +19,5 @@ inline void log_error(const std::string error) {
     throw std::runtime_error(error);
 }
 
-#define THROW_ERROR(...) log_error(__VA_ARGS__);
+#define THROW_ERROR(...) log_error(__VA_ARGS__)
     
