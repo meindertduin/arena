@@ -48,13 +48,6 @@ namespace entity {
             }
         }
 
-        template<typename E>
-        void dispatch_event(E *event, Entity entity) {
-            for (auto &component : component_arrays) {
-                component.second->dispatch(event, E::_id, entity);
-            }
-        }
-
         template<typename C, typename E, typename F>
         void add_event_handler(F && f) {
             get_component_array<C>()->template add_event_handler<E>(f);

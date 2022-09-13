@@ -97,11 +97,6 @@ namespace entity {
             component_manager->dispatch_event(event);
         }
 
-        template<typename E>
-        constexpr void dispatch_event(E *event, Entity entity) {
-            component_manager->dispatch_event(event);
-        }
-
         template<
             typename F,
             typename M = types::member_function_traits<F>,

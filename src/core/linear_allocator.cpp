@@ -44,7 +44,7 @@ namespace core {
     }
 
     void LinearAllocator::deallocate(void *ptr) {
-
+        // linear allocator doesn't deallocate
     }
 
     void LinearAllocator::reset() {
