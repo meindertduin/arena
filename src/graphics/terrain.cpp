@@ -58,6 +58,7 @@ namespace graphics {
                 v.pos.x = (float)x;
                 auto sprite_x = (float)x * ((float)sprite.width / (float)width);
                 auto sprite_y = (float)y * ((float)sprite.height / (float)height);
+
                 // TODO blend the heights when up- or down-scaling
                 v.pos.y = ((float)sprite.get_pixel(sprite_x, sprite_y) /  65535.0f) * (max_height - min_height) + min_height;
                 v.pos.z = (float)y;

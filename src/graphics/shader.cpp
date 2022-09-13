@@ -9,7 +9,6 @@
 #include "../assets/file_reader.h"
 
 namespace graphics {
-
     Shader::Shader(ShaderType type, const std::string& path) : type(type), path(path) {
         if (type == ShaderType::Fragment)
             id = glCreateShader(GL_FRAGMENT_SHADER);

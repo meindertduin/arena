@@ -10,7 +10,7 @@
 #include "../logging.h"
 
 namespace graphics {
-    Sprite16::Sprite16(std::string path) {
+    Sprite16::Sprite16(const std::string& path) {
         data = stbi_load_16(path.c_str(), &width, &height, &channels, 0);
 
         if (!data) {
@@ -22,14 +22,26 @@ namespace graphics {
         stbi_image_free(data);
     }
 
+    Sprite16::Sprite16(const Sprite16 &other) noexcept {
+        data = std::copy(other.data, other.data + other.width * other.height, data);
+        height = other.height;
+        width = other.width;
+        channels = other.channels;
+    }
+
+    Sprite16& Sprite16::operator=(const Sprite16 &other) noexcept {
+        *this = Sprite16(other);
+        return *this;
+    }
+
     unsigned short* Sprite16::get_buffer() const {
         return data;
     }
 
-    GpuTexture::GpuTexture(std::string path) {
+    GpuTexture::GpuTexture(const std::string& path) {
         glGenTextures(1, &id);
 
-        Sprite16 sprite { std::move(path) };
+        Sprite16 sprite { path };
         this->width = sprite.width;
         this->height = sprite.height;
 
