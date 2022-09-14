@@ -7,7 +7,7 @@ namespace core {
     class Allocator {
     public:
         explicit Allocator(const std::size_t total_size) : total_size{total_size}, used{0}, peak{0} { }
-        virtual void* allocate(std::size_t size, std::size_t alignment = 0) = 0;
+        virtual void* allocate(std::size_t size, std::size_t alignment) = 0;
         virtual void deallocate(void *ptr) = 0;
     protected:
         std::size_t total_size;
@@ -15,13 +15,22 @@ namespace core {
         std::size_t peak;
     };
 
+    constexpr std::size_t AlignmentSize = 4;
+    constexpr std::size_t calc_alignment(std::size_t size) {
+        auto remainder = size % AlignmentSize;
+        if (remainder == 0)
+            return size;
+
+        return size + AlignmentSize - remainder;
+    }
+
     template<typename T>
     class StdAllocator : public std::allocator<T> {
     public:
         Allocator *allocator = nullptr;
 
         constexpr T* allocate(std::size_t n) {
-            return reinterpret_cast<T*>(this->allocator->allocate(n, sizeof(T)));
+            return reinterpret_cast<T*>(this->allocator->allocate(n, calc_alignment(sizeof(T))));
         }
 
         constexpr void deallocate(T* p, std::size_t n) {
