@@ -7,7 +7,6 @@ namespace core {
     class Allocator {
     public:
         explicit Allocator(const std::size_t total_size) : total_size{total_size}, used{0}, peak{0} { }
-        virtual void init() = 0;
         virtual void* allocate(std::size_t size, std::size_t alignment = 0) = 0;
         virtual void deallocate(void *ptr) = 0;
     protected:
@@ -22,7 +21,7 @@ namespace core {
         Allocator *allocator = nullptr;
 
         constexpr T* allocate(std::size_t n) {
-            return reinterpret_cast<T*>(this->allocator->allocate(n));
+            return reinterpret_cast<T*>(this->allocator->allocate(n, sizeof(T)));
         }
 
         constexpr void deallocate(T* p, std::size_t n) {

@@ -8,7 +8,6 @@ namespace core {
         explicit LinearAllocator(std::size_t total_size);
         virtual ~LinearAllocator();
 
-        void init() override;
         void* allocate(std::size_t size, std::size_t alignment) override;
         void deallocate(void *ptr) override;
         void reset();

@@ -5,20 +5,15 @@
 
 namespace core {
     LinearAllocator::LinearAllocator(const std::size_t total_size)
-        : Allocator(total_size), start_pointer{nullptr} ,offset{0} { }
+        : Allocator(total_size), start_pointer{nullptr} ,offset{0}
+    {
+        start_pointer = malloc(total_size);
+        offset = 0;
+    }
 
     LinearAllocator::~LinearAllocator() {
         free(start_pointer);
         start_pointer = nullptr;
-    }
-
-    void LinearAllocator::init() {
-        if (start_pointer != nullptr) {
-            free(start_pointer);
-        }
-
-        start_pointer = malloc(total_size);
-        offset = 0;
     }
 
     void* LinearAllocator::allocate(std::size_t size, std::size_t alignment) {
