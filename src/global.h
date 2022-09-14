@@ -35,7 +35,7 @@ struct Global {
     graphics::TerrainRenderer *terrain_renderer;
 
     graphics::GraphicOptions *graphic_options;
-    graphics::GpuTexture *texture;
+    std::shared_ptr<graphics::GpuTexture> texture;
     graphics::Material *material;
 
     entity::Ecs *ecs;
