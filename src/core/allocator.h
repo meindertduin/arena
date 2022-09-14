@@ -45,4 +45,30 @@ namespace core {
             allocator = nullptr;
         }
     };
+
+    constexpr std::size_t calculate_padding(std::size_t base_address, std::size_t alignment) {
+        const std::size_t multiplier = (base_address / alignment) + 1;
+        const std::size_t aligned_address = multiplier * alignment;
+        const std::size_t padding = aligned_address - base_address;
+
+        return padding;
+    }
+
+    constexpr std::size_t calculate_padding(std::size_t base_address, std::size_t alignment, std::size_t header_size) {
+        auto padding = calculate_padding(base_address, alignment);
+        auto needed_space = header_size;
+
+        if (padding < needed_space) {
+            needed_space -= padding;
+
+            // How many alignments I need to fit the header
+            if(needed_space % alignment > 0){
+                padding += alignment * (1+(needed_space / alignment));
+            }else {
+                padding += alignment * (needed_space / alignment);
+            }
+        }
+
+        return padding;
+    }
 }

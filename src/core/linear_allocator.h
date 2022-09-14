@@ -15,8 +15,6 @@ namespace core {
     protected:
         void* start_pointer;
         std::size_t offset;
-    private:
-        static std::size_t calculate_padding(std::size_t base_address, std::size_t alignment);
     };
 
     // Too bad this class cannot be a specialization for StdAllocator, because std::allocator<T> allows only one template type.

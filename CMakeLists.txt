@@ -38,7 +38,7 @@ set(SOURCES
         src/assets/obj_loader.cpp
         src/assets/cache.cpp
         src/assets/terrain_loader.cpp
-        src/assets/file_reader.cpp src/physics/physics_system.h src/physics/physics_system.cpp src/core/allocator.h)
+        src/assets/file_reader.cpp src/physics/physics_system.h src/physics/physics_system.cpp src/core/allocator.h src/core/stack_allocator.cpp src/core/stack_allocator.h)
 
 set(HEADERS include)
 
