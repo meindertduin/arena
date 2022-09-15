@@ -1,8 +1,6 @@
 #include "mesh.h"
 
-#include <memory>
 #include <glad/glad.h>
-#include "../assets/loaders.h"
 
 namespace graphics {
     Mesh::Mesh(MeshData *mesh_data) {

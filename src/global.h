@@ -1,7 +1,7 @@
 #pragma once
 
 #include "input/input_manager.h"
-#include "core/stack_allocator.h"
+#include "core/linear_allocator.h"
 
 #include <memory>
 
@@ -27,7 +27,7 @@ namespace entity {
 
 struct Global {
     core::Window *window;
-    core::StackAllocator allocator { 1024 * 1024 };
+    core::LinearAllocator allocator { 1024 * 1024 };
 
     input::InputManager input_manager;
     game::GameState *game;

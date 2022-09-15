@@ -21,7 +21,7 @@ namespace core {
         std::size_t current_address = (std::size_t)start_pointer + offset;
 
         if (alignment != 0 && offset % alignment != 0) {
-            padding = calculate_padding(current_address, alignment);
+            padding = calculate_padding(size, alignment);
         }
 
         if (offset + padding + size > total_size) {

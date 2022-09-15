@@ -1,13 +1,11 @@
 #include "texture.h"
-
 #include <glad/glad.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
-#include <utility>
-
 #include "../logging.h"
+#include "../global.h"
 
 namespace graphics {
     Sprite16::Sprite16(const std::string& path) {

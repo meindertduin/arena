@@ -1,16 +1,13 @@
 #include "loaders.h"
 
 #include <glm/glm.hpp>
-
 #include <memory>
 #include <sstream>
-#include <map>
 #include <vector>
-
-#include "../graphics/mesh.h"
 
 #include "cache.h"
 #include "file_reader.h"
+#include "../global.h"
 
 namespace assets {
     struct ObjIndex {
@@ -26,9 +23,10 @@ namespace assets {
 
         auto mesh_data = std::make_unique<graphics::MeshData>(graphics::MeshData{});
 
-        std::vector<glm::vec3> vertices;
-        std::vector<glm::u16vec2> textcoords;
-        std::vector<glm::vec3> normals;
+        core::StdLinearAllocator<core::LinearAllocator> allocator { &global.allocator };
+        core::AllocVector<glm::vec3> vertices(allocator);
+        core::AllocVector<glm::u16vec2> textcoords(allocator);
+        core::AllocVector<glm::vec3> normals(allocator);
 
         std::string line;
         while(file_reader.next_line(line)) {
@@ -43,6 +41,7 @@ namespace assets {
                 float x, y, z;
                 ss >> x >> y >> z;
 
+                printf("adding vertices: 12 bytes\n");
                 vertices.emplace_back(x, y, z);
             }
 

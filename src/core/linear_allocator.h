@@ -2,6 +2,8 @@
 
 #include "allocator.h"
 
+#include <vector>
+
 namespace core {
     class LinearAllocator : public Allocator {
     public:
@@ -16,6 +18,7 @@ namespace core {
         std::size_t offset;
     };
 
+    // This class is a wrapper to use the linear allocator in std library container types like the vector
     // Too bad this class cannot be a specialization for StdAllocator, because std::allocator<T> allows only one template type.
     template<typename T>
     class StdLinearAllocator : public std::allocator<T> {
@@ -23,11 +26,11 @@ namespace core {
         LinearAllocator *allocator = nullptr;
 
         constexpr T* allocate(std::size_t n) {
-            return reinterpret_cast<T*>(this->allocator->allocate(n, 0));
+            return reinterpret_cast<T*>(this->allocator->allocate(n * sizeof(T), 8));
         }
 
         constexpr void deallocate(T* p, std::size_t n) {
-            this->allocator->deallocate(p);
+            // linear doesnt deallocate
         }
 
         StdLinearAllocator() = delete;
@@ -38,13 +41,16 @@ namespace core {
         }
 
         template <class U>
-        StdLinearAllocator(const StdAllocator<U> &other) noexcept: std::allocator<T>(other) {
+        StdLinearAllocator(const StdLinearAllocator<U> &other) noexcept: std::allocator<T>(other) {
             allocator = other.allocator;
         }
 
         ~StdLinearAllocator() noexcept {
             allocator->reset();
-            allocator = nullptr;
         }
     };
+
+
+    template<typename T>
+    using AllocVector = std::vector<T, StdLinearAllocator<T>>;
 }
