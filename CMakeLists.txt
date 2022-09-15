@@ -38,7 +38,7 @@ set(SOURCES
         src/assets/obj_loader.cpp
         src/assets/cache.cpp
         src/assets/terrain_loader.cpp
-        src/assets/file_reader.cpp src/physics/physics_system.h src/physics/physics_system.cpp src/core/allocator.h src/core/stack_allocator.cpp src/core/stack_allocator.h src/core/list_allocator.cpp src/core/list_allocator.h src/core/double_linked_list.h)
+        src/assets/file_reader.cpp src/physics/physics_system.h src/physics/physics_system.cpp src/core/allocator.h src/core/stack_allocator.cpp src/core/stack_allocator.h src/core/list_allocator.cpp src/core/list_allocator.h src/core/singly_linked_list.h)
 
 set(HEADERS include)
 

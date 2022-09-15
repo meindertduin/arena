@@ -16,28 +16,28 @@ namespace core {
 
     void* ListAllocator::allocate(std::size_t size, std::size_t alignment) {
         std::size_t padding;
-        int block_index {0};
-        auto next_block = find(size, alignment, padding, block_index);
+        Node* found_node, *previous;
+        find(size, alignment, padding, found_node, previous);
 
-        if (next_block == nullptr) {
+        if (found_node == nullptr) {
             THROW_ERROR("ListAllocator exceeded memory of %s bytes", std::to_string(total_size));
         }
 
         std::size_t alignment_padding = padding - sizeof(AllocatedBlockHeader);
         std::size_t required_size = size + padding;
 
-        std::size_t rest = next_block->size - required_size;
+        std::size_t rest = found_node->data.size - required_size;
+
         if (rest > 0) {
-            auto new_block = (FreeBlockHeader*) next_block + required_size;
-            new_block->size = rest;
-            free_blocks.insert(free_blocks.begin() + 1, new_block);
-            free_blocks.insert(free_blocks.begin() + block_index + 1, new_block);
+            auto new_free_node = (Node*)((std::size_t) found_node + required_size);
+            new_free_node->data.size = rest;
+            free_blocks.insert(new_free_node, found_node);
         }
 
-        free_blocks.remove(next_block);
+        free_blocks.remove(found_node, previous);
 
         // setup the data block
-        std::size_t header_address = (std::size_t) next_block + alignment_padding;
+        std::size_t header_address = (std::size_t) found_node + alignment_padding;
         std::size_t data_address = header_address + sizeof(AllocatedBlockHeader);
 
         ((AllocatedBlockHeader*) header_address)->size = required_size;
@@ -53,24 +53,31 @@ namespace core {
 
     }
 
-    ListAllocator::FreeBlockHeader* ListAllocator::find(std::size_t size, std::size_t alignment, std::size_t &padding, int &pos) const {
+    void ListAllocator::find(std::size_t size, std::size_t alignment, std::size_t &padding, Node* &found_node, Node* &previous) const {
         padding = calculate_padding(size, alignment, sizeof(AllocatedBlockHeader));
-        for (const auto header : free_blocks) {
-            if (header->size >= size + padding) {
-                return header;
-            }
 
-            pos++;
+        auto it = free_blocks.head;
+        Node* it_previous = nullptr;
+
+        while (it != nullptr) {
+            if (it->data.size >= size + padding) {
+                break;
+            }
+            it_previous = it;
+            it = it->next;
         }
 
-        return nullptr;
+        found_node = it;
+        previous = it_previous;
     }
 
     void ListAllocator::reset() {
         used = 0;
         peak = 0;
-        auto first_block = (FreeBlockHeader*) start_pointer;
-        first_block->size = total_size;
-        free_blocks.push_back(first_block);
+        auto first_node = (Node*) start_pointer;
+        first_node->data.size = total_size;
+        first_node->next = nullptr;
+        free_blocks.head = nullptr;
+        free_blocks.insert(first_node, nullptr);
     }
 }

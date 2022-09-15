@@ -1,7 +1,7 @@
 #pragma once
 
 #include "allocator.h"
-#include "double_linked_list.h"
+#include "singly_linked_list.h"
 
 #include <list>
 
@@ -19,8 +19,6 @@ namespace core {
         void* allocate(std::size_t size, std::size_t alignment) override;
         void deallocate(void *ptr) override;
         void reset();
-    protected:
-
     private:
         PlacementPolicy policy;
 
@@ -32,7 +30,9 @@ namespace core {
             uint8_t padding;
         };
 
-        std::list<FreeBlockHeader*> free_blocks;
-        FreeBlockHeader* find(std::size_t size, std::size_t alignment, std::size_t &padding, int &pos) const;
+        using Node = SinglyLinkedList<FreeBlockHeader>::Node;
+        SinglyLinkedList<FreeBlockHeader> free_blocks;
+
+        void find(std::size_t size, std::size_t alignment, std::size_t &padding, Node* &found_node, Node* &previous) const;
     };
 }
