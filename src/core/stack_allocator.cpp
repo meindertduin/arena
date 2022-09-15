@@ -3,18 +3,18 @@
 
 namespace core {
     StackAllocator::StackAllocator(const std::size_t total_size) : Allocator(total_size) {
-        start_ptr = malloc(total_size);
+        start_pointer = malloc(total_size);
         offset = 0;
     }
 
     StackAllocator::~StackAllocator() {
-        free(start_ptr);
-        start_ptr = nullptr;
+        free(start_pointer);
+        start_pointer = nullptr;
     }
 
     void *StackAllocator::allocate(std::size_t size, std::size_t alignment) {
         printf("allocating size: %lu\n", size);
-        const std::size_t current_address = (std::size_t) start_ptr + offset;
+        const std::size_t current_address = (std::size_t) start_pointer + offset;
         const std::size_t padding = calculate_padding(size, alignment, sizeof (AllocationHeader));
 
         if (offset + padding + size > total_size) {
@@ -43,7 +43,7 @@ namespace core {
         const std::size_t header_address = current_address - sizeof(AllocationHeader);
         const AllocationHeader * allocation_header{(AllocationHeader*) header_address};
 
-        offset = current_address - allocation_header->padding - (std::size_t)start_ptr;
+        offset = current_address - allocation_header->padding - (std::size_t)start_pointer;
         used = offset;
 
         printf("deallocated: offset %lu, padding: %hhd \n", offset, allocation_header->padding);

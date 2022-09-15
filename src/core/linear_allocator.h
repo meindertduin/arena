@@ -14,7 +14,6 @@ namespace core {
         void deallocate(void *ptr) override;
         void reset();
     protected:
-        void* start_pointer;
         std::size_t offset;
     };
 
@@ -26,14 +25,13 @@ namespace core {
         LinearAllocator *allocator = nullptr;
 
         constexpr T* allocate(std::size_t n) {
-            return reinterpret_cast<T*>(this->allocator->allocate(n * sizeof(T), 8));
+            return reinterpret_cast<T*>(this->allocator->allocate(n * sizeof(T), DefaultAlignment));
         }
 
         constexpr void deallocate(T* p, std::size_t n) {
             // linear doesnt deallocate
         }
 
-        StdLinearAllocator() = delete;
         explicit StdLinearAllocator(LinearAllocator *allocator) : allocator(allocator) { }
 
         StdLinearAllocator(const StdLinearAllocator &other) noexcept: std::allocator<T>(other) {

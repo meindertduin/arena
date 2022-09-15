@@ -8,11 +8,12 @@ namespace core {
 
     class Allocator {
     public:
-        explicit Allocator(const std::size_t total_size) : total_size{total_size}, used{0}, peak{0} { }
+        explicit Allocator(const std::size_t total_size) : total_size{total_size}, used{0}, peak{0}, start_pointer{nullptr} { }
         virtual void* allocate(std::size_t size, std::size_t alignment) = 0;
         virtual void deallocate(void *ptr) = 0;
     protected:
         std::size_t total_size;
+        void* start_pointer;
         std::size_t used;
         std::size_t peak;
     };

@@ -14,7 +14,6 @@ namespace core {
 
         virtual void reset();
     protected:
-        void* start_ptr = nullptr;
         std::size_t offset;
     private:
         StackAllocator(StackAllocator &allocator);
