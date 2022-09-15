@@ -50,7 +50,30 @@ namespace core {
     }
 
     void ListAllocator::deallocate(void *ptr) {
+        auto current_address = (std::size_t) ptr;
+        auto header_address = current_address - sizeof(AllocatedBlockHeader);
+        AllocatedBlockHeader* allocation_header { (AllocatedBlockHeader*) header_address };
 
+        Node* free_node = (Node* ) header_address;
+        free_node->data.size = allocation_header->size + allocation_header->padding;
+        free_node->next = nullptr;
+
+        auto it = free_blocks.head;
+        Node* it_prev = nullptr;
+
+        while (it != nullptr) {
+            if (ptr < it) {
+                free_blocks.insert(free_node, it_prev);
+                break;
+            }
+
+            it_prev = it;
+            it = it->next;
+        }
+
+        used -= free_node->data.size;
+
+        // TODO merge nodes that are next to each other
     }
 
     void ListAllocator::find(std::size_t size, std::size_t alignment, std::size_t &padding, Node* &found_node, Node* &previous) const {
