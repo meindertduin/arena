@@ -73,7 +73,7 @@ namespace core {
 
         used -= free_node->data.size;
 
-        // TODO merge nodes that are next to each other
+        coalescene(free_node, it_prev);
     }
 
     void ListAllocator::find(std::size_t size, std::size_t alignment, std::size_t &padding, Node* &found_node, Node* &previous) const {
@@ -92,6 +92,22 @@ namespace core {
 
         found_node = it;
         previous = it_previous;
+    }
+
+    void ListAllocator::coalescene(Node* free_node, Node* previous_node) {
+        if (free_node->next != nullptr &&
+            (std::size_t) free_node + free_node->data.size == (std::size_t) free_node->next)
+        {
+            free_node.data.size += free_node->next->data.size;
+            free_blocks.remove(free_node->next, free_node);
+        }
+
+        if (previous_node != nullptr &&
+            (std::size_t) previous_node + previous_node->data.size == (std::size_t) free_node)
+        {
+            previous_node->data.size += free_node->data.size;
+            free_blocks.remove(free_node, previous_node);
+        }
     }
 
     void ListAllocator::reset() {

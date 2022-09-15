@@ -34,5 +34,7 @@ namespace core {
         SinglyLinkedList<FreeBlockHeader> free_blocks;
 
         void find(std::size_t size, std::size_t alignment, std::size_t &padding, Node* &found_node, Node* &previous) const;
+
+        void coalescene(Node* free_node, Node* previous_node);
     };
 }
