@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <vector>
 
 namespace core {
     class Allocator {
@@ -15,14 +16,7 @@ namespace core {
         std::size_t peak;
     };
 
-    constexpr std::size_t AlignmentSize = 4;
-    constexpr std::size_t calc_alignment(std::size_t size) {
-        auto remainder = size % AlignmentSize;
-        if (remainder == 0)
-            return size;
-
-        return size + AlignmentSize - remainder;
-    }
+    constexpr std::size_t AlignmentSize = 8;
 
     template<typename T>
     class StdAllocator : public std::allocator<T> {
@@ -30,11 +24,11 @@ namespace core {
         Allocator *allocator = nullptr;
 
         constexpr T* allocate(std::size_t n) {
-            return reinterpret_cast<T*>(this->allocator->allocate(n, calc_alignment(sizeof(T))));
+            return reinterpret_cast<T*>(this->allocator->allocate(n, AlignmentSize));
         }
 
         constexpr void deallocate(T* p, std::size_t n) {
-            this->allocator->deallocate(p);
+            // this->allocator->deallocate(p);
         }
 
         StdAllocator() = delete;
@@ -54,16 +48,17 @@ namespace core {
         }
     };
 
-    constexpr std::size_t calculate_padding(std::size_t base_address, std::size_t alignment) {
-        const std::size_t multiplier = (base_address / alignment) + 1;
-        const std::size_t aligned_address = multiplier * alignment;
-        const std::size_t padding = aligned_address - base_address;
+    inline constexpr std::size_t calculate_padding(std::size_t size, std::size_t alignment) {
+        auto remainder = size % alignment;
+        if (remainder > 0) {
+            return alignment - remainder;
+        }
 
-        return padding;
+        return 0;
     }
 
-    constexpr std::size_t calculate_padding(std::size_t base_address, std::size_t alignment, std::size_t header_size) {
-        auto padding = calculate_padding(base_address, alignment);
+    inline constexpr std::size_t calculate_padding(std::size_t size, std::size_t alignment, std::size_t header_size) {
+        auto padding = calculate_padding(size, alignment);
         auto needed_space = header_size;
 
         if (padding < needed_space) {
@@ -79,4 +74,7 @@ namespace core {
 
         return padding;
     }
+
+    template<typename T>
+    using AllocVector = std::vector<T, StdAllocator<T>>;
 }
