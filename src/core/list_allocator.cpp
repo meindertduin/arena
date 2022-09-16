@@ -50,6 +50,8 @@ namespace core {
     }
 
     void ListAllocator::deallocate(void *ptr) {
+        std::list<FreeBlockHeader> list;
+
         auto current_address = (std::size_t) ptr;
         auto header_address = current_address - sizeof(AllocatedBlockHeader);
         AllocatedBlockHeader* allocation_header { (AllocatedBlockHeader*) header_address };
@@ -92,6 +94,18 @@ namespace core {
 
         found_node = it;
         previous = it_previous;
+    }
+
+    void ListAllocator::find(std::size_t size, std::size_t alignment, size_t &padding, FreeHeadersIterator &it) {
+        padding = calculate_padding(size, alignment, sizeof(AllocatedBlockHeader));
+
+        while(*it != nullptr) {
+            if ((*it)->size >= size + padding) {
+                break;
+            }
+        }
+
+        return it;
     }
 
     void ListAllocator::coalescene(Node* free_node, Node* previous_node) {
