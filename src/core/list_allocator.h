@@ -34,11 +34,9 @@ namespace core {
         SinglyLinkedList<FreeBlockHeader> free_blocks;
 
         using FreeHeadersList = std::list<FreeBlockHeader*>;
-        using FreeHeadersIterator = FreeHeadersList::iterator;
         FreeHeadersList free_headers;
 
         void find(std::size_t size, std::size_t alignment, std::size_t &padding, Node* &found_node, Node* &previous) const;
-        void find(std::size_t size, std::size_t alignment, size_t &padding, FreeHeadersIterator &it);
 
         void coalescene(Node* free_node, Node* previous_node);
     };

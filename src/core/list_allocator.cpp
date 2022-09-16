@@ -96,18 +96,6 @@ namespace core {
         previous = it_previous;
     }
 
-    void ListAllocator::find(std::size_t size, std::size_t alignment, size_t &padding, FreeHeadersIterator &it) {
-        padding = calculate_padding(size, alignment, sizeof(AllocatedBlockHeader));
-
-        while(*it != nullptr) {
-            if ((*it)->size >= size + padding) {
-                break;
-            }
-        }
-
-        return it;
-    }
-
     void ListAllocator::coalescene(Node* free_node, Node* previous_node) {
         if (free_node->next != nullptr &&
             (std::size_t) free_node + free_node->data.size == (std::size_t) free_node->next)
