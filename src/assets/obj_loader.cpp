@@ -24,9 +24,10 @@ namespace assets {
         auto mesh_data = std::make_unique<graphics::MeshData>(graphics::MeshData{});
 
         core::StdLinearAllocator<core::LinearAllocator> allocator { &global.allocator };
-        core::AllocVector<glm::vec3> vertices(allocator);
-        core::AllocVector<glm::u16vec2> textcoords(allocator);
-        core::AllocVector<glm::vec3> normals(allocator);
+
+        core::LinearAllocVector<glm::vec3> vertices(allocator);
+        core::LinearAllocVector<glm::u16vec2> textcoords(allocator);
+        core::LinearAllocVector<glm::vec3> normals(allocator);
 
         std::string line;
         while(file_reader.next_line(line)) {
@@ -41,7 +42,6 @@ namespace assets {
                 float x, y, z;
                 ss >> x >> y >> z;
 
-                printf("adding vertices: 12 bytes\n");
                 vertices.emplace_back(x, y, z);
             }
 

@@ -13,7 +13,6 @@ namespace core {
     }
 
     void *StackAllocator::allocate(std::size_t size, std::size_t alignment) {
-        printf("allocating size: %lu\n", size);
         const std::size_t current_address = (std::size_t) start_pointer + offset;
         const std::size_t padding = calculate_padding(size, alignment, sizeof (AllocationHeader));
 
@@ -34,7 +33,6 @@ namespace core {
         used = offset;
         peak = std::max(peak, used);
 
-        printf("allocated: offset %lu, padding %lu \n", offset, padding);
         return (void*) next_address;
     }
 
@@ -45,8 +43,6 @@ namespace core {
 
         offset = current_address - allocation_header->padding - (std::size_t)start_pointer;
         used = offset;
-
-        printf("deallocated: offset %lu, padding: %hhd \n", offset, allocation_header->padding);
     }
 
     void StackAllocator::reset() {

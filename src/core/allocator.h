@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <memory>
+#include <vector>
 
 namespace core {
     constexpr std::size_t DefaultAlignment = 8;

@@ -36,7 +36,7 @@ namespace core {
 
         free_blocks.remove(found_node, previous);
 
-        // setup the data block
+        // set up the data block
         std::size_t header_address = (std::size_t) found_node + alignment_padding;
         std::size_t data_address = header_address + sizeof(AllocatedBlockHeader);
 
@@ -46,10 +46,12 @@ namespace core {
         used += required_size;
         peak = std::max(peak, used);
 
+        printf("allocated: %lu, padding %lu\n", size, required_size);
         return (void*) data_address;
     }
 
     void ListAllocator::deallocate(void *ptr) {
+        printf("deallocated\n");
         std::list<FreeBlockHeader> list;
 
         auto current_address = (std::size_t) ptr;
@@ -100,7 +102,7 @@ namespace core {
         if (free_node->next != nullptr &&
             (std::size_t) free_node + free_node->data.size == (std::size_t) free_node->next)
         {
-            free_node.data.size += free_node->next->data.size;
+            free_node->data.size += free_node->next->data.size;
             free_blocks.remove(free_node->next, free_node);
         }
 

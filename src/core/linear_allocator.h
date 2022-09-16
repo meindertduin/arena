@@ -18,7 +18,7 @@ namespace core {
     };
 
     // This class is a wrapper to use the linear allocator in std library container types like the vector
-    // Too bad this class cannot be a specialization for StdAllocator, because std::allocator<T> allows only one template type.
+    // Too bad this class cannot be a specialization for StdListAllocator, because std::allocator<T> allows only one template type.
     template<typename T>
     class StdLinearAllocator : public std::allocator<T> {
     public:
@@ -48,7 +48,6 @@ namespace core {
         }
     };
 
-
     template<typename T>
-    using AllocVector = std::vector<T, StdLinearAllocator<T>>;
+    using LinearAllocVector = std::vector<T, StdLinearAllocator<T>>;
 }

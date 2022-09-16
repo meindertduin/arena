@@ -6,7 +6,7 @@
 #include <list>
 
 namespace core {
-    class ListAllocator : Allocator {
+    class ListAllocator : public Allocator {
     public:
         enum class PlacementPolicy {
             First,
