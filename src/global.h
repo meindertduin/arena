@@ -29,7 +29,7 @@ namespace entity {
 struct Global {
     core::Window *window;
     core::LinearAllocator allocator { 1024 * 1024 };
-    core::ListAllocator allocator2 { 1024 * 1024, core::ListAllocator::PlacementPolicy::First };
+    core::ListAllocator list_allocator {1024 * 1024 * 2, core::ListAllocator::PlacementPolicy::First };
 
     input::InputManager input_manager;
     game::GameState *game;

@@ -11,8 +11,14 @@ namespace core {
         offset = 0;
     }
 
+    LinearAllocator::LinearAllocator(std::size_t total_size, void* start_ptr) : Allocator(total_size, start_ptr) {
+        offset = 0;
+    }
+
     LinearAllocator::~LinearAllocator() {
-        free(start_pointer);
+        if (free_on_destruct) {
+            free(start_pointer);
+        }
         start_pointer = nullptr;
     }
 

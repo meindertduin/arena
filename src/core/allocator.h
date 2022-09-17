@@ -9,15 +9,28 @@ namespace core {
 
     class Allocator {
     public:
-        explicit Allocator(const std::size_t total_size) : total_size{total_size}, used{0}, peak{0}, start_pointer{nullptr} { }
+        explicit Allocator(const std::size_t total_size) : total_size{total_size}, used{0}, peak{0}, start_pointer{nullptr}, free_on_destruct{true} { }
+        Allocator(const std::size_t total_size, void* start_ptr) : total_size {total_size}, used{0}, peak{0}, start_pointer {start_ptr}, free_on_destruct{false}  {}
         virtual void* allocate(std::size_t size, std::size_t alignment) = 0;
         virtual void deallocate(void *ptr) = 0;
     protected:
+        bool free_on_destruct;
         std::size_t total_size;
         void* start_pointer;
         std::size_t used;
         std::size_t peak;
     };
+
+    // class ChainedAllocator {
+    // public:
+    //     Allocator *input_allocator;
+    //     Allocator *output_allocator;
+
+    //     ChainedAllocator(Allocator *input, Allocator *output) : input_allocator{ input}, output_allocator{ output } { }
+    //     ~ChainedAllocator() {
+    //         input_allocator.
+    //     }
+    // };
 
     inline constexpr std::size_t calculate_padding(std::size_t size, std::size_t alignment) {
         auto remainder = size % alignment;

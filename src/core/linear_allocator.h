@@ -8,6 +8,7 @@ namespace core {
     class LinearAllocator : public Allocator {
     public:
         explicit LinearAllocator(std::size_t total_size);
+        explicit LinearAllocator(std::size_t total_size, void* start_ptr);
         virtual ~LinearAllocator();
 
         void* allocate(std::size_t size, std::size_t alignment) override;
