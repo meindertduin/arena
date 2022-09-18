@@ -21,16 +21,25 @@ namespace core {
         std::size_t peak;
     };
 
-    // class ChainedAllocator {
-    // public:
-    //     Allocator *input_allocator;
-    //     Allocator *output_allocator;
+    template<typename T>
+    class ChainedAllocator {
+    public:
+        ChainedAllocator(Allocator *input, std::size_t size, std::size_t alignment)
+            : input_allocator{ input }, mem_ptr {input->allocate(size, alignment)} , output_allocator{ size, mem_ptr }, size { size } { }
 
-    //     ChainedAllocator(Allocator *input, Allocator *output) : input_allocator{ input}, output_allocator{ output } { }
-    //     ~ChainedAllocator() {
-    //         input_allocator.
-    //     }
-    // };
+        ~ChainedAllocator() {
+            input_allocator->deallocate(mem_ptr);
+        }
+
+        T* get() {
+            return &output_allocator;
+        }
+    private:
+        Allocator *input_allocator;
+        void* mem_ptr;
+        T output_allocator;
+        std::size_t size;
+    };
 
     inline constexpr std::size_t calculate_padding(std::size_t size, std::size_t alignment) {
         auto remainder = size % alignment;

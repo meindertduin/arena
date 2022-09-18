@@ -23,10 +23,8 @@ namespace assets {
 
         auto mesh_data = std::make_unique<graphics::MeshData>(graphics::MeshData{});
 
-        auto mem = global.list_allocator.allocate(1024 * 1024, 8);
-        auto linear_allocator = core::LinearAllocator {1024 * 1024, mem };
-
-        core::StdLinearAllocator<core::LinearAllocator> allocator { &linear_allocator };
+        auto chained = core::ChainedAllocator<core::LinearAllocator>{ &global.list_allocator, 1024 * 1024, 8 };
+        core::StdLinearAllocator<core::LinearAllocator> allocator { chained.get(), 0 };
 
         core::LinearAllocVector<glm::vec3> vertices(allocator);
         core::LinearAllocVector<glm::u16vec2> textcoords(allocator);
@@ -89,7 +87,6 @@ namespace assets {
             }
         }
 
-        global.list_allocator.deallocate(mem);
         return std::make_shared<graphics::Mesh>(mesh_data.get());
     }
 

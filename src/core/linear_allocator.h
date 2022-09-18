@@ -24,24 +24,28 @@ namespace core {
     class StdLinearAllocator : public std::allocator<T> {
     public:
         LinearAllocator *allocator = nullptr;
+        std::size_t alignment;
 
         constexpr T* allocate(std::size_t n) {
-            return reinterpret_cast<T*>(this->allocator->allocate(n * sizeof(T), DefaultAlignment));
+            return reinterpret_cast<T*>(this->allocator->allocate(n * sizeof(T), alignment));
         }
 
         constexpr void deallocate(T* p, std::size_t n) {
             // linear doesnt deallocate
         }
 
-        explicit StdLinearAllocator(LinearAllocator *allocator) : allocator(allocator) { }
+        explicit StdLinearAllocator(LinearAllocator *allocator, std::size_t alignment = DefaultAlignment)
+            : allocator(allocator) , alignment(alignment) { }
 
         StdLinearAllocator(const StdLinearAllocator &other) noexcept: std::allocator<T>(other) {
             allocator = other.allocator;
+            alignment = other.alignment;
         }
 
         template <class U>
         StdLinearAllocator(const StdLinearAllocator<U> &other) noexcept: std::allocator<T>(other) {
             allocator = other.allocator;
+            alignment = other.alignment;
         }
 
         ~StdLinearAllocator() noexcept {
@@ -51,4 +55,6 @@ namespace core {
 
     template<typename T>
     using LinearAllocVector = std::vector<T, StdLinearAllocator<T>>;
+
+
 }
