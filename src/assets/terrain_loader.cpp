@@ -7,7 +7,7 @@
 #include "cache.h"
 
 namespace assets {
-    std::shared_ptr<graphics::Terrain> load_terrain(const std::string &filename, Cache *cache) {
+    std::shared_ptr<graphics::Terrain> load_terrain(const std::string &filename) {
         FileReader file_reader { filename };
         graphics::TerrainFile terrain_file;
 

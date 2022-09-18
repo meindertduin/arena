@@ -5,7 +5,6 @@
 #include <sstream>
 #include <vector>
 
-#include "cache.h"
 #include "file_reader.h"
 #include "../global.h"
 
@@ -18,7 +17,7 @@ namespace assets {
 
     ObjIndex parse_object_index(std::string token, graphics::MeshData *meshData);
 
-    std::shared_ptr<graphics::Mesh> load_obj(const std::string &filename, Cache *cache) {
+    std::shared_ptr<graphics::Mesh> load_obj(const std::string &filename) {
         FileReader file_reader { filename };
 
         auto mesh_data = std::make_unique<graphics::MeshData>(graphics::MeshData{});

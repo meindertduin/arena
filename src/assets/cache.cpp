@@ -6,12 +6,12 @@
 namespace assets {
     template<>
     std::shared_ptr<graphics::Mesh> Cache::load_asset<graphics::Mesh>(const std::string& filename) {
-        return load_obj(filename, this);
+        return load_obj(filename);
     }
 
     template<>
     std::shared_ptr<graphics::Terrain> Cache::load_asset<graphics::Terrain>(const std::string& filename) {
-        return load_terrain(filename, this);
+        return load_terrain(filename);
     }
 
     template<>
