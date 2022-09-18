@@ -45,7 +45,9 @@ namespace graphics {
             position = std::vector<glm::vec3>(width);
         }
 
-        core::StdLinearAllocator<std::vector<Vertex>> allocator { &global.allocator, 8 };
+        auto chained = core::ChainedAllocator<core::LinearAllocator>{ &global.list_allocator, 1024 * 1024, 8 };
+        core::StdLinearAllocator<core::LinearAllocator> allocator { chained.get(), 0 };
+
         core::LinearAllocVector<std::vector<Vertex>> vertices(height, allocator);
 
         for (auto &v_vector : vertices) {

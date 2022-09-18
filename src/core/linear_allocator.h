@@ -55,6 +55,4 @@ namespace core {
 
     template<typename T>
     using LinearAllocVector = std::vector<T, StdLinearAllocator<T>>;
-
-
 }
