@@ -11,12 +11,9 @@
 namespace game {
     struct Map {
     public:
-        // TODO load map data from file
-        Map() {
-            terrain = { "assets/terrain.ter" };
-        }
+        Map();
 
         void render_background() const;
-        assets::AssetHandle<graphics::Terrain> terrain;
+        std::shared_ptr<graphics::Terrain> terrain;
     };
 }

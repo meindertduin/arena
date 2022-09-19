@@ -1,7 +1,6 @@
 #include "input_manager.h"
 #include "input.h"
 #include "../global.h"
-#include "../entity/ec_command.h"
 #include "../game/game_state.h"
 
 namespace input {
@@ -18,12 +17,10 @@ namespace input {
     }
 
     void InputManager::on_mouse_movement(float mouse_x_offset, float mouse_y_offset) {
-        // TODO check state of program
         this->player_input.on_mouse_movement(mouse_x_offset, mouse_y_offset);
     }
 
     void InputManager::on_key_event(int key, int mods_mask, int action) {
-        // TODO check state of program
         this->player_input.on_key_press(key, mods_mask, action);
     }
 

@@ -15,6 +15,8 @@ namespace assets {
         void open_file(const std::string &filename);
         bool next_line(char *line, size_t size);
         bool next_line(std::string &line);
+
+        std::string get_file_content() const;
     private:
         std::ifstream fs;
     };

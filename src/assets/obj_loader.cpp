@@ -1,16 +1,12 @@
 #include "loaders.h"
 
 #include <glm/glm.hpp>
-
 #include <memory>
 #include <sstream>
-#include <map>
 #include <vector>
 
-#include "../graphics/mesh.h"
-
-#include "cache.h"
 #include "file_reader.h"
+#include "../global.h"
 
 namespace assets {
     struct ObjIndex {
@@ -21,14 +17,17 @@ namespace assets {
 
     ObjIndex parse_object_index(std::string token, graphics::MeshData *meshData);
 
-    void load_obj(const std::string &filename, Cache *cache) {
+    std::shared_ptr<graphics::Mesh> load_obj(const std::string &filename) {
         FileReader file_reader { filename };
 
         auto mesh_data = std::make_unique<graphics::MeshData>(graphics::MeshData{});
 
-        std::vector<glm::vec3> vertices;
-        std::vector<glm::u16vec2> textcoords;
-        std::vector<glm::vec3> normals;
+        auto chained = core::ChainedAllocator<core::LinearAllocator>{ &global.list_allocator, 1024 * 1024, 8 };
+        core::StdLinearAllocator<core::LinearAllocator> allocator { chained.get(), 0 };
+
+        core::LinearAllocVector<glm::vec3> vertices(allocator);
+        core::LinearAllocVector<glm::u16vec2> textcoords(allocator);
+        core::LinearAllocVector<glm::vec3> normals(allocator);
 
         std::string line;
         while(file_reader.next_line(line)) {
@@ -87,8 +86,7 @@ namespace assets {
             }
         }
 
-        auto mesh = std::make_unique<graphics::Mesh>(mesh_data.get());
-        cache->save_mesh(filename, std::move(mesh));
+        return std::make_shared<graphics::Mesh>(mesh_data.get());
     }
 
     ObjIndex parse_object_index(std::string token, graphics::MeshData *mesh_data) {

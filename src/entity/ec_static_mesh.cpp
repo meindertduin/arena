@@ -1,12 +1,11 @@
 #include "ec_static_mesh.h"
 
-#include <utility>
-
 #include "../global.h"
+#include "../game/game_state.h"
 
 namespace entity {
-    void EcStaticMeshRenderer::init(std::string filename) {
-        this->mesh = { std::move(filename) };
+    void EcStaticMeshRenderer::init(const std::string& filename) {
+        this->mesh = global.game->cache.get_resource<graphics::Mesh>(filename);
         this->material = global.material;
         this->texture = global.texture;
     }

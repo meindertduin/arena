@@ -1,15 +1,16 @@
 #include "terrain.h"
 
 #include "../global.h"
+#include "../game/game_state.h"
 
 namespace graphics {
     TerrainTexturePack::TerrainTexturePack(const TerrainFile &file) {
-        background_texture = std::make_unique<GpuTexture>(file.background_texture);
-        blendmap = std::make_unique<GpuTexture>(file.blendmap);
+        background_texture = global.game->cache.get_resource<GpuTexture>(file.background_texture);
+        blendmap = global.game->cache.get_resource<GpuTexture>(file.blendmap);
 
-        r_texture = std::make_unique<GpuTexture>(file.r_texture);
-        g_texture = std::make_unique<GpuTexture>(file.g_texture);
-        b_texture = std::make_unique<GpuTexture>(file.b_texture);
+        r_texture = global.game->cache.get_resource<GpuTexture>(file.r_texture);
+        g_texture = global.game->cache.get_resource<GpuTexture>(file.g_texture);
+        b_texture = global.game->cache.get_resource<GpuTexture>(file.b_texture);
     }
 
     void TerrainTexturePack::bind() const {
@@ -44,7 +45,11 @@ namespace graphics {
             position = std::vector<glm::vec3>(width);
         }
 
-        auto vertices = std::vector<std::vector<Vertex>>(height);
+        auto chained = core::ChainedAllocator<core::LinearAllocator>{ &global.list_allocator, 1024 * 1024, 8 };
+        core::StdLinearAllocator<core::LinearAllocator> allocator { chained.get(), 0 };
+
+        core::LinearAllocVector<std::vector<Vertex>> vertices(height, allocator);
+
         for (auto &v_vector : vertices) {
             v_vector = std::vector<Vertex>(width);
         }
@@ -56,6 +61,7 @@ namespace graphics {
                 v.pos.x = (float)x;
                 auto sprite_x = (float)x * ((float)sprite.width / (float)width);
                 auto sprite_y = (float)y * ((float)sprite.height / (float)height);
+
                 // TODO blend the heights when up- or down-scaling
                 v.pos.y = ((float)sprite.get_pixel(sprite_x, sprite_y) /  65535.0f) * (max_height - min_height) + min_height;
                 v.pos.z = (float)y;

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "input/input_manager.h"
+#include "core/linear_allocator.h"
+#include "core/list_allocator.h"
 
 #include <memory>
 
@@ -26,6 +28,8 @@ namespace entity {
 
 struct Global {
     core::Window *window;
+    core::LinearAllocator allocator { 1024 * 1024 };
+    core::ListAllocator list_allocator {1024 * 1024 * 2, core::ListAllocator::PlacementPolicy::First };
 
     input::InputManager input_manager;
     game::GameState *game;
@@ -33,7 +37,7 @@ struct Global {
     graphics::TerrainRenderer *terrain_renderer;
 
     graphics::GraphicOptions *graphic_options;
-    graphics::GpuTexture *texture;
+    std::shared_ptr<graphics::GpuTexture> texture;
     graphics::Material *material;
 
     entity::Ecs *ecs;
