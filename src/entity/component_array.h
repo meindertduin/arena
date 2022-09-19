@@ -16,9 +16,6 @@ namespace entity {
     template<typename T>
     struct ComponentArray : IComponentArray {
     public:
-        ComponentArray() {
-            printf("%d, \n", components.bucket_count());
-        }
         void insert(Entity entity, T component) {
             if (components.find(entity.id) != components.end()) {
                 THROW_ERROR("Cannot insert entity that does not exist");

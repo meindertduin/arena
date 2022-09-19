@@ -8,12 +8,12 @@
 #include <memory>
 
 namespace entity {
-    const uint32_t MAX_ENTITIES = 2000;
-
     struct Ecs;
 
-    constexpr uint32_t MAX_COMPONENTS = 32;
-    using Signature = std::bitset<MAX_COMPONENTS>;
+    static constexpr uint32_t MaxEntities = 2000;
+    static constexpr uint32_t MaxComponents = 64;
+
+    using Signature = std::bitset<MaxComponents>;
 
     template<typename T>
     struct Object {
@@ -69,7 +69,7 @@ namespace entity {
         Signature get_signature(Entity entity) const;
     private:
         std::queue<Entity> available_entries;
-        std::array<Signature, MAX_ENTITIES> signatures;
+        std::array<Signature, MaxEntities> signatures;
         uint32_t active_entities_count;
     };
 

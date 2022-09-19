@@ -19,8 +19,8 @@ namespace entity {
     template<typename T>
     struct InitComponent {
         InitComponent() {
-            if (next_component >= MAX_COMPONENTS)
-                THROW_ERROR("Max components of %s exceeded.", std::to_string(MAX_COMPONENTS));
+            if (next_component >= MaxComponents)
+                THROW_ERROR("Max components of %s exceeded.", std::to_string(MaxComponents));
 
             T::_id = next_component;
 

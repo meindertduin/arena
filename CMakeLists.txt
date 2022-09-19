@@ -20,7 +20,6 @@ set(SOURCES
         src/graphics/render_target.cpp
         external/glad/glad.c
         src/entity/event_manager.cpp
-        src/entity/component_array.cpp
         src/entity/entity.cpp
         src/entity/ec_component_inits.cpp
         src/entity/ec_transform.cpp
