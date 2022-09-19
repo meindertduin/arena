@@ -4,8 +4,6 @@
 #include "event_manager.h"
 #include "../logging.h"
 
-#include "../global.h"
-
 namespace entity {
     struct IComponentArray {
     public:
@@ -18,8 +16,6 @@ namespace entity {
     template<typename T>
     struct ComponentArray : IComponentArray {
     public:
-        ComponentArray() : chained_allocator{ &global.list_allocator, 1024 * 64, 8}, allocator{ chained_allocator.get(), 0}, components { allocator } {}
-
         void insert(Entity entity, T component) {
             if (components.find(entity.id) != components.end()) {
                 THROW_ERROR("Cannot insert entity that does not exist");
@@ -85,9 +81,6 @@ namespace entity {
     private:
         std::unordered_map<uint32_t, T> components;
         std::unordered_map<EventType, std::function<void(T*, void*)>> event_handlers;
-
-        core::ChainedAllocator<core::LinearAllocator> chained_allocator;
-        core::StdLinearAllocator<core::LinearAllocator> allocator;
 
         size_t size{0};
     };

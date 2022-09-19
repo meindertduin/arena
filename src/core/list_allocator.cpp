@@ -46,12 +46,10 @@ namespace core {
         used += required_size;
         peak = std::max(peak, used);
 
-        printf("allocated: %lu, padding %lu\n", size, required_size);
         return (void*) data_address;
     }
 
     void ListAllocator::deallocate(void *ptr) {
-        printf("deallocated\n");
         std::list<FreeBlockHeader> list;
 
         auto current_address = (std::size_t) ptr;
