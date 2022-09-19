@@ -17,47 +17,31 @@ namespace entity {
     struct ComponentArray : IComponentArray {
     public:
         void insert(Entity entity, T component) {
-            if (entity_index_map.find(entity.id) != entity_index_map.end()) {
+            if (components.find(entity.id) != components.end()) {
                 THROW_ERROR("Cannot insert entity that does not exist");
             }
 
-            // insert a new component at the back of the empty components array
-            auto new_index = size;
-            entity_index_map[entity.id] = new_index;
-            index_entity_map[new_index] = entity.id;
-            components[new_index] = component;
+            components[entity.id] = component;
 
             size++;
         }
 
         void remove(Entity entity) {
-            if (entity_index_map.find(entity.id) == entity_index_map.end()) {
+            if (components.find(entity.id) == components.end()) {
                 THROW_ERROR("Cannot remove entity that does not exist");
             }
 
-            auto removed_entity_index = entity_index_map[entity.id];
-            auto last_element_index = size - 1;
-            
-            // replace the removed component with the last element
-            components[removed_entity_index] = components[last_element_index];
-
-		    // Update map to point to moved spot
-            auto last_element_entity = index_entity_map[last_element_index];
-            entity_index_map[last_element_index] = removed_entity_index;
-            index_entity_map[removed_entity_index] = last_element_entity;
-
-            entity_index_map.erase(entity.id);
-            index_entity_map.erase(last_element_index);
+            components.erase(entity.id);
 
             size--;
         }
 
         T& get(Entity entity) {
-            if (entity_index_map.find(entity.id) == entity_index_map.end()) {
+            if (components.find(entity.id) == components.end()) {
                 THROW_ERROR("Cannot retrieve entity that does not exist");
             }
 
-            return components[entity_index_map[entity.id]];
+            return components[entity.id];
         }
 
         void entity_destroyed(Entity entity) override {
@@ -73,14 +57,13 @@ namespace entity {
             event_handlers[E::_id] = handler;
         }
 
-        // could not make this a template function, thats why e is type void*
+        // could not make this a template function, that's why e is type void*
         void dispatch(void *e, uint32_t event_id) override {
             if (event_handlers.find(event_id) == event_handlers.end()) {
                 return;
             }
 
-            for (const auto &[key, value] : entity_index_map) {
-                auto &component = components[value];
+            for (auto &[id, component] : components) {
                 event_handlers[event_id](&component, e);
             }
         }
@@ -89,23 +72,17 @@ namespace entity {
             if (event_handlers.find(event_id) == event_handlers.end())
                 return;
 
-            if (entity_index_map.find(entity.id) == entity_index_map.end())
+            if (components.find(entity.id) == components.end())
                 return;
 
             auto &component = components[entity.id];
             event_handlers[event_id](&component, e);
         }
     private:
-        // Not very memory efficient with alot of components
-        // could be managed with a memory allocator?
-        std::array<T, MAX_ENTITIES> components;
-
-        std::unordered_map<uint32_t, size_t> entity_index_map;
-        std::unordered_map<uint32_t, size_t> index_entity_map;
-
+        std::unordered_map<uint32_t, T> components;
         std::unordered_map<EventType, std::function<void(T*, void*)>> event_handlers;
 
-        size_t size;
+        size_t size{0};
     };
 }
 
