@@ -16,6 +16,9 @@ namespace entity {
     template<typename T>
     struct ComponentArray : IComponentArray {
     public:
+        ComponentArray() {
+            printf("%d, \n", components.bucket_count());
+        }
         void insert(Entity entity, T component) {
             if (components.find(entity.id) != components.end()) {
                 THROW_ERROR("Cannot insert entity that does not exist");
@@ -79,7 +82,7 @@ namespace entity {
             event_handlers[event_id](&component, e);
         }
     private:
-        std::unordered_map<uint32_t, T> components;
+        std::unordered_map<uint32_t, T> components { 128 };
         std::unordered_map<EventType, std::function<void(T*, void*)>> event_handlers;
 
         size_t size{0};

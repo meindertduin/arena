@@ -31,7 +31,6 @@ namespace core {
         }
 
         constexpr void deallocate(T* p, std::size_t n) {
-            printf("deallocating from std::allocator\n");
             // linear doesnt deallocate
         }
 
