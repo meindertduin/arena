@@ -1,6 +1,7 @@
 #include "global.h"
 
 #include "core/window.h"
+#include "core/program_time.h"
 #include "graphics/renderer.h"
 #include "graphics/texture.h"
 #include "input/input.h"
@@ -14,6 +15,7 @@
 #include "game/game_state.h"
 
 #include "physics/physics_system.h"
+
 
 Global global;
 
@@ -53,11 +55,13 @@ int main () {
     global.texture = global.game->cache.get_resource<graphics::GpuTexture>("assets/container.png");
 
     while(!global.window->close_requested()) {
+        auto frame_start_time = core::program_time_ms();
+
         global.input_manager.update();
         physics_system->update();
 
         terrain_collision_system->update();
-        
+
         global.renderer->before_render();
         global.game->map->render_background();
         // render the different systems
@@ -65,6 +69,13 @@ int main () {
 
         global.renderer->after_render();
         global.window->end_frame();
+
+        auto frame_end_time = core::program_time_ms();
+
+        auto dt = static_cast<int>(frame_end_time - frame_start_time);
+        int delay_time_ms = static_cast<int>(1000.0f / 60.0f) - dt;
+        if (delay_time_ms > 0)
+            core::delay(delay_time_ms);
     }
 
     return 0;
