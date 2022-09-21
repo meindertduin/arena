@@ -2,16 +2,6 @@
 
 #include <string>
 #include <stdexcept>
-#include <iostream>
-
-static std::string EscSeqResetColor = "\x1b[0m";
-static std::string EscSeqFgGreen = "\x1b[92m";
-static std::string EscSeqFgYellow = "\x1b[93m";
-
-inline void color_write_console(std::string msg, const std::string &color_sequence) {
-    auto str = color_sequence + msg + EscSeqResetColor;
-    std::cout << str << std::endl;
-}
 
 inline constexpr std::string& replace_str_format(std::string &str, std::string arg) {
     auto pos = str.find("%s");
@@ -48,4 +38,5 @@ inline void warning(std::string msg, Args... args) {
 }
 
 
-#define THROW_ERROR(...) log_error(__VA_ARGS__);
+#define THROW_ERROR(...) log_error(__VA_ARGS__)
+

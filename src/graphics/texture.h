@@ -6,16 +6,18 @@
 namespace graphics {
     struct Sprite16 {
     public:
-        int width;
-        int height;
-        int channels;
+        int width{};
+        int height{};
+        int channels{};
 
-        Sprite16(std::string path);
+        Sprite16(const std::string& path);
         ~Sprite16();
 
-        // TODO implement
-        Sprite16(Sprite16 &other) = delete;
-        Sprite16& operator=(Sprite16 &other) = delete;
+        Sprite16(const Sprite16 &other) noexcept;
+        Sprite16& operator=(const Sprite16 &other) noexcept;
+
+        Sprite16(Sprite16 &&other) = default;
+        Sprite16& operator=(Sprite16 &&other) = default;
 
         [[nodiscard]] constexpr unsigned short get_pixel(int x, int y) const {
             return data[4 * (y * width + x) + 0];
@@ -31,11 +33,11 @@ namespace graphics {
         int width;
         int height;
 
-        GpuTexture(std::string path);
+        GpuTexture(const std::string& path);
 
-        // TODO implement
-        GpuTexture(const GpuTexture &other) = delete;
-        GpuTexture& operator=(const GpuTexture &other) = delete;
+        // no copy constructor or assignment, because there is no reason to put same texture on the GPU 2x
+        GpuTexture(GpuTexture &&other) = default;
+        GpuTexture& operator=(GpuTexture &&other) = default;
 
         ~GpuTexture();
 

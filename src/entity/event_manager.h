@@ -13,21 +13,23 @@
 #include <glm/gtx/quaternion.hpp>
 
 namespace entity {
-    struct EventBase {
-        Entity *entity = nullptr;
-    };
-
     template<typename T>
-    struct Event : public EventBase {
+    struct Event {
         inline static uint32_t _id;
+        Entity *entity = nullptr;
+        Event() = default;
+        Event(Entity * entity) : entity(entity) { }
     };
 
-    // TODO remove for testing purposes
-    struct PositionChangeEvent : public Event<PositionChangeEvent> {  };
+    struct PositionChangeEvent : public Event<PositionChangeEvent> {
+        PositionChangeEvent() = default;
+        PositionChangeEvent(Entity *entity) : Event<PositionChangeEvent>(entity) { }
+    };
     struct RotationChangeEvent : public Event<RotationChangeEvent> { 
         glm::quat rotation;
 
         RotationChangeEvent(glm::quat rotation) : rotation(rotation) {  }
+        RotationChangeEvent(Entity *entity, glm::quat rotation) : Event<RotationChangeEvent>(entity), rotation(rotation) {  }
     };
 
     struct TickEvent : public Event<TickEvent> {

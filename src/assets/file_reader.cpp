@@ -1,6 +1,8 @@
 #include "file_reader.h"
 #include "../logging.h"
 
+#include <sstream>
+
 namespace assets {
     FileReader::FileReader(const std::string &filename) {
         open_file(filename);
@@ -36,4 +38,9 @@ namespace assets {
         return true;
     }
 
+    std::string FileReader::get_file_content() const {
+        std::stringstream ss;
+        ss << fs.rdbuf();
+        return ss.str();
+    }
 }

@@ -2,52 +2,38 @@
 
 #include "loaders.h"
 #include "../global.h"
-#include "../game/game_state.h"
 
 namespace assets {
     template<>
-    void Cache::load_asset<graphics::Mesh>(const std::string& filename) {
-        if (meshses.find(filename) == meshses.end())
-            load_obj(filename, this);
+    std::shared_ptr<graphics::Mesh> Cache::load_asset<graphics::Mesh>(const std::string& filename) {
+        return load_obj(filename);
     }
 
     template<>
-    void Cache::load_asset<graphics::Terrain>(const std::string& filename) {
-        if (terrains.find(filename) == terrains.end())
-            load_terrain(filename, this);
-    }
-
-    graphics::Mesh* Cache::get_mesh(std::string filename) const {
-        auto pair = meshses.find(filename);
-        if (pair != meshses.end())
-            return pair->second.get();
-
-        return nullptr;
-    }
-
-    void Cache::save_mesh(std::string filename, std::unique_ptr<graphics::Mesh> mesh) {
-        meshses.insert(std::make_pair(filename, std::move(mesh)));
-    }
-
-    graphics::Terrain *Cache::get_terrain(std::string filename) const {
-        auto pair = terrains.find(filename);
-        if (pair != terrains.end())
-            return pair->second.get();
-
-        return nullptr;
-    }
-
-    void Cache::save_terrain(std::string filename, std::unique_ptr<graphics::Terrain> terrain) {
-        terrains.insert(std::make_pair(filename, std::move(terrain)));
+    std::shared_ptr<graphics::Terrain> Cache::load_asset<graphics::Terrain>(const std::string& filename) {
+        return load_terrain(filename);
     }
 
     template<>
-    graphics::Mesh* AssetHandle<graphics::Mesh>::get() const {
-       return global.game->cache.get_mesh(filename);
+    std::shared_ptr<graphics::GpuTexture> Cache::load_asset<graphics::GpuTexture>(const std::string &filename) {
+        return load_texture(filename);
     }
 
     template<>
-    graphics::Terrain* AssetHandle<graphics::Terrain>::get() const {
-        return global.game->cache.get_terrain(filename);
+    std::shared_ptr<graphics::Mesh> Cache::get_resource(const std::string &filename) {
+        auto &mesh = meshes[filename];
+        return get_shared_asset<graphics::Mesh>(mesh, filename);
+    }
+
+    template<>
+    std::shared_ptr<graphics::Terrain> Cache::get_resource(const std::string &filename) {
+        auto &terrain = terrains[filename];
+        return get_shared_asset<graphics::Terrain>(terrain, filename);
+    }
+
+    template<>
+    std::shared_ptr<graphics::GpuTexture> Cache::get_resource(const std::string &filename) {
+        auto &texture = textures[filename];
+        return get_shared_asset<graphics::GpuTexture>(texture, filename);
     }
 }

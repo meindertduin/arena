@@ -25,7 +25,7 @@ namespace graphics {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         
-        glEnable(GL_CULL_FACE); // TODO disable when mesh is not a fully closed 3D model
+        glEnable(GL_CULL_FACE);
         
         glGenFramebuffers(1, &framebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);

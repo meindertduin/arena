@@ -30,20 +30,14 @@ namespace game {
     }
 
     void GameState::init() {
-        // loading assets
-        this->cache.load_asset<graphics::Mesh>("assets/cube.obj");
-        this->cache.load_asset<graphics::Mesh>("assets/valley.obj");
-        this->cache.load_asset<graphics::Terrain>("assets/terrain.ter");
-
        // loading map
         this->map = std::make_unique<Map>();
 
-        entity::ECPlayer ec_player;
-        this->player = ec_player.create(global.ecs->create_entity());
+        this->player = entity::ECPlayer::create(global.ecs->create_entity());
         this->cube = global.ecs->create_entity();
         auto mesh_renderer = entity::EcStaticMeshRenderer();
         mesh_renderer.init("assets/cube.obj");
         this->cube.add(mesh_renderer);
-        this->cube.add(entity::ECTransform({ 0, 0, -10 }, {}));
+        this->cube.add(entity::ECTransform({ 0, -18, -10 }, {}));
     }
 }

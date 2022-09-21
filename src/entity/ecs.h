@@ -26,7 +26,7 @@ namespace entity {
             return entity_manager->create_entity();
         }
 
-        void destory_entity(Entity entity) {
+        void destroy_entity(Entity entity) {
             entity_manager->destroy(entity);
             component_manager->entity_destroyed(entity);
             systems_manager->entity_destroyed(entity);
@@ -97,19 +97,15 @@ namespace entity {
             component_manager->dispatch_event(event);
         }
 
-        template<typename E>
-        constexpr void dispatch_event(E *event, Entity entity) {
-            component_manager->dispatch_event(event);
-        }
-
         template<
             typename F,
             typename M = types::member_function_traits<F>,
             typename C = typename M::instance_type,
             typename E = typename M::first_argument>
-        void add_event_handler(F && f) {
+        void add_event_handler(F &&f) {
             component_manager->add_event_handler<C, E>(f);
         }
+
     protected:
         Ecs() {
             component_manager = std::make_unique<ComponentManager>();

@@ -45,12 +45,12 @@ int main () {
     auto physics_system = global.ecs->create_system<physics::PhysicsSystem>({ entity::ECPhysics::_id });
     auto terrain_collision_system = global.ecs->create_system<entity::TerrainCollisionSystem>({ entity::ECCollisionBox::_id });
 
-    global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
-    global.texture = new graphics::GpuTexture("assets/container.png");
-
     // initialize game state
     global.game = new game::GameState();
     global.game->init();
+
+    global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
+    global.texture = global.game->cache.get_resource<graphics::GpuTexture>("assets/container.png");
 
     while(!global.window->close_requested()) {
         global.input_manager.update();

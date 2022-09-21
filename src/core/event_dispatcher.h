@@ -2,7 +2,7 @@
 
 #include <functional>
 #include <memory>
-#include <vector>
+#include <list>
 
 namespace core {
     template<typename T>
@@ -11,10 +11,7 @@ namespace core {
     template<typename T>
     class EventDispatcher {
     public:
-        ~EventDispatcher() {
-
-        }
-
+        ~EventDispatcher() = default;
         EventDispatcher(const EventDispatcher&) = delete;
         EventDispatcher& operator=(const EventDispatcher&) = delete;
         EventDispatcher(EventDispatcher&&) = delete;
@@ -27,7 +24,7 @@ namespace core {
         }
 
         void remove_event_handler(EventHandler<T> *eventHandler) {
-            // TODO IMPLEMENT
+            eventHandlers.remove(eventHandler);
         }
 
         static EventDispatcher<T>* instance() {
@@ -39,7 +36,7 @@ namespace core {
         EventDispatcher() = default;
 
     private:
-        std::vector<EventHandler<T>*> eventHandlers;
+        std::list<EventHandler<T>*> eventHandlers;
     };
 
     template<typename T>

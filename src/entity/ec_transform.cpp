@@ -5,18 +5,15 @@ namespace entity {
     void ECTransform::rotate(float degrees, const glm::vec3 &v) {
         rotation = glm::rotate(rotation, glm::radians(degrees), v);
 
-        RotationChangeEvent event { rotation };
-        event.entity = &this->entity;
-        global.ecs->dispatch_event(&event, this->entity);
+        RotationChangeEvent event { &this->entity, rotation };
+        global.ecs->dispatch_event(&event);
     }
 
 
     void ECTransform::move(const glm::vec3 &dir, float amount) {
         pos = pos + (dir * amount);
         
-        // TODO make sending events a little bit more elegant
-        PositionChangeEvent event;
-        event.entity = &this->entity;
-        global.ecs->dispatch_event(&event, this->entity);
+        PositionChangeEvent event { &this->entity };
+        global.ecs->dispatch_event(&event);
     }
 }
