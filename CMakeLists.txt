@@ -46,7 +46,7 @@ set(SOURCES
         src/core/stack_allocator.h
         src/core/list_allocator.cpp
         src/core/list_allocator.h
-        src/core/singly_linked_list.h src/core/program_time.cpp src/core/program_time.h)
+        src/core/singly_linked_list.h src/core/program_time.cpp src/core/program_time.h src/graphics/font.h src/graphics/font.cpp)
 
 set(HEADERS include)
 
@@ -56,5 +56,6 @@ add_executable(${PROJECT_NAME} ${SOURCES})
 target_include_directories(
     ${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external
     ${PROJECT_NAME} PUBLIC
+    /usr/include/freetype2
 )
-target_link_libraries(${PROJECT_NAME} glfw GL dl)
+target_link_libraries(${PROJECT_NAME} glfw GL dl freetype)
