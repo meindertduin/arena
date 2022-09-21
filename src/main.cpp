@@ -30,7 +30,7 @@ int main () {
         { window_options.width, window_options.height },
     };
 
-    debug("Starting application");
+    Logger::debug("Starting application");
 
     global.window = new core::Window(window_options);
     global.renderer = new graphics::Renderer();
