@@ -3,6 +3,7 @@
 #include "../global.h"
 #include "material.h"
 #include "../game/game_state.h"
+#include "glad/glad.h"
 
 namespace graphics {
     Renderer::Renderer() {
@@ -100,5 +101,67 @@ namespace graphics {
         shader.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
         terrain.mesh->render();
+    }
+
+    TextRenderer::TextRenderer() {
+        shader.link();
+
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, nullptr, GL_DYNAMIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
+    void TextRenderer::render(std::string text) {
+        float x = 0;
+        float y = 0;
+        float scale = 1.0f;
+
+        shader.use();
+        glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+
+        shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
+        glActiveTexture(GL_TEXTURE0);
+        glBindVertexArray(VAO);
+
+        // iterate through all characters
+        std::string::const_iterator c;
+        for (c = text.begin(); c != text.end(); c++)
+        {
+            auto glyph = font.get_glyph(*c);
+
+            float xpos = x + glyph.bearing.x * scale;
+            float ypos = y - (glyph.size.y - glyph.bearing.y) * scale;
+
+            float w = glyph.size.x * scale;
+            float h = glyph.size.y * scale;
+            // update VBO for each character
+            float vertices[6][4] = {
+                { xpos,     ypos + h,   0.0f, 0.0f },
+                { xpos,     ypos,       0.0f, 1.0f },
+                { xpos + w, ypos,       1.0f, 1.0f },
+
+                { xpos,     ypos + h,   0.0f, 0.0f },
+                { xpos + w, ypos,       1.0f, 1.0f },
+                { xpos + w, ypos + h,   1.0f, 0.0f }
+            };
+            // render glyph texture over quad
+            glBindTexture(GL_TEXTURE_2D, glyph.texture);
+            // update content of VBO memory
+            glBindBuffer(GL_ARRAY_BUFFER, VBO);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            // render quad
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+            // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+            x += (glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
+        }
+        glBindVertexArray(0);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 }

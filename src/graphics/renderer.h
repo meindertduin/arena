@@ -10,6 +10,7 @@
 
 #include "light.h"
 #include "terrain.h"
+#include "font.h"
 #include "../entity/ec_transform.h"
 
 namespace graphics {
@@ -37,5 +38,16 @@ namespace graphics {
         void render(const Terrain &terrain) const;
     private:
         ShaderProgram shader { "shaders/terrain.vert", "shaders/terrain.frag" };
+    };
+
+    class TextRenderer {
+    public:
+        TextRenderer();
+        void render(std::string text);
+    private:
+        uint32_t VAO;
+        uint32_t VBO;
+        TrueTypeFont font { "assets/alagard.ttf", 48 };
+        ShaderProgram shader { "shaders/text.vert", "shaders/text.frag" };
     };
 }

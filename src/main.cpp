@@ -33,9 +33,12 @@ int main () {
 
     Logger::debug("Starting application");
 
+    graphics::font_init();
+
     global.window = new core::Window(window_options);
     global.renderer = new graphics::Renderer();
     global.terrain_renderer = new graphics::TerrainRenderer();
+    global.text_renderer = new graphics::TextRenderer();
 
     input::initialize_input(*global.window);
 
@@ -75,6 +78,8 @@ int main () {
         if (delay_time_ms > 0)
             core::delay(delay_time_ms);
     }
+
+    graphics::font_quit();
 
     return 0;
 }
