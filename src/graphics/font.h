@@ -1,20 +1,20 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <map>
-
 #include "texture.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
+#include <glm/glm.hpp>
+#include <map>
+#include <memory>
 
 namespace graphics {
     void font_init();
     void font_quit();
 
     struct Glyph {
-        // GpuTexture texture;
-        uint32_t texture;
+        std::shared_ptr<GpuTexture> texture;
         glm::ivec2 size;
         glm::ivec2 bearing;
         int advance;

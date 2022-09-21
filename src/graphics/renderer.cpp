@@ -150,8 +150,8 @@ namespace graphics {
                 { xpos + w, ypos,       1.0f, 1.0f },
                 { xpos + w, ypos + h,   1.0f, 0.0f }
             };
-            // render glyph texture over quad
-            glBindTexture(GL_TEXTURE_2D, glyph.texture);
+            glyph.texture->bind(0);
+
             // update content of VBO memory
             glBindBuffer(GL_ARRAY_BUFFER, VBO);
             glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);

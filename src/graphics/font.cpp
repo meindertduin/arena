@@ -48,7 +48,7 @@ namespace graphics {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
             Glyph character = {
-                texture,
+                std::make_shared<GpuTexture>(face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap.buffer),
                 glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
                 glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
                 static_cast<int>(face->glyph->advance.x)
