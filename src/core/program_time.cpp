@@ -8,7 +8,22 @@ namespace core {
     }
 
     double program_time_ms() {
-        std::chrono::duration<double, std::milli> timespan = std::chrono::system_clock::now() - ProgramStartTime;
+        DurationMs timespan = std::chrono::system_clock::now() - ProgramStartTime;
         return timespan.count();
+    }
+
+    void Timer::start() {
+        duration_ms = 0;
+        start_time = std::chrono::system_clock::now();
+    }
+
+    void Timer::stop() {
+        auto end_time = std::chrono::system_clock::now();
+        DurationMs difference = end_time - start_time;
+        duration_ms = static_cast<int>(difference.count());
+    }
+
+    int Timer::difference_ms() const {
+        return duration_ms;
     }
 }

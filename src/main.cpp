@@ -16,7 +16,6 @@
 
 #include "physics/physics_system.h"
 
-
 Global global;
 
 int main () {
@@ -54,8 +53,9 @@ int main () {
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
     global.texture = global.game->cache.get_resource<graphics::GpuTexture>("assets/container.png");
 
+    core::Timer program_timer;
     while(!global.window->close_requested()) {
-        auto frame_start_time = core::program_time_ms();
+        program_timer.start();
 
         global.input_manager.update();
         physics_system->update();
@@ -70,10 +70,8 @@ int main () {
         global.renderer->after_render();
         global.window->end_frame();
 
-        auto frame_end_time = core::program_time_ms();
-
-        auto dt = static_cast<int>(frame_end_time - frame_start_time);
-        int delay_time_ms = static_cast<int>(1000.0f / 60.0f) - dt;
+        program_timer.stop();
+        int delay_time_ms = static_cast<int>(1000.0f / 60.0f) - program_timer.difference_ms();
         if (delay_time_ms > 0)
             core::delay(delay_time_ms);
     }
