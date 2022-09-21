@@ -118,13 +118,14 @@ namespace graphics {
     }
 
     void TextRenderer::render(std::string text) {
-        float x = 0;
-        float y = 0;
+        float x = 20;
+        float y = 20;
         float scale = 1.0f;
 
         shader.use();
         glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
 
+        shader.set_property("projection", projection);
         shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
         glActiveTexture(GL_TEXTURE0);
         glBindVertexArray(VAO);
