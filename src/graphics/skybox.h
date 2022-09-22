@@ -7,12 +7,12 @@
 namespace graphics {
     class Skybox {
     public:
-        Skybox(Texture *texture);
-        void draw();
+        Skybox();
+        void render();
     private:
         VertexBuffer vertex_buffer {3 * sizeof(float) };
         ArrayBuffer array_buffer;
         ShaderProgram shader { "shaders/skybox.vert", "shaders/skybox.frag" };
-        Texture *texture;
+        SkyboxTexture texture { "assets/skybox" };
     };
 }

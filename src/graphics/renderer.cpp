@@ -38,6 +38,7 @@ namespace graphics {
     }
 
     void Renderer::after_render() {
+        skybox.render();
         render_target->unbind();
         render_target->render();
     }

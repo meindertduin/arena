@@ -52,7 +52,7 @@ namespace graphics {
 
     class SkyboxTexture : public GpuTextureBase {
     public:
-        SkyboxTexture(const std::string &path);
+        explicit SkyboxTexture(const std::string &path);
 
         SkyboxTexture(SkyboxTexture &&other) = delete;
         SkyboxTexture& operator=(SkyboxTexture &&other) = delete;

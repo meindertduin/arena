@@ -49,21 +49,18 @@ namespace graphics {
          1.0f, -1.0f,  1.0f
     };
 
-    Skybox::Skybox(Texture *texture) : texture{texture} {
+    Skybox::Skybox() {
         shader.link();
-        if (texture == nullptr)
-            THROW_ERROR("Texture cannot be nullptr in skybox");
-
         vertex_buffer.add_vertex_attribute({3, GL_FLOAT, sizeof(float), false });
     }
 
-    void Skybox::draw() {
+    void Skybox::render() {
         glDepthFunc(GL_LEQUAL);
 
         shader.use();
         shader.set_property("cameraPos", global.game->camera->transform.pos);
 
-        texture->bind(0);
+        texture.bind(0);
 
         array_buffer.set_data(0, sizeof(skybox_vertices), &skybox_vertices);
         vertex_buffer.bind();
