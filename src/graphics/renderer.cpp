@@ -3,6 +3,7 @@
 #include "../global.h"
 #include "material.h"
 #include "../game/game_state.h"
+#include "glad/glad.h"
 
 namespace graphics {
     Renderer::Renderer() {
@@ -100,5 +101,46 @@ namespace graphics {
         shader.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
         terrain.mesh->render();
+    }
+
+    TextRenderer::TextRenderer() {
+        shader.link();
+
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+        glBindVertexArray(VAO);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, nullptr, GL_DYNAMIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
+    void TextRenderer::render(const std::string& text, const glm::vec2 &pos) {
+        float scale = 0.40f;
+        auto x = pos.x;
+
+        shader.use();
+        glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+
+        shader.set_property("projection", projection);
+        shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
+
+        for (char c : text) {
+            auto &glyph = font.get_glyph(c);
+
+            float xpos = x + static_cast<float>(glyph.bearing.x) * scale;
+            float ypos = pos.y - static_cast<float>(glyph.size.y - glyph.bearing.y) * scale;
+            float w = static_cast<float>(glyph.size.x) * scale;
+            float h = static_cast<float>(glyph.size.y) * scale;
+
+            plane.set_size_and_position({w, h}, {xpos, ypos });
+            glyph.texture->bind(0);
+            plane.render();
+
+            // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+            x += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
+        }
     }
 }

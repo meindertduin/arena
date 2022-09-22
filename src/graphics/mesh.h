@@ -19,10 +19,9 @@ namespace graphics {
     struct Mesh {
     public:
         Mesh(MeshData *mesh_data);
+
         Mesh(const Mesh&) = delete;
-        Mesh(Mesh&&) = delete;
         Mesh& operator=(const Mesh&) = delete;
-        Mesh& operator=(Mesh&&) = delete;
 
         void render() const;
         entity::ECTransform transform;

@@ -17,6 +17,7 @@ namespace game {
 namespace graphics {
     struct Renderer;
     struct TerrainRenderer;
+    class TextRenderer;
     struct GpuTexture;
     struct Material;
     struct GraphicOptions;
@@ -35,6 +36,7 @@ struct Global {
     game::GameState *game;
     graphics::Renderer *renderer;
     graphics::TerrainRenderer *terrain_renderer;
+    graphics::TextRenderer *text_renderer;
 
     graphics::GraphicOptions *graphic_options;
     std::shared_ptr<graphics::GpuTexture> texture;

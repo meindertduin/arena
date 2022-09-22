@@ -34,15 +34,16 @@ namespace graphics {
         int height;
 
         GpuTexture(const std::string& path);
+        GpuTexture(int width, int height, uint8_t *buffer);
 
         // no copy constructor or assignment, because there is no reason to put same texture on the GPU 2x
-        GpuTexture(GpuTexture &&other) = default;
-        GpuTexture& operator=(GpuTexture &&other) = default;
+        GpuTexture(GpuTexture &&other) = delete;
+        GpuTexture& operator=(GpuTexture &&other) = delete;
 
         ~GpuTexture();
 
         void bind(int slot) const;
     private:
-        uint32_t id { };
+        uint32_t id {0};
     };
 }
