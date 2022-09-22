@@ -129,7 +129,7 @@ namespace graphics {
         shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
 
         for (char c : text) {
-            auto glyph = font.get_glyph(c);
+            auto &glyph = font.get_glyph(c);
 
             float xpos = x + static_cast<float>(glyph.bearing.x) * scale;
             float ypos = y - static_cast<float>(glyph.size.y - glyph.bearing.y) * scale;

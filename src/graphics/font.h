@@ -14,7 +14,7 @@ namespace graphics {
     void font_quit();
 
     struct Glyph {
-        std::shared_ptr<GpuTexture> texture;
+        GpuTexture *texture;
         glm::ivec2 size;
         glm::ivec2 bearing;
         int advance;
