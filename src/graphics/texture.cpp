@@ -10,6 +10,34 @@
 #include "../global.h"
 
 namespace graphics {
+    Sprite8::Sprite8(const std::string &path) {
+        data = stbi_load(path.c_str(), &width, &height, &channels, 0);
+
+        if (!data) {
+            THROW_ERROR("Texture with path: %s could not be loaded correctly", path);
+        }
+    }
+
+    Sprite8::~Sprite8() {
+        stbi_image_free(data);
+    }
+
+    Sprite8::Sprite8(const Sprite8 &other) noexcept {
+        data = std::copy(other.data, other.data + other.width * other.height, data);
+        height = other.height;
+        width = other.width;
+        channels = other.channels;
+    }
+
+    Sprite8 &Sprite8::operator=(const Sprite8 &other) noexcept {
+        *this = Sprite8(other);
+        return *this;
+    }
+
+    unsigned char *Sprite8::get_buffer() const {
+        return data;
+    }
+
     Sprite16::Sprite16(const std::string &path) {
         data = stbi_load_16(path.c_str(), &width, &height, &channels, 0);
 
@@ -98,9 +126,10 @@ namespace graphics {
 
         std::sort(faces_paths.begin(), faces_paths.end());
         for (int i = 0; i < faces_paths.size(); i++) {
-            Sprite16 sprite{faces_paths[i]};
+            Sprite8 sprite{faces_paths[i]};
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, sprite.width, sprite.height,
                          0, GL_RGB, GL_UNSIGNED_BYTE, sprite.get_buffer());
         }
     }
+
 }

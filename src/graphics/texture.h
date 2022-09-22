@@ -4,6 +4,33 @@
 #include <vector>
 
 namespace graphics {
+
+    // TODO, code is a bit duplicate from sprite16.
+    //  Could maybe be built into a template where T is the type of the buffer
+    class Sprite8 {
+    public:
+        int width{};
+        int height{};
+        int channels{};
+
+        Sprite8(const std::string &path);
+        ~Sprite8();
+
+        Sprite8(const Sprite8 &other) noexcept;
+        Sprite8& operator=(const Sprite8 &other) noexcept;
+
+        Sprite8(Sprite8 &&other) = default;
+        Sprite8& operator=(Sprite8 &&other) = default;
+
+        [[nodiscard]] constexpr unsigned char get_pixel(int x, int y) const {
+            return data[4 * (y * width + x) + 0];
+        }
+
+        [[nodiscard]] unsigned char* get_buffer() const;
+    private:
+        unsigned char *data;
+    };
+
     class Sprite16 {
     public:
         int width{};
