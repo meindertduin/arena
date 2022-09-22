@@ -4,7 +4,7 @@
 #include <vector>
 
 namespace graphics {
-    struct Sprite16 {
+    class Sprite16 {
     public:
         int width{};
         int height{};
@@ -28,21 +28,28 @@ namespace graphics {
         unsigned short *data;
     };
 
-    struct GpuTexture {
+    class GpuTextureBase {
+    public:
+        virtual ~GpuTextureBase();
+        virtual void bind(int slot) const = 0;
+    protected:
+        uint32_t  id{0};
+    };
+
+    class GpuTexture : public GpuTextureBase {
     public:
         int width;
         int height;
 
-        GpuTexture(const std::string& path);
+        explicit GpuTexture(const std::string& path);
         GpuTexture(int width, int height, uint8_t *buffer);
+        // GpuTexture(std::vector<std::string> faces);
 
         // no copy constructor or assignment, because there is no reason to put same texture on the GPU 2x
         GpuTexture(GpuTexture &&other) = delete;
         GpuTexture& operator=(GpuTexture &&other) = delete;
 
-        ~GpuTexture();
-
-        void bind(int slot) const;
+        void bind(int slot) const override;
     private:
         uint32_t id {0};
     };

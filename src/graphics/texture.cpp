@@ -2,18 +2,19 @@
 #include <glad/glad.h>
 
 #define STB_IMAGE_IMPLEMENTATION
+
 #include <stb/stb_image.h>
 
 #include "../logging.h"
 #include "../global.h"
 
 namespace graphics {
-    Sprite16::Sprite16(const std::string& path) {
+    Sprite16::Sprite16(const std::string &path) {
         data = stbi_load_16(path.c_str(), &width, &height, &channels, 0);
 
         if (!data) {
             THROW_ERROR("Texture with path: %s could not be loaded correctly", path);
-        }  
+        }
     }
 
     Sprite16::~Sprite16() {
@@ -27,19 +28,22 @@ namespace graphics {
         channels = other.channels;
     }
 
-    Sprite16& Sprite16::operator=(const Sprite16 &other) noexcept {
+    Sprite16 &Sprite16::operator=(const Sprite16 &other) noexcept {
         *this = Sprite16(other);
         return *this;
     }
 
-    unsigned short* Sprite16::get_buffer() const {
+    unsigned short *Sprite16::get_buffer() const {
         return data;
     }
 
-    GpuTexture::GpuTexture(const std::string& path) {
-        glGenTextures(1, &id);
+    GpuTextureBase::~GpuTextureBase() {
+        glDeleteTextures(1, &id);
+    }
 
-        Sprite16 sprite { path };
+    GpuTexture::GpuTexture(const std::string &path) : GpuTextureBase() {
+        glGenTextures(1, &id);
+        Sprite16 sprite{path};
         this->width = sprite.width;
         this->height = sprite.height;
 
@@ -49,7 +53,8 @@ namespace graphics {
         glGenerateMipmap(GL_TEXTURE_2D);
 
         // set the texture wrapping/filtering options (on the currently bound texture object)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+                        GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         // set texture filtering parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
@@ -69,27 +74,24 @@ namespace graphics {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
-    GpuTexture::~GpuTexture() {
-        glDeleteTextures(1, &id);
-    }
+    // GpuTexture::GpuTexture(std::vector<std::string> faces) {
+    //     glGenTextures(1, &id);
+    //     glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+
+    //     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    //     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    //     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    //     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    //     for (int i = 0; i < faces.size(); i++) {
+    //         Sprite16 sprite{faces[i]};
+    //         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, sprite.get_buffer());
+    //     }
+    // }
 
     void GpuTexture::bind(int slot) const {
         glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_2D, id);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
