@@ -117,7 +117,7 @@ namespace graphics {
         glBindVertexArray(0);
     }
 
-    void TextRenderer::render(std::string text) {
+    void TextRenderer::render(const std::string& text) {
         float x = 20;
         float y = 20;
         float scale = 1.0f;
@@ -127,39 +127,21 @@ namespace graphics {
 
         shader.set_property("projection", projection);
         shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
-        glBindVertexArray(VAO);
 
-        // iterate through all characters
-        std::string::const_iterator c;
-        for (c = text.begin(); c != text.end(); c++) {
-            auto glyph = font.get_glyph(*c);
+        for (char c : text) {
+            auto glyph = font.get_glyph(c);
 
-            float xpos = x + glyph.bearing.x * scale;
-            float ypos = y - (glyph.size.y - glyph.bearing.y) * scale;
+            float xpos = x + static_cast<float>(glyph.bearing.x) * scale;
+            float ypos = y - static_cast<float>(glyph.size.y - glyph.bearing.y) * scale;
+            float w = static_cast<float>(glyph.size.x) * scale;
+            float h = static_cast<float>(glyph.size.y) * scale;
 
-            float w = glyph.size.x * scale;
-            float h = glyph.size.y * scale;
-            // update VBO for each character
-            float vertices[6][4] = {
-                { xpos,     ypos + h,   0.0f, 0.0f },
-                { xpos,     ypos,       0.0f, 1.0f },
-                { xpos + w, ypos,       1.0f, 1.0f },
-                { xpos,     ypos + h,   0.0f, 0.0f },
-                { xpos + w, ypos,       1.0f, 1.0f },
-                { xpos + w, ypos + h,   1.0f, 0.0f }
-            };
+            plane.set_size_and_position({w, h}, {xpos, ypos });
             glyph.texture->bind(0);
+            plane.render();
 
-            // update content of VBO memory
-            glBindBuffer(GL_ARRAY_BUFFER, VBO);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            // render quad
-            glDrawArrays(GL_TRIANGLES, 0, 6);
             // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-            x += (glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
+            x += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
         }
-        glBindVertexArray(0);
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
 }

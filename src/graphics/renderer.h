@@ -11,6 +11,7 @@
 #include "light.h"
 #include "terrain.h"
 #include "font.h"
+#include "geometry.h"
 #include "../entity/ec_transform.h"
 
 namespace graphics {
@@ -43,11 +44,12 @@ namespace graphics {
     class TextRenderer {
     public:
         TextRenderer();
-        void render(std::string text);
+        void render(const std::string& text);
     private:
         uint32_t VAO;
         uint32_t VBO;
         TrueTypeFont font { "assets/alagard.ttf", 48 };
         ShaderProgram shader { "shaders/text.vert", "shaders/text.frag" };
+        GpuPlane plane;
     };
 }
