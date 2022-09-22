@@ -44,7 +44,7 @@ namespace graphics {
     class TextRenderer {
     public:
         TextRenderer();
-        void render(const std::string& text);
+        void render(const std::string& text, const glm::vec2 &pos);
     private:
         uint32_t VAO;
         uint32_t VBO;

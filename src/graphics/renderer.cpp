@@ -117,10 +117,9 @@ namespace graphics {
         glBindVertexArray(0);
     }
 
-    void TextRenderer::render(const std::string& text) {
-        float x = 20;
-        float y = 20;
+    void TextRenderer::render(const std::string& text, const glm::vec2 &pos) {
         float scale = 1.0f;
+        auto x = pos.x;
 
         shader.use();
         glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
@@ -132,7 +131,7 @@ namespace graphics {
             auto &glyph = font.get_glyph(c);
 
             float xpos = x + static_cast<float>(glyph.bearing.x) * scale;
-            float ypos = y - static_cast<float>(glyph.size.y - glyph.bearing.y) * scale;
+            float ypos = pos.y - static_cast<float>(glyph.size.y - glyph.bearing.y) * scale;
             float w = static_cast<float>(glyph.size.x) * scale;
             float h = static_cast<float>(glyph.size.y) * scale;
 

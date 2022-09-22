@@ -56,6 +56,7 @@ int main () {
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
     global.texture = global.game->cache.get_resource<graphics::GpuTexture>("assets/container.png");
 
+    int frame_time_ms;
     core::Timer program_timer;
     while(!global.window->close_requested()) {
         program_timer.start();
@@ -69,13 +70,15 @@ int main () {
         global.game->map->render_background();
         // render the different systems
         static_render_system->update();
-        global.text_renderer->render("Rendering fonts is awesome!");
+        global.text_renderer->render(std::to_string(frame_time_ms) + " ms", { 20, global.graphic_options->screen_dimensions.y - 180});
 
         global.renderer->after_render();
         global.window->end_frame();
 
         program_timer.stop();
-        int delay_time_ms = static_cast<int>(1000.0f / 60.0f) - program_timer.difference_ms();
+        auto difference_ms = program_timer.difference_ms();
+        int delay_time_ms = static_cast<int>(1000.0f / 60.0f) - difference_ms;
+        frame_time_ms = difference_ms;
         if (delay_time_ms > 0)
             core::delay(delay_time_ms);
     }
