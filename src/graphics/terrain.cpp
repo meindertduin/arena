@@ -5,12 +5,12 @@
 
 namespace graphics {
     TerrainTexturePack::TerrainTexturePack(const TerrainFile &file) {
-        background_texture = global.game->cache.get_resource<GpuTexture>(file.background_texture);
-        blendmap = global.game->cache.get_resource<GpuTexture>(file.blendmap);
+        background_texture = global.game->cache.get_resource<Texture>(file.background_texture);
+        blendmap = global.game->cache.get_resource<Texture>(file.blendmap);
 
-        r_texture = global.game->cache.get_resource<GpuTexture>(file.r_texture);
-        g_texture = global.game->cache.get_resource<GpuTexture>(file.g_texture);
-        b_texture = global.game->cache.get_resource<GpuTexture>(file.b_texture);
+        r_texture = global.game->cache.get_resource<Texture>(file.r_texture);
+        g_texture = global.game->cache.get_resource<Texture>(file.g_texture);
+        b_texture = global.game->cache.get_resource<Texture>(file.b_texture);
     }
 
     void TerrainTexturePack::bind() const {

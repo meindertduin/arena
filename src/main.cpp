@@ -54,7 +54,7 @@ int main () {
     global.game->init();
 
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
-    global.texture = global.game->cache.get_resource<graphics::GpuTexture>("assets/container.png");
+    global.texture = global.game->cache.get_resource<graphics::Texture>("assets/container.png");
 
     int frame_time_ms;
     core::Timer program_timer;

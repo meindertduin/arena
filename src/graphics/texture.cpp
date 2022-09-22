@@ -4,6 +4,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 
 #include <stb/stb_image.h>
+#include <filesystem>
 
 #include "../logging.h"
 #include "../global.h"
@@ -37,12 +38,20 @@ namespace graphics {
         return data;
     }
 
+    GpuTextureBase::GpuTextureBase() {
+        glGenTextures(1, &id);
+    }
+
     GpuTextureBase::~GpuTextureBase() {
         glDeleteTextures(1, &id);
     }
 
-    GpuTexture::GpuTexture(const std::string &path) : GpuTextureBase() {
-        glGenTextures(1, &id);
+    void GpuTextureBase::bind(int slot) const {
+        glActiveTexture(GL_TEXTURE0 + slot);
+        glBindTexture(GL_TEXTURE_2D, id);
+    }
+
+    Texture::Texture(const std::string &path) : GpuTextureBase() {
         Sprite16 sprite{path};
         this->width = sprite.width;
         this->height = sprite.height;
@@ -61,8 +70,7 @@ namespace graphics {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
-    GpuTexture::GpuTexture(int width, int height, unsigned char *buffer) : width{width}, height{height} {
-        glGenTextures(1, &id);
+    Texture::Texture(int width, int height, unsigned char *buffer) : GpuTextureBase(), width{width}, height{height} {
         glBindTexture(GL_TEXTURE_2D, id);
 
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, buffer);
@@ -74,24 +82,25 @@ namespace graphics {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
-    // GpuTexture::GpuTexture(std::vector<std::string> faces) {
-    //     glGenTextures(1, &id);
-    //     glBindTexture(GL_TEXTURE_CUBE_MAP, id);
+    SkyboxTexture::SkyboxTexture(const std::string &path) {
+        glGenTextures(1, &id);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, id);
 
-    //     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    //     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    //     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    //     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    //     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-    //     for (int i = 0; i < faces.size(); i++) {
-    //         Sprite16 sprite{faces[i]};
-    //         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, sprite.get_buffer());
-    //     }
-    // }
+        std::vector<std::string> faces_paths;
+        for (auto const &entry : std::filesystem::directory_iterator(path))
+            faces_paths.push_back(entry.path());
 
-    void GpuTexture::bind(int slot) const {
-        glActiveTexture(GL_TEXTURE0 + slot);
-        glBindTexture(GL_TEXTURE_2D, id);
+        std::sort(faces_paths.begin(), faces_paths.end());
+        for (int i = 0; i < faces_paths.size(); i++) {
+            Sprite16 sprite{faces_paths[i]};
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, sprite.width, sprite.height,
+                         0, GL_RGB, GL_UNSIGNED_BYTE, sprite.get_buffer());
+        }
     }
 }

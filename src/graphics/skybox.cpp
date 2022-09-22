@@ -49,7 +49,7 @@ namespace graphics {
          1.0f, -1.0f,  1.0f
     };
 
-    Skybox::Skybox(GpuTexture *texture) : texture{texture} {
+    Skybox::Skybox(Texture *texture) : texture{texture} {
         shader.link();
         if (texture == nullptr)
             THROW_ERROR("Texture cannot be nullptr in skybox");

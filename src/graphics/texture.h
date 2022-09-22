@@ -30,27 +30,31 @@ namespace graphics {
 
     class GpuTextureBase {
     public:
+        GpuTextureBase();
         virtual ~GpuTextureBase();
-        virtual void bind(int slot) const = 0;
+        virtual void bind(int slot) const;
     protected:
         uint32_t  id{0};
     };
 
-    class GpuTexture : public GpuTextureBase {
+    class Texture : public GpuTextureBase {
     public:
         int width;
         int height;
 
-        explicit GpuTexture(const std::string& path);
-        GpuTexture(int width, int height, uint8_t *buffer);
-        // GpuTexture(std::vector<std::string> faces);
+        explicit Texture(const std::string& path);
+        Texture(int width, int height, uint8_t *buffer);
 
         // no copy constructor or assignment, because there is no reason to put same texture on the GPU 2x
-        GpuTexture(GpuTexture &&other) = delete;
-        GpuTexture& operator=(GpuTexture &&other) = delete;
+        Texture(Texture &&other) = delete;
+        Texture& operator=(Texture &&other) = delete;
+    };
 
-        void bind(int slot) const override;
-    private:
-        uint32_t id {0};
+    class SkyboxTexture : public GpuTextureBase {
+    public:
+        SkyboxTexture(const std::string &path);
+
+        SkyboxTexture(SkyboxTexture &&other) = delete;
+        SkyboxTexture& operator=(SkyboxTexture &&other) = delete;
     };
 }
