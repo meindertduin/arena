@@ -23,29 +23,13 @@ namespace graphics {
         FT_New_Face(library, path.c_str(), 0, &face);
         FT_Set_Pixel_Sizes(face, 0, size);
 
+        // disable byte-alignment restriction
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
         for(unsigned char c = 0; c < MaxCharacters; c++) {
             if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
                 THROW_ERROR("TrueTypeFont::TrueTypeFont: could not load character %s", std::to_string(c));
             }
-
-            uint32_t texture;
-            glGenTextures(1, &texture);
-            glBindTexture(GL_TEXTURE_2D, texture);
-            glTexImage2D(
-                GL_TEXTURE_2D,
-                0,
-                GL_RED,
-                face->glyph->bitmap.width,
-                face->glyph->bitmap.rows,
-                0,
-                GL_RED,
-                GL_UNSIGNED_BYTE,
-                face->glyph->bitmap.buffer
-            );
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
             Glyph character = {
                 std::make_shared<GpuTexture>(face->glyph->bitmap.width, face->glyph->bitmap.rows, face->glyph->bitmap.buffer),
@@ -54,7 +38,7 @@ namespace graphics {
                 static_cast<int>(face->glyph->advance.x)
             };
 
-            glyphs.insert(std::pair<char, Glyph>(c, character));
+            glyphs.insert(std::pair<unsigned char, Glyph>(c, character));
         }
     }
 

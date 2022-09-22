@@ -69,7 +69,7 @@ int main () {
         global.game->map->render_background();
         // render the different systems
         static_render_system->update();
-        global.text_renderer->render("hellow");
+        global.text_renderer->render("Rendering fonts is awesome!");
 
         global.renderer->after_render();
         global.window->end_frame();

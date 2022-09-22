@@ -127,13 +127,11 @@ namespace graphics {
 
         shader.set_property("projection", projection);
         shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
-        glActiveTexture(GL_TEXTURE0);
         glBindVertexArray(VAO);
 
         // iterate through all characters
         std::string::const_iterator c;
-        for (c = text.begin(); c != text.end(); c++)
-        {
+        for (c = text.begin(); c != text.end(); c++) {
             auto glyph = font.get_glyph(*c);
 
             float xpos = x + glyph.bearing.x * scale;
@@ -146,7 +144,6 @@ namespace graphics {
                 { xpos,     ypos + h,   0.0f, 0.0f },
                 { xpos,     ypos,       0.0f, 1.0f },
                 { xpos + w, ypos,       1.0f, 1.0f },
-
                 { xpos,     ypos + h,   0.0f, 0.0f },
                 { xpos + w, ypos,       1.0f, 1.0f },
                 { xpos + w, ypos + h,   1.0f, 0.0f }

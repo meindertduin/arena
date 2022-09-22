@@ -44,6 +44,6 @@ namespace graphics {
 
         void bind(int slot) const;
     private:
-        uint32_t id { };
+        uint32_t id {0};
     };
 }
