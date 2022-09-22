@@ -48,7 +48,7 @@ namespace graphics {
     private:
         uint32_t VAO;
         uint32_t VBO;
-        TrueTypeFont font { "assets/alagard.ttf", 48 };
+        TrueTypeFont font { "assets/alagard.ttf", 64 };
         ShaderProgram shader { "shaders/text.vert", "shaders/text.frag" };
         GpuPlane plane;
     };

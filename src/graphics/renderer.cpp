@@ -118,7 +118,7 @@ namespace graphics {
     }
 
     void TextRenderer::render(const std::string& text, const glm::vec2 &pos) {
-        float scale = 1.0f;
+        float scale = 0.40f;
         auto x = pos.x;
 
         shader.use();
