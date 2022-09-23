@@ -4,56 +4,41 @@
 #include <vector>
 
 namespace graphics {
-
-    // TODO, code is a bit duplicate from sprite16.
-    //  Could maybe be built into a template where T is the type of the buffer
-    class Sprite8 {
+    template<typename T>
+    class Sprite {
     public:
-        int width{};
-        int height{};
-        int channels{};
+        int width{0};
+        int height{0};
+        int channels{0};
 
-        Sprite8(const std::string &path);
-        ~Sprite8();
+        explicit Sprite(const std::string &path);
+        ~Sprite();
 
-        Sprite8(const Sprite8 &other) noexcept;
-        Sprite8& operator=(const Sprite8 &other) noexcept;
+        Sprite(const Sprite<T> &other) noexcept {
+            data = std::copy(other.data, other.data + other.width * other.height, data);
+            height = other.height;
+            width = other.width;
+            channels = other.channels;
+        }
+        Sprite<T>& operator=(const Sprite<T> &other) noexcept {
+            *this = Sprite<T>(other);
+            return *this;
+        }
 
-        Sprite8(Sprite8 &&other) = default;
-        Sprite8& operator=(Sprite8 &&other) = default;
+        Sprite(Sprite<T> &&other)  noexcept = default;
+        Sprite<T>& operator=(Sprite<T> &&other)  noexcept = default;
 
-        [[nodiscard]] constexpr unsigned char get_pixel(int x, int y) const {
+        constexpr T get_pixel(int x, int y) const {
             return data[4 * (y * width + x) + 0];
         }
 
-        [[nodiscard]] unsigned char* get_buffer() const;
+        T* get_buffer() { return data; }
     private:
-        unsigned char *data;
+        T* data;
     };
 
-    class Sprite16 {
-    public:
-        int width{};
-        int height{};
-        int channels{};
-
-        Sprite16(const std::string& path);
-        ~Sprite16();
-
-        Sprite16(const Sprite16 &other) noexcept;
-        Sprite16& operator=(const Sprite16 &other) noexcept;
-
-        Sprite16(Sprite16 &&other) = default;
-        Sprite16& operator=(Sprite16 &&other) = default;
-
-        [[nodiscard]] constexpr unsigned short get_pixel(int x, int y) const {
-            return data[4 * (y * width + x) + 0];
-        }
-        
-        [[nodiscard]] unsigned short* get_buffer() const;
-    private:
-        unsigned short *data;
-    };
+    using Sprite8 = Sprite<unsigned char>;
+    using Sprite16 = Sprite<unsigned short>;
 
     class GpuTextureBase {
     public:

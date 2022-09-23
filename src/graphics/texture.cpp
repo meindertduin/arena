@@ -10,7 +10,8 @@
 #include "../global.h"
 
 namespace graphics {
-    Sprite8::Sprite8(const std::string &path) {
+    template<>
+    Sprite<unsigned char>::Sprite(const std::string &path) {
         data = stbi_load(path.c_str(), &width, &height, &channels, 0);
 
         if (!data) {
@@ -18,27 +19,8 @@ namespace graphics {
         }
     }
 
-    Sprite8::~Sprite8() {
-        stbi_image_free(data);
-    }
-
-    Sprite8::Sprite8(const Sprite8 &other) noexcept {
-        data = std::copy(other.data, other.data + other.width * other.height, data);
-        height = other.height;
-        width = other.width;
-        channels = other.channels;
-    }
-
-    Sprite8 &Sprite8::operator=(const Sprite8 &other) noexcept {
-        *this = Sprite8(other);
-        return *this;
-    }
-
-    unsigned char *Sprite8::get_buffer() const {
-        return data;
-    }
-
-    Sprite16::Sprite16(const std::string &path) {
+    template<>
+    Sprite<unsigned short>::Sprite(const std::string &path) {
         data = stbi_load_16(path.c_str(), &width, &height, &channels, 0);
 
         if (!data) {
@@ -46,24 +28,9 @@ namespace graphics {
         }
     }
 
-    Sprite16::~Sprite16() {
+    template<typename T>
+    Sprite<T>::~Sprite() {
         stbi_image_free(data);
-    }
-
-    Sprite16::Sprite16(const Sprite16 &other) noexcept {
-        data = std::copy(other.data, other.data + other.width * other.height, data);
-        height = other.height;
-        width = other.width;
-        channels = other.channels;
-    }
-
-    Sprite16 &Sprite16::operator=(const Sprite16 &other) noexcept {
-        *this = Sprite16(other);
-        return *this;
-    }
-
-    unsigned short *Sprite16::get_buffer() const {
-        return data;
     }
 
     GpuTextureBase::GpuTextureBase() {

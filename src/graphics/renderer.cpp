@@ -126,9 +126,6 @@ namespace graphics {
         float scale = 0.40f;
         auto x = pos.x;
 
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
         shader.use();
         glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
 
