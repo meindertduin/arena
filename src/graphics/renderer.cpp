@@ -37,8 +37,12 @@ namespace graphics {
         mesh->render();
     }
 
-    void Renderer::after_render() {
+    void Renderer::render_skybox() {
         skybox.render();
+    }
+
+
+    void Renderer::after_render() {
         render_target->unbind();
         render_target->render();
     }
@@ -121,6 +125,9 @@ namespace graphics {
     void TextRenderer::render(const std::string& text, const glm::vec2 &pos) {
         float scale = 0.40f;
         auto x = pos.x;
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         shader.use();
         glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);

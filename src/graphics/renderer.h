@@ -24,6 +24,7 @@ namespace graphics {
         
         void before_render();
         void render(const Mesh *mesh, const entity::ECTransform &transform) const;
+        void render_skybox();
         void after_render();
 
         void set_ubo_data();
