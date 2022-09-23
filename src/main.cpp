@@ -54,7 +54,7 @@ int main () {
     global.game->init();
 
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
-    global.texture = global.game->cache.get_resource<graphics::GpuTexture>("assets/container.png");
+    global.texture = global.game->cache.get_resource<graphics::Texture>("assets/container.png");
 
     int frame_time_ms;
     core::Timer program_timer;
@@ -70,8 +70,9 @@ int main () {
         global.game->map->render_background();
         // render the different systems
         static_render_system->update();
-        global.text_renderer->render(std::to_string(frame_time_ms) + " ms", { 10, global.graphic_options->screen_dimensions.y - 150});
+        global.renderer->render_skybox();
 
+        global.text_renderer->render(std::to_string(frame_time_ms) + " ms", { 10, global.graphic_options->screen_dimensions.y - 150});
         global.renderer->after_render();
         global.window->end_frame();
 

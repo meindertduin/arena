@@ -18,6 +18,7 @@ set(SOURCES
         src/graphics/gpu_buffer.cpp
         src/graphics/shader.cpp
         src/graphics/render_target.cpp
+        src/graphics/skybox.h src/graphics/skybox.cpp
         external/glad/glad.c
         src/entity/event_manager.cpp
         src/entity/entity.cpp

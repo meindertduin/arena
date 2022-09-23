@@ -33,11 +33,11 @@ namespace graphics {
         TerrainTexturePack(const TerrainFile &file);
         void bind() const;
     private:
-        std::shared_ptr<GpuTexture> background_texture;
-        std::shared_ptr<GpuTexture> blendmap;
-        std::shared_ptr<GpuTexture> r_texture;
-        std::shared_ptr<GpuTexture> g_texture;
-        std::shared_ptr<GpuTexture> b_texture;
+        std::shared_ptr<Texture> background_texture;
+        std::shared_ptr<Texture> blendmap;
+        std::shared_ptr<Texture> r_texture;
+        std::shared_ptr<Texture> g_texture;
+        std::shared_ptr<Texture> b_texture;
     };
 
     struct Terrain {

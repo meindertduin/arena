@@ -31,7 +31,7 @@ namespace assets {
     private:
         std::unordered_map<std::string, std::weak_ptr<graphics::Mesh>> meshes;
         std::unordered_map<std::string, std::weak_ptr<graphics::Terrain>> terrains;
-        std::unordered_map<std::string, std::weak_ptr<graphics::GpuTexture>> textures;
+        std::unordered_map<std::string, std::weak_ptr<graphics::Texture>> textures;
 
         template<typename T>
         std::shared_ptr<T> load_asset(const std::string& filename) {

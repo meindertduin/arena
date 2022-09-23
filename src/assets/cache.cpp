@@ -15,7 +15,7 @@ namespace assets {
     }
 
     template<>
-    std::shared_ptr<graphics::GpuTexture> Cache::load_asset<graphics::GpuTexture>(const std::string &filename) {
+    std::shared_ptr<graphics::Texture> Cache::load_asset<graphics::Texture>(const std::string &filename) {
         return load_texture(filename);
     }
 
@@ -32,8 +32,8 @@ namespace assets {
     }
 
     template<>
-    std::shared_ptr<graphics::GpuTexture> Cache::get_resource(const std::string &filename) {
+    std::shared_ptr<graphics::Texture> Cache::get_resource(const std::string &filename) {
         auto &texture = textures[filename];
-        return get_shared_asset<graphics::GpuTexture>(texture, filename);
+        return get_shared_asset<graphics::Texture>(texture, filename);
     }
 }
