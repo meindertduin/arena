@@ -47,7 +47,7 @@ set(SOURCES
         src/core/stack_allocator.h
         src/core/list_allocator.cpp
         src/core/list_allocator.h
-        src/core/singly_linked_list.h src/core/program_time.cpp src/core/program_time.h src/graphics/font.h src/graphics/font.cpp src/graphics/geometry.h src/graphics/geometry.cpp)
+        src/core/singly_linked_list.h src/core/program_time.cpp src/core/program_time.h src/graphics/font.h src/graphics/font.cpp src/graphics/geometry.h src/graphics/geometry.cpp src/input/key_bindings.h src/entity/ec_control.h src/entity/movement_system.cpp src/entity/movement_system.h)
 
 set(HEADERS include)
 

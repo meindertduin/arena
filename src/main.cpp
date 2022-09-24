@@ -12,9 +12,12 @@
 #include "entity/ec_static_mesh.h"
 #include "entity/ec_collision_box.h"
 #include "entity/ec_physics.h"
+#include "entity/ec_control.h"
 #include "game/game_state.h"
 
 #include "physics/physics_system.h"
+#include "entity/movement_system.h"
+#include "entity/component.h"
 
 Global global;
 
@@ -48,6 +51,7 @@ int main () {
     auto static_render_system = global.ecs->create_system<entity::StaticRenderSystem>({ entity::EcStaticMeshRenderer::_id });
     auto physics_system = global.ecs->create_system<physics::PhysicsSystem>({ entity::ECPhysics::_id });
     auto terrain_collision_system = global.ecs->create_system<entity::TerrainCollisionSystem>({ entity::ECCollisionBox::_id });
+    auto movement_system = global.ecs->create_system<entity::MovementSystem>({ entity::ECControl::_id, entity::ECTransform::_id });
 
     // initialize game state
     global.game = new game::GameState();
@@ -62,6 +66,7 @@ int main () {
         program_timer.start();
 
         global.input_manager.update();
+        movement_system->update();
         physics_system->update();
 
         terrain_collision_system->update();
