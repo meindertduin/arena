@@ -16,8 +16,8 @@ namespace input {
         Keybindings(const Keybindings &other) = delete;
         Keybindings& operator=(const Keybindings &other) = delete;
 
-        std::optional<entity::ECCommand*> get_command(const KeyCombination &combination);
+        std::optional<entity::ECCommand*> get_player_command(const KeyCombination &combination);
     private:
-        std::unordered_map<uint32_t , std::unique_ptr<entity::ECCommand>> commands;
+        std::unordered_map<uint32_t , std::unique_ptr<entity::ECCommand>> player_commands;
     };
 }

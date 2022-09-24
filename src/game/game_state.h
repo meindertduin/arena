@@ -19,6 +19,8 @@ namespace game {
 
         void init();
 
+        bool ui_mode {false};
+
         assets::Cache cache;
         entity::Camera *camera;
         entity::Entity player;

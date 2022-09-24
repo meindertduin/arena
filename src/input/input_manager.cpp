@@ -21,7 +21,16 @@ namespace input {
     }
 
     void InputManager::on_key_event(KeyCombination combi) {
-        auto command_opt = key_bindings.get_command(combi);
+        auto maskless_combi = combi;
+        maskless_combi.mods_mask = 0;
+
+        auto maskless_command_opt = key_bindings.get_player_command(maskless_combi);
+        if (maskless_command_opt.has_value()) {
+            maskless_command_opt.value()->execute(global.game->player);
+            return;
+        }
+
+        auto command_opt = key_bindings.get_player_command(combi);
         if (command_opt.has_value()) {
             command_opt.value()->execute(global.game->player);
         }
