@@ -21,23 +21,9 @@ namespace input {
     }
 
     void InputManager::on_key_event(KeyCombination combi) {
-        if (combi.action == input::KEY_PRESS || combi.action == input::KEY_RELEASE) {
-            switch(combi.key) {
-                case input::KEY_W:
-                    // moves_forward = action == input::KEY_PRESS;
-                    break;
-                case input::KEY_S:
-                    // moves_backward = action == input::KEY_PRESS;
-                    break;
-                case input::KEY_A:
-                    // moves_left = action == input::KEY_PRESS;
-                    break;
-                case input::KEY_D:
-                    // moves_right = action == input::KEY_PRESS;
-                    break;
-                default:
-                    break;
-            }
+        auto command_opt = key_bindings.get_command(combi);
+        if (command_opt.has_value()) {
+            command_opt.value()->execute(global.game->player);
         }
     }
 }

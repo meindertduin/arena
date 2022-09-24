@@ -4,29 +4,28 @@
 #include "entity.h"
 
 namespace entity {
+    enum class Direction {
+        Forward,
+        Backward,
+        Left,
+        Right,
+    };
+
     struct ECCommand {
         virtual void execute(Entity entity) = 0;
     };
 
-    struct MoveCommand : public ECCommand {
-        glm::vec3 direction;
+    struct StartMoveCommand : public ECCommand {
+        Direction direction;
+        StartMoveCommand(Direction direction) : direction{direction} { }
 
         void execute(Entity entity) override;
     };
 
-    struct MoveForwardCommand : public ECCommand {
-        void execute(Entity entity) override;
-    };
+    struct StopMoveCommand : public ECCommand {
+        Direction direction;
+        StopMoveCommand(Direction direction) : direction{direction} { }
 
-    struct MoveBackwardCommand : public ECCommand {
-        void execute(Entity entity) override;
-    };
-
-    struct MoveLeftCommand : public ECCommand {
-        void execute(Entity entity) override;
-    };
-
-    struct MoveRightCommand : public ECCommand {
         void execute(Entity entity) override;
     };
 

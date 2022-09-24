@@ -6,6 +6,7 @@
 #include "../core/event_dispatcher.h"
 
 #include "../entity/ec_command.h"
+#include "key_bindings.h"
 
 namespace input {
     struct InputManager {
@@ -22,5 +23,7 @@ namespace input {
             float mouse_sensitivity = 0.1f;
             InputSettings() = default;
         } settings;
+
+        Keybindings key_bindings;
     };
 }
