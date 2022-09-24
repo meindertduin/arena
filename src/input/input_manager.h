@@ -25,5 +25,8 @@ namespace input {
         } settings;
 
         Keybindings key_bindings;
+
+        bool handle_ui_command(const KeyCombination &combi, const KeyCombination &maskless_combi);
+        bool handle_player_command(const KeyCombination &combi, const KeyCombination &maskless_combi);
     };
 }

@@ -13,26 +13,54 @@ namespace input {
     }
 
     void InputManager::on_mouse_movement(float mouse_x_offset, float mouse_y_offset) {
-        entity::RotateCommand command;
-        command.degrees_x = mouse_x_offset * settings.mouse_sensitivity;
-        command.degrees_y = mouse_y_offset * settings.mouse_sensitivity;
+        if (!global.game->ui_mode) {
+            entity::RotateCommand command;
+            command.degrees_x = mouse_x_offset * settings.mouse_sensitivity;
+            command.degrees_y = mouse_y_offset * settings.mouse_sensitivity;
 
-        command.execute(global.game->player);
+            command.execute(global.game->player);
+        }
     }
 
     void InputManager::on_key_event(KeyCombination combi) {
         auto maskless_combi = combi;
         maskless_combi.mods_mask = 0;
 
+        if (handle_ui_command(combi, maskless_combi))
+            return;
+
+        handle_player_command(combi, maskless_combi);
+    }
+
+    bool InputManager::handle_ui_command(const KeyCombination &combi, const KeyCombination &maskless_combi) {
+        auto maskless_command_opt = key_bindings.get_ui_command(maskless_combi);
+        if (maskless_command_opt.has_value()) {
+            maskless_command_opt.value()->execute();
+            return true;
+        }
+
+        auto command_opt = key_bindings.get_ui_command(combi);
+        if (command_opt.has_value()) {
+            command_opt.value()->execute();
+            return true;
+        }
+
+        return false;
+    }
+
+    bool InputManager::handle_player_command(const KeyCombination &combi, const KeyCombination &maskless_combi) {
         auto maskless_command_opt = key_bindings.get_player_command(maskless_combi);
         if (maskless_command_opt.has_value()) {
             maskless_command_opt.value()->execute(global.game->player);
-            return;
+            return true;
         }
 
         auto command_opt = key_bindings.get_player_command(combi);
         if (command_opt.has_value()) {
             command_opt.value()->execute(global.game->player);
+            return true;
         }
+
+        return false;
     }
 }
