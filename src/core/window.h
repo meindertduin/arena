@@ -11,6 +11,7 @@ namespace core {
         uint32_t width;
         uint32_t height;
         std::string window_name;
+        bool cursor_enabled = false;
     };
 
     struct Window {
@@ -20,6 +21,8 @@ namespace core {
 
         bool close_requested() const;
         void end_frame() const;
+        void enable_cursor();
+        void disable_cursor();
 
         WindowOptions win_options;
 

@@ -45,4 +45,20 @@ namespace core {
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
+
+    void Window::enable_cursor() {
+        if (win_options.cursor_enabled)
+            return;
+
+        win_options.cursor_enabled = true;
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    }
+
+    void Window::disable_cursor() {
+        if (!win_options.cursor_enabled)
+            return;
+
+        win_options.cursor_enabled = false;
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
 }
