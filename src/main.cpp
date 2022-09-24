@@ -65,7 +65,6 @@ int main () {
     while(!global.window->close_requested()) {
         program_timer.start();
 
-        global.input_manager.update();
         movement_system->update();
         physics_system->update();
 
