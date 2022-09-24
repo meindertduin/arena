@@ -1,12 +1,11 @@
 #pragma once
 
 #include "../core/event.h"
+#include "input.h"
 
 namespace input {
     struct KeyEvent : public core::Event {
-        int key;
-        int mods;
-        int action;
+        KeyCombination key_combination;
     };
 
     struct MouseEvent : public core::Event {

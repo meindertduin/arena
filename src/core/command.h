@@ -1,8 +1,8 @@
-//
-// Created by meindert on 9/24/22.
-//
+#pragma once
 
-#ifndef ARENA_COMMAND_H
-#define ARENA_COMMAND_H
-
-#endif //ARENA_COMMAND_H
+namespace core {
+    class Command {
+    public:
+        virtual void execute() = 0;
+    };
+}

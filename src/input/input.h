@@ -139,6 +139,23 @@ namespace input {
     constexpr int MOD_SUPER = GLFW_MOD_SUPER;
     constexpr int MOD_NUM_LOCK = GLFW_MOD_NUM_LOCK;
 
+    struct KeyCombination {
+        uint32_t key;
+        uint32_t mods_mask;
+        uint32_t action;
+
+        KeyCombination() = default;
+        KeyCombination(uint32_t key, uint32_t mods_mask, uint32_t action) : key{key}, mods_mask{mods_mask}, action{action} { }
+
+        inline auto operator==(const KeyCombination &rhs) const {
+            return key == rhs.key && mods_mask == rhs.mods_mask && action == rhs.action;
+        }
+
+        [[nodiscard]] constexpr uint32_t to_u32() const {
+            return (key << 16) | (mods_mask << 8) | action;
+        }
+    };
+
     inline static std::array<int, MAX_KEYBOARD_NUM> keyboard_state;
 
     void initialize_input(const core::Window &window);

@@ -13,7 +13,7 @@ namespace input {
         InputManager();
 
         void on_mouse_movement(float mouse_x_offset, float mouse_y_offset);
-        void on_key_event(int key, int mods_mask, int action);
+        void on_key_event(KeyCombination combi);
     private:
         std::unique_ptr<core::EventHandler<input::MouseEvent>> mouseEventHandler;
         std::unique_ptr<core::EventHandler<input::KeyEvent>> keyEventHandler;

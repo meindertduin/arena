@@ -9,7 +9,7 @@ namespace input {
                [&](const input::MouseEvent &event) { on_mouse_movement(event.mouse_x_offset, event.mouse_y_offset); });
 
         keyEventHandler = core::create_unique_event_handler<input::KeyEvent>(
-               [&](const input::KeyEvent &event) { on_key_event(event.key, event.mods, event.action); });
+               [&](const input::KeyEvent &event) { on_key_event(event.key_combination); });
     }
 
     void InputManager::on_mouse_movement(float mouse_x_offset, float mouse_y_offset) {
@@ -20,9 +20,9 @@ namespace input {
         command.execute(global.game->player);
     }
 
-    void InputManager::on_key_event(int key, int mods_mask, int action) {
-        if (action == input::KEY_PRESS || action == input::KEY_RELEASE) {
-            switch(key) {
+    void InputManager::on_key_event(KeyCombination combi) {
+        if (combi.action == input::KEY_PRESS || combi.action == input::KEY_RELEASE) {
+            switch(combi.key) {
                 case input::KEY_W:
                     // moves_forward = action == input::KEY_PRESS;
                     break;

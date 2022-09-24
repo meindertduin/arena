@@ -26,9 +26,7 @@ namespace input {
 
             KeyEvent event{};
             event.event_type = core::Event::EventType::InputEvent;
-            event.key = key;
-            event.mods = mods;
-            event.action = action;
+            event.key_combination = KeyCombination(key, mods, action);
 
             dispatcher->emit_event(event);
         });
