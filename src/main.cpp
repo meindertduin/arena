@@ -76,6 +76,9 @@ int main () {
         static_render_system->update();
         global.renderer->render_skybox();
 
+        if (global.game->ui_mode)
+            global.game->ui.render();
+
         global.text_renderer->render(std::to_string(frame_time_ms) + " ms", { 10, global.graphic_options->screen_dimensions.y - 150});
         global.renderer->after_render();
         global.window->end_frame();

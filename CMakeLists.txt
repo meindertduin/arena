@@ -47,7 +47,7 @@ set(SOURCES
         src/core/stack_allocator.h
         src/core/list_allocator.cpp
         src/core/list_allocator.h
-        src/core/singly_linked_list.h src/core/program_time.cpp src/core/program_time.h src/graphics/font.h src/graphics/font.cpp src/graphics/geometry.h src/graphics/geometry.cpp src/input/key_bindings.h src/entity/ec_control.h src/entity/movement_system.cpp src/entity/movement_system.h src/input/keybindings.cpp src/ui/ui_command.cpp src/ui/ui_command.h src/ui/ui_node.cpp src/ui/ui_node.h src/ui/ui.cpp src/ui/ui.h)
+        src/core/singly_linked_list.h src/core/program_time.cpp src/core/program_time.h src/graphics/font.h src/graphics/font.cpp src/graphics/geometry.h src/graphics/geometry.cpp src/input/key_bindings.h src/entity/ec_control.h src/entity/movement_system.cpp src/entity/movement_system.h src/input/keybindings.cpp src/ui/ui_command.cpp src/ui/ui_command.h src/ui/ui_node.cpp src/ui/ui_node.h src/ui/ui.cpp src/ui/ui.h src/ui/component.cpp src/ui/component.h)
 
 set(HEADERS include)
 

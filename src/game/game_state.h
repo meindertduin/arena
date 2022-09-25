@@ -5,6 +5,7 @@
 #include "../assets/cache.h"
 
 #include "map.h"
+#include "../ui/ui.h"
 
 namespace game {
     struct GameState {
@@ -14,12 +15,13 @@ namespace game {
         GameState(const GameState&) = delete;
         GameState& operator=(const GameState&) = delete;
 
+        ui::UI ui;
+        bool ui_mode {false};
+
         std::vector<graphics::DirLight> dir_lights;
         std::vector<graphics::PointLight> point_lights;
 
         void init();
-
-        bool ui_mode {false};
 
         assets::Cache cache;
         entity::Camera *camera;

@@ -3,17 +3,19 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <memory>
+#include "component.h"
 
 namespace ui {
     class UINode {
     public:
         int id;
-        int width;
-        int height;
-
         glm::ivec2 pos;
+        std::unique_ptr<UIComponent> component;
+
+        void render();
+        void add_child(UINode &&node);
     private:
-        std::vector<std::unique_ptr<UINode>> children;
-        std::weak_ptr<UINode> parent;
+        std::vector<UINode> children;
+        UINode *parent {nullptr};
     };
 }

@@ -2,10 +2,13 @@
 
 #include "ui_node.h"
 
-class UI {
-public:
-    std::unique_ptr<ui::UINode> root;
+namespace ui {
+    class UI {
+    public:
+        UI();
+        std::unique_ptr<ui::UINode> root;
 
-    void handle_event();
-    void render();
-};
+        void handle_event();
+        void render() const;
+    };
+}
