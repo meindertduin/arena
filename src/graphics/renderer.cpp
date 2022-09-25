@@ -145,7 +145,7 @@ namespace graphics {
         shader.link();
     }
 
-    void UIRenderer::render(const Renderable &renderable, const glm::vec4 &color) {
+    void UIRenderer::render(const Renderable &renderable, glm::vec4 &color) {
         glDisable(GL_DEPTH_TEST);
         shader.use();
         glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,

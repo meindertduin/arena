@@ -7,6 +7,23 @@ namespace ui {
         root = std::make_unique<ButtonComponent>(glm::ivec2{ 100, 100 }, glm::ivec2{ 130, 40 });
     }
 
+    static bool on_mouse_move(UIComponent *component, const UIMouseMoveEvent &event) {
+        auto &component_ref = *component;
+        if (component_ref.pos.x <= event.mouse_pos.x && component_ref.pos.x + component_ref. size.x >= event.mouse_pos.x &&
+            component_ref.pos.y <= event.mouse_pos.y && component_ref.pos.y + component_ref.size.y >= event.mouse_pos.y)
+        {
+            component_ref.handle_hover(event);
+            return true;
+        }
+
+        for (auto &child : component_ref.children) {
+            if (on_mouse_move(&child, event))
+                return true;
+        }
+
+        return false;
+    }
+
     static bool on_click(UIComponent *component, const UIMouseClickEvent &event) {
         auto &component_ref = *component;
         if (component_ref.pos.x <= event.mouse_pos.x && component_ref.pos.x + component_ref. size.x >= event.mouse_pos.x &&
@@ -22,6 +39,11 @@ namespace ui {
         }
 
         return false;
+    }
+
+    void UI::handle_mouse_move_event() {
+        auto mouse_pos = input::get_mouse_position();
+        on_mouse_move(root.get(), UIMouseMoveEvent{ .mouse_pos = mouse_pos });
     }
 
     void UI::handle_mouse_button_event(const input::KeyCombination &combi) {

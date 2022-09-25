@@ -10,8 +10,12 @@ namespace ui {
 
     void ButtonComponent::render() {
         global.ui_renderer->render(border, { 1.0f, 1.0f, 1.0f, 1.0f });
-        global.ui_renderer->render(background, { 1.0f, 0, 0, 1.0f });
+        global.ui_renderer->render(background, background_color);
         global.text_renderer->render("Click me!", { pos.x + 10, pos.y + 10 });
+    }
+
+    void ButtonComponent::handle_hover(const UIMouseMoveEvent &event) {
+        background_color = { 0, 0, 1.0f, 1.0f};
     }
 
     void ButtonComponent::handle_click(const UIMouseClickEvent &event) {

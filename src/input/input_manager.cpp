@@ -16,7 +16,9 @@ namespace input {
     }
 
     void InputManager::on_mouse_movement(float mouse_x_offset, float mouse_y_offset) const {
-        if (!global.game->ui_mode) {
+        if (global.game->ui_mode) {
+            global.game->ui.handle_mouse_move_event();
+        } else {
             entity::RotateCommand command;
             command.degrees_x = mouse_x_offset * settings.mouse_sensitivity;
             command.degrees_y = mouse_y_offset * settings.mouse_sensitivity;

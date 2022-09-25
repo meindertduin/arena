@@ -16,10 +16,10 @@ namespace core {
 
     struct Window {
     public:
-        Window(const WindowOptions &options);
+        explicit Window(const WindowOptions &options);
         ~Window();
 
-        bool close_requested() const;
+        [[nodiscard]] bool close_requested() const;
         void end_frame() const;
         void enable_cursor();
         void disable_cursor();
