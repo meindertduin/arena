@@ -2,6 +2,8 @@
 
 #include "../core/event_dispatcher.h"
 #include "events.h"
+#include "../global.h"
+#include "../graphics/graphic_options.h"
 
 namespace input {
     static float mouse_x;
@@ -31,6 +33,16 @@ namespace input {
             dispatcher->emit_event(event);
         });
 
+        glfwSetMouseButtonCallback(window.window, [](GLFWwindow *window, int button, int action, int mods) {
+            auto dispatcher = core::EventDispatcher<MouseButtonEvent>::instance();
+
+            MouseButtonEvent event{};
+            event.event_type = core::Event::EventType::InputEvent;
+            event.key_combination = KeyCombination(button, mods, action);
+
+            dispatcher->emit_event(event);
+        });
+
         glfwSetCursorPosCallback(window.window,
                 [](GLFWwindow* window, double xpos_in, double ypos_in)
         {
@@ -56,9 +68,8 @@ namespace input {
 
     }
 
-    void get_mouse_position(int &xPos, int &yPos) {
-        xPos = static_cast<int>(mouse_x);
-        yPos = static_cast<int>(mouse_y);
+    glm::ivec2 get_mouse_position() {
+        return { static_cast<int>(mouse_x), global.graphic_options->screen_dimensions.y - static_cast<int>(mouse_y) };
     }
 
     void get_mouse_movement(int &dx, int &dy) {

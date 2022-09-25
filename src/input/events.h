@@ -8,6 +8,10 @@ namespace input {
         KeyCombination key_combination;
     };
 
+    struct MouseButtonEvent : public core::Event {
+        KeyCombination key_combination;
+    };
+
     struct MouseEvent : public core::Event {
         float mouse_x;
         float mouse_y;

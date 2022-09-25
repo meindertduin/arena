@@ -10,15 +10,26 @@ namespace input {
 
         keyEventHandler = core::create_unique_event_handler<input::KeyEvent>(
                [&](const input::KeyEvent &event) { on_key_event(event.key_combination); });
+
+        mouse_button_event_handler = core::create_unique_event_handler<input::MouseButtonEvent>(
+                [&](const input::MouseButtonEvent &event) { on_mouse_button_event(event.key_combination); });
     }
 
-    void InputManager::on_mouse_movement(float mouse_x_offset, float mouse_y_offset) {
+    void InputManager::on_mouse_movement(float mouse_x_offset, float mouse_y_offset) const {
         if (!global.game->ui_mode) {
             entity::RotateCommand command;
             command.degrees_x = mouse_x_offset * settings.mouse_sensitivity;
             command.degrees_y = mouse_y_offset * settings.mouse_sensitivity;
 
             command.execute(global.game->player);
+        }
+    }
+
+    void InputManager::on_mouse_button_event(KeyCombination combi) {
+        if (global.game->ui_mode) {
+            global.game->ui.handle_mouse_button_event(combi);
+        } else {
+            // let the player handle the event
         }
     }
 
@@ -29,7 +40,11 @@ namespace input {
         if (handle_ui_command(combi, maskless_combi))
             return;
 
-        handle_player_command(combi, maskless_combi);
+        if (global.game->ui_mode) {
+            global.game->ui.handle_key_event(combi);
+        } else {
+            handle_player_command(combi, maskless_combi);
+        }
     }
 
     bool InputManager::handle_ui_command(const KeyCombination &combi, const KeyCombination &maskless_combi) {

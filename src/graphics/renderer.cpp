@@ -152,7 +152,7 @@ namespace graphics {
                                           0.0f, (float)global.graphic_options->screen_dimensions.y);
 
         shader.set_property("projection", projection);
-        shader.set_property("color", { 1.0f, 0.0f, 0.0f, 0.5f });
+        shader.set_property("color", color);
         renderable.render();
     }
 

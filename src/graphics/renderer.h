@@ -18,7 +18,7 @@
 namespace graphics {
     struct Renderer {
     public:
-        Renderer(std::shared_ptr<RenderTarget> render_target);
+        explicit Renderer(std::shared_ptr<RenderTarget> render_target);
         
         void before_render();
         void render(const Renderable *mesh, const entity::ECTransform &transform) const;
@@ -54,7 +54,7 @@ namespace graphics {
 
     class UIRenderer {
     public:
-        UIRenderer(std::shared_ptr<RenderTarget> render_target);
+        explicit UIRenderer(std::shared_ptr<RenderTarget> render_target);
         void before_ui_rendering();
         void after_ui_rendering();
         void render(const Renderable &renderable, const glm::vec4 &color);
