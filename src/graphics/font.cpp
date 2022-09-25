@@ -48,7 +48,7 @@ namespace graphics {
             delete glyph.texture;
     }
 
-    Glyph& TrueTypeFont::get_glyph(unsigned char c) {
+    const Glyph& TrueTypeFont::get_glyph(unsigned char c) {
         return this->glyphs[c];
     }
 }

@@ -28,7 +28,7 @@ namespace graphics {
         TrueTypeFont(const TrueTypeFont &other) = delete;
         TrueTypeFont& operator=(const TrueTypeFont &other) = delete;
 
-        Glyph& get_glyph(unsigned char c);
+        const Glyph& get_glyph(unsigned char c);
     private:
         FT_Face face = nullptr;
         std::map<unsigned char, Glyph> glyphs;

@@ -42,6 +42,7 @@ int main () {
     global.renderer = new graphics::Renderer();
     global.terrain_renderer = new graphics::TerrainRenderer();
     global.text_renderer = new graphics::TextRenderer();
+    global.ui_renderer = new graphics::UIRenderer();
 
     input::initialize_input(*global.window);
 

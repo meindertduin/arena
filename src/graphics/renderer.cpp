@@ -18,7 +18,7 @@ namespace graphics {
         set_ubo_data();
     }
 
-    void Renderer::render(const Mesh *mesh, const entity::ECTransform &transform) const {
+    void Renderer::render(const Renderable *mesh, const entity::ECTransform &transform) const {
         auto model_4x4 = transform.get_transform_4x4();
 
         shader.use();
@@ -110,16 +110,6 @@ namespace graphics {
 
     TextRenderer::TextRenderer() {
         shader.link();
-
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
-        glBindVertexArray(VAO);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, nullptr, GL_DYNAMIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
     }
 
     void TextRenderer::render(const std::string& text, const glm::vec2 &pos) {
@@ -147,5 +137,18 @@ namespace graphics {
             // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
             x += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
         }
+    }
+
+    UIRenderer::UIRenderer() {
+        shader.link();
+    }
+
+    void UIRenderer::render(const Renderable &renderable) {
+        shader.use();
+        glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+
+        shader.set_property("projection", projection);
+        shader.set_property("color", { 1.0f, 0.0f, 0.0f, 1.0f });
+        renderable.render();
     }
 }

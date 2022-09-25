@@ -16,14 +16,12 @@
 #include "../entity/ec_transform.h"
 
 namespace graphics {
-    struct Mesh;
-
     struct Renderer {
     public:
         Renderer();
         
         void before_render();
-        void render(const Mesh *mesh, const entity::ECTransform &transform) const;
+        void render(const Renderable *mesh, const entity::ECTransform &transform) const;
         void render_skybox();
         void after_render();
 
@@ -49,10 +47,16 @@ namespace graphics {
         TextRenderer();
         void render(const std::string& text, const glm::vec2 &pos);
     private:
-        uint32_t VAO;
-        uint32_t VBO;
         TrueTypeFont font { "assets/alagard.ttf", 64 };
         ShaderProgram shader { "shaders/text.vert", "shaders/text.frag" };
         GpuPlane plane;
+    };
+
+    class UIRenderer {
+    public:
+        UIRenderer();
+        void render(const Renderable &renderable);
+    private:
+        ShaderProgram shader { "shaders/ui.vert", "shaders/ui.frag" };
     };
 }

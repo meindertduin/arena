@@ -18,6 +18,7 @@ namespace graphics {
     struct Renderer;
     struct TerrainRenderer;
     class TextRenderer;
+    class UIRenderer;
     struct Texture;
     struct Material;
     struct GraphicOptions;
@@ -37,6 +38,7 @@ struct Global {
     graphics::Renderer *renderer;
     graphics::TerrainRenderer *terrain_renderer;
     graphics::TextRenderer *text_renderer;
+    graphics::UIRenderer *ui_renderer;
 
     graphics::GraphicOptions *graphic_options;
     std::shared_ptr<graphics::Texture> texture;

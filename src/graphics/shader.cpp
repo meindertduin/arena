@@ -91,6 +91,11 @@ namespace graphics {
         glUniform3f(uniform_lock, v.x, v.y, v.z);
     }
 
+    void ShaderProgram::set_property(const std::string &property_name, glm::vec4 &&v) const {
+        int uniform_lock = glGetUniformLocation(program, property_name.c_str());
+        glUniform4f(uniform_lock, v.x, v.y, v.z, v.w);
+    }
+
     void ShaderProgram::set_property(const std::string& property_name, glm::mat4 &&m) const {
         int uniform_lock = glGetUniformLocation(program, property_name.c_str());
         glUniformMatrix4fv(uniform_lock, 1, GL_FALSE, glm::value_ptr(m));
@@ -99,6 +104,11 @@ namespace graphics {
     void ShaderProgram::set_property(const std::string& property_name, glm::vec3 &v) const {
         int uniform_lock = glGetUniformLocation(program, property_name.c_str());
         glUniform3f(uniform_lock, v.x, v.y, v.z);
+    }
+
+    void ShaderProgram::set_property(const std::string& property_name, glm::vec4 &v) const {
+        int uniform_lock = glGetUniformLocation(program, property_name.c_str());
+        glUniform4f(uniform_lock, v.x, v.y, v.z, v.w);
     }
 
     void ShaderProgram::set_property(const std::string& property_name, glm::mat4 &m) const {
