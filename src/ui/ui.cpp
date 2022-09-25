@@ -4,15 +4,30 @@
 
 namespace ui {
     UI::UI() {
-        auto node = new UINode{};
-        node->component = std::make_unique<ButtonComponent>(glm::ivec2{ 100, 100 }, glm::ivec2{ 130, 40 });
-        root = std::unique_ptr<UINode>(node);
+        root = std::make_unique<ButtonComponent>(glm::ivec2{ 100, 100 }, glm::ivec2{ 130, 40 });
+    }
+
+    static bool on_click(UIComponent *component, const UIMouseClickEvent &event) {
+        auto &component_ref = *component;
+        if (component_ref.pos.x <= event.mouse_pos.x && component_ref.pos.x + component_ref. size.x >= event.mouse_pos.x &&
+            component_ref.pos.y <= event.mouse_pos.y && component_ref.pos.y + component_ref.size.y >= event.mouse_pos.y)
+        {
+            component_ref.handle_click(event);
+            return true;
+        }
+
+        for (auto &child : component_ref.children) {
+            if (on_click(&child, event))
+                return true;
+        }
+
+        return false;
     }
 
     void UI::handle_mouse_button_event(const input::KeyCombination &combi) {
-        if (combi.key == input::MOUSE_1) {
+        if (combi.action == input::KEY_PRESS) {
             auto mouse_pos = input::get_mouse_position();
-            root->on_click(UIMouseClickEvent{ .button = combi.key, .mouse_pos = mouse_pos });
+            on_click(root.get(), UIMouseClickEvent{ .button = combi.key, .mouse_pos = mouse_pos });
         }
     }
 

@@ -10,10 +10,15 @@ namespace ui {
     public:
         glm::ivec2 pos;
         glm::ivec2 size;
+        std::vector<UIComponent> children;
+
         UIComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
 
         virtual void render() = 0;
         virtual void handle_click(const UIMouseClickEvent &event) { };
+    protected:
+        friend class UI;
+        UIComponent *parent {nullptr};
     };
 
     class ButtonComponent : public UIComponent {
