@@ -18,7 +18,7 @@
 namespace graphics {
     struct Renderer {
     public:
-        Renderer();
+        Renderer(std::shared_ptr<RenderTarget> render_target);
         
         void before_render();
         void render(const Renderable *mesh, const entity::ECTransform &transform) const;
@@ -28,7 +28,7 @@ namespace graphics {
         void set_ubo_data();
         ShaderProgram shader { "shaders/light_shader.vert", "shaders/light_shader.frag" };
     private:
-        std::unique_ptr<RenderTarget> render_target;
+        std::shared_ptr<RenderTarget> render_target;
         SharedDataBuffer ubo_matrices { 0, 2 * sizeof(glm::mat4) };
         SharedDataBuffer ubo_lights { 1, 16 * 2 + (DIR_LIGHT_STD140_SIZE * MAX_DIR_LIGHTS) + (POINT_LIGHT_STD140_SIZE * MAX_POINT_LIGHTS) }; // std140 alignment size: 64 = dirlight, int = 16, 112 = pointLight
         Skybox skybox;
@@ -54,9 +54,12 @@ namespace graphics {
 
     class UIRenderer {
     public:
-        UIRenderer();
+        UIRenderer(std::shared_ptr<RenderTarget> render_target);
+        void before_ui_rendering();
+        void after_ui_rendering();
         void render(const Renderable &renderable);
     private:
+        std::shared_ptr<RenderTarget> render_target;
         ShaderProgram shader { "shaders/ui.vert", "shaders/ui.frag" };
     };
 }

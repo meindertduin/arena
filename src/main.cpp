@@ -39,10 +39,11 @@ int main () {
     graphics::font_init();
 
     global.window = new core::Window(window_options);
-    global.renderer = new graphics::Renderer();
+    auto render_target = std::make_shared<graphics::RenderTarget>();
+    global.renderer = new graphics::Renderer(render_target);
     global.terrain_renderer = new graphics::TerrainRenderer();
     global.text_renderer = new graphics::TextRenderer();
-    global.ui_renderer = new graphics::UIRenderer();
+    global.ui_renderer = new graphics::UIRenderer(render_target);
 
     input::initialize_input(*global.window);
 
@@ -77,10 +78,11 @@ int main () {
         static_render_system->update();
         global.renderer->render_skybox();
 
+        // TODO move frametime counter to a ui node
+        // global.text_renderer->render(std::to_string(frame_time_ms) + " ms", { 10, global.graphic_options->screen_dimensions.y - 150});
         if (global.game->ui_mode)
             global.game->ui.render();
 
-        global.text_renderer->render(std::to_string(frame_time_ms) + " ms", { 10, global.graphic_options->screen_dimensions.y - 150});
         global.renderer->after_render();
         global.window->end_frame();
 

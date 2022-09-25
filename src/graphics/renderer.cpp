@@ -1,14 +1,15 @@
 #include "renderer.h"
 
+#include <utility>
+
 #include "../global.h"
 #include "material.h"
 #include "../game/game_state.h"
 #include "glad/glad.h"
 
 namespace graphics {
-    Renderer::Renderer() {
+    Renderer::Renderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
         shader.link();
-        render_target = std::make_unique<RenderTarget>();
     }
 
     void Renderer::before_render() {
@@ -117,7 +118,8 @@ namespace graphics {
         auto x = pos.x;
 
         shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
+                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
 
         shader.set_property("projection", projection);
         shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
@@ -139,16 +141,26 @@ namespace graphics {
         }
     }
 
-    UIRenderer::UIRenderer() {
+    UIRenderer::UIRenderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
         shader.link();
     }
 
     void UIRenderer::render(const Renderable &renderable) {
+        glDisable(GL_DEPTH_TEST);
         shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
+                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
 
         shader.set_property("projection", projection);
-        shader.set_property("color", { 1.0f, 0.0f, 0.0f, 1.0f });
+        shader.set_property("color", { 1.0f, 0.0f, 0.0f, 0.5f });
         renderable.render();
+    }
+
+    void UIRenderer::before_ui_rendering() {
+        render_target->disable_depth_test();
+    }
+
+    void UIRenderer::after_ui_rendering() {
+        render_target->enable_depth_test();
     }
 }

@@ -1,4 +1,6 @@
 #include "ui.h"
+#include "../global.h"
+#include "../graphics/renderer.h"
 
 namespace ui {
     UI::UI() {
@@ -12,6 +14,8 @@ namespace ui {
     }
 
     void UI::render() const {
+        global.ui_renderer->before_ui_rendering();
         root->render();
+        global.ui_renderer->after_ui_rendering();
     }
 }

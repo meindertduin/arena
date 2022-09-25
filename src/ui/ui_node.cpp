@@ -1,12 +1,10 @@
-//
-// Created by meindert on 9/25/22.
-//
-
 #include "ui_node.h"
 
 namespace ui {
     void UINode::render() {
-        component->render();
+        if (component != nullptr)
+            component->render();
+
         for (auto &child : children)
             child.render();
     }
