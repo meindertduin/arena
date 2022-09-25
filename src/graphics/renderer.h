@@ -57,7 +57,8 @@ namespace graphics {
         UIRenderer(std::shared_ptr<RenderTarget> render_target);
         void before_ui_rendering();
         void after_ui_rendering();
-        void render(const Renderable &renderable);
+        void render(const Renderable &renderable, const glm::vec4 &color);
+        void render(const Renderable &renderable, glm::vec4 &&color);
     private:
         std::shared_ptr<RenderTarget> render_target;
         ShaderProgram shader { "shaders/ui.vert", "shaders/ui.frag" };

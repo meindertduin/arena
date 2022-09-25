@@ -132,7 +132,7 @@ namespace graphics {
             float w = static_cast<float>(glyph.size.x) * scale;
             float h = static_cast<float>(glyph.size.y) * scale;
 
-            plane.set_size_and_position({w, h}, {xpos, ypos });
+            plane.set_size_and_position({xpos, ypos }, {w, h});
             glyph.texture->bind(0);
             plane.render();
 
@@ -145,7 +145,7 @@ namespace graphics {
         shader.link();
     }
 
-    void UIRenderer::render(const Renderable &renderable) {
+    void UIRenderer::render(const Renderable &renderable, const glm::vec4 &color) {
         glDisable(GL_DEPTH_TEST);
         shader.use();
         glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
@@ -153,6 +153,17 @@ namespace graphics {
 
         shader.set_property("projection", projection);
         shader.set_property("color", { 1.0f, 0.0f, 0.0f, 0.5f });
+        renderable.render();
+    }
+
+    void UIRenderer::render(const Renderable &renderable, glm::vec4 &&color) {
+        glDisable(GL_DEPTH_TEST);
+        shader.use();
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
+                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
+
+        shader.set_property("projection", projection);
+        shader.set_property("color", color);
         renderable.render();
     }
 

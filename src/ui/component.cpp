@@ -3,12 +3,14 @@
 #include "../graphics/renderer.h"
 
 namespace ui {
-    ButtonComponent::ButtonComponent() {
-        background.set_size_and_position({ 100, 30 }, { 0, 500 });
+    ButtonComponent::ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} {
+        border.set_size_and_position({ pos.x, pos.y}, { size.x, size.y });
+        background.set_size_and_position({ pos.x + 2, pos.y + 2 }, { size.x - 4, size.y - 4 });
     }
 
     void ButtonComponent::render() {
-        global.ui_renderer->render(background);
-        global.text_renderer->render("Click me!", { 0, 500 });
+        global.ui_renderer->render(border, { 1.0f, 1.0f, 1.0f, 1.0f });
+        global.ui_renderer->render(background, { 1.0f, 0, 0, 1.0f });
+        global.text_renderer->render("Click me!", { pos.x + 10, pos.y + 10 });
     }
 }

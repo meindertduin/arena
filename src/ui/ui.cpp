@@ -5,7 +5,7 @@
 namespace ui {
     UI::UI() {
         auto node = new UINode{};
-        node->component = std::make_unique<ButtonComponent>();
+        node->component = std::make_unique<ButtonComponent>(glm::ivec2{ 100, 100 }, glm::ivec2{ 130, 40 });
         root = std::unique_ptr<UINode>(node);
     }
 

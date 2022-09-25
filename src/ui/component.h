@@ -14,11 +14,14 @@ namespace ui {
 
     class ButtonComponent : public UIComponent {
     public:
-        ButtonComponent();
-
+        explicit ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
         void render() override;
     private:
         std::string text;
+        glm::ivec2 pos;
+        glm::ivec2 size;
+
         graphics::GpuPlane background;
+        graphics::GpuPlane border;
     };
 }
