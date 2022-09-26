@@ -13,6 +13,7 @@ namespace ui {
 
     void PlaneComponent::render() {
         global.ui_renderer->render(background, background_color);
+        UIComponent::render();
     }
 
     TextComponent::TextComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : UIComponent(pos, size) { }

@@ -40,6 +40,7 @@ namespace ui {
         explicit PlaneComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
         void render() override;
     private:
+        friend class ComponentBuilder<PlaneComponent>;
         graphics::GpuPlane background;
         glm::vec4 background_color { 1.0f, 0, 0, 1.0f };
     };
