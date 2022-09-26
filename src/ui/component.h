@@ -7,12 +7,18 @@ namespace ui {
     struct UIMouseClickEvent;
     struct UIMouseMoveEvent;
 
+    template<typename T>
+    class ComponentBuilder;
+
     class UIComponent {
     public:
         glm::ivec2 pos;
         glm::ivec2 size;
-        std::vector<std::unique_ptr<UIComponent>> children;
         bool is_hovered { false };
+
+        // TODO: Encapsulate and make builder friend
+        std::vector<std::unique_ptr<UIComponent>> children;
+        UIComponent *parent {nullptr};
 
         UIComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
 
@@ -22,9 +28,6 @@ namespace ui {
         }
 
         virtual void handle_click(const UIMouseClickEvent &event) { };
-    protected:
-        friend class UI;
-        UIComponent *parent {nullptr};
     };
 
     class RootComponent : public UIComponent {
@@ -52,8 +55,13 @@ namespace ui {
     class ButtonComponent : public UIComponent {
     public:
         explicit ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
+        ~ButtonComponent() {
+            printf("destructor called\n");
+        }
         void render() override;
         void handle_click(const UIMouseClickEvent &event) override;
+
+        friend class ComponentBuilder<ButtonComponent>;
     private:
         std::string text;
 

@@ -132,7 +132,7 @@ namespace graphics {
             float w = static_cast<float>(glyph.size.x) * scale;
             float h = static_cast<float>(glyph.size.y) * scale;
 
-            plane.set_size_and_position({xpos, ypos }, {w, h});
+            plane.set_pos_and_size({xpos, ypos}, {w, h});
             glyph.texture->bind(0);
             plane.render();
 

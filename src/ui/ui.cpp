@@ -8,9 +8,10 @@ namespace ui {
         ComponentBuilder<RootComponent> builder;
         root = builder.with_pos(glm::ivec2 { 0, 0 })
                 .with_size(glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
+                .with_child<ButtonComponent>([](ComponentBuilder<ButtonComponent> &builder){
+                    builder.with_pos_and_size(glm::ivec2{ 100, 100 }, glm::ivec2{ 130, 40 });
+                })
                 .build();
-
-        // root = std::make_unique<RootComponent>(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y });
     }
 
     void UI::handle_mouse_move_event() {

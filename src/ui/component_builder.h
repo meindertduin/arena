@@ -4,6 +4,7 @@
 #include <memory>
 #include <functional>
 #include <glm/glm.hpp>
+#include "component.h"
 
 namespace ui {
     template<typename T>
@@ -23,13 +24,19 @@ namespace ui {
             return *this;
         }
 
+        ComponentBuilder<T>& with_pos_and_size(const glm::ivec2 &pos, const glm::ivec2 &size) {
+            component->pos = pos;
+            component->size = size;
+            return *this;
+        }
+
         template<typename C>
-        ComponentBuilder& with_child(const std::function<void(ComponentBuilder<C>&)> &builder_setup_callback) {
+        ComponentBuilder& with_child(std::function<void(ComponentBuilder<C>&)> &&builder_setup_callback) {
             auto builder = ComponentBuilder<C>();
             builder_setup_callback(builder);
             auto child_component = builder.build();
             child_component->parent = component.get();
-            component.children.push_back(std::move(child_component));
+            component->children.push_back(std::move(child_component));
 
             return *this;
         }
