@@ -3,6 +3,15 @@
 #include "../graphics/renderer.h"
 
 namespace ui {
+    RootComponent::RootComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : UIComponent(pos, size) {
+        children.push_back(std::make_unique<ButtonComponent>(glm::ivec2{ 100, 100 }, glm::ivec2{ 130, 40 }));
+    }
+
+    void RootComponent::render() {
+        for (auto &child : children)
+            child->render();
+    }
+
     ButtonComponent::ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : UIComponent(pos, size) {
         border.set_size_and_position({ pos.x, pos.y}, { size.x, size.y });
         background.set_size_and_position({ pos.x + 2, pos.y + 2 }, { size.x - 4, size.y - 4 });
@@ -10,12 +19,17 @@ namespace ui {
 
     void ButtonComponent::render() {
         global.ui_renderer->render(border, { 1.0f, 1.0f, 1.0f, 1.0f });
-        global.ui_renderer->render(background, background_color);
-        global.text_renderer->render("Click me!", { pos.x + 10, pos.y + 10 });
-    }
 
-    void ButtonComponent::handle_hover(const UIMouseMoveEvent &event) {
-        background_color = { 0, 0, 1.0f, 1.0f};
+        if (is_hovered) {
+            global.ui_renderer->render(background, { 0, 0, 1.0f, 1.0f });
+        } else {
+            global.ui_renderer->render(background, background_color);
+        }
+
+        global.text_renderer->render("Click me!", { pos.x + 10, pos.y + 10 });
+
+        for (auto &child : children)
+            child->render();
     }
 
     void ButtonComponent::handle_click(const UIMouseClickEvent &event) {

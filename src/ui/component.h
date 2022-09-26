@@ -11,27 +11,31 @@ namespace ui {
     public:
         glm::ivec2 pos;
         glm::ivec2 size;
-        std::vector<UIComponent> children;
+        std::vector<std::unique_ptr<UIComponent>> children;
+        bool is_hovered { false };
 
         UIComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
 
         virtual void render() = 0;
-        virtual void handle_hover(const UIMouseMoveEvent &event) { };
         virtual void handle_click(const UIMouseClickEvent &event) { };
     protected:
         friend class UI;
         UIComponent *parent {nullptr};
     };
 
+    class RootComponent : public UIComponent {
+    public:
+        explicit RootComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
+        void render() override;
+    };
+
     class ButtonComponent : public UIComponent {
     public:
         explicit ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
         void render() override;
-        void handle_hover(const UIMouseMoveEvent &event) override;
         void handle_click(const UIMouseClickEvent &event) override;
     private:
         std::string text;
-        bool is_hovering;
 
         graphics::GpuPlane background;
         graphics::GpuPlane border;
