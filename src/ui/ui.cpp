@@ -1,10 +1,16 @@
 #include "ui.h"
 #include "../global.h"
 #include "../graphics/renderer.h"
+#include "component_builder.h"
 
 namespace ui {
     UI::UI() {
-        root = std::make_unique<RootComponent>(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y });
+        ComponentBuilder<RootComponent> builder;
+        root = builder.with_pos(glm::ivec2 { 0, 0 })
+                .with_size(glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
+                .build();
+
+        // root = std::make_unique<RootComponent>(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y });
     }
 
     void UI::handle_mouse_move_event() {
