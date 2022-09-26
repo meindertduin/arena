@@ -7,9 +7,19 @@ namespace ui {
         children.push_back(std::make_unique<ButtonComponent>(glm::ivec2{ 100, 100 }, glm::ivec2{ 130, 40 }));
     }
 
-    void RootComponent::render() {
-        for (auto &child : children)
-            child->render();
+    PlaneComponent::PlaneComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : UIComponent(pos, size) {
+        background.set_size_and_position({ pos.x + 2, pos.y + 2 }, { size.x - 4, size.y - 4 });
+    }
+
+    void PlaneComponent::render() {
+        global.ui_renderer->render(background, background_color);
+    }
+
+    TextComponent::TextComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : UIComponent(pos, size) { }
+
+    void TextComponent::render() {
+        global.text_renderer->render("Rendering text...", { pos.x + 10, pos.y + 10 });
+        UIComponent::render();
     }
 
     ButtonComponent::ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : UIComponent(pos, size) {
@@ -28,8 +38,7 @@ namespace ui {
 
         global.text_renderer->render("Click me!", { pos.x + 10, pos.y + 10 });
 
-        for (auto &child : children)
-            child->render();
+        UIComponent::render();
     }
 
     void ButtonComponent::handle_click(const UIMouseClickEvent &event) {
