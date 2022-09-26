@@ -6,10 +6,10 @@
 namespace ui {
     UI::UI() {
         ComponentBuilder<RootComponent> builder;
-        root = builder.with_pos(glm::ivec2 { 0, 0 })
-                .with_size(glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
-                .with_child<ButtonComponent>([](ComponentBuilder<ButtonComponent> &builder){
-                    builder.with_pos_and_size(glm::ivec2{ 100, 100 }, glm::ivec2{ 130, 40 });
+        root = builder
+                .with_pos_and_size(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
+                .with_child<ButtonComponent>([](ComponentBuilder<ButtonComponent> &builder) {
+                    builder.with_rel_pos_and_size(glm::ivec2{ 10, 10 }, glm::ivec2{ 130, 40 });
                 })
                 .build();
     }

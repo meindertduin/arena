@@ -5,6 +5,8 @@
 #include <functional>
 #include <glm/glm.hpp>
 #include "component.h"
+#include "../global.h"
+#include "../graphics/graphic_options.h"
 
 namespace ui {
     template<typename T>
@@ -14,20 +16,20 @@ namespace ui {
             component = std::make_unique<T>(glm::ivec2 { }, glm::ivec2 { });
         }
 
-        ComponentBuilder<T>& with_pos(const glm::ivec2 &pos) {
-            component->pos = pos;
-            return *this;
-        }
-
-        ComponentBuilder<T>& with_size(const glm::ivec2 &size) {
-            component->size = size;
-            return *this;
-        }
-
         ComponentBuilder<T>& with_pos_and_size(const glm::ivec2 &pos, const glm::ivec2 &size) {
             component->pos = pos;
             component->size = size;
+            component->pos.y = global.graphic_options->screen_dimensions.y - pos.y - size.y;
             return *this;
+        }
+
+        ComponentBuilder<T>& with_rel_pos_and_size(const glm::ivec2 &pos, const glm::ivec2 &size) {
+            if (component->parent != nullptr) {
+                glm::ivec2 rel_pos = { pos.x + component->parent->pos.x, component->parent->pos.y - pos.y };
+                return with_pos_and_size(rel_pos, size);
+            } else {
+                return with_pos_and_size(pos, size);
+            }
         }
 
         template<typename C>

@@ -60,9 +60,9 @@ namespace ui {
         }
         void render() override;
         void handle_click(const UIMouseClickEvent &event) override;
-
-        friend class ComponentBuilder<ButtonComponent>;
     private:
+        friend class ComponentBuilder<ButtonComponent>;
+
         std::string text;
 
         graphics::GpuPlane background;
