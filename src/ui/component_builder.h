@@ -17,11 +17,7 @@ namespace ui {
         }
 
         ComponentBuilder<T>& with_pos_and_size(const glm::ivec2 &pos, const glm::ivec2 &size) {
-            component->pos = pos;
-            component->gl_pos = pos;
-            component->gl_pos.y = global.graphic_options->screen_dimensions.y - pos.y - size.y;
-            component->size = size;
-
+            set_component_pos_and_size(pos, size);
             return *this;
         }
 
@@ -60,5 +56,12 @@ namespace ui {
         }
     private:
         std::unique_ptr<T> component;
+
+        void set_component_pos_and_size(const glm::ivec2 &pos, const glm::ivec2 &size) {
+            component->pos = pos;
+            component->gl_pos = pos;
+            component->gl_pos.y = global.graphic_options->screen_dimensions.y - pos.y - size.y;
+            component->size = size;
+        }
     };
 }
