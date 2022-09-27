@@ -30,8 +30,9 @@ namespace ui {
             }
         }
 
-        ComponentBuilder<T>& with_background_color(const glm::vec4 &color) {
+        ComponentBuilder<T>& with_background(const glm::vec4 &color) {
             component->background_color = color;
+            component->background.set_pos_and_size({component->gl_pos.x, component->gl_pos.y}, {component->size.x, component->size.y});
             return *this;
         }
 
@@ -48,6 +49,14 @@ namespace ui {
             auto child_component = builder.build();
             component->children.push_back(std::move(child_component));
 
+            return *this;
+        }
+
+        ComponentBuilder<T> &with_border(int pixels, glm::vec4 &&color);
+
+        template<typename C>
+        ComponentBuilder<T>& with_text(C &&text) {
+            component->text = std::forward<std::string>(text);
             return *this;
         }
 

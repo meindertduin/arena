@@ -12,6 +12,7 @@ namespace ui {
     }
 
     void PlaneComponent::render() {
+        global.ui_renderer->render(border, border_color);
         global.ui_renderer->render(background, background_color);
         UIComponent::render();
     }
@@ -19,7 +20,7 @@ namespace ui {
     TextComponent::TextComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : UIComponent(pos, size) { }
 
     void TextComponent::render() {
-        global.text_renderer->render("Rendering text...", { pos.x + 10, pos.y + 10 });
+        global.text_renderer->render(text, { pos.x + 10, pos.y + 10 });
         UIComponent::render();
     }
 
@@ -29,7 +30,7 @@ namespace ui {
     }
 
     void ButtonComponent::render() {
-        global.ui_renderer->render(border, { 1.0f, 1.0f, 1.0f, 1.0f });
+        global.ui_renderer->render(border, border_color);
 
         if (is_hovered) {
             global.ui_renderer->render(background, { 0, 0, 1.0f, 1.0f });
@@ -37,7 +38,7 @@ namespace ui {
             global.ui_renderer->render(background, background_color);
         }
 
-        global.text_renderer->render("Click me!", { gl_pos.x + 10, gl_pos.y + 10 });
+        global.text_renderer->render(text, { gl_pos.x + 10, gl_pos.y + 10 });
 
         UIComponent::render();
     }
