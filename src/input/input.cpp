@@ -69,7 +69,7 @@ namespace input {
     }
 
     glm::ivec2 get_mouse_position() {
-        return { static_cast<int>(mouse_x), global.graphic_options->screen_dimensions.y - static_cast<int>(mouse_y) };
+        return { static_cast<int>(mouse_x), static_cast<int>(mouse_y) };
     }
 
     void get_mouse_movement(int &dx, int &dy) {

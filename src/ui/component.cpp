@@ -37,7 +37,7 @@ namespace ui {
             global.ui_renderer->render(background, background_color);
         }
 
-        global.text_renderer->render("Click me!", { pos.x + 10, pos.y + 10 });
+        global.text_renderer->render("Click me!", { gl_pos.x + 10, gl_pos.y + 10 });
 
         UIComponent::render();
     }

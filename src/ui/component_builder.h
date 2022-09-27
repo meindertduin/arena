@@ -18,15 +18,16 @@ namespace ui {
 
         ComponentBuilder<T>& with_pos_and_size(const glm::ivec2 &pos, const glm::ivec2 &size) {
             component->pos = pos;
+            component->gl_pos = pos;
+            component->gl_pos.y = global.graphic_options->screen_dimensions.y - pos.y - size.y;
             component->size = size;
-            component->pos.y = global.graphic_options->screen_dimensions.y - pos.y - size.y;
+
             return *this;
         }
 
         ComponentBuilder<T>& with_rel_pos_and_size(const glm::ivec2 &pos, const glm::ivec2 &size) {
             if (component->parent != nullptr) {
-                auto left_top_conv_pos = global.graphic_options->screen_dimensions.y - (component->parent->pos.y + component->parent->size.y);
-                glm::ivec2 rel_pos = { pos.x + component->parent->pos.x, left_top_conv_pos + pos.y };
+                glm::ivec2 rel_pos = { pos.x + component->parent->pos.x, component->parent->pos.y + pos.y };
                 return with_pos_and_size(rel_pos, size);
             } else {
                 return with_pos_and_size(pos, size);

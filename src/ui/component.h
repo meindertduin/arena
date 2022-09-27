@@ -13,6 +13,8 @@ namespace ui {
     class UIComponent {
     public:
         glm::ivec2 pos;
+        glm::ivec2 gl_pos;
+
         glm::ivec2 size;
         bool is_hovered { false };
 
