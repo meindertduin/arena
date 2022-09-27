@@ -45,9 +45,11 @@ namespace graphics {
     class TextRenderer {
     public:
         TextRenderer();
-        void render(const std::string& text, const glm::vec2 &pos);
+        void render(const std::string& text, const glm::vec2 &pos, int text_size);
     private:
-        TrueTypeFont font { "assets/alagard.ttf", 64 };
+        static constexpr int FontRenderSize = 64;
+
+        TrueTypeFont font { "assets/alagard.ttf", FontRenderSize };
         ShaderProgram shader { "shaders/text.vert", "shaders/text.frag" };
         GpuPlane plane;
     };

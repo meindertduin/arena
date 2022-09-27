@@ -113,8 +113,8 @@ namespace graphics {
         shader.link();
     }
 
-    void TextRenderer::render(const std::string& text, const glm::vec2 &pos) {
-        float scale = 0.40f;
+    void TextRenderer::render(const std::string& text, const glm::vec2 &pos, int text_size) {
+        float scale = static_cast<float>(text_size) / static_cast<float>(FontRenderSize);
         auto x = pos.x;
 
         shader.use();

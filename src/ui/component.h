@@ -56,6 +56,9 @@ namespace ui {
         explicit TextComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
         void render() override;
     private:
+        friend class ComponentBuilder<TextComponent>;
+
+        int text_size = 12;
         std::string text;
     };
 

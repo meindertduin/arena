@@ -21,6 +21,13 @@ namespace ui {
     }
 
     template<>
+    ComponentBuilder<TextComponent>& ComponentBuilder<TextComponent>::with_pos_and_size(const glm::ivec2 &pos, const glm::ivec2 &size) {
+        set_component_pos_and_size(pos, size);
+        component->text_size = size.y;
+        return *this;
+    }
+
+    template<>
     ComponentBuilder<ButtonComponent>& ComponentBuilder<ButtonComponent>::with_border(int pixels, glm::vec4 &&color) {
         component->border_color = color;
         component->border.set_pos_and_size(component->gl_pos, component->size);
