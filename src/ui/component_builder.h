@@ -54,8 +54,8 @@ namespace ui {
 
         ComponentBuilder<T> &with_border(int pixels, glm::vec4 &&color);
 
-        template<typename C>
-        ComponentBuilder<T>& with_text(C &&text) {
+        ComponentBuilder<T>& with_text(std::string &&text, int size) {
+            component->text_size = size;
             component->text = std::forward<std::string>(text);
             return *this;
         }

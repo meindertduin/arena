@@ -74,6 +74,7 @@ namespace ui {
         friend class ComponentBuilder<ButtonComponent>;
 
         std::string text;
+        int text_size = 12;
 
         graphics::GpuPlane background;
         graphics::GpuPlane border;

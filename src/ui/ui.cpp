@@ -14,11 +14,11 @@ namespace ui {
                             .with_border(2, { 1.0f, 1.0f, 1.0, 1.0f})
                             .with_child<TextComponent>([](ComponentBuilder<TextComponent> &builder) {
                                 builder.with_rel_pos_and_size({ 0, 0}, { 100, 14 })
-                                    .with_text("Wow this is cool!");
+                                    .with_text("Wow this is cool!", 14);
                             })
                             .with_child<ButtonComponent>([](ComponentBuilder<ButtonComponent> &builder) {
                                 builder.with_rel_pos_and_size(glm::ivec2{ 10, 100 }, glm::ivec2{ 130, 40 })
-                                    .with_text("Hello!")
+                                    .with_text("Hello!", 14)
                                     .with_border(2, { 1.0f, 1.0f, 1.0f, 1.0f });
                             });
                 })

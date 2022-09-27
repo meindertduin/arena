@@ -20,7 +20,7 @@ namespace ui {
     TextComponent::TextComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : UIComponent(pos, size) { }
 
     void TextComponent::render() {
-        global.text_renderer->render(text, { gl_pos.x, gl_pos.y }, size.y);
+        global.text_renderer->render(text, { gl_pos.x, gl_pos.y }, text_size);
         UIComponent::render();
     }
 
@@ -38,7 +38,7 @@ namespace ui {
             global.ui_renderer->render(background, background_color);
         }
 
-        global.text_renderer->render(text, { gl_pos.x + 10, gl_pos.y + 10 }, size.y);
+        global.text_renderer->render(text, { gl_pos.x + 10, gl_pos.y + 10 }, text_size);
 
         UIComponent::render();
     }
