@@ -54,7 +54,7 @@ namespace ui {
         graphics::GpuPlane background;
         graphics::GpuPlane border;
 
-        glm::vec4 background_color { 1.0f, 0, 0, 1.0f };
+        glm::vec4 *background_color;
         glm::vec4 border_color { 1.0f, 1.0f, 1.0f, 1.0f };
     };
 
@@ -76,5 +76,8 @@ namespace ui {
             printf("destructor called\n");
         }
         void render() override;
+    private:
+        glm::vec4 background_color;
+        glm::vec4 border_color;
     };
 }

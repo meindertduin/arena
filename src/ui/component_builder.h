@@ -35,7 +35,7 @@ namespace ui {
             }
         }
 
-        ComponentBuilder<T>& with_background(const glm::vec4 &color) {
+        ComponentBuilder<T>& with_background(glm::vec4 *color) {
             component->background_color = color;
             component->background.set_pos_and_size({component->gl_pos.x, component->gl_pos.y}, {component->size.x, component->size.y});
             return *this;

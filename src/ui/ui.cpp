@@ -10,7 +10,8 @@ namespace ui {
                 .with_pos_and_size(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
                 .with_child<PlaneComponent>([](ComponentBuilder<PlaneComponent> &builder) {
                     builder.with_rel_pos_and_size(glm::ivec2{20, 20}, glm::ivec2{220, 200})
-                            .with_background({0.3f, 0.3f, 0.3f, 1.0f})
+                            // TODO remove this temporary allocation
+                            .with_background(new glm::vec4{0.3f, 0.3f, 0.3f, 1.0f})
                             .with_border(2, { 1.0f, 1.0f, 1.0, 1.0f})
                             .with_child<TextComponent>([](ComponentBuilder<TextComponent> &builder) {
                                 builder.with_rel_pos_and_size({ 0, 0}, { 100, 14 })
