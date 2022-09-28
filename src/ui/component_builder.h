@@ -81,9 +81,9 @@ namespace ui {
 
         ComponentBuilder<T> &with_border(int pixels, glm::vec4 &&color);
 
-        ComponentBuilder<T>& with_text(std::string &&text, int size) {
+        ComponentBuilder<T>& with_text(std::string *text, int size) {
             component->text_size = size;
-            component->text = std::forward<std::string>(text);
+            component->text = text;
             return *this;
         }
 
@@ -92,7 +92,7 @@ namespace ui {
             auto parent_size = component->parent->size;
 
             // These algorithms are quite weird, but do work consistently
-            component->pos.x = parent_pos.x + ((parent_size.x - component->text_size * component->text.length()) / 2) + component->text_size * 1.25f;
+            component->pos.x = parent_pos.x + ((parent_size.x - component->text_size * component->text->length()) / 2) + component->text_size * 1.25f;
             component->pos.y = parent_pos.y + (parent_size.y / 2 + (component->text_size / 2)) - component->text_size / 5;
             set_component_pos_and_size(component->pos, component->size);
         }

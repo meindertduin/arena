@@ -33,7 +33,7 @@ namespace ui {
     TextComponent::TextComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : UIComponent(pos, size) { }
 
     void TextComponent::render() {
-        global.text_renderer->render(text, { gl_pos.x, gl_pos.y }, text_size);
+        global.text_renderer->render(*text, { gl_pos.x, gl_pos.y }, text_size);
         UIComponent::render();
     }
 
@@ -45,7 +45,7 @@ namespace ui {
             .with_border(2, { 1.0f, 1.0f, 1.0f, 1.0f })
             .with_child<TextComponent>([&](ComponentBuilder<TextComponent> &builder) {
                 builder.with_rel_pos_and_size({ 0, 0 }, { 0, 0 })
-                    .with_text("Hello", 14)
+                    .with_text(&text, 14)
                     .center_text();
             })
             .build();
@@ -70,6 +70,22 @@ namespace ui {
             background_color = glm::vec4{0, 0, 1.f, 1.0f};
         }
 
+        UIComponent::render();
+    }
+
+    DebugPanelComponent::DebugPanelComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : UIComponent(pos, size) {
+        ComponentBuilder<PlaneComponent> builder;
+        auto component = builder.with_parent(this)
+                .with_rel_pos_and_size({ 0, 0 }, size)
+                .with_background(&background_color)
+                .with_child<TextComponent>([&](ComponentBuilder<TextComponent> &builder) {
+                    builder.with_rel_pos_and_size({10, 0}, {0, 24}).with_text(&text, 24);
+                })
+                .build();
+        children.push_back(std::move(component));
+    }
+
+    void DebugPanelComponent::render() {
         UIComponent::render();
     }
 }

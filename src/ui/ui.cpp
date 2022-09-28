@@ -8,17 +8,7 @@ namespace ui {
         ComponentBuilder<RootComponent> builder;
         root = builder
                 .with_pos_and_size(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
-                .with_child<PlaneComponent>([](ComponentBuilder<PlaneComponent> &builder) {
-                    builder.with_rel_pos_and_size(glm::ivec2{20, 20}, glm::ivec2{220, 200})
-                            // TODO remove this temporary allocation
-                            .with_background(new glm::vec4{0.3f, 0.3f, 0.3f, 1.0f})
-                            .with_border(2, { 1.0f, 1.0f, 1.0, 1.0f})
-                            .with_child<TextComponent>([](ComponentBuilder<TextComponent> &builder) {
-                                builder.with_rel_pos_and_size({ 0, 0}, { 100, 14 })
-                                    .with_text("Wow this is cool!", 18);
-                            })
-                            .with_child<ButtonComponent>({ 80, 80 }, { 80, 20 });
-                })
+                .with_child<DebugPanelComponent>({ 10, 10}, { 200, 100 })
                 .build();
     }
 

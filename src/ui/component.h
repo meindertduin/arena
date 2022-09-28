@@ -66,18 +66,26 @@ namespace ui {
         friend class ComponentBuilder<TextComponent>;
 
         int text_size = 12;
-        std::string text;
+        std::string *text;
     };
 
     class ButtonComponent : public UIComponent {
     public:
         explicit ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
-        ~ButtonComponent() {
-            printf("destructor called\n");
-        }
         void render() override;
     private:
         glm::vec4 background_color;
         glm::vec4 border_color;
+
+        std::string text = "Hello world";
+    };
+
+    class DebugPanelComponent : public UIComponent {
+    public:
+        explicit DebugPanelComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
+        void render() override;
+    private:
+        glm::vec4 background_color { 0.1f, 0.1f, 0.1f, 0.2f };
+        std::string text = "Hello world";
     };
 }
