@@ -71,8 +71,6 @@ namespace ui {
         void render() override;
         void handle_click(const UIMouseClickEvent &event) override;
     private:
-        friend class ComponentBuilder<ButtonComponent>;
-
         std::string text;
         int text_size = 12;
 

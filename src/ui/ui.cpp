@@ -16,8 +16,7 @@ namespace ui {
                                 builder.with_rel_pos_and_size({ 0, 0}, { 100, 14 })
                                     .with_text("Wow this is cool!", 14);
                             })
-                            .with_child<ButtonComponent>([](ComponentBuilder<ButtonComponent> &builder) {
-                            }, glm::ivec2{ 10, 10 }, glm::ivec2{ 130, 40 });
+                            .with_child<ButtonComponent>({ 10, 10 }, { 130, 40 });
                 })
                 .build();
     }

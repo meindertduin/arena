@@ -6,13 +6,16 @@
 #include <array>
 
 namespace ui {
+    struct UIEvent {
 
-    struct UIMouseClickEvent {
+    };
+
+    struct UIMouseClickEvent : public UIEvent {
         uint32_t button;
         glm::ivec2 mouse_pos;
     };
 
-    struct UIMouseMoveEvent {
+    struct UIMouseMoveEvent : public UIEvent {
         glm::ivec2 mouse_pos;
     };
 

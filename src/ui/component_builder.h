@@ -58,6 +58,16 @@ namespace ui {
         }
 
         template<typename C, typename ...Args>
+        ComponentBuilder& with_child(glm::ivec2 &&pos, glm::ivec2 &&size, Args&&... args) {
+            pos += component->pos;
+            auto new_child = std::make_unique<C>(pos, size, std::forward<Args>(args)...);
+            new_child->parent = component.get();
+            component->children.push_back(std::move(new_child));
+
+            return *this;
+        }
+
+        template<typename C, typename ...Args>
         ComponentBuilder& with_child(std::function<void(ComponentBuilder<C>&)> &&builder_setup_callback, glm::ivec2 &&pos, glm::ivec2 &&size, Args&&... args) {
             pos += component->pos;
             auto builder = ComponentBuilder<C>(pos, size, std::forward<Args>(args)...);
