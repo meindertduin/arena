@@ -9,7 +9,7 @@ namespace ui {
         root = builder
                 .with_pos_and_size(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
                 .with_child<PlaneComponent>([](ComponentBuilder<PlaneComponent> &builder) {
-                    builder.with_rel_pos_and_size(glm::ivec2{10, 10}, glm::ivec2{220, 200})
+                    builder.with_rel_pos_and_size(glm::ivec2{20, 20}, glm::ivec2{220, 200})
                             .with_background({0.3f, 0.3f, 0.3f, 1.0f})
                             .with_border(2, { 1.0f, 1.0f, 1.0, 1.0f})
                             .with_child<TextComponent>([](ComponentBuilder<TextComponent> &builder) {
@@ -17,7 +17,7 @@ namespace ui {
                                     .with_text("Wow this is cool!", 14);
                             })
                             .with_child<ButtonComponent>([](ComponentBuilder<ButtonComponent> &builder) {
-                            }, glm::ivec2{ 10, 100 }, glm::ivec2{ 130, 40 });
+                            }, glm::ivec2{ 10, 10 }, glm::ivec2{ 130, 40 });
                 })
                 .build();
     }

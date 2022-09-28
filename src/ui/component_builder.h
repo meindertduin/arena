@@ -17,7 +17,7 @@ namespace ui {
         }
 
         template<typename ...Args>
-        ComponentBuilder(Args... args) {
+        ComponentBuilder(Args&&... args) {
             component = std::make_unique<T>(std::forward<Args>(args)...);
         }
 
@@ -58,8 +58,9 @@ namespace ui {
         }
 
         template<typename C, typename ...Args>
-        ComponentBuilder& with_child(std::function<void(ComponentBuilder<C>&)> &&builder_setup_callback, Args&&... args) {
-            auto builder = ComponentBuilder<C>(std::forward<Args>(args)...);
+        ComponentBuilder& with_child(std::function<void(ComponentBuilder<C>&)> &&builder_setup_callback, glm::ivec2 &&pos, glm::ivec2 &&size, Args&&... args) {
+            pos += component->pos;
+            auto builder = ComponentBuilder<C>(pos, size, std::forward<Args>(args)...);
             builder.with_parent(component.get());
             builder_setup_callback(builder);
             auto child_component = builder.build();
