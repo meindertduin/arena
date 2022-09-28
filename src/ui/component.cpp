@@ -44,8 +44,9 @@ namespace ui {
             .with_background(&background_color)
             .with_border(2, { 1.0f, 1.0f, 1.0f, 1.0f })
             .with_child<TextComponent>([&](ComponentBuilder<TextComponent> &builder) {
-                builder.with_rel_pos_and_size({ 0, 0 }, { size.x, size.y })
-                    .with_text("Hello world!", 14);
+                builder.with_rel_pos_and_size({ 0, 0 }, { 0, 0 })
+                    .with_text("Hello", 14)
+                    .center_text();
             })
             .build();
 

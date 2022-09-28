@@ -21,7 +21,7 @@ namespace graphics {
 
     TrueTypeFont::TrueTypeFont(const std::string &path, int size) {
         FT_New_Face(library, path.c_str(), 0, &face);
-        FT_Set_Pixel_Sizes(face, 0, size);
+        FT_Set_Pixel_Sizes(face, size, size);
 
         // disable byte-alignment restriction
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);

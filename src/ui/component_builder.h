@@ -87,6 +87,32 @@ namespace ui {
             return *this;
         }
 
+        ComponentBuilder<T>& center_text() {
+            auto parent_pos = component->parent->pos;
+            auto parent_size = component->parent->size;
+
+            // These algorithms are quite weird, but do work consistently
+            component->pos.x = parent_pos.x + ((parent_size.x - component->text_size * component->text.length()) / 2) + component->text_size * 1.25f;
+            component->pos.y = parent_pos.y + (parent_size.y / 2 + (component->text_size / 2)) - component->text_size / 5;
+            set_component_pos_and_size(component->pos, component->size);
+        }
+
+        ComponentBuilder<T>& center_text_x() {
+            auto parent_pos = component->parent->pos;
+            auto parent_size = component->parent->size;
+
+            component->pos.x = parent_pos.x + ((parent_size.x - component->text_size * component->text.length()) / 2) + component->text_size * 1.25f;
+            set_component_pos_and_size(component->pos, component->size);
+        }
+
+        ComponentBuilder<T>& center_text_y() {
+            auto parent_pos = component->parent->pos;
+            auto parent_size = component->parent->size;
+
+            component->pos.y = parent_pos.y + (parent_size.y / 2 + (component->text_size / 2));
+            set_component_pos_and_size(component->pos, component->size);
+        }
+
         std::unique_ptr<T> build() {
             return std::move(component);
         }

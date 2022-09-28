@@ -15,9 +15,9 @@ namespace ui {
                             .with_border(2, { 1.0f, 1.0f, 1.0, 1.0f})
                             .with_child<TextComponent>([](ComponentBuilder<TextComponent> &builder) {
                                 builder.with_rel_pos_and_size({ 0, 0}, { 100, 14 })
-                                    .with_text("Wow this is cool!", 14);
+                                    .with_text("Wow this is cool!", 18);
                             })
-                            .with_child<ButtonComponent>({ 10, 10 }, { 130, 40 });
+                            .with_child<ButtonComponent>({ 80, 80 }, { 80, 20 });
                 })
                 .build();
     }
