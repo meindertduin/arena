@@ -43,7 +43,7 @@ namespace ui {
         global.ui_renderer->after_ui_rendering();
     }
 
-    bool UI::on_mouse_move(UIComponent *component, const UIMouseMoveEvent &event) {
+    bool UI::on_mouse_move(UIComponent *component, UIMouseMoveEvent event) {
         auto &component_ref = *component;
 
         component_ref.is_hovered = false;
@@ -59,25 +59,42 @@ namespace ui {
             return false;
         }
 
+        bool hovers_child;
         for (auto &child : component_ref.children) {
-            on_mouse_move(child.get(), event);
+            hovers_child = on_mouse_move(child.get(), event);
+        }
+
+        // We want to fire the event only at the deepest, because the event will be bubbled up
+        if (!hovers_child) {
+            component_ref.handle_event(UIEventType::MouseMove, &event);
         }
 
         return true;
     }
 
-    bool UI::on_click(UIComponent *component, const UIMouseClickEvent &event) const {
+    bool UI::on_click(UIComponent *component, UIMouseClickEvent event) const {
         auto &component_ref = *component;
+
+        bool clicks_component = false;
         if (component_ref.pos.x <= event.mouse_pos.x && component_ref.pos.x + component_ref. size.x >= event.mouse_pos.x &&
             component_ref.pos.y <= event.mouse_pos.y && component_ref.pos.y + component_ref.size.y >= event.mouse_pos.y)
         {
-            component_ref.handle_click(event);
+            clicks_component = true;
         }
 
+        if (!clicks_component) {
+            return false;
+        }
+
+        bool clicks_child = false;
         for (auto &child : component_ref.children) {
-            on_click(child.get(), event);
+            clicks_child = on_click(child.get(), event);
         }
 
-        return false;
+        if (!clicks_child) {
+            component_ref.handle_event(UIEventType::MouseButton, &event);
+        }
+
+        return true;
     }
 }

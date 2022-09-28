@@ -3,9 +3,15 @@
 #include <string>
 #include "../graphics/geometry.h"
 
+#include "unordered_map"
+
 namespace ui {
-    struct UIMouseClickEvent;
-    struct UIMouseMoveEvent;
+    enum UIEventType {
+        MouseButton = 1,
+        MouseMove = 2,
+    };
+
+    struct UIEvent;
 
     template<typename T>
     class ComponentBuilder;
@@ -18,7 +24,6 @@ namespace ui {
         glm::ivec2 size;
         bool is_hovered { false };
 
-        // TODO: Encapsulate and make builder friend
         std::vector<std::unique_ptr<UIComponent>> children;
         UIComponent *parent {nullptr};
 
@@ -29,7 +34,9 @@ namespace ui {
                 child->render();
         }
 
-        virtual void handle_click(const UIMouseClickEvent &event) { };
+        void handle_event(UIEventType type, UIEvent* event);
+    protected:
+        std::unordered_map<UIEventType, std::function<void(UIEvent*)>> event_handlers;
     };
 
     class RootComponent : public UIComponent {
@@ -69,15 +76,5 @@ namespace ui {
             printf("destructor called\n");
         }
         void render() override;
-        void handle_click(const UIMouseClickEvent &event) override;
-    private:
-        std::string text;
-        int text_size = 12;
-
-        graphics::GpuPlane background;
-        graphics::GpuPlane border;
-
-        glm::vec4 background_color { 1.0f, 0, 0, 1.0f };
-        glm::vec4 border_color { 1.0f, 1.0f, 1.0f, 1.0f };
     };
 }

@@ -7,7 +7,7 @@
 
 namespace ui {
     struct UIEvent {
-
+        bool stop_bubbling { false };
     };
 
     struct UIMouseClickEvent : public UIEvent {
@@ -29,7 +29,8 @@ namespace ui {
         void handle_key_event(const input::KeyCombination &combi);
         void render();
     private:
-        bool on_mouse_move(UIComponent *component, const UIMouseMoveEvent &event);
-        bool on_click(UIComponent *component, const UIMouseClickEvent &event) const;
+        // TODO optimize the events, i.e. passed by reference hopefully
+        bool on_mouse_move(UIComponent *component, UIMouseMoveEvent event);
+        bool on_click(UIComponent *component, UIMouseClickEvent event) const;
     };
 }
