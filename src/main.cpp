@@ -78,8 +78,6 @@ int main () {
         static_render_system->update();
         global.renderer->render_skybox();
 
-        // TODO move frametime counter to a ui node
-        // global.text_renderer->render(std::to_string(frame_time_ms) + " ms", { 10, global.graphic_options->screen_dimensions.y - 150});
         if (global.game->ui_mode)
             global.game->ui.render();
 
@@ -89,7 +87,7 @@ int main () {
         program_timer.stop();
         auto difference_ms = program_timer.difference_ms();
         int delay_time_ms = static_cast<int>(1000.0f / 60.0f) - difference_ms;
-        frame_time_ms = difference_ms;
+        global.telemetrics.last_frame_time_ms = difference_ms;
         if (delay_time_ms > 0)
             core::delay(delay_time_ms);
     }

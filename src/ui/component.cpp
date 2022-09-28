@@ -86,6 +86,7 @@ namespace ui {
     }
 
     void DebugPanelComponent::render() {
+        text = "Frametime: " + std::to_string(global.telemetrics.last_frame_time_ms) + "ms";
         UIComponent::render();
     }
 }

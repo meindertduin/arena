@@ -3,6 +3,7 @@
 #include "input/input_manager.h"
 #include "core/linear_allocator.h"
 #include "core/list_allocator.h"
+#include "core/telemetrics.h"
 
 #include <memory>
 
@@ -32,6 +33,8 @@ struct Global {
     core::Window *window;
     core::LinearAllocator allocator { 1024 * 1024 };
     core::ListAllocator list_allocator {1024 * 1024 * 2, core::ListAllocator::PlacementPolicy::First };
+
+    core::Telemetrics telemetrics;
 
     input::InputManager input_manager;
     game::GameState *game;
