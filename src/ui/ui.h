@@ -29,8 +29,7 @@ namespace ui {
         void handle_key_event(const input::KeyCombination &combi);
         void render();
     private:
-        // TODO optimize the events, i.e. passed by reference hopefully
-        bool on_mouse_move(UIComponent *component, UIMouseMoveEvent event);
-        bool on_click(UIComponent *component, UIMouseClickEvent event) const;
+        bool on_mouse_move(UIComponent *component, UIMouseMoveEvent &event);
+        bool on_click(UIComponent *component, UIMouseClickEvent &event) const;
     };
 }

@@ -14,13 +14,15 @@ namespace ui {
 
     void UI::handle_mouse_move_event() {
         auto mouse_pos = input::get_mouse_position();
-        on_mouse_move(root.get(), UIMouseMoveEvent{ .mouse_pos = mouse_pos });
+        UIMouseMoveEvent event = { .mouse_pos = mouse_pos };
+        on_mouse_move(root.get(), event);
     }
 
     void UI::handle_mouse_button_event(const input::KeyCombination &combi) {
         if (combi.action == input::KEY_PRESS) {
             auto mouse_pos = input::get_mouse_position();
-            on_click(root.get(), UIMouseClickEvent{ .button = combi.key, .mouse_pos = mouse_pos });
+            UIMouseClickEvent event = { .button = combi.key, .mouse_pos = mouse_pos };
+            on_click(root.get(), event);
         }
     }
 
@@ -34,7 +36,7 @@ namespace ui {
         global.ui_renderer->after_ui_rendering();
     }
 
-    bool UI::on_mouse_move(UIComponent *component, UIMouseMoveEvent event) {
+    bool UI::on_mouse_move(UIComponent *component, UIMouseMoveEvent &event) {
         auto &component_ref = *component;
 
         component_ref.is_hovered = false;
@@ -63,7 +65,7 @@ namespace ui {
         return true;
     }
 
-    bool UI::on_click(UIComponent *component, UIMouseClickEvent event) const {
+    bool UI::on_click(UIComponent *component, UIMouseClickEvent &event) const {
         auto &component_ref = *component;
 
         bool clicks_component = false;
