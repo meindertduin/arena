@@ -26,7 +26,7 @@ namespace input {
         return std::optional<entity::ECCommand*>{command.get()};
     }
 
-    std::optional<ui::UICommand *> Keybindings::get_ui_command(const KeyCombination &combination) {
+    std::optional<ui::UICommand*> Keybindings::get_ui_command(const KeyCombination &combination) {
         auto combo_u32 = combination.to_u32();
         if (ui_commands.find(combo_u32) == ui_commands.end())
             return std::nullopt;

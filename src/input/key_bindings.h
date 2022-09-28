@@ -17,7 +17,6 @@ namespace input {
         Keybindings(const Keybindings &other) = delete;
         Keybindings& operator=(const Keybindings &other) = delete;
 
-        // TODO rule of 3: Can be template functions with specializations
         std::optional<entity::ECCommand*> get_player_command(const KeyCombination &combination);
         std::optional<ui::UICommand*> get_ui_command(const KeyCombination &combination);
     private:

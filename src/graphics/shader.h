@@ -45,7 +45,6 @@ namespace graphics {
         void use() const;
         void link() const;
 
-        // TODO Check if universal reference can speed things up
         void set_property(const std::string& property_name, int) const;
         void set_property(const std::string& property_name, float) const;
         void set_property(const std::string& property_name, glm::vec3&&) const;
