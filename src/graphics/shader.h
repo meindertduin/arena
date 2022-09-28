@@ -48,8 +48,10 @@ namespace graphics {
         void set_property(const std::string& property_name, int) const;
         void set_property(const std::string& property_name, float) const;
         void set_property(const std::string& property_name, glm::vec3&&) const;
+        void set_property(const std::string& property_name, glm::vec4&&) const;
         void set_property(const std::string& property_name, glm::mat4&&) const;
         void set_property(const std::string& property_name, glm::vec3&) const;
+        void set_property(const std::string& property_name, glm::vec4&) const;
         void set_property(const std::string& property_name, glm::mat4&) const;
 
         void set_uniform_loc(const std::string& name, int index) const;

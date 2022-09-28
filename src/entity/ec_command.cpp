@@ -1,32 +1,42 @@
 #include "ec_command.h"
 #include "ec_transform.h"
+#include "ec_control.h"
 
 namespace entity {
-    void MoveCommand::execute(Entity entity) {
-        auto &transform = entity.get<ECTransform>();
-
-        // remove magic number and retrieve from speed component
-        transform.move(direction, 0.2f);
+    void StartMoveCommand::execute(Entity entity) {
+        auto &ec_control = entity.get<ECControl>();
+        switch (direction) {
+            case Direction::Forward:
+                ec_control.moves_forward = true;
+                break;
+            case Direction::Backward:
+                ec_control.moves_backward = true;
+                break;
+            case Direction::Left:
+                ec_control.moves_left = true;
+                break;
+            case Direction::Right:
+                ec_control.moves_right = true;
+                break;
+        }
     }
 
-    void MoveForwardCommand::execute(Entity entity) {
-        auto &transform = entity.get<ECTransform>();
-        transform.move(transform.get_forward(), 0.2f);
-    }
-
-    void MoveBackwardCommand::execute(Entity entity) {
-        auto &transform = entity.get<ECTransform>();
-        transform.move(transform.get_backward(), 0.2f);
-    }
-
-    void MoveLeftCommand::execute(Entity entity) {
-        auto &transform = entity.get<ECTransform>();
-        transform.move(transform.get_left(), 0.2f);
-    }
-
-    void MoveRightCommand::execute(Entity entity) {
-        auto &transform = entity.get<ECTransform>();
-        transform.move(transform.get_right(), 0.2f);
+    void StopMoveCommand::execute(Entity entity) {
+        auto &ec_control = entity.get<ECControl>();
+        switch (direction) {
+            case Direction::Forward:
+                ec_control.moves_forward = false;
+                break;
+            case Direction::Backward:
+                ec_control.moves_backward = false;
+                break;
+            case Direction::Left:
+                ec_control.moves_left = false;
+                break;
+            case Direction::Right:
+                ec_control.moves_right = false;
+                break;
+        }
     }
 
     void RotateCommand::execute(Entity entity) {
@@ -35,4 +45,5 @@ namespace entity {
         transform.rotate(degrees_x, glm::vec3(0, 1, 0));
         transform.rotate(-degrees_y, transform.get_right());
     }
+
 }

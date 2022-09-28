@@ -118,4 +118,14 @@ namespace graphics {
 
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }
+
+    void RenderTarget::enable_depth_test() {
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+    }
+
+    void RenderTarget::disable_depth_test() {
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_CULL_FACE);
+    }
 }

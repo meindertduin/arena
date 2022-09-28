@@ -1,14 +1,15 @@
 #include "renderer.h"
 
+#include <utility>
+
 #include "../global.h"
 #include "material.h"
 #include "../game/game_state.h"
 #include "glad/glad.h"
 
 namespace graphics {
-    Renderer::Renderer() {
+    Renderer::Renderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
         shader.link();
-        render_target = std::make_unique<RenderTarget>();
     }
 
     void Renderer::before_render() {
@@ -18,7 +19,7 @@ namespace graphics {
         set_ubo_data();
     }
 
-    void Renderer::render(const Mesh *mesh, const entity::ECTransform &transform) const {
+    void Renderer::render(const Renderable *mesh, const entity::ECTransform &transform) const {
         auto model_4x4 = transform.get_transform_4x4();
 
         shader.use();
@@ -110,24 +111,15 @@ namespace graphics {
 
     TextRenderer::TextRenderer() {
         shader.link();
-
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
-        glBindVertexArray(VAO);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, nullptr, GL_DYNAMIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), nullptr);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
     }
 
-    void TextRenderer::render(const std::string& text, const glm::vec2 &pos) {
-        float scale = 0.40f;
+    void TextRenderer::render(const std::string& text, const glm::vec2 &pos, int text_size) {
+        float scale = static_cast<float>(text_size) / static_cast<float>(FontRenderSize);
         auto x = pos.x;
 
         shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
+                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
 
         shader.set_property("projection", projection);
         shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
@@ -140,12 +132,46 @@ namespace graphics {
             float w = static_cast<float>(glyph.size.x) * scale;
             float h = static_cast<float>(glyph.size.y) * scale;
 
-            plane.set_size_and_position({w, h}, {xpos, ypos });
+            plane.set_pos_and_size({xpos, ypos}, {w, h});
             glyph.texture->bind(0);
             plane.render();
 
             // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
             x += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
         }
+    }
+
+    UIRenderer::UIRenderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
+        shader.link();
+    }
+
+    void UIRenderer::render(const Renderable &renderable, glm::vec4 &color) {
+        glDisable(GL_DEPTH_TEST);
+        shader.use();
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
+                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
+
+        shader.set_property("projection", projection);
+        shader.set_property("color", color);
+        renderable.render();
+    }
+
+    void UIRenderer::render(const Renderable &renderable, glm::vec4 &&color) {
+        glDisable(GL_DEPTH_TEST);
+        shader.use();
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
+                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
+
+        shader.set_property("projection", projection);
+        shader.set_property("color", color);
+        renderable.render();
+    }
+
+    void UIRenderer::before_ui_rendering() {
+        render_target->disable_depth_test();
+    }
+
+    void UIRenderer::after_ui_rendering() {
+        render_target->enable_depth_test();
     }
 }

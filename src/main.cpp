@@ -12,9 +12,12 @@
 #include "entity/ec_static_mesh.h"
 #include "entity/ec_collision_box.h"
 #include "entity/ec_physics.h"
+#include "entity/ec_control.h"
 #include "game/game_state.h"
 
 #include "physics/physics_system.h"
+#include "entity/movement_system.h"
+#include "entity/component.h"
 
 Global global;
 
@@ -36,9 +39,11 @@ int main () {
     graphics::font_init();
 
     global.window = new core::Window(window_options);
-    global.renderer = new graphics::Renderer();
+    auto render_target = std::make_shared<graphics::RenderTarget>();
+    global.renderer = new graphics::Renderer(render_target);
     global.terrain_renderer = new graphics::TerrainRenderer();
     global.text_renderer = new graphics::TextRenderer();
+    global.ui_renderer = new graphics::UIRenderer(render_target);
 
     input::initialize_input(*global.window);
 
@@ -48,6 +53,7 @@ int main () {
     auto static_render_system = global.ecs->create_system<entity::StaticRenderSystem>({ entity::EcStaticMeshRenderer::_id });
     auto physics_system = global.ecs->create_system<physics::PhysicsSystem>({ entity::ECPhysics::_id });
     auto terrain_collision_system = global.ecs->create_system<entity::TerrainCollisionSystem>({ entity::ECCollisionBox::_id });
+    auto movement_system = global.ecs->create_system<entity::MovementSystem>({ entity::ECControl::_id, entity::ECTransform::_id });
 
     // initialize game state
     global.game = new game::GameState();
@@ -56,12 +62,11 @@ int main () {
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
     global.texture = global.game->cache.get_resource<graphics::Texture>("assets/container.png");
 
-    int frame_time_ms;
     core::Timer program_timer;
     while(!global.window->close_requested()) {
         program_timer.start();
 
-        global.input_manager.update();
+        movement_system->update();
         physics_system->update();
 
         terrain_collision_system->update();
@@ -72,14 +77,16 @@ int main () {
         static_render_system->update();
         global.renderer->render_skybox();
 
-        global.text_renderer->render(std::to_string(frame_time_ms) + " ms", { 10, global.graphic_options->screen_dimensions.y - 150});
+        if (global.game->ui_mode)
+            global.game->ui.render();
+
         global.renderer->after_render();
         global.window->end_frame();
 
         program_timer.stop();
         auto difference_ms = program_timer.difference_ms();
         int delay_time_ms = static_cast<int>(1000.0f / 60.0f) - difference_ms;
-        frame_time_ms = difference_ms;
+        global.telemetrics.last_frame_time_ms = difference_ms;
         if (delay_time_ms > 0)
             core::delay(delay_time_ms);
     }

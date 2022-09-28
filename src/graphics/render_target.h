@@ -20,6 +20,9 @@ namespace graphics {
         void unbind();
         void clear();
         void render();
+
+        void enable_depth_test();
+        void disable_depth_test();
     private:
         VertexBuffer screen_vertex_buffer { 4 * sizeof(float) };
         ArrayBuffer screen_array_buffer;

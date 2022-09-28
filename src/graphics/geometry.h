@@ -2,14 +2,15 @@
 
 #include <glm/glm.hpp>
 #include "gpu_buffer.h"
+#include "mesh.h"
 
 namespace graphics {
-    class GpuPlane {
+    class GpuPlane : public Renderable {
     public:
         GpuPlane();
 
-        void render();
-        void set_size_and_position(const glm::vec2 &size, const glm::vec2 &pos) {
+        void render() const override;
+        void set_pos_and_size(const glm::vec2 &pos, const glm::vec2 &size) {
             vertices[0].pos = { pos.x, pos.y + size.y };
             vertices[1].pos = { pos.x, pos.y };
             vertices[2].pos = { pos.x + size.x, pos.y };

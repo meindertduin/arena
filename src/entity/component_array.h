@@ -18,7 +18,7 @@ namespace entity {
     public:
         void insert(Entity entity, T component) {
             if (components.find(entity.id) != components.end()) {
-                THROW_ERROR("Cannot insert entity that does not exist");
+                THROW_ERROR("Cannot insert entity that already exists");
             }
 
             components[entity.id] = component;

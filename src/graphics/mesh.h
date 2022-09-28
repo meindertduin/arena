@@ -12,18 +12,22 @@ namespace graphics {
         glm::u16vec2 textcoords;
     };
 
+    struct Renderable {
+        virtual void render() const = 0;
+    };
+
     struct MeshData {
         std::vector<Vertex> vertices;
     };
 
-    struct Mesh {
+    struct Mesh : public Renderable {
     public:
         Mesh(MeshData *mesh_data);
 
         Mesh(const Mesh&) = delete;
         Mesh& operator=(const Mesh&) = delete;
 
-        void render() const;
+        void render() const override;
         entity::ECTransform transform;
     private:
         std::size_t size;

@@ -3,10 +3,12 @@
 #include "ec_collision_box.h"
 #include "ec_first_person_camera.h"
 #include "ec_static_mesh.h"
+#include "ec_control.h"
 
 namespace entity {
-    DECL_COMPONENT_INIT(ECTransform) {};
-    DECL_COMPONENT_INIT(ECPhysics) { }
+    DECL_COMPONENT_INIT(ECTransform) {}
+    DECL_COMPONENT_INIT(ECPhysics) {}
+    DECL_COMPONENT_INIT(ECControl) {}
     DECL_COMPONENT_INIT(ECCollisionBox) {}
 
     DECL_COMPONENT_INIT(ECFirstPersonCamera) {

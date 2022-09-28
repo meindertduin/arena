@@ -9,7 +9,7 @@ namespace graphics {
         this->vertex_buffer.add_vertex_attribute({ 2, GL_UNSIGNED_SHORT, sizeof(uint16_t), true });
     }
 
-    void GpuPlane::render() {
+    void GpuPlane::render() const {
         this->array_buffer.bind();
         this->vertex_buffer.bind();
         glDrawArrays(GL_TRIANGLES, 0, 6);
