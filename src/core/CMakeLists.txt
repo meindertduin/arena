@@ -1,0 +1,14 @@
+set(CORE_SOURCES
+        src/core/window.cpp
+        src/core/linear_allocator.h
+        src/core/linear_allocator.cpp
+        src/core/allocator.h
+        src/core/singly_linked_list.h
+        src/core/stack_allocator.cpp
+        src/core/stack_allocator.h
+        src/core/list_allocator.cpp
+        src/core/list_allocator.h
+        src/core/program_time.cpp
+        src/core/program_time.h
+        src/core/telemetrics.h
+        )

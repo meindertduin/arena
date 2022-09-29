@@ -1,0 +1,14 @@
+set(GRAPHICS_SOURCES
+        src/graphics/mesh.cpp
+        src/graphics/terrain.cpp
+        src/graphics/renderer.cpp
+        src/graphics/texture.cpp
+        src/graphics/gpu_buffer.cpp
+        src/graphics/shader.cpp
+        src/graphics/render_target.cpp
+        src/graphics/skybox.h
+        src/graphics/skybox.cpp
+        src/graphics/font.h
+        src/graphics/font.cpp
+        src/graphics/geometry.h
+        src/graphics/geometry.cpp)
