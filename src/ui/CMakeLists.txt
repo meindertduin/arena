@@ -1,0 +1,9 @@
+set(UI_SOURCES
+        src/ui/ui_command.cpp
+        src/ui/ui_command.h
+        src/ui/ui.cpp
+        src/ui/ui.h
+        src/ui/component.cpp
+        src/ui/component.h
+        src/ui/component_builder.h
+        src/ui/component_builder.cpp)
