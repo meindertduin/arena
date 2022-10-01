@@ -10,7 +10,7 @@ project(${PROJECT_NAME} VERSION ${arena_version} LANGUAGES CXX C)
 set(SOURCES
         src/main.cpp
         external/glad/glad.c
-        )
+        src/entity/systems_collection.cpp src/entity/systems_collection.h)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/assets/CMakeLists.txt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/core/CMakeLists.txt)

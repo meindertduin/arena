@@ -8,7 +8,8 @@
 #include "../ui/ui.h"
 
 namespace game {
-    struct GameState {
+    class GameState {
+    public:
         GameState();
         ~GameState();
 
@@ -21,13 +22,15 @@ namespace game {
         std::vector<graphics::DirLight> dir_lights;
         std::vector<graphics::PointLight> point_lights;
 
-        void init();
-
         assets::Cache cache;
         entity::Camera *camera;
         entity::Entity player;
         entity::Entity cube;
 
         std::unique_ptr<Map> map;
+
+        void init();
+        void update();
+        void render();
     };
 }
