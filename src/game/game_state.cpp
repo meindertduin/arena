@@ -2,6 +2,9 @@
 #include "../global.h"
 #include "../entity/ec_player.h"
 #include "../graphics/graphic_options.h"
+#include "../entity/systems_collection.h"
+
+#include "../graphics/renderer.h"
 
 namespace game {
     GameState::GameState() {
@@ -39,5 +42,29 @@ namespace game {
         mesh_renderer.init("assets/cube.obj");
         this->cube.add(mesh_renderer);
         this->cube.add(entity::ECTransform({ 0, -18, -10 }, {}));
+    }
+
+    void GameState::update() {
+        update_render_lock.lock();
+
+        global.systems->update();
+
+        update_render_lock.unlock();
+    }
+
+    void GameState::render() {
+        update_render_lock.lock();
+
+        global.renderer->before_render();
+
+        map->render_background();
+        global.systems->render();
+        skybox.render();
+        if (ui_mode)
+            ui.render();
+
+        global.renderer->after_render();
+
+        update_render_lock.unlock();
     }
 }

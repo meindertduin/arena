@@ -27,6 +27,7 @@ namespace graphics {
 
 namespace entity {
     struct Ecs;
+    class SystemsCollection;
 }
 
 struct Global {
@@ -42,6 +43,7 @@ struct Global {
     graphics::TerrainRenderer *terrain_renderer;
     graphics::TextRenderer *text_renderer;
     graphics::UIRenderer *ui_renderer;
+    entity::SystemsCollection *systems;
 
     graphics::GraphicOptions *graphic_options;
     std::shared_ptr<graphics::Texture> texture;

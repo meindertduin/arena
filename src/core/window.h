@@ -23,6 +23,7 @@ namespace core {
         void end_frame() const;
         void enable_cursor();
         void disable_cursor();
+        void poll_events() const;
 
         WindowOptions win_options;
 

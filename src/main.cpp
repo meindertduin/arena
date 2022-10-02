@@ -10,14 +10,15 @@
 #include "entity/terrain_collision_system.h"
 
 #include "entity/ec_static_mesh.h"
-#include "entity/ec_collision_box.h"
 #include "entity/ec_physics.h"
-#include "entity/ec_control.h"
 #include "game/game_state.h"
 
 #include "physics/physics_system.h"
 #include "entity/movement_system.h"
 #include "entity/component.h"
+#include "entity/systems_collection.h"
+
+#include <thread>
 
 Global global;
 
@@ -44,16 +45,14 @@ int main () {
     global.terrain_renderer = new graphics::TerrainRenderer();
     global.text_renderer = new graphics::TextRenderer();
     global.ui_renderer = new graphics::UIRenderer(render_target);
+    global.systems = new entity::SystemsCollection();
 
     input::initialize_input(*global.window);
 
     // setting up ecs and systems
     global.ecs = entity::Ecs::instance();
 
-    auto static_render_system = global.ecs->create_system<entity::StaticRenderSystem>({ entity::EcStaticMeshRenderer::_id });
-    auto physics_system = global.ecs->create_system<physics::PhysicsSystem>({ entity::ECPhysics::_id });
-    auto terrain_collision_system = global.ecs->create_system<entity::TerrainCollisionSystem>({ entity::ECCollisionBox::_id });
-    auto movement_system = global.ecs->create_system<entity::MovementSystem>({ entity::ECControl::_id, entity::ECTransform::_id });
+    global.systems->init();
 
     // initialize game state
     global.game = new game::GameState();
@@ -62,25 +61,23 @@ int main () {
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
     global.texture = global.game->cache.get_resource<graphics::Texture>("assets/container.png");
 
+    std::thread game_thread([&] {
+        for (;;) {
+            global.window->poll_events();
+            global.game->update();
+            core::delay(core::TickTimeMs);
+
+            core::TotalTicks++;
+        }
+    });
+
+    game_thread.detach();
+
     core::Timer program_timer;
     while(!global.window->close_requested()) {
         program_timer.start();
 
-        movement_system->update();
-        physics_system->update();
-
-        terrain_collision_system->update();
-
-        global.renderer->before_render();
-        global.game->map->render_background();
-        // render the different systems
-        static_render_system->update();
-        global.renderer->render_skybox();
-
-        if (global.game->ui_mode)
-            global.game->ui.render();
-
-        global.renderer->after_render();
+        global.game->render();
         global.window->end_frame();
 
         program_timer.stop();
