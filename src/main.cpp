@@ -61,7 +61,7 @@ int main () {
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
     global.texture = global.game->cache.get_resource<graphics::Texture>("assets/container.png");
 
-    std::thread logic_thread([&] {
+    std::thread game_thread([&] {
         for (;;) {
             global.window->poll_events();
             global.game->update();
@@ -71,7 +71,7 @@ int main () {
         }
     });
 
-    logic_thread.detach();
+    game_thread.detach();
 
     core::Timer program_timer;
     while(!global.window->close_requested()) {
