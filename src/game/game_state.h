@@ -6,6 +6,7 @@
 
 #include "map.h"
 #include "../ui/ui.h"
+#include "../graphics/skybox.h"
 
 namespace game {
     class GameState {
@@ -28,6 +29,7 @@ namespace game {
         entity::Entity cube;
 
         std::unique_ptr<Map> map;
+        graphics::Skybox skybox;
 
         void init();
         void update();

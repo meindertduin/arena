@@ -38,11 +38,6 @@ namespace graphics {
         mesh->render();
     }
 
-    void Renderer::render_skybox() {
-        skybox.render();
-    }
-
-
     void Renderer::after_render() {
         render_target->unbind();
         render_target->render();

@@ -45,13 +45,13 @@ namespace game {
     }
 
     void GameState::update() {
-
+        global.systems->update();
     }
 
     void GameState::render() {
         map->render_background();
         global.systems->render();
-        global.renderer->render_skybox();
+        skybox.render();
         if (ui_mode)
             ui.render();
     }

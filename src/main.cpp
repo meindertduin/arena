@@ -64,8 +64,8 @@ int main () {
     core::Timer program_timer;
     while(!global.window->close_requested()) {
         program_timer.start();
+        global.game->update();
 
-        global.systems->update();
         global.renderer->before_render();
 
         // render the different systems
