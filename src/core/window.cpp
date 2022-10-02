@@ -41,9 +41,12 @@ namespace core {
         return glfwWindowShouldClose(window);
     }
 
+    void Window::poll_events() const {
+        glfwPollEvents();
+    }
+
     void Window::end_frame() const {
         glfwSwapBuffers(window);
-        glfwPollEvents();
     }
 
     void Window::enable_cursor() {

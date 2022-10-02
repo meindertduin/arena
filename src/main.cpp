@@ -63,6 +63,7 @@ int main () {
 
     std::thread logic_thread([&] {
         for (;;) {
+            global.window->poll_events();
             global.game->update();
             core::delay(core::TickTimeMs);
 
