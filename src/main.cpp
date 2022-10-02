@@ -61,15 +61,20 @@ int main () {
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
     global.texture = global.game->cache.get_resource<graphics::Texture>("assets/container.png");
 
-    core::Timer program_timer;
+    std::thread logic_thread([&] {
+        for (;;) {
+            global.game->update();
+            core::delay(core::TickTimeMs);
 
+            core::TotalTicks++;
+        }
+    });
+
+    logic_thread.detach();
+
+    core::Timer program_timer;
     while(!global.window->close_requested()) {
         program_timer.start();
-
-        std::thread logic_thread([&] {
-            global.game->update();
-        });
-        logic_thread.detach();
 
         global.game->render();
         global.window->end_frame();

@@ -1,8 +1,12 @@
 #pragma once
 
 #include <chrono>
+#include <atomic>
 
 namespace core {
+    static constexpr int TickTimeMs = 10;
+    static std::atomic<unsigned long> TotalTicks {0};
+
     using TimePoint = std::chrono::system_clock::time_point;
     using DurationMs = std::chrono::duration<double, std::milli>;
 
