@@ -8,6 +8,8 @@
 #include "../ui/ui.h"
 #include "../graphics/skybox.h"
 
+#include <thread>
+
 namespace game {
     class GameState {
     public:
@@ -34,5 +36,7 @@ namespace game {
         void init();
         void update();
         void render();
+    private:
+        std::mutex update_render_lock;
     };
 }

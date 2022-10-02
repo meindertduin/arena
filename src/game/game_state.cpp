@@ -45,14 +45,26 @@ namespace game {
     }
 
     void GameState::update() {
+        update_render_lock.lock();
+
         global.systems->update();
+
+        update_render_lock.unlock();
     }
 
     void GameState::render() {
+        update_render_lock.lock();
+
+        global.renderer->before_render();
+
         map->render_background();
         global.systems->render();
         skybox.render();
         if (ui_mode)
             ui.render();
+
+        global.renderer->after_render();
+
+        update_render_lock.unlock();
     }
 }

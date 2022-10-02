@@ -10,15 +10,15 @@
 #include "entity/terrain_collision_system.h"
 
 #include "entity/ec_static_mesh.h"
-#include "entity/ec_collision_box.h"
 #include "entity/ec_physics.h"
-#include "entity/ec_control.h"
 #include "game/game_state.h"
 
 #include "physics/physics_system.h"
 #include "entity/movement_system.h"
 #include "entity/component.h"
 #include "entity/systems_collection.h"
+
+#include <thread>
 
 Global global;
 
@@ -62,16 +62,16 @@ int main () {
     global.texture = global.game->cache.get_resource<graphics::Texture>("assets/container.png");
 
     core::Timer program_timer;
+
     while(!global.window->close_requested()) {
         program_timer.start();
-        global.game->update();
 
-        global.renderer->before_render();
+        std::thread logic_thread([&] {
+            global.game->update();
+        });
+        logic_thread.detach();
 
-        // render the different systems
         global.game->render();
-
-        global.renderer->after_render();
         global.window->end_frame();
 
         program_timer.stop();
