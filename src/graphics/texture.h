@@ -32,6 +32,10 @@ namespace graphics {
             return data[4 * (y * width + x) + 0];
         }
 
+        constexpr std::size_t get_size() const {
+            return width * height;
+        }
+
         T* get_buffer() { return data; }
     private:
         T* data;
