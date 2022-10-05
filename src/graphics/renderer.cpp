@@ -10,6 +10,9 @@
 namespace graphics {
     Renderer::Renderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
         shader.link();
+
+        shader.set_uniform_loc("baseTexture", 0);
+        shader.set_uniform_loc("cubeMap", 1);
     }
 
     void Renderer::before_render() {
@@ -24,6 +27,8 @@ namespace graphics {
 
         shader.use();
         global.texture->bind(0);
+        global.game->skybox.bind_texture(1);
+
         shader.set_property("color", { 1.0f, 1.0f, 0 });
         shader.set_property("model", model_4x4);
 

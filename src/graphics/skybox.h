@@ -9,6 +9,7 @@ namespace graphics {
     public:
         Skybox();
         void render();
+        void bind_texture(int index) const;
     private:
         VertexBuffer vertex_buffer {3 * sizeof(float) };
         ArrayBuffer array_buffer;
