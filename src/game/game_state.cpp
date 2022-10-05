@@ -39,7 +39,7 @@ namespace game {
         this->player = entity::ECPlayer::create(global.ecs->create_entity());
         this->cube = global.ecs->create_entity();
         auto mesh_renderer = entity::EcStaticMeshRenderer();
-        mesh_renderer.init("assets/cube.obj");
+        mesh_renderer.init("assets/monkey.obj");
         this->cube.add(mesh_renderer);
         this->cube.add(entity::ECTransform({ 0, -18, -10 }, {}));
     }

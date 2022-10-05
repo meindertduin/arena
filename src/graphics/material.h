@@ -11,6 +11,7 @@ namespace graphics {
         glm::vec3 diffuse;
         glm::vec3 specular;
 
+        bool reflects { false };
         float shininess;
     };
 }

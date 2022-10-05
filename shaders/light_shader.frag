@@ -6,6 +6,7 @@ in vec3 Normal;
 in vec3 FragPos;
 
 uniform sampler2D baseTexture;
+uniform samplerCube cubeMap;
 uniform vec3 viewPos;
 
 struct Material {
@@ -79,12 +80,15 @@ vec3 CalulateDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 pixel) {
 
 void main()
 {
+    vec4 reflection = texture(cubeMap, R);
+
     vec3 texturePixel = vec3(texture(baseTexture, TexCoord));
 
     vec3 normal = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
 
     vec3 result;
+
     for (int i = 0; i < dirLightsCount; i++) {
         result += CalulateDirLight(dirLights[i], normal, viewDir, texturePixel);
     }
@@ -92,7 +96,7 @@ void main()
         result += CalculatePointLight(pointLights[i], normal, viewDir, texturePixel);
     }
 
-    FragColor = vec4(result, 1.0);
+    FragColor = reflection;
 }
 
 

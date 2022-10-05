@@ -68,4 +68,8 @@ namespace graphics {
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glDepthFunc(GL_LESS);
     }
+
+    void Skybox::bind_texture(int index) const {
+        texture.bind(index);
+    }
 }
