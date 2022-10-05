@@ -90,4 +90,20 @@ namespace ui {
 
         return true;
     }
+
+    void UI::open_dev_info() {
+        ComponentBuilder<RootComponent> builder;
+        root = builder
+                .with_pos_and_size(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
+                .with_child<DebugPanelComponent>({ 10, 10}, { 200, 100 })
+                .build();
+    }
+
+    void UI::open_edit_tools() {
+        ComponentBuilder<RootComponent> builder;
+        root = builder
+                .with_pos_and_size(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
+                .with_child<DebugPanelComponent>({ 100, 100}, { 200, 100 })
+                .build();
+    }
 }

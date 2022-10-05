@@ -28,6 +28,9 @@ namespace ui {
         void handle_mouse_button_event(const input::KeyCombination &combi);
         void handle_key_event(const input::KeyCombination &combi);
         void render();
+
+        void open_dev_info();
+        void open_edit_tools();
     private:
         bool on_mouse_move(UIComponent *component, UIMouseMoveEvent &event);
         bool on_click(UIComponent *component, UIMouseClickEvent &event) const;

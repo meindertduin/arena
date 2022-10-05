@@ -61,21 +61,22 @@ int main () {
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
     global.texture = global.game->cache.get_resource<graphics::Texture>("assets/container.png");
 
-    std::thread game_thread([&] {
-        for (;;) {
-            global.window->poll_events();
-            global.game->update();
-            core::delay(core::TickTimeMs);
+    // std::thread game_thread([&] {
+    //     for (;;) {
+    //         core::delay(core::TickTimeMs);
 
-            core::TotalTicks++;
-        }
-    });
+    //         core::TotalTicks++;
+    //     }
+    // });
 
-    game_thread.detach();
+    // game_thread.detach();
 
     core::Timer program_timer;
     while(!global.window->close_requested()) {
         program_timer.start();
+
+        global.window->poll_events();
+        global.game->update();
 
         global.game->render();
         global.window->end_frame();

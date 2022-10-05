@@ -80,8 +80,6 @@ vec3 CalulateDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 pixel) {
 
 void main()
 {
-    vec4 reflection = texture(cubeMap, R);
-
     vec3 texturePixel = vec3(texture(baseTexture, TexCoord));
 
     vec3 normal = normalize(Normal);
@@ -96,7 +94,7 @@ void main()
         result += CalculatePointLight(pointLights[i], normal, viewDir, texturePixel);
     }
 
-    FragColor = reflection;
+    FragColor = vec4(result, 1.0);
 }
 
 
