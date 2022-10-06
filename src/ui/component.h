@@ -16,6 +16,48 @@ namespace ui {
     template<typename T>
     class ComponentBuilder;
 
+    enum class AttributeType {
+        Border,
+        Text,
+    };
+
+    class UiAttribute {
+    public:
+        AttributeType attribute_type;
+        virtual void render() = 0;
+    };
+
+    class BorderAttribute : UiAttribute {
+    public:
+        glm::ivec4 border_size;
+        glm::vec4 border_color;
+    };
+
+    class TextAttribute : UiAttribute {
+    public:
+        std::string text;
+        bool center_text;
+        bool text_wrap;
+    };
+
+    class UiElement {
+    public:
+        glm::ivec2 pos;
+        glm::ivec2 size;
+        glm::ivec4 padding;
+        glm::ivec4 margin;
+
+        glm::vec4 background_color;
+
+        int z_index;
+
+        bool is_hovered { false };
+        void handle_event(UIEventType type, UIEvent* event);
+    protected:
+        std::unordered_map<UIEventType, std::function<void(UIEvent*)>> event_handlers;
+        std::vector<UiAttribute> attributes;
+    };
+
     class UIComponent {
     public:
         glm::ivec2 pos;
