@@ -6,7 +6,11 @@
 namespace ui {
     UI::UI() {
         root = std::make_unique<RootElement>(glm::ivec2 { 0, 0 }, glm::ivec2 {  global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y });
-        root->background_color = { 1, 0, 0, 1 };
+        root->background_color = { 0.1f, 0.1f, 0.1f, 0.25f };
+        auto info = std::make_unique<TextElement>(glm::ivec2 { 10, 10}, glm::ivec2 { 100, 50 }, "Hello world");
+        info->background_color = { 1, 0, 0, 1 };
+        info->parent = root.get();
+        root->children.push_back(std::move(info));
     }
 
     void UI::handle_mouse_move_event() {

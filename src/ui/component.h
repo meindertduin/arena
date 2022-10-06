@@ -3,7 +3,8 @@
 #include <string>
 #include "../graphics/geometry.h"
 
-#include "unordered_map"
+#include <unordered_map>
+#include <map>
 
 namespace ui {
     enum UIEventType {
@@ -24,20 +25,21 @@ namespace ui {
     class UiAttribute {
     public:
         AttributeType attribute_type;
-        virtual void render() = 0;
     };
 
-    class BorderAttribute : UiAttribute {
+    class BorderAttribute : public  UiAttribute {
     public:
         glm::ivec4 border_size;
         glm::vec4 border_color;
     };
 
-    class TextAttribute : UiAttribute {
+    class TextAttribute : public UiAttribute {
     public:
+        TextAttribute(const std::string &text) : text{text} { }
         std::string text;
-        bool center_text;
-        bool text_wrap;
+        bool center_text { false };
+        bool text_wrap { false };
+        int text_size { 12 };
     };
 
     class UiElement {
@@ -53,14 +55,13 @@ namespace ui {
         UiElement *parent { nullptr };
         std::vector<std::unique_ptr<UiElement>> children;
 
-        int z_index { 0};
         bool is_hovered { false };
+        std::map<AttributeType, std::unique_ptr<UiAttribute>> attributes;
 
         void handle_event(UIEventType type, UIEvent* event);
         UiElement(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
     protected:
         std::unordered_map<UIEventType, std::function<void(UIEvent*)>> event_handlers;
-        std::vector<UiAttribute> attributes;
     };
 
     class RootElement : public UiElement {
@@ -89,6 +90,11 @@ namespace ui {
         void handle_event(UIEventType type, UIEvent* event);
     protected:
         std::unordered_map<UIEventType, std::function<void(UIEvent*)>> event_handlers;
+    };
+
+    class TextElement : public UiElement {
+    public:
+        TextElement(const glm::ivec2 &pos, const glm::ivec2 &size, const std::string &text);
     };
 
     class RootComponent : public UIComponent {

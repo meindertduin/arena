@@ -103,4 +103,7 @@ namespace ui {
             parent->handle_event(type, event);
     }
 
+    TextElement::TextElement(const glm::ivec2 &pos, const glm::ivec2 &size, const std::string &text) : UiElement(pos, size) {
+        attributes.insert({ AttributeType::Text, std::make_unique<TextAttribute>(text)});
+    }
 }

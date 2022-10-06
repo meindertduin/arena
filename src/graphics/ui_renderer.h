@@ -11,11 +11,13 @@ namespace graphics {
         explicit UIRenderer(std::shared_ptr<RenderTarget> render_target);
         void before_ui_rendering();
         void after_ui_rendering();
-        void render(ui::UiElement *root);
+        void render(ui::UiElement *element);
     private:
         std::shared_ptr<RenderTarget> render_target;
         ShaderProgram shader { "shaders/ui.vert", "shaders/ui.frag" };
 
         graphics::GpuPlane plane;
+
+        static glm::ivec2 convert_to_gl_pos(const glm::ivec2 pos, const glm::ivec2 size);
     };
 }

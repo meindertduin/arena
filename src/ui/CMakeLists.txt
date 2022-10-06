@@ -6,4 +6,6 @@ set(UI_SOURCES
         src/ui/component.cpp
         src/ui/component.h
         src/ui/component_builder.h
-        src/ui/component_builder.cpp)
+        src/ui/component_builder.cpp
+        src/ui/view.h
+        src/ui/view.cpp)
