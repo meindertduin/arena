@@ -18,19 +18,13 @@ namespace ui {
     class ComponentBuilder;
 
     enum class AttributeType {
+        Geometry,
+        GeometryHovered,
         Border,
         Text,
     };
 
     class UiAttribute {
-    public:
-        AttributeType attribute_type;
-    };
-
-    class BorderAttribute : public  UiAttribute {
-    public:
-        glm::ivec4 border_size;
-        glm::vec4 border_color;
     };
 
     class TextAttribute : public UiAttribute {
@@ -42,6 +36,15 @@ namespace ui {
         int text_size { 12 };
     };
 
+    class GeometryAttribute : public UiAttribute {
+    public:
+        GeometryAttribute(const glm::vec4 &background_color) : background_color{background_color} { }
+        glm::vec4 background_color { 0, 0, 0, 0};
+
+        glm::ivec4 border_size { 0, 0, 0, 0 };
+        glm::vec4 border_color { 0, 0, 0, 0 };
+    };
+
     class UiElement {
     public:
         int id;
@@ -50,18 +53,17 @@ namespace ui {
         glm::ivec4 padding { 0, 0, 0, 0};
         glm::ivec4 margin { 0, 0, 0, 0 };
 
-        glm::vec4 background_color { 0, 0, 0, 0};
-
         UiElement *parent { nullptr };
         std::vector<std::unique_ptr<UiElement>> children;
 
         bool is_hovered { false };
+
         std::map<AttributeType, std::unique_ptr<UiAttribute>> attributes;
+        std::unordered_map<UIEventType, std::function<void(UIEvent*)>> event_handlers;
 
         void handle_event(UIEventType type, UIEvent* event);
         UiElement(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
     protected:
-        std::unordered_map<UIEventType, std::function<void(UIEvent*)>> event_handlers;
     };
 
     class RootElement : public UiElement {

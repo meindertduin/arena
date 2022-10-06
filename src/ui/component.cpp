@@ -105,5 +105,10 @@ namespace ui {
 
     TextElement::TextElement(const glm::ivec2 &pos, const glm::ivec2 &size, const std::string &text) : UiElement(pos, size) {
         attributes.insert({ AttributeType::Text, std::make_unique<TextAttribute>(text)});
+
+        event_handlers.insert({ UIEventType::MouseMove, [&](UIEvent *event) {
+            event->stop_bubbling = true;
+            this->is_hovered = true;
+        }});
     }
 }

@@ -18,17 +18,34 @@ namespace graphics {
 
     void UIRenderer::render(ui::UiElement *element) {
         shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
-                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
-
-        shader.set_property("projection", projection);
-        shader.set_property("color", element->background_color);
 
         glm::ivec2 pos = convert_to_gl_pos(element->pos, element->size);
 
-        if (element->size.x > 0 && element->size.y > 0 && element->background_color.w > 0.0f) {
-            plane.set_pos_and_size(pos, element->size);
-            plane.render();
+        if (element->is_hovered && element->attributes.contains(ui::AttributeType::GeometryHovered)) {
+            glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
+                                              0.0f, (float)global.graphic_options->screen_dimensions.y);
+
+            shader.set_property("projection", projection);
+            auto geometry = reinterpret_cast<ui::GeometryAttribute*>(element->attributes[ui::AttributeType::GeometryHovered].get());
+
+            shader.set_property("color", geometry->background_color);
+
+            if (element->size.x > 0 && element->size.y > 0 && geometry->background_color.w > 0.0f) {
+                plane.set_pos_and_size(pos, element->size);
+                plane.render();
+            }
+        } else if (element->attributes.contains(ui::AttributeType::Geometry)) {
+            glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
+                                              0.0f, (float)global.graphic_options->screen_dimensions.y);
+
+            shader.set_property("projection", projection);
+            auto geometry = reinterpret_cast<ui::GeometryAttribute*>(element->attributes[ui::AttributeType::Geometry].get());
+            shader.set_property("color", geometry->background_color);
+
+            if (element->size.x > 0 && element->size.y > 0 && geometry->background_color.w > 0.0f) {
+                plane.set_pos_and_size(pos, element->size);
+                plane.render();
+            }
         }
 
         if (element->attributes.contains(ui::AttributeType::Text)) {

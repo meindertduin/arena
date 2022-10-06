@@ -32,7 +32,7 @@ namespace ui {
         void open_dev_info();
         void open_edit_tools();
     private:
-        bool on_mouse_move(UIComponent *component, UIMouseMoveEvent &event);
-        bool on_click(UIComponent *component, UIMouseClickEvent &event) const;
+        bool on_mouse_move(UiElement *element, UIMouseMoveEvent &event);
+        bool on_click(UiElement *element, UIMouseClickEvent &event) const;
     };
 }
