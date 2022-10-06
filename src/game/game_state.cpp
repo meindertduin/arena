@@ -60,6 +60,7 @@ namespace game {
         map->render_background();
         global.systems->render();
         skybox.render();
+
         if (ui_mode)
             ui.render();
 
