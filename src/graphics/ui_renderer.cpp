@@ -21,33 +21,16 @@ namespace graphics {
 
         glm::ivec2 pos = convert_to_gl_pos(element->pos, element->size);
 
+        // render the geometry
         if (element->is_hovered && element->attributes.contains(ui::AttributeType::GeometryHovered)) {
-            glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
-                                              0.0f, (float)global.graphic_options->screen_dimensions.y);
-
-            shader.set_property("projection", projection);
             auto geometry = reinterpret_cast<ui::GeometryAttribute*>(element->attributes[ui::AttributeType::GeometryHovered].get());
-
-            shader.set_property("color", geometry->background_color);
-
-            if (element->size.x > 0 && element->size.y > 0 && geometry->background_color.w > 0.0f) {
-                plane.set_pos_and_size(pos, element->size);
-                plane.render();
-            }
+            render_geometry(geometry, pos, element->size);
         } else if (element->attributes.contains(ui::AttributeType::Geometry)) {
-            glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
-                                              0.0f, (float)global.graphic_options->screen_dimensions.y);
-
-            shader.set_property("projection", projection);
             auto geometry = reinterpret_cast<ui::GeometryAttribute*>(element->attributes[ui::AttributeType::Geometry].get());
-            shader.set_property("color", geometry->background_color);
-
-            if (element->size.x > 0 && element->size.y > 0 && geometry->background_color.w > 0.0f) {
-                plane.set_pos_and_size(pos, element->size);
-                plane.render();
-            }
+            render_geometry(geometry, pos, element->size);
         }
 
+        // render the text
         if (element->attributes.contains(ui::AttributeType::Text)) {
             auto attribute = reinterpret_cast<ui::TextAttribute*>(element->attributes[ui::AttributeType::Text].get());
             global.text_renderer->render(attribute->text, pos, attribute->text_size);
@@ -63,5 +46,19 @@ namespace graphics {
                 pos.x,
                 global.graphic_options->screen_dimensions.y - pos.y - size.y,
         };
+    }
+
+    void UIRenderer::render_geometry(ui::GeometryAttribute *geometry, const glm::ivec2 &pos, const glm::ivec2 &size) {
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
+                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
+
+        shader.set_property("projection", projection);
+
+        shader.set_property("color", geometry->background_color);
+
+        if (size.x > 0 && size.y > 0 && geometry->background_color.w > 0.0f) {
+            plane.set_pos_and_size(pos, size);
+            plane.render();
+        }
     }
 }

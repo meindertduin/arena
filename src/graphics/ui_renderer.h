@@ -19,5 +19,6 @@ namespace graphics {
         graphics::GpuPlane plane;
 
         static glm::ivec2 convert_to_gl_pos(const glm::ivec2 pos, const glm::ivec2 size);
+        void render_geometry(ui::GeometryAttribute *geometry, const glm::ivec2 &pos, const glm::ivec2 &size);
     };
 }
