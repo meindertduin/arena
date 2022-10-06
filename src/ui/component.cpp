@@ -25,8 +25,8 @@ namespace ui {
     }
 
     void PlaneComponent::render() {
-        global.ui_renderer->render(border, border_color);
-        global.ui_renderer->render(background, *background_color);
+        // global.ui_renderer->render(border, border_color);
+        // global.ui_renderer->render(background, *background_color);
         UIComponent::render();
     }
 
@@ -89,4 +89,18 @@ namespace ui {
         text = "Frametime: " + std::to_string(global.telemetrics.last_frame_time_ms) + "ms";
         UIComponent::render();
     }
+
+    void UiElement::handle_event(UIEventType type, UIEvent *event) {
+        if (event_handlers.find(type) != event_handlers.end()) {
+            event_handlers[type](event);
+        }
+
+        if (event->stop_bubbling) {
+            return;
+        }
+
+        if (parent != nullptr)
+            parent->handle_event(type, event);
+    }
+
 }

@@ -3,6 +3,7 @@
 #include "core/window.h"
 #include "core/program_time.h"
 #include "graphics/renderer.h"
+#include "graphics/ui_renderer.h"
 #include "graphics/texture.h"
 #include "input/input.h"
 

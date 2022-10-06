@@ -42,20 +42,30 @@ namespace ui {
 
     class UiElement {
     public:
+        int id;
         glm::ivec2 pos;
         glm::ivec2 size;
-        glm::ivec4 padding;
-        glm::ivec4 margin;
+        glm::ivec4 padding { 0, 0, 0, 0};
+        glm::ivec4 margin { 0, 0, 0, 0 };
 
-        glm::vec4 background_color;
+        glm::vec4 background_color { 0, 0, 0, 0};
 
-        int z_index;
+        UiElement *parent { nullptr };
+        std::vector<std::unique_ptr<UiElement>> children;
 
+        int z_index { 0};
         bool is_hovered { false };
+
         void handle_event(UIEventType type, UIEvent* event);
+        UiElement(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
     protected:
         std::unordered_map<UIEventType, std::function<void(UIEvent*)>> event_handlers;
         std::vector<UiAttribute> attributes;
+    };
+
+    class RootElement : public UiElement {
+    public:
+        RootElement(const glm::ivec2 &pos, const glm::ivec2 &size) : UiElement(pos, size) { }
     };
 
     class UIComponent {

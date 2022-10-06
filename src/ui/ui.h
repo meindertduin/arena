@@ -22,7 +22,7 @@ namespace ui {
     class UI {
     public:
         UI();
-        std::unique_ptr<UIComponent> root;
+        std::unique_ptr<UiElement> root;
 
         void handle_mouse_move_event();
         void handle_mouse_button_event(const input::KeyCombination &combi);

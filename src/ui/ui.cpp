@@ -1,29 +1,26 @@
 #include "ui.h"
 #include "../global.h"
-#include "../graphics/renderer.h"
 #include "component_builder.h"
+#include "../graphics/ui_renderer.h"
 
 namespace ui {
     UI::UI() {
-        ComponentBuilder<RootComponent> builder;
-        root = builder
-                .with_pos_and_size(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
-                .with_child<DebugPanelComponent>({ 10, 10}, { 200, 100 })
-                .build();
+        root = std::make_unique<RootElement>(glm::ivec2 { 0, 0 }, glm::ivec2 {  global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y });
+        root->background_color = { 1, 0, 0, 1 };
     }
 
     void UI::handle_mouse_move_event() {
-        auto mouse_pos = input::get_mouse_position();
-        UIMouseMoveEvent event = { .mouse_pos = mouse_pos };
-        on_mouse_move(root.get(), event);
+        // auto mouse_pos = input::get_mouse_position();
+        // UIMouseMoveEvent event = { .mouse_pos = mouse_pos };
+        // on_mouse_move(root.get(), event);
     }
 
     void UI::handle_mouse_button_event(const input::KeyCombination &combi) {
-        if (combi.action == input::KEY_PRESS) {
-            auto mouse_pos = input::get_mouse_position();
-            UIMouseClickEvent event = { .button = combi.key, .mouse_pos = mouse_pos };
-            on_click(root.get(), event);
-        }
+        // if (combi.action == input::KEY_PRESS) {
+        //     auto mouse_pos = input::get_mouse_position();
+        //     UIMouseClickEvent event = { .button = combi.key, .mouse_pos = mouse_pos };
+        //     on_click(root.get(), event);
+        // }
     }
 
     void UI::handle_key_event(const input::KeyCombination &combi) {
@@ -32,7 +29,7 @@ namespace ui {
 
     void UI::render() {
         global.ui_renderer->before_ui_rendering();
-        root->render();
+        global.ui_renderer->render(root.get());
         global.ui_renderer->after_ui_rendering();
     }
 
@@ -92,20 +89,20 @@ namespace ui {
     }
 
     void UI::open_dev_info() {
-        ComponentBuilder<RootComponent> builder;
-        root.reset();
-        root = builder
-                .with_pos_and_size(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
-                .with_child<DebugPanelComponent>({ 10, 10}, { 200, 100 })
-                .build();
+        // ComponentBuilder<RootComponent> builder;
+        // root.reset();
+        // root = builder
+        //         .with_pos_and_size(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
+        //         .with_child<DebugPanelComponent>({ 10, 10}, { 200, 100 })
+        //         .build();
     }
 
     void UI::open_edit_tools() {
-        ComponentBuilder<RootComponent> builder;
-        root.reset();
-        root = builder
-                .with_pos_and_size(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
-                .with_child<DebugPanelComponent>({ 100, 100}, { 200, 100 })
-                .build();
+        // ComponentBuilder<RootComponent> builder;
+        // root.reset();
+        // root = builder
+        //         .with_pos_and_size(glm::ivec2 { 0, 0 }, glm::ivec2 { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y })
+        //         .with_child<DebugPanelComponent>({ 100, 100}, { 200, 100 })
+        //         .build();
     }
 }

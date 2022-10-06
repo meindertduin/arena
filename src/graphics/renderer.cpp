@@ -6,6 +6,8 @@
 #include "material.h"
 #include "../game/game_state.h"
 #include "glad/glad.h"
+#include "ui_renderer.h"
+
 
 namespace graphics {
     Renderer::Renderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
@@ -139,39 +141,5 @@ namespace graphics {
             // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
             x += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
         }
-    }
-
-    UIRenderer::UIRenderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
-        shader.link();
-    }
-
-    void UIRenderer::render(const Renderable &renderable, glm::vec4 &color) {
-        glDisable(GL_DEPTH_TEST);
-        shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
-                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
-
-        shader.set_property("projection", projection);
-        shader.set_property("color", color);
-        renderable.render();
-    }
-
-    void UIRenderer::render(const Renderable &renderable, glm::vec4 &&color) {
-        glDisable(GL_DEPTH_TEST);
-        shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
-                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
-
-        shader.set_property("projection", projection);
-        shader.set_property("color", color);
-        renderable.render();
-    }
-
-    void UIRenderer::before_ui_rendering() {
-        render_target->disable_depth_test();
-    }
-
-    void UIRenderer::after_ui_rendering() {
-        render_target->enable_depth_test();
     }
 }
