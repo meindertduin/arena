@@ -11,8 +11,17 @@ namespace ui {
         info->get_attribute<TextAttribute>(AttributeType::Text)->center_text = true;
         info->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1 });
 
+        auto button = std::make_unique<Button>(glm::ivec2 { 100, 100}, glm::ivec2 { 200, 40 }, "Click me!", [](auto event) {
+            printf("Click happened!\n");
+        });
+        button->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 0, 1, 0, 1});
+        button->add_attribute<GeometryAttribute>(AttributeType::GeometryHovered, glm::vec4 { 0, 0, 1, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
+
         info->parent = root.get();
         root->children.push_back(std::move(info));
+
+        button->parent = root.get();
+        root->children.push_back(std::move(button));
     }
 
     void UI::handle_mouse_move_event() {

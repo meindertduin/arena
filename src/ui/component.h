@@ -29,6 +29,9 @@ namespace ui {
     class TextAttribute : public UiAttribute {
     public:
         explicit TextAttribute(std::string text) : text{std::move(text)} { }
+        explicit TextAttribute(std::string text, int text_size, bool centered = false) : text{std::move(text)},
+            text_size{text_size}, center_text{centered} { }
+
         std::string text;
         bool center_text { false };
         bool text_wrap { false };
@@ -38,6 +41,9 @@ namespace ui {
     class GeometryAttribute : public UiAttribute {
     public:
         GeometryAttribute(const glm::vec4 &background_color) : background_color{background_color} { }
+        GeometryAttribute(const glm::vec4 &background_color, const glm::vec4 &border_color, int border_size)
+            : background_color{background_color}, border_color{border_color}, border_size{border_size, border_size, border_size, border_size} { }
+
         glm::vec4 background_color { 0, 0, 0, 0};
 
         glm::ivec4 border_size { 0, 0, 0, 0 };
@@ -107,5 +113,17 @@ namespace ui {
         void on_tick(uint64_t tick) override;
     private:
         static std::string get_frame_time_string();
+    };
+
+    class Button : public UiElement {
+    public:
+        Button(const glm::ivec2 &pos, const glm::ivec2 &size, std::string text, std::function<void(UIEvent*)>&& on_click);
+    };
+
+    class Drawer : public UiElement {
+    public:
+        Drawer(const glm::ivec2 &pos, const glm::ivec2 &size);
+    private:
+        bool expanded { false };
     };
 }

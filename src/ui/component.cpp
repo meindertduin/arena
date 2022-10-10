@@ -43,4 +43,14 @@ namespace ui {
     std::string FrameTimeCounter::get_frame_time_string() {
         return "Frame time: " + std::to_string(global.telemetrics.last_frame_time_ms) + "ms";
     }
+
+    Button::Button(const glm::ivec2 &pos, const glm::ivec2 &size, std::string text, std::function<void(UIEvent*)>&& on_click)
+        : UiElement(pos, size) {
+        this->event_handlers.insert({ UIEventType::MouseButton, std::forward<std::function<void(UIEvent*)>>(on_click) });
+        add_attribute<TextAttribute>(AttributeType::Text, text, 20, true);
+    }
+
+    Drawer::Drawer(const glm::ivec2 &pos, const glm::ivec2 &size) : UiElement(pos, size) {
+
+    }
 }
