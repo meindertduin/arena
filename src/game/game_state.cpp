@@ -5,6 +5,7 @@
 #include "../entity/systems_collection.h"
 
 #include "../graphics/renderer.h"
+#include "../core/program_time.h"
 
 namespace game {
     GameState::GameState() {
@@ -48,6 +49,9 @@ namespace game {
         update_render_lock.lock();
 
         global.systems->update();
+
+        if (ui_mode)
+            ui.on_tick(core::TotalTicks);
 
         update_render_lock.unlock();
     }

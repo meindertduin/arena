@@ -1,14 +1,13 @@
 #include "ui.h"
 #include "../global.h"
-#include "component_builder.h"
 #include "../graphics/ui_renderer.h"
 
 namespace ui {
     UI::UI() {
         root = std::make_unique<RootElement>(glm::ivec2 { 0, 0 }, glm::ivec2 {  global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y });
         root->attributes.insert({ AttributeType::Geometry, std::make_unique<GeometryAttribute>(glm::vec4 { 0.1f, 0.1f, 0.1f, 0.25f })});
-        auto info = std::make_unique<TextElement>(glm::ivec2 { 10, 10}, glm::ivec2 { 100, 50 }, "Hello world");
 
+        auto info = std::make_unique<FrameTimeCounter>(glm::ivec2 { 10, 10}, glm::ivec2 { 100, 50 });
         info->attributes.insert({ AttributeType::Geometry, std::make_unique<GeometryAttribute>(glm::vec4 { 1, 0, 0, 1 })});
         info->attributes.insert({ AttributeType::GeometryHovered, std::make_unique<GeometryAttribute>(glm::vec4 { 0, 1, 0, 1 })});
 
@@ -112,4 +111,19 @@ namespace ui {
         //         .with_child<DebugPanelComponent>({ 100, 100}, { 200, 100 })
         //         .build();
     }
+
+    void UI::on_tick(uint64_t tick) {
+        if (tick % 5 == 0) {
+            handle_element_ticks(tick, root);
+        }
+    }
+
+    void UI::handle_element_ticks(uint64_t tick, std::unique_ptr<UiElement> &element) {
+        element->on_tick(tick);
+        for (auto &child : element->children) {
+            handle_element_ticks(tick, child);
+        }
+    }
+
+
 }

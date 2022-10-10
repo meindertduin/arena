@@ -5,6 +5,7 @@
 
 #include <unordered_map>
 #include <map>
+#include <utility>
 
 namespace ui {
     enum UIEventType {
@@ -13,9 +14,6 @@ namespace ui {
     };
 
     struct UIEvent;
-
-    template<typename T>
-    class ComponentBuilder;
 
     enum class AttributeType {
         Geometry,
@@ -29,7 +27,7 @@ namespace ui {
 
     class TextAttribute : public UiAttribute {
     public:
-        TextAttribute(const std::string &text) : text{text} { }
+        explicit TextAttribute(std::string text) : text{std::move(text)} { }
         std::string text;
         bool center_text { false };
         bool text_wrap { false };
@@ -63,6 +61,13 @@ namespace ui {
 
         void handle_event(UIEventType type, UIEvent* event);
         UiElement(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
+        virtual void on_tick(uint64_t tick) { }
+
+        template<typename T>
+        T* get_attribute(AttributeType type) {
+            return reinterpret_cast<T*>(this->attributes[type].get());
+        }
+
     protected:
     };
 
@@ -71,81 +76,16 @@ namespace ui {
         RootElement(const glm::ivec2 &pos, const glm::ivec2 &size) : UiElement(pos, size) { }
     };
 
-    class UIComponent {
-    public:
-        glm::ivec2 pos;
-        glm::ivec2 gl_pos;
-
-        glm::ivec2 size;
-        bool is_hovered { false };
-
-        std::vector<std::unique_ptr<UIComponent>> children;
-        UIComponent *parent {nullptr};
-
-        UIComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
-
-        virtual void render() {
-            for (auto &child : children)
-                child->render();
-        }
-
-        void handle_event(UIEventType type, UIEvent* event);
-    protected:
-        std::unordered_map<UIEventType, std::function<void(UIEvent*)>> event_handlers;
-    };
-
     class TextElement : public UiElement {
     public:
         TextElement(const glm::ivec2 &pos, const glm::ivec2 &size, const std::string &text);
     };
 
-    class RootComponent : public UIComponent {
+    class FrameTimeCounter : public UiElement {
     public:
-        explicit RootComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
-    };
-
-    class PlaneComponent : public UIComponent {
-    public:
-        explicit PlaneComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
-        void render() override;
+        FrameTimeCounter(const glm::ivec2 &pos, const glm::ivec2 &size);
+        void on_tick(uint64_t tick) override;
     private:
-        friend class ComponentBuilder<PlaneComponent>;
-
-        graphics::GpuPlane background;
-        graphics::GpuPlane border;
-
-        glm::vec4 *background_color;
-        glm::vec4 border_color { 1.0f, 1.0f, 1.0f, 1.0f };
-    };
-
-    class TextComponent : public UIComponent {
-    public:
-        explicit TextComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
-        void render() override;
-    private:
-        friend class ComponentBuilder<TextComponent>;
-
-        int text_size = 12;
-        std::string *text;
-    };
-
-    class ButtonComponent : public UIComponent {
-    public:
-        explicit ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
-        void render() override;
-    private:
-        glm::vec4 background_color;
-        glm::vec4 border_color;
-
-        std::string text = "Hello world";
-    };
-
-    class DebugPanelComponent : public UIComponent {
-    public:
-        explicit DebugPanelComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
-        void render() override;
-    private:
-        glm::vec4 background_color { 0.1f, 0.1f, 0.1f, 0.2f };
-        std::string text = "Hello world";
+        static std::string get_frame_time_string();
     };
 }
