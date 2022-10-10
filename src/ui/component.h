@@ -24,7 +24,6 @@ namespace ui {
     };
 
     class UiAttribute {
-
     };
 
     class TextAttribute : public UiAttribute {
@@ -58,12 +57,9 @@ namespace ui {
 
         bool is_hovered { false };
 
-        std::map<AttributeType, std::unique_ptr<UiAttribute>> attributes;
         std::unordered_map<UIEventType, std::function<void(UIEvent*)>> event_handlers;
 
-        void handle_event(UIEventType type, UIEvent* event);
         UiElement(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
-        virtual void on_tick(uint64_t tick) { }
 
         template<typename T>
         T* get_attribute(AttributeType type) {
@@ -78,7 +74,21 @@ namespace ui {
 
             return std::nullopt;
         }
+
+        template<typename T, typename ...Args>
+        void add_attribute(AttributeType type, Args&&... args) {
+            attributes.insert({ type, std::make_unique<T>(std::forward<Args>(args)...) });
+        }
+
+        template<typename T>
+        void add_attribute(AttributeType type, std::unique_ptr<T> &&attribute) {
+            attributes.insert({ type, std::forward<std::unique_ptr<T>>(attribute) });
+        }
+
+        void handle_event(UIEventType type, UIEvent* event);
+        virtual void on_tick(uint64_t tick) { }
     protected:
+        std::map<AttributeType, std::unique_ptr<UiAttribute>> attributes;
     };
 
     class RootElement : public UiElement {
