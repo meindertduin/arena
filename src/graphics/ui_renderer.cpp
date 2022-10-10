@@ -35,7 +35,20 @@ namespace graphics {
         // render the text
         auto text_attribute = element->get_attribute_opt<ui::TextAttribute>(ui::AttributeType::Text);
         if (text_attribute.has_value()) {
-            global.text_renderer->render(text_attribute.value()->text, pos, text_attribute.value()->text_size);
+            if (text_attribute.value()->center_text) {
+                // Also center the text on the x-axis
+                auto text_size = text_attribute.value()->text_size;
+                auto text_length = text_attribute.value()->text.length();
+                auto text_width = text_size * text_length / 1.95f;
+
+                int text_pos_x = text_width >= element->size.x ? pos.x : pos.x + (element->size.x - text_width) / 2;
+                int text_pos_y = text_size >= element->size.y ? pos.y : pos.y + (element->size.y - text_size) / 1.5f;
+
+                glm::ivec2 text_pos = { text_pos_x, text_pos_y };
+                global.text_renderer->render(text_attribute.value()->text, text_pos, text_attribute.value()->text_size);
+            } else {
+                global.text_renderer->render(text_attribute.value()->text, pos, text_attribute.value()->text_size);
+            }
         }
 
         // TODO This goes to the deepest level first, that could be problematic
