@@ -22,18 +22,20 @@ namespace graphics {
         glm::ivec2 pos = convert_to_gl_pos(element->pos, element->size);
 
         // render the geometry
-        if (element->is_hovered && element->attributes.contains(ui::AttributeType::GeometryHovered)) {
-            auto geometry = reinterpret_cast<ui::GeometryAttribute*>(element->attributes[ui::AttributeType::GeometryHovered].get());
-            render_geometry(geometry, pos, element->size);
-        } else if (element->attributes.contains(ui::AttributeType::Geometry)) {
-            auto geometry = reinterpret_cast<ui::GeometryAttribute*>(element->attributes[ui::AttributeType::Geometry].get());
-            render_geometry(geometry, pos, element->size);
+        auto hovered_geometry_attribute = element->get_attribute_opt<ui::GeometryAttribute>(ui::AttributeType::GeometryHovered);
+        if (element->is_hovered && hovered_geometry_attribute.has_value()) {
+            render_geometry(hovered_geometry_attribute.value(), pos, element->size);
+        } else {
+            auto geometry_attribute = element->get_attribute_opt<ui::GeometryAttribute>(ui::AttributeType::Geometry);
+            if (geometry_attribute.has_value()) {
+                render_geometry(geometry_attribute.value(), pos, element->size);
+            }
         }
 
         // render the text
-        if (element->attributes.contains(ui::AttributeType::Text)) {
-            auto attribute = reinterpret_cast<ui::TextAttribute*>(element->attributes[ui::AttributeType::Text].get());
-            global.text_renderer->render(attribute->text, pos, attribute->text_size);
+        auto text_attribute = element->get_attribute_opt<ui::TextAttribute>(ui::AttributeType::Text);
+        if (text_attribute.has_value()) {
+            global.text_renderer->render(text_attribute.value()->text, pos, text_attribute.value()->text_size);
         }
 
         // TODO This goes to the deepest level first, that could be problematic

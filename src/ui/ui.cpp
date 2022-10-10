@@ -7,9 +7,8 @@ namespace ui {
         root = std::make_unique<RootElement>(glm::ivec2 { 0, 0 }, glm::ivec2 {  global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y });
         root->attributes.insert({ AttributeType::Geometry, std::make_unique<GeometryAttribute>(glm::vec4 { 0.1f, 0.1f, 0.1f, 0.25f })});
 
-        auto info = std::make_unique<FrameTimeCounter>(glm::ivec2 { 10, 10}, glm::ivec2 { 100, 50 });
+        auto info = std::make_unique<FrameTimeCounter>(glm::ivec2 { 10, 10}, glm::ivec2 { 200, 40 }, 20);
         info->attributes.insert({ AttributeType::Geometry, std::make_unique<GeometryAttribute>(glm::vec4 { 1, 0, 0, 1 })});
-        info->attributes.insert({ AttributeType::GeometryHovered, std::make_unique<GeometryAttribute>(glm::vec4 { 0, 1, 0, 1 })});
 
         info->parent = root.get();
         root->children.push_back(std::move(info));

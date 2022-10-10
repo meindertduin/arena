@@ -6,6 +6,7 @@
 #include <unordered_map>
 #include <map>
 #include <utility>
+#include <optional>
 
 namespace ui {
     enum UIEventType {
@@ -23,6 +24,7 @@ namespace ui {
     };
 
     class UiAttribute {
+
     };
 
     class TextAttribute : public UiAttribute {
@@ -68,6 +70,14 @@ namespace ui {
             return reinterpret_cast<T*>(this->attributes[type].get());
         }
 
+        template<typename T>
+        std::optional<T*> get_attribute_opt(AttributeType type) {
+            if (this->attributes.contains(type)) {
+                return std::optional<T*>{ get_attribute<T>(type) };
+            }
+
+            return std::nullopt;
+        }
     protected:
     };
 
@@ -83,7 +93,7 @@ namespace ui {
 
     class FrameTimeCounter : public UiElement {
     public:
-        FrameTimeCounter(const glm::ivec2 &pos, const glm::ivec2 &size);
+        FrameTimeCounter(const glm::ivec2 &pos, const glm::ivec2 &size, int text_size);
         void on_tick(uint64_t tick) override;
     private:
         static std::string get_frame_time_string();
