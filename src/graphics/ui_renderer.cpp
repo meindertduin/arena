@@ -24,11 +24,12 @@ namespace graphics {
         // render the geometry
         auto hovered_geometry_attribute = element->get_attribute_opt<ui::GeometryAttribute>(ui::AttributeType::GeometryHovered);
         if (element->is_hovered && hovered_geometry_attribute.has_value()) {
-            render_geometry(hovered_geometry_attribute.value(), pos, element->size);
+            auto attribute = hovered_geometry_attribute.value();
+            render_geometry(attribute, pos, element);
         } else {
             auto geometry_attribute = element->get_attribute_opt<ui::GeometryAttribute>(ui::AttributeType::Geometry);
             if (geometry_attribute.has_value()) {
-                render_geometry(geometry_attribute.value(), pos, element->size);
+                render_geometry(geometry_attribute.value(), pos, element);
             }
         }
 
@@ -63,15 +64,25 @@ namespace graphics {
         };
     }
 
-    void UIRenderer::render_geometry(ui::GeometryAttribute *geometry, const glm::ivec2 &pos, const glm::ivec2 &size) {
+
+    void UIRenderer::render_geometry(ui::GeometryAttribute *attribute, const glm::ivec2 &pos, ui::UiElement *element) {
+        if (attribute->border_size > 0) {
+            auto border_pos = pos - attribute->border_size;
+            auto border_plane_size = element->size + attribute->border_size * 2;
+            render_plane(attribute->border_color, border_pos, border_plane_size);
+        }
+        render_plane(attribute->background_color, pos, element->size);
+    }
+
+    void UIRenderer::render_plane(glm::vec4 &color, const glm::ivec2 &pos, const glm::ivec2 &size) {
         glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
                                           0.0f, (float)global.graphic_options->screen_dimensions.y);
 
         shader.set_property("projection", projection);
 
-        shader.set_property("color", geometry->background_color);
+        shader.set_property("color", color);
 
-        if (size.x > 0 && size.y > 0 && geometry->background_color.w > 0.0f) {
+        if (size.x > 0 && size.y > 0 && color.w > 0.0f) {
             plane.set_pos_and_size(pos, size);
             plane.render();
         }

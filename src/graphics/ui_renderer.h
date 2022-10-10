@@ -19,6 +19,7 @@ namespace graphics {
         graphics::GpuPlane plane;
 
         static glm::ivec2 convert_to_gl_pos(const glm::ivec2 pos, const glm::ivec2 size);
-        void render_geometry(ui::GeometryAttribute *geometry, const glm::ivec2 &pos, const glm::ivec2 &size);
+        void render_geometry(ui::GeometryAttribute *attribute, const glm::ivec2 &pos, ui::UiElement *element);
+        void render_plane(glm::vec4 &color, const glm::ivec2 &pos, const glm::ivec2 &size);
     };
 }

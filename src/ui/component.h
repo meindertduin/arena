@@ -42,11 +42,11 @@ namespace ui {
     public:
         GeometryAttribute(const glm::vec4 &background_color) : background_color{background_color} { }
         GeometryAttribute(const glm::vec4 &background_color, const glm::vec4 &border_color, int border_size)
-            : background_color{background_color}, border_color{border_color}, border_size{border_size, border_size, border_size, border_size} { }
+            : background_color{background_color}, border_color{border_color}, border_size{border_size} { }
 
         glm::vec4 background_color { 0, 0, 0, 0};
 
-        glm::ivec4 border_size { 0, 0, 0, 0 };
+        int border_size;
         glm::vec4 border_color { 0, 0, 0, 0 };
     };
 
@@ -125,5 +125,7 @@ namespace ui {
         Drawer(const glm::ivec2 &pos, const glm::ivec2 &size);
     private:
         bool expanded { false };
+        glm::ivec2 folded_size;
+        glm::ivec2 expanded_size;
     };
 }

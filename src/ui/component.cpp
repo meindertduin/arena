@@ -50,7 +50,23 @@ namespace ui {
         add_attribute<TextAttribute>(AttributeType::Text, text, 20, true);
     }
 
-    Drawer::Drawer(const glm::ivec2 &pos, const glm::ivec2 &size) : UiElement(pos, size) {
+    Drawer::Drawer(const glm::ivec2 &pos, const glm::ivec2 &size) : UiElement(pos, size), folded_size{size} {
+        expanded_size = { size.x, size.y * 2 };
+        auto button = std::make_unique<Button>(pos, folded_size, "Click me!", [&](auto event) {
+            if (expanded) {
+                this->size = this->folded_size;
+            } else {
+                this->size = this->expanded_size;
+            }
 
+            expanded = !expanded;
+        });
+        add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
+
+        button->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
+        button->add_attribute<GeometryAttribute>(AttributeType::GeometryHovered, glm::vec4 { 0, 0, 1, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
+
+        button->parent = this;
+        children.push_back(std::move(button));
     }
 }
