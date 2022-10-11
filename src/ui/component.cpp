@@ -51,7 +51,7 @@ namespace ui {
     }
 
     DrawerComponent::DrawerComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : Component(pos, size), folded_size{size} {
-        expanded_size = { size.x, size.y * 2 };
+        expanded_size = { size.x, size.y + 4 };
     }
 
     void DrawerComponent::build(View &view, UiElement *binding_element) {
@@ -70,6 +70,18 @@ namespace ui {
 
         button->build(view, background);
         background->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 0, 0, 1 }, 2);
+
+        int prev_height = pos.y + size.y;
+        for (auto &item : items) {
+            item->pos = { pos.x, prev_height };
+            item->build(view, background);
+            prev_height += item->size.y;
+        }
+    }
+
+    void DrawerComponent::add_item(std::unique_ptr<Component> &&component) {
+        expanded_size.y += component->size.y;
+        items.push_back(std::forward<std::unique_ptr<Component>>(component));
     }
 
     ButtonComponent::ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size, const std::string& text, std::function<void(UIEvent *)> &&on_click)

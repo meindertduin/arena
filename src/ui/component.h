@@ -127,14 +127,8 @@ namespace ui {
         Component(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
         virtual void build(View &view, UiElement *binding_element) = 0;
 
-        void add_component(std::unique_ptr<Component> &&component) {
-            components.push_back(std::forward<std::unique_ptr<Component>>(component));
-        }
-    protected:
         glm::ivec2 pos;
         glm::ivec2 size;
-
-        std::vector<std::unique_ptr<Component>> components;
     };
 
 
@@ -153,6 +147,7 @@ namespace ui {
     public:
         DrawerComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
         void build(View &view, UiElement *binding_element) override;
+        void add_item(std::unique_ptr<Component> &&component);
     private:
         bool expanded { false };
         glm::ivec2 folded_size;
@@ -161,5 +156,6 @@ namespace ui {
         uint32_t background_id;
 
         std::unique_ptr<ButtonComponent> button;
+        std::vector<std::unique_ptr<Component>> items;
     };
 }
