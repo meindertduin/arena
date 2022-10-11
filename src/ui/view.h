@@ -21,6 +21,8 @@ namespace ui {
         std::vector<UiElement*> elements;
         uint32_t elements_count;
 
+        std::vector<std::unique_ptr<Component>> components;
+
         static void handle_element_ticks(uint64_t tick, std::unique_ptr<UiElement> &element);
     };
 }

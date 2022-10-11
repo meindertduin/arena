@@ -26,6 +26,8 @@ namespace ui {
     class UiAttribute {
     };
 
+    class View;
+
     class TextAttribute : public UiAttribute {
     public:
         explicit TextAttribute(std::string text) : text{std::move(text)} { }
@@ -122,16 +124,29 @@ namespace ui {
 
     class Component {
     public:
-        Component();
-        virtual void render() = 0;
+        Component(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
+        virtual void build(View &view, UiElement *binding_element) = 0;
+
+        void add_component(std::unique_ptr<Component> &&component) {
+            components.push_back(std::forward<std::unique_ptr<Component>>(component));
+        }
+
+    protected:
+        glm::ivec2 pos;
+        glm::ivec2 size;
+
+        std::vector<std::unique_ptr<Component>> components;
     };
 
-    class Drawer : public UiElement {
+    class DrawerComponent : public Component {
     public:
-        Drawer(const glm::ivec2 &pos, const glm::ivec2 &size);
+        DrawerComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
+        void build(View &view, UiElement *binding_element) override;
     private:
         bool expanded { false };
         glm::ivec2 folded_size;
         glm::ivec2 expanded_size;
+
+        UiElement* background;
     };
 }

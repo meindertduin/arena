@@ -50,23 +50,29 @@ namespace ui {
         add_attribute<TextAttribute>(AttributeType::Text, text, 20, true);
     }
 
-    Drawer::Drawer(const glm::ivec2 &pos, const glm::ivec2 &size) : UiElement(pos, size), folded_size{size} {
+    DrawerComponent::DrawerComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : Component(pos, size), folded_size{size} {
         expanded_size = { size.x, size.y * 2 };
+    }
+
+    void DrawerComponent::build(View &view, UiElement *binding_element) {
+        auto unique_background = std::make_unique<UiElement>(pos, size);
+        unique_background->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 0, 0, 1 }, 2);
+
+        background = unique_background.get();
+        view.add_element(binding_element, std::move(unique_background));
+
         auto button = std::make_unique<Button>(pos, folded_size, "Click me!", [&](auto event) {
             if (expanded) {
-                this->size = this->folded_size;
+                background->size = this->folded_size;
             } else {
-                this->size = this->expanded_size;
+                background->size = this->expanded_size;
             }
 
             expanded = !expanded;
         });
-        add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
 
         button->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
         button->add_attribute<GeometryAttribute>(AttributeType::GeometryHovered, glm::vec4 { 0, 0, 1, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
-
-        button->parent = this;
-        children.push_back(std::move(button));
+        view.add_element(background, std::move(button));
     }
 }

@@ -11,14 +11,15 @@ namespace ui {
         root_element = std::make_unique<RootElement>(glm::ivec2 { 0, 0 }, glm::ivec2 {  global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y });
         root_element->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 0.1f, 0.1f, 0.1f, 0.25f });
 
+        auto component = std::make_unique<DrawerComponent>(glm::ivec2 { 100, 100}, glm::ivec2 { 200, 40 });
+        component->build(*this, root_element.get());
+        components.push_back(std::move(component));
+
         auto info = std::make_unique<FrameTimeCounter>(glm::ivec2 { 10, 10}, glm::ivec2 { 200, 40 }, 20);
         info->get_attribute<TextAttribute>(AttributeType::Text)->center_text = true;
         info->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1 });
 
-        auto drawer = std::make_unique<Drawer>(glm::ivec2 { 100, 100}, glm::ivec2 { 200, 40 });
-
         add_element(root_element.get(), std::move(info));
-        add_element(root_element.get(), std::move(drawer));
     }
 
     void View::render() {
@@ -117,5 +118,4 @@ namespace ui {
 
         return true;
     }
-
 }
