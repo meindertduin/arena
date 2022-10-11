@@ -6,6 +6,7 @@
 namespace ui {
     inline static bool on_mouse_move(UiElement *component, UIMouseMoveEvent &event);
     inline static bool on_click(UiElement *component, UIMouseClickEvent &event);
+    inline static bool reset_hovering_elements(UiElement* element);
 
     View::View() {
         root_element = std::make_unique<RootElement>(glm::ivec2 { 0, 0 }, glm::ivec2 {  global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y });
@@ -42,6 +43,7 @@ namespace ui {
     }
 
     void View::handle_mouse_move(UIMouseMoveEvent &event) {
+        reset_hovering_elements(root_element.get());
         on_mouse_move(root_element.get(), event);
     }
 
@@ -117,5 +119,13 @@ namespace ui {
         }
 
         return true;
+    }
+
+    bool reset_hovering_elements(UiElement* element) {
+        element->is_hovered = false;
+
+        for (auto &child : element->children) {
+            reset_hovering_elements(child.get());
+        }
     }
 }
