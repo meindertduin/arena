@@ -147,6 +147,6 @@ namespace ui {
         glm::ivec2 folded_size;
         glm::ivec2 expanded_size;
 
-        UiElement* background;
+        uint32_t background_id;
     };
 }

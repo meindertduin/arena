@@ -14,12 +14,14 @@ namespace ui {
         uint32_t add_element(UiElement* parent, std::unique_ptr<UiElement> &&element);
         uint32_t add_element(uint32_t parent_id, std::unique_ptr<UiElement> &&element);
 
+        UiElement* get_element(uint32_t id);
+
         void handle_mouse_click(UIMouseClickEvent &event);
         void handle_mouse_move(UIMouseMoveEvent &event);
     private:
         std::unique_ptr<UiElement> root_element;
         std::vector<UiElement*> elements;
-        uint32_t elements_count;
+        uint32_t elements_count { 0 };
 
         std::vector<std::unique_ptr<Component>> components;
 

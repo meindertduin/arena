@@ -66,6 +66,10 @@ namespace ui {
         return add_element(parent, std::forward<std::unique_ptr<UiElement>>(element));
     }
 
+    UiElement* View::get_element(uint32_t id) {
+        return elements[id];
+    }
+
     bool on_mouse_move(UiElement *component, UIMouseMoveEvent &event) {
         auto &component_ref = *component;
 

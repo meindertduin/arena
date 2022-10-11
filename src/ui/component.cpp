@@ -55,13 +55,11 @@ namespace ui {
     }
 
     void DrawerComponent::build(View &view, UiElement *binding_element) {
-        auto unique_background = std::make_unique<UiElement>(pos, size);
-        unique_background->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 0, 0, 1 }, 2);
+        background_id = view.add_element(binding_element, std::make_unique<UiElement>(pos, size));
+        auto background = view.get_element(background_id);
 
-        background = unique_background.get();
-        view.add_element(binding_element, std::move(unique_background));
-
-        auto button = std::make_unique<Button>(pos, folded_size, "Click me!", [&](auto event) {
+        background->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 0, 0, 1 }, 2);
+        auto button = std::make_unique<Button>(pos, folded_size, "Click me!", [=](auto event) {
             if (expanded) {
                 background->size = this->folded_size;
             } else {
