@@ -120,6 +120,12 @@ namespace ui {
         Button(const glm::ivec2 &pos, const glm::ivec2 &size, std::string text, std::function<void(UIEvent*)>&& on_click);
     };
 
+    class Component {
+    public:
+        Component();
+        virtual void render() = 0;
+    };
+
     class Drawer : public UiElement {
     public:
         Drawer(const glm::ivec2 &pos, const glm::ivec2 &size);
