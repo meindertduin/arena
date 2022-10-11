@@ -58,8 +58,7 @@ namespace ui {
         background_id = view.add_element(binding_element, std::make_unique<UiElement>(pos, size));
         auto background = view.get_element(background_id);
 
-        background->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 0, 0, 1 }, 2);
-        auto button = std::make_unique<Button>(pos, folded_size, "Click me!", [=](auto event) {
+        button = std::make_unique<ButtonComponent>(pos, folded_size, "Click me!", [=](auto event) {
             if (expanded) {
                 background->size = this->folded_size;
             } else {
@@ -69,9 +68,20 @@ namespace ui {
             expanded = !expanded;
         });
 
-        button->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
-        button->add_attribute<GeometryAttribute>(AttributeType::GeometryHovered, glm::vec4 { 0, 0, 1, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
+        button->build(view, background);
+        background->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 0, 0, 1 }, 2);
+    }
 
-        view.add_element(background, std::move(button));
+    ButtonComponent::ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size, const std::string& text, std::function<void(UIEvent *)> &&on_click)
+        : Component(pos, size), text{text}, on_click{on_click} { }
+
+    void ButtonComponent::build(View &view, UiElement *binding_element) {
+        background_id = view.add_element(binding_element, std::make_unique<UiElement>(pos, size));
+        auto background = view.get_element(background_id);
+
+        background->event_handlers.insert({ UIEventType::MouseButton, on_click });
+        background->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
+        background->add_attribute<GeometryAttribute>(AttributeType::GeometryHovered, glm::vec4 { 0, 0, 1, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
+        background->add_attribute<TextAttribute>(AttributeType::Text, text, 20, true);
     }
 }

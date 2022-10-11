@@ -130,12 +130,23 @@ namespace ui {
         void add_component(std::unique_ptr<Component> &&component) {
             components.push_back(std::forward<std::unique_ptr<Component>>(component));
         }
-
     protected:
         glm::ivec2 pos;
         glm::ivec2 size;
 
         std::vector<std::unique_ptr<Component>> components;
+    };
+
+
+    class ButtonComponent : public Component {
+    public:
+        ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size, const std::string& text, std::function<void(UIEvent*)>&& on_click);
+        void build(View &view, UiElement *binding_element) override;
+    private:
+        uint32_t background_id;
+        std::string text;
+
+        std::function<void(UIEvent *)> on_click;
     };
 
     class DrawerComponent : public Component {
@@ -148,5 +159,7 @@ namespace ui {
         glm::ivec2 expanded_size;
 
         uint32_t background_id;
+
+        std::unique_ptr<ButtonComponent> button;
     };
 }
