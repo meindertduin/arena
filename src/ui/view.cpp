@@ -17,11 +17,8 @@ namespace ui {
 
         auto drawer = std::make_unique<Drawer>(glm::ivec2 { 100, 100}, glm::ivec2 { 200, 40 });
 
-        info->parent = root_element.get();
-        root_element->children.push_back(std::move(info));
-
-        drawer->parent = root_element.get();
-        root_element->children.push_back(std::move(drawer));
+        add_element(root_element.get(), std::move(info));
+        add_element(root_element.get(), std::move(drawer));
     }
 
     void View::render() {
@@ -45,6 +42,25 @@ namespace ui {
 
     void View::handle_mouse_move(UIMouseMoveEvent &event) {
         on_mouse_move(root_element.get(), event);
+    }
+
+    uint32_t View::add_element(UiElement *parent, std::unique_ptr<UiElement> &&element) {
+        auto element_ptr = element.get();
+        elements.push_back(element_ptr);
+
+        element->parent = parent;
+        parent->children.push_back(std::forward<std::unique_ptr<UiElement>>(element));
+
+        return elements_count++;
+    }
+
+    uint32_t View::add_element(uint32_t parent_id, std::unique_ptr<UiElement> &&element) {
+        auto parent = elements[parent_id];
+        if (parent == nullptr) {
+            THROW_ERROR("UI: Element with id: %id does not exist.", std::to_string(parent_id));
+        }
+
+        return add_element(parent, std::forward<std::unique_ptr<UiElement>>(element));
     }
 
     bool on_mouse_move(UiElement *component, UIMouseMoveEvent &event) {

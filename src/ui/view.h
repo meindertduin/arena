@@ -18,7 +18,7 @@ namespace ui {
         void handle_mouse_move(UIMouseMoveEvent &event);
     private:
         std::unique_ptr<UiElement> root_element;
-        std::unordered_map<uint32_t, UiElement*> elements;
+        std::vector<UiElement*> elements;
         uint32_t elements_count;
 
         static void handle_element_ticks(uint64_t tick, std::unique_ptr<UiElement> &element);

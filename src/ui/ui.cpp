@@ -3,10 +3,6 @@
 #include "../graphics/ui_renderer.h"
 
 namespace ui {
-    UI::UI() {
-
-    }
-
     void UI::handle_mouse_move_event() {
         auto mouse_pos = input::get_mouse_position();
         UIMouseMoveEvent event = { .mouse_pos = mouse_pos };
