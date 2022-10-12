@@ -5,7 +5,6 @@
 #include "component.h"
 
 namespace ui {
-
     template<typename T>
     class ElementBuilder {
     public:
@@ -14,14 +13,21 @@ namespace ui {
             return ElementBuilder<T>{std::forward<Args>(args)...};
         }
 
+        ElementBuilder<T>& set_parent(UiElement* parent) {
+            element->parent = parent;
+            return *this;
+        }
+
         template<typename ...Args>
         explicit ElementBuilder(Args&&... args) {
             element = std::make_unique<T>(std::forward<Args>(args)...);
         }
 
-        ElementBuilder<T>& with_relative_pos(UiElement* rel_element, const glm::ivec2 &pos) {
+        ElementBuilder<T>& with_relative_pos(const glm::ivec2 &pos) {
             element->display_type = DisplayType::Relative;
-            element->pos = rel_element->pos + pos;
+            element->pos = element->parent->pos + pos;
+
+            return *this;
         }
 
         std::unique_ptr<T> build() {
