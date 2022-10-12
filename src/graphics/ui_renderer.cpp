@@ -74,7 +74,6 @@ namespace graphics {
         };
     }
 
-
     void UIRenderer::render_geometry(ui::GeometryAttribute *attribute, const glm::ivec2 &pos, ui::UiElement *element) {
         if (attribute->border_size > 0) {
             auto border_pos = pos - attribute->border_size;

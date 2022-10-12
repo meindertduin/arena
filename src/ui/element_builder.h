@@ -21,6 +21,22 @@ namespace ui {
             element->display_type = DisplayType::Relative;
         }
 
+        template<typename C, typename ...Args>
+        ElementBuilder<T>& add_attribute(AttributeType type, Args&&... args) {
+            element->template add_attribute<C>(type, std::forward<Args>(args)...);
+            return *this;
+        }
+
+        ElementBuilder<T>& add_event_handler(std::pair<UIEventType, std::function<void(UIEvent*)>> &&insert_pair) {
+            element->event_handlers.insert(insert_pair);
+            return *this;
+        }
+
+        ElementBuilder<T>& with_display(bool value) {
+            element->display = value;
+            return *this;
+        }
+
         std::unique_ptr<T> build() {
             return std::move(element);
         }

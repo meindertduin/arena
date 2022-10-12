@@ -53,14 +53,12 @@ namespace ui {
             : Component(pos, size), text{text}, on_click{on_click} { }
 
     void ButtonComponent::build(View &view, UiElement *binding_element) {
-        background_id = view.create_element<UiElement>(binding_element, pos, size);
-
-        auto background = view.get_element(background_id);
-
-        background->event_handlers.insert({ UIEventType::MouseButton, on_click });
-        background->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
-        background->add_attribute<GeometryAttribute>(AttributeType::GeometryHovered, glm::vec4 { 0, 0, 1, 1}, glm::vec4 { 1, 1, 1, 1 }, 2);
-        background->add_attribute<TextAttribute>(AttributeType::Text, text, 20, true);
+        view.create_element<UiElement>([&](ElementBuilder<UiElement> &builder) {
+            builder.add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 1, 1, 1 }, 2)
+                .add_attribute<GeometryAttribute>(AttributeType::GeometryHovered, glm::vec4 { 0, 0, 1, 1}, glm::vec4 { 1, 1, 1, 1 }, 2)
+                .add_attribute<TextAttribute>(AttributeType::Text, text, 20, true)
+                .add_event_handler({ UIEventType::MouseButton, on_click });
+        }, binding_element, pos, size);
     }
 
     DrawerComponent::DrawerComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : Component(pos, size) {
@@ -68,10 +66,12 @@ namespace ui {
     }
 
     void DrawerComponent::build(View &view, UiElement *binding_element) {
-        items_container_id = view.create_element<UiElement>(binding_element, glm::ivec2 { pos.x, pos.y + size.y }, folded_size);
-        auto items_container = view.get_element(items_container_id);
-        items_container->display = false;
+        items_container_id = view.create_element<UiElement>([](ElementBuilder<UiElement> &builder){
+            builder.add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 0, 0, 1 }, 2)
+                .with_display(false);
+        } ,binding_element, glm::ivec2 { pos.x, pos.y + size.y }, folded_size);
 
+        auto items_container = view.get_element(items_container_id);
         button = std::make_unique<ButtonComponent>(pos, size, "Click me!", [&, items_container](auto event) {
             if (expanded) {
                 items_container->size = this->folded_size;
@@ -85,9 +85,8 @@ namespace ui {
         });
 
         button->build(view, binding_element);
-        items_container->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 0, 0, 1 }, 2);
 
-        int prev_height = size.y;
+        int prev_height = folded_size.y;
         for (auto &item : items) {
             item->pos = { 0, prev_height };
             item->build(view, items_container);

@@ -139,7 +139,6 @@ namespace ui {
         ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size, const std::string& text, std::function<void(UIEvent*)>&& on_click);
         void build(View &view, UiElement *binding_element) override;
     private:
-        uint32_t background_id;
         std::string text;
 
         std::function<void(UIEvent *)> on_click;

@@ -13,7 +13,7 @@ namespace ui {
         root_element->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 0.1f, 0.1f, 0.1f, 0.25f });
 
         auto component = std::make_unique<DrawerComponent>(glm::ivec2 { 100, 100}, glm::ivec2 { 200, 40 });
-        component->add_item(std::make_unique<DrawerComponent>(glm::ivec2 { 100, 100}, glm::ivec2 { 200, 40 }));
+        component->add_item(std::make_unique<DrawerComponent>(glm::ivec2 { 0, 0}, glm::ivec2 { 200, 40 }));
         component->build(*this, root_element.get());
         components.push_back(std::move(component));
 
