@@ -14,12 +14,21 @@ namespace ui {
         void on_tick(uint64_t tick);
 
         template<typename T, typename ...Args>
-        uint32_t create_element(std::function<void(ElementBuilder<T>&)> builder_callback, UiElement* parent, Args&&... args) {
-            ElementBuilder<T> builder { std::forward<Args>(args)... };
-            builder.set_parent(parent);
+        uint32_t create_element(std::function<void(ElementBuilder<T>&)> builder_callback, UiElement* parent, const glm::ivec2 &pos, Args&&... args) {
+            auto builder = ElementBuilder<T>::get( parent, pos, std::forward<Args>(args)...);
             builder_callback(builder);
 
             auto element = builder.build();
+            elements.push_back(element.get());
+            parent->children.push_back(std::move(element));
+
+            return elements_count++;
+        }
+
+        template<typename T, typename ...Args>
+        uint32_t create_element(UiElement* parent, const glm::ivec2 &pos, Args&&... args) {
+            auto element = ElementBuilder<T>::get( parent, pos, std::forward<Args>(args)...).build();
+
             elements.push_back(element.get());
             parent->children.push_back(std::move(element));
 

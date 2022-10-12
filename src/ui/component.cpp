@@ -53,9 +53,7 @@ namespace ui {
             : Component(pos, size), text{text}, on_click{on_click} { }
 
     void ButtonComponent::build(View &view, UiElement *binding_element) {
-        background_id = view.create_element<UiElement>([&](ElementBuilder<UiElement> &builder){
-            builder.with_relative_pos(pos);
-        }, binding_element, pos, size);
+        background_id = view.create_element<UiElement>(binding_element, pos, size);
 
         auto background = view.get_element(background_id);
 
