@@ -52,6 +52,11 @@ namespace ui {
         glm::vec4 border_color { 0, 0, 0, 0 };
     };
 
+    enum class DisplayType {
+        Relative,
+        Absolute,
+    };
+
     class UiElement {
     public:
         int id;
@@ -61,6 +66,7 @@ namespace ui {
         glm::ivec4 margin { 0, 0, 0, 0 };
 
         bool display { true };
+        DisplayType display_type { DisplayType::Relative };
 
         UiElement *parent { nullptr };
         std::vector<std::unique_ptr<UiElement>> children;
@@ -119,11 +125,6 @@ namespace ui {
         static std::string get_frame_time_string();
     };
 
-    class Button : public UiElement {
-    public:
-        Button(const glm::ivec2 &pos, const glm::ivec2 &size, std::string text, std::function<void(UIEvent*)>&& on_click);
-    };
-
     class Component {
     public:
         Component(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
@@ -132,7 +133,6 @@ namespace ui {
         glm::ivec2 pos;
         glm::ivec2 size;
     };
-
 
     class ButtonComponent : public Component {
     public:
