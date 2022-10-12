@@ -11,7 +11,7 @@ namespace graphics {
         explicit UIRenderer(std::shared_ptr<RenderTarget> render_target);
         void before_ui_rendering();
         void after_ui_rendering();
-        void render(ui::UiElement *element);
+        void render(ui::UiElement *element, glm::ivec2 pos = glm::ivec2{ 0, 0 });
     private:
         std::shared_ptr<RenderTarget> render_target;
         ShaderProgram shader { "shaders/ui.vert", "shaders/ui.frag" };

@@ -9,15 +9,16 @@ namespace ui {
     class ElementBuilder {
     public:
         template<typename ...Args>
-        static ElementBuilder<T> get(UiElement *parent, const glm::ivec2 &pos, Args&&... args) {
-            return ElementBuilder<T>{ parent, pos, std::forward<Args>(args)... };
+        static ElementBuilder<T> get(UiElement *parent, Args&&... args) {
+            return ElementBuilder<T>{ parent, std::forward<Args>(args)... };
         }
 
         template<typename ...Args>
-        explicit ElementBuilder(UiElement *parent, const glm::ivec2 &pos, Args&&... args) {
-            element = std::make_unique<T>(pos, std::forward<Args>(args)...);
+        explicit ElementBuilder(UiElement *parent, Args&&... args) {
+            element = std::make_unique<T>(std::forward<Args>(args)...);
             element->parent = parent;
-            with_relative_pos(pos);
+
+            element->display_type = DisplayType::Relative;
         }
 
         std::unique_ptr<T> build() {
@@ -26,10 +27,5 @@ namespace ui {
 
     private:
         std::unique_ptr<T> element;
-
-        void with_relative_pos(const glm::ivec2 &pos) {
-            element->display_type = DisplayType::Relative;
-            element->pos = element->parent->pos + pos;
-        }
     };
 }
