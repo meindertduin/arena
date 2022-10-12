@@ -4,6 +4,10 @@
 
 namespace ui {
     void UiElement::handle_event(UIEventType type, UIEvent *event) {
+        if (!display) {
+            parent->handle_event(type, event);
+        }
+
         if (event_handlers.find(type) != event_handlers.end()) {
             event_handlers[type](event);
         }
@@ -50,31 +54,34 @@ namespace ui {
         add_attribute<TextAttribute>(AttributeType::Text, text, 20, true);
     }
 
-    DrawerComponent::DrawerComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : Component(pos, size), folded_size{size} {
-        expanded_size = { size.x, size.y + 4 };
+    DrawerComponent::DrawerComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : Component(pos, size) {
+        expanded_size = { size.x, size.y };
     }
 
     void DrawerComponent::build(View &view, UiElement *binding_element) {
-        background_id = view.add_element(binding_element, std::make_unique<UiElement>(pos, size));
-        auto background = view.get_element(background_id);
+        items_container_id = view.add_element(binding_element, std::make_unique<UiElement>(glm::ivec2 { pos.x, pos.y + size.y }, folded_size));
+        auto items_container = view.get_element(items_container_id);
+        items_container->display = false;
 
-        button = std::make_unique<ButtonComponent>(pos, folded_size, "Click me!", [=](auto event) {
+        button = std::make_unique<ButtonComponent>(pos, size, "Click me!", [&, items_container](auto event) {
             if (expanded) {
-                background->size = this->folded_size;
+                items_container->size = this->folded_size;
+                items_container->display = false;
             } else {
-                background->size = this->expanded_size;
+                items_container->size = this->expanded_size;
+                items_container->display = true;
             }
 
             expanded = !expanded;
         });
 
-        button->build(view, background);
-        background->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 0, 0, 1 }, 2);
+        button->build(view, binding_element);
+        items_container->add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 0, 0, 1 }, 2);
 
         int prev_height = pos.y + size.y;
         for (auto &item : items) {
             item->pos = { pos.x, prev_height };
-            item->build(view, background);
+            item->build(view, items_container);
             prev_height += item->size.y;
         }
     }

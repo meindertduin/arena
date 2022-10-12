@@ -17,6 +17,10 @@ namespace graphics {
     }
 
     void UIRenderer::render(ui::UiElement *element) {
+        if (!element->display) {
+            return;
+        }
+
         shader.use();
 
         glm::ivec2 pos = convert_to_gl_pos(element->pos, element->size);

@@ -60,6 +60,8 @@ namespace ui {
         glm::ivec4 padding { 0, 0, 0, 0};
         glm::ivec4 margin { 0, 0, 0, 0 };
 
+        bool display { true };
+
         UiElement *parent { nullptr };
         std::vector<std::unique_ptr<UiElement>> children;
 
@@ -150,10 +152,11 @@ namespace ui {
         void add_item(std::unique_ptr<Component> &&component);
     private:
         bool expanded { false };
-        glm::ivec2 folded_size;
+        glm::ivec2 folded_size { 0, 0 };
         glm::ivec2 expanded_size;
 
         uint32_t background_id;
+        uint32_t items_container_id;
 
         std::unique_ptr<ButtonComponent> button;
         std::vector<std::unique_ptr<Component>> items;
