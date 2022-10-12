@@ -68,6 +68,7 @@ namespace ui {
     void DrawerComponent::build(View &view, UiElement *binding_element) {
         items_container_id = view.create_element<UiElement>([](ElementBuilder<UiElement> &builder){
             builder.add_attribute<GeometryAttribute>(AttributeType::Geometry, glm::vec4 { 1, 0, 0, 1}, glm::vec4 { 1, 0, 0, 1 }, 2)
+                .with_display_type(DisplayType::Auto)
                 .with_display(false);
         } ,binding_element, glm::ivec2 { pos.x, pos.y + size.y }, folded_size);
 
@@ -88,7 +89,7 @@ namespace ui {
 
         int prev_height = folded_size.y;
         for (auto &item : items) {
-            item->pos = { 0, prev_height };
+            item->pos = { 0, 200 };
             item->build(view, items_container);
             prev_height += item->size.y;
         }

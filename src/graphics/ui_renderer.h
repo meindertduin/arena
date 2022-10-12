@@ -6,12 +6,19 @@
 #include "../ui/component.h"
 
 namespace graphics {
+    struct UiRenderContext {
+        UiRenderContext(const glm::ivec2 &pos) : incremental_pos{pos} { }
+        UiRenderContext(const glm::ivec2 &pos, ui::UiElement *sibling) : incremental_pos{pos}, sibling{sibling} { }
+        glm::vec2 incremental_pos;
+        ui::UiElement *sibling { nullptr };
+    };
+
     class UIRenderer {
     public:
         explicit UIRenderer(std::shared_ptr<RenderTarget> render_target);
         void before_ui_rendering();
         void after_ui_rendering();
-        void render(ui::UiElement *element, glm::ivec2 pos = glm::ivec2{ 0, 0 });
+        void render(ui::UiElement *element, UiRenderContext context = UiRenderContext{ glm::ivec2 { 0, 0 }});
     private:
         std::shared_ptr<RenderTarget> render_target;
         ShaderProgram shader { "shaders/ui.vert", "shaders/ui.frag" };

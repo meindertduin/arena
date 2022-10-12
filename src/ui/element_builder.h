@@ -37,6 +37,11 @@ namespace ui {
             return *this;
         }
 
+        ElementBuilder<T>& with_display_type(DisplayType display_type) {
+            element->display_type = display_type;
+            return *this;
+        }
+
         std::unique_ptr<T> build() {
             return std::move(element);
         }

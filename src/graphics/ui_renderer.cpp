@@ -16,20 +16,29 @@ namespace graphics {
         render_target->enable_depth_test();
     }
 
-    void UIRenderer::render(ui::UiElement *element, glm::ivec2 pos) {
+    void UIRenderer::render(ui::UiElement *element, UiRenderContext context) {
         if (!element->display) {
             return;
         }
 
         shader.use();
 
-        if (element->display_type == ui::DisplayType::Relative) {
-            pos += element->pos;
-        } else {
-            pos = element->pos;
-        }
+        switch (element->display_type) {
+            case ui::DisplayType::Relative:
+                context.incremental_pos += element->pos;
+                break;
+            case ui::DisplayType::Absolute:
+                context.incremental_pos = element->pos;
+                break;
+            case ui::DisplayType::Auto:
+                if (context.sibling != nullptr)
+                    context.incremental_pos += glm::ivec2{ element->pos.x, element->pos.y + context.sibling->size.y };
+                else
+                    context.incremental_pos += element->pos;
+                break;
+        };
 
-        glm::ivec2 gl_pos = convert_to_gl_pos(pos, element->size);
+        glm::ivec2 gl_pos = convert_to_gl_pos(context.incremental_pos, element->size);
 
         // render the geometry
         auto hovered_geometry_attribute = element->get_attribute_opt<ui::GeometryAttribute>(ui::AttributeType::GeometryHovered);
@@ -63,8 +72,11 @@ namespace graphics {
         }
 
         // TODO This goes to the deepest level first, that could be problematic
-        for (auto &child_element : element->children)
-            render(child_element.get(), pos);
+        ui::UiElement *previous_child { nullptr };
+        for (auto &child_element : element->children) {
+            render(child_element.get(), UiRenderContext{ context.incremental_pos, previous_child });
+            previous_child = child_element.get();
+        }
     }
 
     glm::ivec2 UIRenderer::convert_to_gl_pos(const glm::ivec2 pos, const glm::ivec2 size) {

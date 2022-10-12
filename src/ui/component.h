@@ -55,6 +55,7 @@ namespace ui {
     enum class DisplayType {
         Relative,
         Absolute,
+        Auto,
     };
 
     class UiElement {
