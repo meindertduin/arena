@@ -3,7 +3,7 @@
 #include <utility>
 
 namespace ui {
-    ui::Frame::Frame(std::string text) : text{std::move(text)} {
+    Frame::Frame(std::string text) : text{std::move(text)} {
 
     }
 

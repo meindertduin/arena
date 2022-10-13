@@ -11,6 +11,8 @@ set(GRAPHICS_SOURCES
         src/graphics/font.h
         src/graphics/font.cpp
         src/graphics/geometry.h
+        src/graphics/rect.cpp
+        src/graphics/rect.h
         src/graphics/geometry.cpp
         src/graphics/ui_renderer.h
         src/graphics/ui_renderer.cpp)
