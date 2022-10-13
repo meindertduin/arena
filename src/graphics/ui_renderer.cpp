@@ -32,7 +32,7 @@ namespace graphics {
                 break;
             case ui::DisplayType::Auto:
                 if (context.sibling != nullptr)
-                    context.incremental_pos += glm::ivec2{ element->pos.x, element->pos.y + context.sibling->size.y };
+                    context.incremental_pos += glm::ivec2{ 0, element->pos.y + context.sibling->size.y };
                 else
                     context.incremental_pos += element->pos;
                 break;

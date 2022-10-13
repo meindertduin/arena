@@ -3,10 +3,16 @@ set(UI_SOURCES
         src/ui/ui_command.h
         src/ui/ui.cpp
         src/ui/ui.h
-        src/ui/component.cpp
-        src/ui/component.h
+        src/ui/element.cpp
+        src/ui/element.h
         src/ui/view.h
         src/ui/view.cpp
         src/ui/events.h
         src/ui/element_builder.h
-        src/ui/element_builder.cpp)
+        src/ui/element_builder.cpp
+        src/ui/component.h
+        src/ui/component.cpp
+        src/ui/frame.h
+        src/ui/frame.cpp
+        src/ui/object.h
+        src/ui/object.cpp)

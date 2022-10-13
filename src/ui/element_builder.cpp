@@ -1,6 +1,6 @@
 #include "element_builder.h"
 
-#include "component.h"
+#include "element.h"
 
 namespace ui {
 }

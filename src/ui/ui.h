@@ -1,6 +1,6 @@
 #pragma once
 
-#include "component.h"
+#include "element.h"
 
 #include "../input/input.h"
 #include "events.h"

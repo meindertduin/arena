@@ -2,7 +2,7 @@
 
 #include <memory>
 #include <glm/glm.hpp>
-#include "component.h"
+#include "element.h"
 
 namespace ui {
     template<typename T>

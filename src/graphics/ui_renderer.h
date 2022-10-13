@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "render_target.h"
-#include "../ui/component.h"
+#include "../ui/element.h"
 
 namespace graphics {
     struct UiRenderContext {
