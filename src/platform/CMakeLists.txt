@@ -1,0 +1,1 @@
+set(PLATFORM_SOURCES src/platform/platform.h)

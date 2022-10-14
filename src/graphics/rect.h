@@ -1,10 +1,6 @@
 #pragma once
 
-// TODO move this to a platform file
-#ifdef ALWAYS_INLINE
-#    undef ALWAYS_INLINE
-#endif
-#define ALWAYS_INLINE __attribute__((always_inline)) inline
+#include "../platform/platform.h"
 
 namespace graphics {
     template<typename T>
