@@ -120,8 +120,8 @@ namespace graphics {
         auto x = pos.x;
 
         shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
-                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
+                                          0.0f, (float)global.graphic_options->size().height());
 
         shader.set_property("projection", projection);
         shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });

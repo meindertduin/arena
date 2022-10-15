@@ -52,7 +52,7 @@ namespace graphics {
         };
 
         IRect convert_to_gl_rect(const IRect &rect) const {
-            auto converted_pos = graphics::Point<int>(rect.position().x(), global.graphic_options->screen_dimensions.y - rect.position().y() - rect.size().height());
+            auto converted_pos = graphics::Point<int>(rect.position().x(), global.graphic_options->size().height() - rect.position().y() - rect.size().height());
             return { converted_pos, rect.size() };
         }
 

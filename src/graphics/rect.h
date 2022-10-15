@@ -13,6 +13,12 @@ namespace graphics {
         constexpr ALWAYS_INLINE T width() const { return m_width; }
         constexpr ALWAYS_INLINE T height() const { return m_height; }
         constexpr ALWAYS_INLINE T area() const { return m_width * m_height; }
+
+        template<typename U>
+        bool operator==(const Size<U> &other) const {
+            return width() == other.width() && height() == other.height();
+        }
+
     private:
         T m_width;
         T m_height;
@@ -60,5 +66,7 @@ namespace graphics {
         Size<T> m_size;
     };
 
+    using ISize = Size<int>;
+    using U32Size = Size<unsigned int>;
     using IRect = Rect<int>;
 }

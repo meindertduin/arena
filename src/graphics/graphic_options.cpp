@@ -16,17 +16,18 @@ namespace graphics {
         dispatcher->emit_event(event);
     }
 
-    void GraphicOptions::set_screen_dimensions(glm::u32vec2 new_value) {
-        if (new_value == screen_dimensions)
+    void GraphicOptions::set_size(const U32Size &size) {
+        if (size == m_size)
             return;
 
         auto dispatcher = core::EventDispatcher<ScreenResizeEvent>::instance();
-        ScreenResizeEvent event;
+        ScreenResizeEvent event{};
 
         event.event_type = core::Event::EventType::SettingChangeEvent;
         event.option_type = OptionChangeEvent::OptionType::ScreenResize;
-        event.new_screen_dimensions = new_value;
+        event.new_size = size;
         dispatcher->emit_event(event);
-    }
 
+        m_size = size;
+    }
 }

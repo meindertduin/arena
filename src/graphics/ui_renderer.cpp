@@ -19,13 +19,13 @@ namespace graphics {
     glm::ivec2 UIRenderer::convert_to_gl_pos(const glm::ivec2 pos, const glm::ivec2 size) {
         return {
                 pos.x,
-                global.graphic_options->screen_dimensions.y - pos.y - size.y,
+                global.graphic_options->size().height() - pos.y - size.y,
         };
     }
 
     void UIRenderer::render_plane(glm::vec4 &color, const glm::ivec2 &pos, const glm::ivec2 &size) {
-        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
-                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
+                                          0.0f, (float)global.graphic_options->size().height());
 
         shader.set_property("projection", projection);
 
@@ -39,8 +39,8 @@ namespace graphics {
 
     void UIRenderer::draw_rect(const IRect &rect, const Color &color) {
         shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
-                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
+                                          0.0f, (float)global.graphic_options->size().height());
 
         shader.set_property("projection", projection);
 

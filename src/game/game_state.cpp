@@ -25,8 +25,7 @@ namespace game {
         pointLight.quadratic = 0.032f;
 
         point_lights.push_back(pointLight);
-
-        this->camera = new entity::Camera { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y };
+        this->camera = new entity::Camera { global.graphic_options->size().width(), global.graphic_options->size().height() };
     }
 
     GameState::~GameState() {

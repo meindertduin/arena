@@ -31,8 +31,8 @@ namespace graphics {
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         
         // creationg framebuffer for multi-sample or without
-        auto screen_width = global.graphic_options->screen_dimensions.x;
-        auto screen_height = global.graphic_options->screen_dimensions.y;
+        auto screen_width = global.graphic_options->size().width();
+        auto screen_height = global.graphic_options->size().height();
 
         if (global.graphic_options->antialiasing) {
             glGenTextures(1, &texture_color_buffer_multi_sampled);
@@ -92,8 +92,8 @@ namespace graphics {
 
     void RenderTarget::unbind() {
         if (global.graphic_options->antialiasing) {
-            auto src_width = global.graphic_options->screen_dimensions.x;
-            auto src_height = global.graphic_options->screen_dimensions.y;
+            auto src_width = global.graphic_options->size().width();
+            auto src_height = global.graphic_options->size().height();
             glBindFramebuffer(GL_READ_FRAMEBUFFER, framebuffer);
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, intermediate_fbo);
             glBlitFramebuffer(0, 0, src_width, src_height, 0, 0, src_width, src_height, GL_COLOR_BUFFER_BIT, GL_NEAREST);

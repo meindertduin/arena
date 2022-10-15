@@ -4,6 +4,7 @@
 
 #include "../core/event.h"
 #include "../core/event_dispatcher.h"
+#include "rect.h"
 
 namespace graphics {
     struct OptionChangeEvent : public core::Event {
@@ -18,7 +19,7 @@ namespace graphics {
     };
 
     struct ScreenResizeEvent : public OptionChangeEvent {
-        glm::u32vec2 new_screen_dimensions;
+        U32Size new_size;
     };
 
     using ScreenResizeEventHandler = core::EventHandler<ScreenResizeEvent>;

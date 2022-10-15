@@ -18,7 +18,7 @@ namespace entity {
             view = glm::lookAt(transform.pos, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 
             resize_event_handler = core::create_unique_event_handler<graphics::ScreenResizeEvent>([&](const auto &event) {
-                set_projection(event.new_screen_dimensions.x, event.new_screen_dimensions.y);
+                set_projection(event.new_size.width(), event.new_size.height());
             });
         }
 
