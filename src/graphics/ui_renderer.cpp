@@ -16,83 +16,11 @@ namespace graphics {
         render_target->enable_depth_test();
     }
 
-    void UIRenderer::render(ui::UiElement *element, UiRenderContext context) {
-        if (!element->display) {
-            return;
-        }
-
-        shader.use();
-
-        switch (element->display_type) {
-            case ui::DisplayType::Relative:
-                context.incremental_pos += element->pos;
-                break;
-            case ui::DisplayType::Absolute:
-                context.incremental_pos = element->pos;
-                break;
-            case ui::DisplayType::Auto:
-                if (context.sibling != nullptr)
-                    context.incremental_pos += glm::ivec2{ 0, element->pos.y + context.sibling->size.y };
-                else
-                    context.incremental_pos += element->pos;
-                break;
-        };
-
-        glm::ivec2 gl_pos = convert_to_gl_pos(context.incremental_pos, element->size);
-
-        // render the geometry
-        auto hovered_geometry_attribute = element->get_attribute_opt<ui::GeometryAttribute>(ui::AttributeType::GeometryHovered);
-        if (element->is_hovered && hovered_geometry_attribute.has_value()) {
-            auto attribute = hovered_geometry_attribute.value();
-            render_geometry(attribute, gl_pos, element);
-        } else {
-            auto geometry_attribute = element->get_attribute_opt<ui::GeometryAttribute>(ui::AttributeType::Geometry);
-            if (geometry_attribute.has_value()) {
-                render_geometry(geometry_attribute.value(), gl_pos, element);
-            }
-        }
-
-        // render the text
-        auto text_attribute = element->get_attribute_opt<ui::TextAttribute>(ui::AttributeType::Text);
-        if (text_attribute.has_value()) {
-            if (text_attribute.value()->center_text) {
-                // Also center the text on the x-axis
-                auto text_size = text_attribute.value()->text_size;
-                auto text_length = text_attribute.value()->text.length();
-                auto text_width = text_size * text_length / 1.95f;
-
-                int text_pos_x = text_width >= element->size.x ? gl_pos.x : gl_pos.x + (element->size.x - text_width) / 2;
-                int text_pos_y = text_size >= element->size.y ? gl_pos.y : gl_pos.y + (element->size.y - text_size) / 1.5f;
-
-                glm::ivec2 text_pos = { text_pos_x, text_pos_y };
-                global.text_renderer->render(text_attribute.value()->text, text_pos, text_attribute.value()->text_size);
-            } else {
-                global.text_renderer->render(text_attribute.value()->text, gl_pos, text_attribute.value()->text_size);
-            }
-        }
-
-        // TODO This goes to the deepest level first, that could be problematic
-        ui::UiElement *previous_child { nullptr };
-        for (auto &child_element : element->children) {
-            render(child_element.get(), UiRenderContext{ context.incremental_pos, previous_child });
-            previous_child = child_element.get();
-        }
-    }
-
     glm::ivec2 UIRenderer::convert_to_gl_pos(const glm::ivec2 pos, const glm::ivec2 size) {
         return {
                 pos.x,
                 global.graphic_options->screen_dimensions.y - pos.y - size.y,
         };
-    }
-
-    void UIRenderer::render_geometry(ui::GeometryAttribute *attribute, const glm::ivec2 &pos, ui::UiElement *element) {
-        if (attribute->border_size > 0) {
-            auto border_pos = pos - attribute->border_size;
-            auto border_plane_size = element->size + attribute->border_size * 2;
-            render_plane(attribute->border_color, border_pos, border_plane_size);
-        }
-        render_plane(attribute->background_color, pos, element->size);
     }
 
     void UIRenderer::render_plane(glm::vec4 &color, const glm::ivec2 &pos, const glm::ivec2 &size) {
@@ -105,6 +33,21 @@ namespace graphics {
 
         if (size.x > 0 && size.y > 0 && color.w > 0.0f) {
             plane.set_pos_and_size(pos, size);
+            plane.render();
+        }
+    }
+
+    void UIRenderer::draw_rect(const IRect &rect, const Color &color) {
+        shader.use();
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
+                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
+
+        shader.set_property("projection", projection);
+
+        shader.set_property("color", color.color());
+
+        if (rect.size().width() > 0 && rect.size().height() > 0 && color.alpha() > 0.0f) {
+            plane.set_from_rect(rect);
             plane.render();
         }
     }

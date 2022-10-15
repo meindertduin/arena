@@ -22,7 +22,7 @@ namespace graphics {
     class Point {
     public:
         Point() = default;
-        Point(T x, T y) : m_x{x}, m_y{y} {}
+        constexpr Point(T x, T y) : m_x{x}, m_y{y} {}
 
         constexpr ALWAYS_INLINE T x() const { return m_x; }
         constexpr ALWAYS_INLINE T y() const { return m_y; }
@@ -50,8 +50,15 @@ namespace graphics {
 
         constexpr ALWAYS_INLINE Point<T> position() const { return m_position; }
         constexpr ALWAYS_INLINE Size<T> size() const { return m_size; }
+
+        constexpr bool contains(const Rect<T> &other) const {
+            return size().width() >= other.size().width()
+                && size().height() >= other.size().height();
+        }
     private:
         Point<T> m_position;
         Size<T> m_size;
     };
+
+    using IRect = Rect<int>;
 }

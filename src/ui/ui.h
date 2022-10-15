@@ -1,10 +1,8 @@
 #pragma once
 
-#include "element.h"
-
 #include "../input/input.h"
 #include "events.h"
-#include "view.h"
+#include "frame.h"
 #include <array>
 
 namespace ui {
@@ -20,6 +18,6 @@ namespace ui {
         void open_dev_info();
         void open_edit_tools();
     private:
-        View view;
+        Frame frame { "Hello world" };
     };
 }
