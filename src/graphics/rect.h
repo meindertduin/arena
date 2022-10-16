@@ -55,7 +55,6 @@ namespace graphics {
         Rect(const Point<T> &position, const Size<T> &size) : m_position{position}, m_size{size} { }
 
         [[nodiscard]] constexpr ALWAYS_INLINE Point<T> position() const { return m_position; }
-        Point<T> rendering_position();
         [[nodiscard]] constexpr ALWAYS_INLINE Size<T> size() const { return m_size; }
 
         [[nodiscard]] constexpr bool contains(const Rect<T> &other) const {

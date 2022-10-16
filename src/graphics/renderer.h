@@ -55,6 +55,8 @@ namespace graphics {
     private:
         static constexpr int FontRenderSize = 64;
 
+        int calculate_text_width(const std::string &text, float scale);
+
         TrueTypeFont font { "assets/alagard.ttf", FontRenderSize };
         ShaderProgram shader { "shaders/text.vert", "shaders/text.frag" };
         GpuPlane plane;

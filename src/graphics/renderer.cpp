@@ -147,11 +147,10 @@ namespace graphics {
         auto gl_rect = convert_to_gl_rect(rect);
         float scale = static_cast<float>(options.text_size) / static_cast<float>(FontRenderSize);
 
-        auto text_length = text.length();
-        auto text_width = options.text_size;
+        auto text_width = calculate_text_width(text, scale);
 
         auto x_pos = gl_rect.position().x();
-        if (options.center_text_x && gl_rect.size().width() > text_length * text_width) {
+        if (options.center_text_x && gl_rect.size().width() > text_width) {
             x_pos = (gl_rect.size().width() - text_width) / 2 + gl_rect.position().x();
         }
 
@@ -179,5 +178,20 @@ namespace graphics {
             // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
             x_pos += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
         }
+    }
+
+    int TextRenderer::calculate_text_width(const std::string &text, float scale) {
+        int text_width = 0;
+
+        auto text_length = text.length();
+
+        for (auto i = 0; i < text_length - 1; i++) {
+            auto &glyph = font.get_glyph(text[i]);
+            text_width += glyph.advance >> 6;
+        }
+        auto &glyph = font.get_glyph(text[text_length - 1]);
+        text_width += glyph.size.x;
+
+        return static_cast<int>(std::round((float) text_width * scale));
     }
 }

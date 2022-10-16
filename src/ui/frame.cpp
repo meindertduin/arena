@@ -15,7 +15,7 @@ namespace ui {
 
     void Frame::render() {
         global.ui_renderer->draw_rect(rect(), color());
-        auto text_rect = IRect({10, 10}, {200, 20});
+        auto text_rect = IRect({0, 0}, {200, 20});
         graphics::TextRenderOptions options{};
         options.text_size = 20;
         options.center_text_x = true;
