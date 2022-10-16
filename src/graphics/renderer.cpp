@@ -142,4 +142,42 @@ namespace graphics {
             x += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
         }
     }
+
+    void TextRenderer::render(const std::string &text, const IRect &rect, const TextRenderOptions &options) {
+        auto gl_rect = convert_to_gl_rect(rect);
+        float scale = static_cast<float>(options.text_size) / static_cast<float>(FontRenderSize);
+
+        auto text_length = text.length();
+        auto text_width = options.text_size;
+
+        auto x_pos = gl_rect.position().x();
+        if (options.center_text_x && gl_rect.size().width() > text_length * text_width) {
+            x_pos = (gl_rect.size().width() - text_width) / 2 + gl_rect.position().x();
+        }
+
+        auto y_pos = gl_rect.position().y();
+
+        shader.use();
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
+                                          0.0f, (float)global.graphic_options->size().height());
+
+        shader.set_property("projection", projection);
+        shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
+
+        for (char c : text) {
+            auto &glyph = font.get_glyph(c);
+
+            float xpos = x_pos + static_cast<float>(glyph.bearing.x) * scale;
+            float ypos = y_pos - static_cast<float>(glyph.size.y - glyph.bearing.y) * scale;
+            float w = static_cast<float>(glyph.size.x) * scale;
+            float h = static_cast<float>(glyph.size.y) * scale;
+
+            plane.set_pos_and_size({xpos, ypos}, {w, h});
+            glyph.texture->bind(0);
+            plane.render();
+
+            // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+            x_pos += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
+        }
+    }
 }

@@ -40,9 +40,17 @@ namespace graphics {
         ShaderProgram shader { "shaders/terrain.vert", "shaders/terrain.frag" };
     };
 
+    struct TextRenderOptions {
+        int text_size;
+        bool overflow;
+        bool center_text_x;
+        bool center_text_y;
+    };
+
     class TextRenderer {
     public:
         TextRenderer();
+        void render(const std::string &text, const IRect &rect, const TextRenderOptions &options);
         void render(const std::string& text, const glm::vec2 &pos, int text_size);
     private:
         static constexpr int FontRenderSize = 64;

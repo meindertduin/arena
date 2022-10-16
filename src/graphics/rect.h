@@ -54,10 +54,11 @@ namespace graphics {
         Rect(T x, T y, T width, T height) : m_position{x, y}, m_size{width, height} { }
         Rect(const Point<T> &position, const Size<T> &size) : m_position{position}, m_size{size} { }
 
-        constexpr ALWAYS_INLINE Point<T> position() const { return m_position; }
-        constexpr ALWAYS_INLINE Size<T> size() const { return m_size; }
+        [[nodiscard]] constexpr ALWAYS_INLINE Point<T> position() const { return m_position; }
+        Point<T> rendering_position();
+        [[nodiscard]] constexpr ALWAYS_INLINE Size<T> size() const { return m_size; }
 
-        constexpr bool contains(const Rect<T> &other) const {
+        [[nodiscard]] constexpr bool contains(const Rect<T> &other) const {
             return size().width() >= other.size().width()
                 && size().height() >= other.size().height();
         }
@@ -69,4 +70,6 @@ namespace graphics {
     using ISize = Size<int>;
     using U32Size = Size<unsigned int>;
     using IRect = Rect<int>;
+
+    IRect convert_to_gl_rect(const IRect &rect);
 }

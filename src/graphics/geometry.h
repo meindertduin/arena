@@ -51,11 +51,6 @@ namespace graphics {
                 {{xpos + width, ypos + height}, {0xFFFF, 0x0000}},
         };
 
-        IRect convert_to_gl_rect(const IRect &rect) const {
-            auto converted_pos = graphics::Point<int>(rect.position().x(), global.graphic_options->size().height() - rect.position().y() - rect.size().height());
-            return { converted_pos, rect.size() };
-        }
-
         float width{0};
         float height{0};
         float xpos{0};
