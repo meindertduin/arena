@@ -41,7 +41,7 @@ namespace graphics {
         template<Integral U>
         constexpr Point(U &&x, U &&y) : m_x{static_cast<T>(x)}, m_y{static_cast<T>(y)} {}
 
-        constexpr ALWAYS_INLINE T x() const { return m_x; }
+        constexpr ALWAYS_INLINE  T x() const { return m_x; }
         constexpr ALWAYS_INLINE T y() const { return m_y; }
 
         template<typename U>

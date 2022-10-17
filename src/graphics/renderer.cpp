@@ -209,9 +209,53 @@ namespace graphics {
         int text_width = calculate_text_width(text, scale);
 
         if (size.width() < text_width) {
-            return 0;
+            if (options.wrap) {
+                return calculate_multi_line_text_height(text, scale, size, options);
+            } else {
+                return size.width();
+            }
         }
 
         return options.text_size;
+    }
+
+    std::vector<std::pair<int, std::string>> TextRenderer::split_words(const std::string &text, float scale) {
+        std::vector<std::pair<int, std::string>> words;
+        std::string current_word;
+
+        for (char c : text) {
+            if (c == ' ') {
+                auto word_width = calculate_text_width(current_word, scale);
+                words.emplace_back(word_width, current_word);
+                current_word = "";
+                continue;
+            }
+
+            current_word += c;
+        }
+
+        int word_width = calculate_text_width(current_word, scale);
+        words.emplace_back(word_width, current_word);
+
+        return words;
+    }
+
+    int TextRenderer::calculate_multi_line_text_height(const std::string &text, float scale, const ISize &size, const TextRenderOptions &options) {
+        auto words = split_words(text, scale);
+        int line_count = 1;
+        int current_line_width = 0;
+
+        for (auto &[width, word] : words) {
+            // TODO handle edge case if word is too small to fit in size
+            if (current_line_width + width > size.width()) {
+                line_count++;
+                current_line_width = 0;
+                continue;
+            }
+
+            current_line_width += width;
+        }
+
+        return line_count * (options.text_size + options.line_height);
     }
 }

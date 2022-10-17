@@ -42,7 +42,8 @@ namespace graphics {
 
     struct TextRenderOptions {
         int text_size;
-        bool overflow;
+        int line_height;
+        bool wrap;
         bool center_text_x;
         bool center_text_y;
     };
@@ -57,6 +58,9 @@ namespace graphics {
 
         int calculate_text_width(const std::string &text, float scale);
         int calculate_text_height(const std::string &text, float scale, const ISize &size, const TextRenderOptions &options);
+        int calculate_multi_line_text_height(const std::string &text, float scale, const ISize &size, const TextRenderOptions &options);
+
+        std::vector<std::pair<int, std::string>> split_words(const std::string &text, float scale);
 
         TrueTypeFont font { "assets/alagard.ttf", FontRenderSize };
         ShaderProgram shader { "shaders/text.vert", "shaders/text.frag" };
