@@ -116,10 +116,25 @@ namespace graphics {
     }
 
     void TextRenderer::render(const std::string &text, const IRect &rect, const TextRenderOptions &options) {
-        float scale = static_cast<float>(options.text_size) / static_cast<float>(FontRenderSize);
+        shader.use();
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
+                                          0.0f, (float)global.graphic_options->size().height());
 
+        shader.set_property("projection", projection);
+        shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
+
+        float scale = static_cast<float>(options.text_size) / static_cast<float>(FontRenderSize);
         auto text_width = calculate_text_width(text, scale);
 
+        // text is on one line if text width is smaller than the size or text isn't wrapped
+        if (rect.size().width() >= text_width || !options.wrap) {
+            render_oneliner(text, scale, rect, options, text_width);
+        } else {
+            render_multiliner(text, scale, rect, options);
+        }
+    }
+
+    void TextRenderer::render_oneliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options, int text_width) {
         int x_pos;
         if (options.center_text_x && rect.size().width() > text_width) {
             x_pos = (rect.size().width() - text_width) / 2 + rect.position().x();
@@ -127,21 +142,13 @@ namespace graphics {
             x_pos = rect.position().x();
         }
 
-        auto text_height = calculate_text_height(text, scale, rect.size(), options);
-
         int y_pos;
         if(options.center_text_y) {
-            y_pos = (rect.size().height() / 2 ) + text_height / 4 + rect.position().y();
+            y_pos = (rect.size().height() / 2 ) + options.text_size / 4 + rect.position().y();
         } else {
             y_pos = rect.position().y();
         }
 
-        shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
-                                          0.0f, (float)global.graphic_options->size().height());
-
-        shader.set_property("projection", projection);
-        shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
         auto gl_pos = convert_to_gl_point({x_pos, y_pos});
         auto gl_x_pos = gl_pos.x();
 
@@ -162,6 +169,69 @@ namespace graphics {
         }
     }
 
+    void TextRenderer::render_multiliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options) {
+        auto sentences = split_in_sentences(text, scale, rect.size());
+
+        auto y_pos = rect.position().y();
+        for (auto &[sentence_width, sentence] : sentences) {
+            IPoint pos = { rect.position().x(), y_pos };
+            render_sentence(sentence, scale, pos, options, sentence_width);
+            y_pos += options.text_size + options.line_height;
+        }
+    }
+
+
+    void TextRenderer::render_sentence(const std::string &sentence, float scale, const IPoint &pos, const TextRenderOptions &options, int sentence_width) {
+        auto gl_pos = convert_to_gl_point(pos);
+        auto gl_x_pos = gl_pos.x();
+
+        for (char c : sentence) {
+            auto &glyph = font.get_glyph(c);
+
+            float xpos = gl_x_pos + static_cast<float>(glyph.bearing.x) * scale;
+            float ypos = gl_pos.y() - static_cast<float>(glyph.size.y - glyph.bearing.y) * scale;
+            float w = static_cast<float>(glyph.size.x) * scale;
+            float h = static_cast<float>(glyph.size.y) * scale;
+
+            plane.set_pos_and_size({xpos, ypos}, {w, h});
+            glyph.texture->bind(0);
+            plane.render();
+
+            // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+            gl_x_pos += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
+        }
+    }
+
+    std::vector<std::pair<int, std::string>> TextRenderer::split_in_sentences(const std::string &text, float scale, const ISize &size) {
+        constexpr int SpaceWidth = 1;
+
+        auto words = split_words(text, scale);
+        std::vector<std::pair<int, std::string>> sentences;
+
+        int sentence_width;
+        std::string sentence;
+        for (auto &[word_width, word] : words) {
+            // TODO handle edge case if word is too small to fit in size
+            if (sentence_width + word_width + SpaceWidth > size.width()) {
+                sentences.emplace_back(sentence_width, sentence);
+                sentence = word;
+                sentence_width = word_width;
+                continue;
+            }
+
+            sentence += " ";
+            sentence_width += SpaceWidth;
+
+            sentence += word;
+            sentence_width += word_width;
+        }
+        std::string current_sentence;
+
+        sentences.emplace_back(sentence_width, sentence);
+
+        return sentences;
+    }
+
     int TextRenderer::calculate_text_width(const std::string &text, float scale) {
         int text_width = 0;
 
@@ -175,20 +245,6 @@ namespace graphics {
         text_width += glyph.size.x;
 
         return static_cast<int>(std::round((float) text_width * scale));
-    }
-
-    int TextRenderer::calculate_text_height(const std::string &text, float scale, const ISize &size, const TextRenderOptions &options) {
-        int text_width = calculate_text_width(text, scale);
-
-        if (size.width() < text_width) {
-            if (options.wrap) {
-                return calculate_multi_line_text_height(text, scale, size, options);
-            } else {
-                return size.width();
-            }
-        }
-
-        return options.text_size;
     }
 
     std::vector<std::pair<int, std::string>> TextRenderer::split_words(const std::string &text, float scale) {
@@ -210,24 +266,5 @@ namespace graphics {
         words.emplace_back(word_width, current_word);
 
         return words;
-    }
-
-    int TextRenderer::calculate_multi_line_text_height(const std::string &text, float scale, const ISize &size, const TextRenderOptions &options) {
-        auto words = split_words(text, scale);
-        int line_count = 1;
-        int current_line_width = 0;
-
-        for (auto &[width, word] : words) {
-            // TODO handle edge case if word is too small to fit in size
-            if (current_line_width + width > size.width()) {
-                line_count++;
-                current_line_width = 0;
-                continue;
-            }
-
-            current_line_width += width;
-        }
-
-        return line_count * (options.text_size + options.line_height);
     }
 }

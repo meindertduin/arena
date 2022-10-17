@@ -15,11 +15,12 @@ namespace ui {
 
     void Frame::render() {
         global.ui_renderer->draw_rect(rect(), color());
-        auto text_rect = IRect({0, 0}, {200, 40});
+        auto text_rect = IRect({0, 0}, {200, 200});
         graphics::TextRenderOptions options{};
         options.text_size = 20;
+        options.wrap = true;
         options.center_text_x = true;
         options.center_text_y = true;
-        global.text_renderer->render(text, text_rect, options);
+        global.text_renderer->render("Wow multiline sentences are really hard", text_rect, options);
     }
 }

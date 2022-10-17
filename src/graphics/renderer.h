@@ -55,11 +55,15 @@ namespace graphics {
     private:
         static constexpr int FontRenderSize = 64;
 
+        void render_oneliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options, int text_width);
+        void render_multiliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options);
+
         int calculate_text_width(const std::string &text, float scale);
-        int calculate_text_height(const std::string &text, float scale, const ISize &size, const TextRenderOptions &options);
-        int calculate_multi_line_text_height(const std::string &text, float scale, const ISize &size, const TextRenderOptions &options);
+
+        void render_sentence(const std::string &sentence, float scale, const IPoint &pos, const TextRenderOptions &options, int sentence_width);
 
         std::vector<std::pair<int, std::string>> split_words(const std::string &text, float scale);
+        std::vector<std::pair<int, std::string>> split_in_sentences(const std::string &text, float scale, const ISize &size);
 
         TrueTypeFont font { "assets/alagard.ttf", FontRenderSize };
         ShaderProgram shader { "shaders/text.vert", "shaders/text.frag" };
