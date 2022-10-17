@@ -203,7 +203,7 @@ namespace graphics {
     }
 
     std::vector<std::pair<int, std::string>> TextRenderer::split_in_sentences(const std::string &text, float scale, const ISize &size) {
-        constexpr int SpaceWidth = 1;
+        int SpaceWidth = static_cast<float>(font.get_glyph(' ').advance >> 6) * scale;
 
         auto words = split_words(text, scale);
         std::vector<std::pair<int, std::string>> sentences;
@@ -255,7 +255,7 @@ namespace graphics {
             if (c == ' ') {
                 auto word_width = calculate_text_width(current_word, scale);
                 words.emplace_back(word_width, current_word);
-                current_word = "";
+                current_word = std::string{};
                 continue;
             }
 
