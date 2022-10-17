@@ -52,7 +52,6 @@ namespace graphics {
     public:
         TextRenderer();
         void render(const std::string &text, const IRect &rect, const TextRenderOptions &options);
-        void render(const std::string& text, const glm::vec2 &pos, int text_size);
     private:
         static constexpr int FontRenderSize = 64;
 

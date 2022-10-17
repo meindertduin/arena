@@ -115,34 +115,6 @@ namespace graphics {
         shader.link();
     }
 
-    void TextRenderer::render(const std::string& text, const glm::vec2 &pos, int text_size) {
-        float scale = static_cast<float>(text_size) / static_cast<float>(FontRenderSize);
-        auto x = pos.x;
-
-        shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
-                                          0.0f, (float)global.graphic_options->size().height());
-
-        shader.set_property("projection", projection);
-        shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
-
-        for (char c : text) {
-            auto &glyph = font.get_glyph(c);
-
-            float xpos = x + static_cast<float>(glyph.bearing.x) * scale;
-            float ypos = pos.y - static_cast<float>(glyph.size.y - glyph.bearing.y) * scale;
-            float w = static_cast<float>(glyph.size.x) * scale;
-            float h = static_cast<float>(glyph.size.y) * scale;
-
-            plane.set_pos_and_size({xpos, ypos}, {w, h});
-            glyph.texture->bind(0);
-            plane.render();
-
-            // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-            x += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
-        }
-    }
-
     void TextRenderer::render(const std::string &text, const IRect &rect, const TextRenderOptions &options) {
         float scale = static_cast<float>(options.text_size) / static_cast<float>(FontRenderSize);
 
