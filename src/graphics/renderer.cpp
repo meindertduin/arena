@@ -173,14 +173,21 @@ namespace graphics {
         auto y_pos = rect.position().y();
         for (auto &[sentence_width, sentence] : sentences) {
             IPoint pos = { rect.position().x(), y_pos };
-            render_sentence(sentence, scale, pos, options, sentence_width);
+            render_sentence(sentence, scale, pos, rect.size(), options, sentence_width);
             y_pos += options.text_size + options.line_height;
         }
     }
 
 
-    void TextRenderer::render_sentence(const std::string &sentence, float scale, const IPoint &pos, const TextRenderOptions &options, int sentence_width) {
-        auto gl_pos = convert_to_gl_point(pos);
+    void TextRenderer::render_sentence(const std::string &sentence, float scale, const IPoint &pos, const ISize &size, const TextRenderOptions &options, int sentence_width) {
+        int x_pos;
+        if (options.center_text_x && size.width() > sentence_width) {
+            x_pos = (size.width() - sentence_width) / 2 + pos.x();
+        } else {
+            x_pos = pos.x();
+        }
+
+        auto gl_pos = convert_to_gl_point({ x_pos, pos.y() });
         auto gl_x_pos = gl_pos.x();
 
         for (char c : sentence) {

@@ -60,7 +60,7 @@ namespace graphics {
 
         int calculate_text_width(const std::string &text, float scale);
 
-        void render_sentence(const std::string &sentence, float scale, const IPoint &pos, const TextRenderOptions &options, int sentence_width);
+        void render_sentence(const std::string &sentence, float scale, const IPoint &pos, const ISize &size, const TextRenderOptions &options, int sentence_width);
 
         std::vector<std::pair<int, std::string>> split_words(const std::string &text, float scale);
         std::vector<std::pair<int, std::string>> split_in_sentences(const std::string &text, float scale, const ISize &size);
