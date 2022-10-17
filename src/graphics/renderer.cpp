@@ -2,10 +2,8 @@
 
 #include <utility>
 
-#include "../global.h"
 #include "material.h"
 #include "../game/game_state.h"
-#include "glad/glad.h"
 #include "ui_renderer.h"
 
 
@@ -213,7 +211,7 @@ namespace graphics {
         for (auto &[word_width, word] : words) {
             // TODO handle edge case if word is too small to fit in size
             if (sentence_width + word_width + SpaceWidth > size.width()) {
-                sentences.emplace_back(sentence_width, sentence);
+                sentences.emplace_back(sentence_width, std::string{sentence});
                 sentence = word;
                 sentence_width = word_width;
                 continue;
@@ -241,6 +239,7 @@ namespace graphics {
             auto &glyph = font.get_glyph(text[i]);
             text_width += glyph.advance >> 6;
         }
+
         auto &glyph = font.get_glyph(text[text_length - 1]);
         text_width += glyph.size.x;
 
@@ -254,8 +253,8 @@ namespace graphics {
         for (char c : text) {
             if (c == ' ') {
                 auto word_width = calculate_text_width(current_word, scale);
-                words.emplace_back(word_width, current_word);
-                current_word = std::string{};
+                words.emplace_back(word_width, std::string{current_word});
+                current_word = "";
                 continue;
             }
 

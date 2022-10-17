@@ -21,6 +21,6 @@ namespace ui {
         options.wrap = true;
         options.center_text_x = true;
         options.center_text_y = true;
-        global.text_renderer->render("Wow multiline sentences are really hard, but why does it not work!", text_rect, options);
+        global.text_renderer->render("Ok, multi-line sentences do kind of work now and its amazing!", text_rect, options);
     }
 }
