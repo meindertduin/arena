@@ -144,7 +144,7 @@ namespace graphics {
         if(options.center_text_y) {
             y_pos = (rect.size().height() / 2 ) + options.text_size / 4 + rect.position().y();
         } else {
-            y_pos = rect.position().y();
+            y_pos = rect.position().y() + options.text_size;
         }
 
         auto gl_pos = convert_to_gl_point({x_pos, y_pos});
@@ -172,12 +172,11 @@ namespace graphics {
 
         auto y_pos = rect.position().y();
         for (auto &[sentence_width, sentence] : sentences) {
-            IPoint pos = { rect.position().x(), y_pos };
+            IPoint pos = { rect.position().x(), y_pos + options.text_size };
             render_sentence(sentence, scale, pos, rect.size(), options, sentence_width);
             y_pos += options.text_size + options.line_height;
         }
     }
-
 
     void TextRenderer::render_sentence(const std::string &sentence, float scale, const IPoint &pos, const ISize &size, const TextRenderOptions &options, int sentence_width) {
         int x_pos;
@@ -224,8 +223,10 @@ namespace graphics {
                 continue;
             }
 
-            sentence += " ";
-            sentence_width += SpaceWidth;
+            if (!sentence.empty()) {
+                sentence += " ";
+                sentence_width += SpaceWidth;
+            }
 
             sentence += word;
             sentence_width += word_width;
