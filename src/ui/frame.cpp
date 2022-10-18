@@ -21,6 +21,6 @@ namespace ui {
         options.wrap = true;
         options.center_text_x = true;
         options.center_text_y = true;
-        global.text_renderer->render("ok, multi-line works. But it still needs to be rendered in the middle on the y-axis. Now that is implemented, it still needs to render the text a little bit more correctly.", text_rect, options);
+        global.text_renderer->render("ok, multi-line works.", text_rect, options);
     }
 }

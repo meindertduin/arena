@@ -148,24 +148,7 @@ namespace graphics {
             y_pos = rect.position().y() + max_character_height;
         }
 
-        auto gl_pos = convert_to_gl_point({x_pos, y_pos});
-        auto gl_x_pos = gl_pos.x();
-
-        for (char c : text) {
-            auto &glyph = font.get_glyph(c);
-
-            float xpos = gl_x_pos + static_cast<float>(glyph.bearing.x) * scale;
-            float ypos = gl_pos.y() - static_cast<float>(glyph.size.y - glyph.bearing.y) * scale;
-            float w = static_cast<float>(glyph.size.x) * scale;
-            float h = static_cast<float>(glyph.size.y) * scale;
-
-            plane.set_pos_and_size({xpos, ypos}, {w, h});
-            glyph.texture->bind(0);
-            plane.render();
-
-            // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-            gl_x_pos += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
-        }
+        render_line(text, { x_pos, y_pos }, scale);
     }
 
     void TextRenderer::render_multiliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options) {
@@ -200,10 +183,14 @@ namespace graphics {
             x_pos = pos.x();
         }
 
-        auto gl_pos = convert_to_gl_point({ x_pos, pos.y() });
+        render_line(sentence, { x_pos, pos.y() }, scale);
+    }
+
+    void TextRenderer::render_line(const std::string &line, const IPoint &pos, float scale) {
+        auto gl_pos = convert_to_gl_point(pos);
         auto gl_x_pos = gl_pos.x();
 
-        for (char c : sentence) {
+        for (char c : line) {
             auto &glyph = font.get_glyph(c);
 
             float xpos = gl_x_pos + static_cast<float>(glyph.bearing.x) * scale;
@@ -220,11 +207,11 @@ namespace graphics {
         }
     }
 
-     TextRenderer::WordsAndWidths TextRenderer::split_in_sentences(const std::string &text, float scale, const ISize &size) {
+     TextRenderer::WidthStringPairs TextRenderer::split_in_sentences(const std::string &text, float scale, const ISize &size) {
         int SpaceWidth = static_cast<float>(font.get_glyph(' ').advance >> 6) * scale;
 
         auto words = split_words(text, scale);
-        TextRenderer::WordsAndWidths sentences;
+        TextRenderer::WidthStringPairs sentences;
 
         int sentence_width = 0;
         std::string sentence;
@@ -262,14 +249,15 @@ namespace graphics {
             text_width += glyph.advance >> 6;
         }
 
+        // For the last character only the width will suffice for a better width calculation
         auto &glyph = font.get_glyph(text[text_length - 1]);
         text_width += glyph.size.x;
 
         return static_cast<int>(std::round((float) text_width * scale));
     }
 
-    TextRenderer::WordsAndWidths TextRenderer::split_words(const std::string &text, float scale) {
-        TextRenderer::WordsAndWidths words;
+    TextRenderer::WidthStringPairs TextRenderer::split_words(const std::string &text, float scale) {
+        TextRenderer::WidthStringPairs words;
         std::string current_word;
 
         for (char c : text) {
@@ -289,7 +277,7 @@ namespace graphics {
         return words;
     }
 
-    int TextRenderer::calculate_text_height(TextRenderer::WordsAndWidths &sentences, const TextRenderOptions &options) {
+    int TextRenderer::calculate_text_height(TextRenderer::WidthStringPairs &sentences, const TextRenderOptions &options) {
         return static_cast<int>(sentences.size()) * (options.text_size + options.line_height) - options.line_height;
     }
 }
