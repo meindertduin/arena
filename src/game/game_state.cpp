@@ -45,19 +45,13 @@ namespace game {
     }
 
     void GameState::update() {
-        update_render_lock.lock();
-
         global.systems->update();
 
         if (ui_mode)
             ui.on_tick(core::TotalTicks);
-
-        update_render_lock.unlock();
     }
 
     void GameState::render() {
-        update_render_lock.lock();
-
         global.renderer->before_render();
 
         map->render_background();
@@ -68,7 +62,5 @@ namespace game {
             ui.render();
 
         global.renderer->after_render();
-
-        update_render_lock.unlock();
     }
 }

@@ -44,7 +44,5 @@ namespace game {
         void init();
         void update();
         void render();
-    private:
-        std::mutex update_render_lock;
     };
 }

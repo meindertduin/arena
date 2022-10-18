@@ -62,17 +62,6 @@ int main () {
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
     global.texture = global.game->cache.get_resource<graphics::Texture>("assets/container.png");
 
-    // TODO enable mutli threading again
-    // std::thread game_thread([&] {
-    //     for (;;) {
-    //         core::delay(core::TickTimeMs);
-
-    //         core::TotalTicks++;
-    //     }
-    // });
-
-    // game_thread.detach();
-
     core::Timer program_timer;
     while(!global.window->close_requested()) {
         core::TotalTicks++;
