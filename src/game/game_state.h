@@ -11,6 +11,12 @@
 #include <thread>
 
 namespace game {
+
+    enum class Mode {
+        Editing,
+        Playing,
+    };
+
     class GameState {
     public:
         GameState();
@@ -18,6 +24,8 @@ namespace game {
 
         GameState(const GameState&) = delete;
         GameState& operator=(const GameState&) = delete;
+
+        Mode game_mode { Mode::Playing };
 
         ui::UI ui;
         bool ui_mode {false};
@@ -36,7 +44,5 @@ namespace game {
         void init();
         void update();
         void render();
-    private:
-        std::mutex update_render_lock;
     };
 }

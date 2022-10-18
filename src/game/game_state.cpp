@@ -5,6 +5,7 @@
 #include "../entity/systems_collection.h"
 
 #include "../graphics/renderer.h"
+#include "../core/program_time.h"
 
 namespace game {
     GameState::GameState() {
@@ -24,8 +25,7 @@ namespace game {
         pointLight.quadratic = 0.032f;
 
         point_lights.push_back(pointLight);
-
-        this->camera = new entity::Camera { global.graphic_options->screen_dimensions.x, global.graphic_options->screen_dimensions.y };
+        this->camera = new entity::Camera { global.graphic_options->size().width(), global.graphic_options->size().height() };
     }
 
     GameState::~GameState() {
@@ -45,26 +45,22 @@ namespace game {
     }
 
     void GameState::update() {
-        update_render_lock.lock();
-
         global.systems->update();
 
-        update_render_lock.unlock();
+        if (ui_mode)
+            ui.on_tick(core::TotalTicks);
     }
 
     void GameState::render() {
-        update_render_lock.lock();
-
         global.renderer->before_render();
 
         map->render_background();
         global.systems->render();
         skybox.render();
+
         if (ui_mode)
             ui.render();
 
         global.renderer->after_render();
-
-        update_render_lock.unlock();
     }
 }

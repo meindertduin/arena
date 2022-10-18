@@ -1,91 +1,36 @@
 #pragma once
 
-#include <string>
-#include "../graphics/geometry.h"
+#include "events.h"
+#include "object.h"
+#include "../graphics/rect.h"
+#include "../graphics/color.h"
 
-#include "unordered_map"
+#include <glm/glm.hpp>
+
+using graphics::IRect;
+using graphics::Color;
 
 namespace ui {
-    enum UIEventType {
-        MouseButton = 1,
-        MouseMove = 2,
-    };
-
-    struct UIEvent;
-
-    template<typename T>
-    class ComponentBuilder;
-
-    class UIComponent {
+    class Component : public Object {
     public:
-        glm::ivec2 pos;
-        glm::ivec2 gl_pos;
+        virtual void mouse_event(UIMouseMoveEvent &events);
+        virtual void mouse_event(UIMouseClickEvent &events);
+        virtual void on_tick(uint64_t tick);
+        virtual void render();
 
-        glm::ivec2 size;
-        bool is_hovered { false };
+        [[nodiscard]] constexpr ALWAYS_INLINE IRect rect() const { return m_rect; }
+        [[nodiscard]] constexpr ALWAYS_INLINE Color color() const { return m_color; }
 
-        std::vector<std::unique_ptr<UIComponent>> children;
-        UIComponent *parent {nullptr};
-
-        UIComponent(const glm::ivec2 &pos, const glm::ivec2 &size) : pos{pos}, size{size} { }
-
-        virtual void render() {
-            for (auto &child : children)
-                child->render();
-        }
-
-        void handle_event(UIEventType type, UIEvent* event);
-    protected:
-        std::unordered_map<UIEventType, std::function<void(UIEvent*)>> event_handlers;
-    };
-
-    class RootComponent : public UIComponent {
-    public:
-        explicit RootComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
-    };
-
-    class PlaneComponent : public UIComponent {
-    public:
-        explicit PlaneComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
-        void render() override;
+        void set_rect(const IRect &rect);
+        void set_color(const Color &color);
     private:
-        friend class ComponentBuilder<PlaneComponent>;
+        bool visible { true };
+        bool enabled { true };
 
-        graphics::GpuPlane background;
-        graphics::GpuPlane border;
+        glm::ivec2 min_size;
+        glm::ivec2 max_size;
 
-        glm::vec4 *background_color;
-        glm::vec4 border_color { 1.0f, 1.0f, 1.0f, 1.0f };
-    };
-
-    class TextComponent : public UIComponent {
-    public:
-        explicit TextComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
-        void render() override;
-    private:
-        friend class ComponentBuilder<TextComponent>;
-
-        int text_size = 12;
-        std::string *text;
-    };
-
-    class ButtonComponent : public UIComponent {
-    public:
-        explicit ButtonComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
-        void render() override;
-    private:
-        glm::vec4 background_color;
-        glm::vec4 border_color;
-
-        std::string text = "Hello world";
-    };
-
-    class DebugPanelComponent : public UIComponent {
-    public:
-        explicit DebugPanelComponent(const glm::ivec2 &pos, const glm::ivec2 &size);
-        void render() override;
-    private:
-        glm::vec4 background_color { 0.1f, 0.1f, 0.1f, 0.2f };
-        std::string text = "Hello world";
+        IRect m_rect;
+        Color m_color;
     };
 }

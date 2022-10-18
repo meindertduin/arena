@@ -15,6 +15,7 @@ namespace input {
         player_commands.insert({ KeyCombination{KEY_D, 0, KEY_RELEASE}.to_u32(), std::make_unique<entity::StopMoveCommand>(entity::Direction::Right) });
 
         ui_commands.insert({ KeyCombination{KEY_ESCAPE, 0, KEY_PRESS}.to_u32(), std::make_unique<ui::ToggleOverlayCommand>() });
+        ui_commands.insert({ KeyCombination{KEY_F1, 0, KEY_PRESS}.to_u32(), std::make_unique<ui::ToggleEditModeCommand>() });
     }
 
     std::optional<entity::ECCommand*> Keybindings::get_player_command(const KeyCombination &combination) {

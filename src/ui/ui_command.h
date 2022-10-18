@@ -8,4 +8,8 @@ namespace ui {
     struct ToggleOverlayCommand : public UICommand {
         void execute() override;
     };
+
+    struct ToggleEditModeCommand : public UICommand {
+        void execute() override;
+    };
 }

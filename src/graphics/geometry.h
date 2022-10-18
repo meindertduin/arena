@@ -3,6 +3,9 @@
 #include <glm/glm.hpp>
 #include "gpu_buffer.h"
 #include "mesh.h"
+#include "rect.h"
+#include "../global.h"
+#include "../graphics/graphic_options.h"
 
 namespace graphics {
     class GpuPlane : public Renderable {
@@ -10,6 +13,19 @@ namespace graphics {
         GpuPlane();
 
         void render() const override;
+
+        void set_from_rect(const IRect &rect) {
+            auto gl_rect = convert_to_gl_rect(rect);
+            vertices[0].pos = { gl_rect.position().x(), gl_rect.position().y() + gl_rect.size().height() };
+            vertices[1].pos = { gl_rect.position().x(), gl_rect.position().y() };
+            vertices[2].pos = { gl_rect.position().x() + gl_rect.size().width(), gl_rect.position().y() };
+            vertices[3].pos = { gl_rect.position().x(), gl_rect.position().y() + gl_rect.size().height() };
+            vertices[4].pos = { gl_rect.position().x() + gl_rect.size().width(), gl_rect.position().y() };
+            vertices[5].pos = { gl_rect.position().x() + gl_rect.size().width(), gl_rect.position().y() + gl_rect.size().height() };
+
+            this->array_buffer.set_data(0, sizeof(Vertex) * 6, vertices);
+        }
+
         void set_pos_and_size(const glm::vec2 &pos, const glm::vec2 &size) {
             vertices[0].pos = { pos.x, pos.y + size.y };
             vertices[1].pos = { pos.x, pos.y };

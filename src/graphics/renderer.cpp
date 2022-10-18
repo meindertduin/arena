@@ -2,10 +2,10 @@
 
 #include <utility>
 
-#include "../global.h"
 #include "material.h"
 #include "../game/game_state.h"
-#include "glad/glad.h"
+#include "ui_renderer.h"
+
 
 namespace graphics {
     Renderer::Renderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
@@ -113,22 +113,88 @@ namespace graphics {
         shader.link();
     }
 
-    void TextRenderer::render(const std::string& text, const glm::vec2 &pos, int text_size) {
-        float scale = static_cast<float>(text_size) / static_cast<float>(FontRenderSize);
-        auto x = pos.x;
-
+    void TextRenderer::render(const std::string &text, const IRect &rect, const TextRenderOptions &options) {
         shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
-                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
+        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
+                                          0.0f, (float)global.graphic_options->size().height());
 
         shader.set_property("projection", projection);
         shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
 
-        for (char c : text) {
+        float scale = static_cast<float>(options.text_size) / static_cast<float>(FontRenderSize);
+        auto text_width = calculate_text_width(text, scale);
+
+        // text is on one line if text width is smaller than the size or text isn't wrapped
+        if (rect.size().width() >= text_width || !options.wrap) {
+            render_oneliner(text, scale, rect, options, text_width);
+        } else {
+            render_multiliner(text, scale, rect, options);
+        }
+    }
+
+    void TextRenderer::render_oneliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options, int text_width) {
+        int x_pos;
+        if (options.center_text_x && rect.size().width() > text_width) {
+            x_pos = (rect.size().width() - text_width) / 2 + rect.position().x();
+        } else {
+            x_pos = rect.position().x();
+        }
+
+        int y_pos;
+        int max_character_height = static_cast<int>((float) font.get_glyph('L').size.y * scale);
+        if(options.center_text_y) {
+            y_pos = (rect.size().height() / 2 ) + max_character_height / 4 + rect.position().y() + 1;
+        } else {
+            y_pos = rect.position().y() + max_character_height;
+        }
+
+        render_line(text, { x_pos, y_pos }, scale);
+    }
+
+    void TextRenderer::render_multiliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options) {
+        auto sentences = split_in_sentences(text, scale, rect.size());
+        int max_character_height = static_cast<int>((float) font.get_glyph('L').size.y * scale) + 1;
+
+        int y_pos;
+        if (options.center_text_y) {
+            auto text_height = calculate_text_height(sentences, options);
+
+            if (text_height >= rect.size().height()) {
+                y_pos = rect.position().y();
+            } else {
+                y_pos = ((rect.size().height() - text_height) / 2 ) + max_character_height / 4 + rect.position().y() + 1;
+            }
+        } else {
+            y_pos = rect.position().y();
+        }
+
+        for (auto &[sentence_width, sentence] : sentences) {
+            IPoint pos = { rect.position().x(), y_pos + max_character_height };
+            render_sentence(sentence, scale, pos, rect.size(), options, sentence_width);
+            y_pos += options.text_size + options.line_height;
+        }
+    }
+
+    void TextRenderer::render_sentence(const std::string &sentence, float scale, const IPoint &pos, const ISize &size, const TextRenderOptions &options, int sentence_width) {
+        int x_pos;
+        if (options.center_text_x && size.width() > sentence_width) {
+            x_pos = (size.width() - sentence_width) / 2 + pos.x();
+        } else {
+            x_pos = pos.x();
+        }
+
+        render_line(sentence, { x_pos, pos.y() }, scale);
+    }
+
+    void TextRenderer::render_line(const std::string &line, const IPoint &pos, float scale) {
+        auto gl_pos = convert_to_gl_point(pos);
+        auto gl_x_pos = gl_pos.x();
+
+        for (char c : line) {
             auto &glyph = font.get_glyph(c);
 
-            float xpos = x + static_cast<float>(glyph.bearing.x) * scale;
-            float ypos = pos.y - static_cast<float>(glyph.size.y - glyph.bearing.y) * scale;
+            float xpos = gl_x_pos + static_cast<float>(glyph.bearing.x) * scale;
+            float ypos = gl_pos.y() - static_cast<float>(glyph.size.y - glyph.bearing.y) * scale;
             float w = static_cast<float>(glyph.size.x) * scale;
             float h = static_cast<float>(glyph.size.y) * scale;
 
@@ -137,41 +203,81 @@ namespace graphics {
             plane.render();
 
             // now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-            x += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
+            gl_x_pos += static_cast<float>(glyph.advance >> 6) * scale; // bitshift by 6 to get value in pixels (2^6 = 64)
         }
     }
 
-    UIRenderer::UIRenderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
-        shader.link();
+     TextRenderer::WidthStringPairs TextRenderer::split_in_sentences(const std::string &text, float scale, const ISize &size) {
+        int SpaceWidth = static_cast<float>(font.get_glyph(' ').advance >> 6) * scale;
+
+        auto words = split_words(text, scale);
+        TextRenderer::WidthStringPairs sentences;
+
+        int sentence_width = 0;
+        std::string sentence;
+        for (auto &[word_width, word] : words) {
+            // TODO handle edge case if word is too small to fit in size
+            if (sentence_width + word_width + SpaceWidth > size.width()) {
+                sentences.emplace_back(sentence_width, std::string{sentence});
+                sentence = word;
+                sentence_width = word_width;
+                continue;
+            }
+
+            if (!sentence.empty()) {
+                sentence += " ";
+                sentence_width += SpaceWidth;
+            }
+
+            sentence += word;
+            sentence_width += word_width;
+        }
+        std::string current_sentence;
+
+        sentences.emplace_back(sentence_width, sentence);
+
+        return sentences;
     }
 
-    void UIRenderer::render(const Renderable &renderable, glm::vec4 &color) {
-        glDisable(GL_DEPTH_TEST);
-        shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
-                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
+    int TextRenderer::calculate_text_width(const std::string &text, float scale) {
+        int text_width = 0;
 
-        shader.set_property("projection", projection);
-        shader.set_property("color", color);
-        renderable.render();
+        auto text_length = text.length();
+
+        for (auto i = 0; i < text_length - 1; i++) {
+            auto &glyph = font.get_glyph(text[i]);
+            text_width += glyph.advance >> 6;
+        }
+
+        // For the last character only the width will suffice for a better width calculation
+        auto &glyph = font.get_glyph(text[text_length - 1]);
+        text_width += glyph.size.x;
+
+        return static_cast<int>(std::round((float) text_width * scale));
     }
 
-    void UIRenderer::render(const Renderable &renderable, glm::vec4 &&color) {
-        glDisable(GL_DEPTH_TEST);
-        shader.use();
-        glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->screen_dimensions.x,
-                                          0.0f, (float)global.graphic_options->screen_dimensions.y);
+    TextRenderer::WidthStringPairs TextRenderer::split_words(const std::string &text, float scale) {
+        TextRenderer::WidthStringPairs words;
+        std::string current_word;
 
-        shader.set_property("projection", projection);
-        shader.set_property("color", color);
-        renderable.render();
+        for (char c : text) {
+            if (c == ' ') {
+                auto word_width = calculate_text_width(current_word, scale);
+                words.emplace_back(word_width, std::string{current_word});
+                current_word = "";
+                continue;
+            }
+
+            current_word += c;
+        }
+
+        int word_width = calculate_text_width(current_word, scale);
+        words.emplace_back(word_width, current_word);
+
+        return words;
     }
 
-    void UIRenderer::before_ui_rendering() {
-        render_target->disable_depth_test();
-    }
-
-    void UIRenderer::after_ui_rendering() {
-        render_target->enable_depth_test();
+    int TextRenderer::calculate_text_height(TextRenderer::WidthStringPairs &sentences, const TextRenderOptions &options) {
+        return static_cast<int>(sentences.size()) * (options.text_size + options.line_height) - options.line_height;
     }
 }
