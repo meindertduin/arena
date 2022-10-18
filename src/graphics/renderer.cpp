@@ -213,7 +213,7 @@ namespace graphics {
         auto words = split_words(text, scale);
         std::vector<std::pair<int, std::string>> sentences;
 
-        int sentence_width;
+        int sentence_width = 0;
         std::string sentence;
         for (auto &[word_width, word] : words) {
             // TODO handle edge case if word is too small to fit in size
