@@ -15,12 +15,12 @@ namespace ui {
 
     void Frame::render() {
         global.ui_renderer->draw_rect(rect(), color());
-        auto text_rect = IRect({0, 0}, {400, 200});
+        auto text_rect = IRect({0, 0}, {400, 20});
         graphics::TextRenderOptions options{};
-        options.text_size = 40;
+        options.text_size = 20;
         options.wrap = true;
-        options.center_text_x = false;
-        options.center_text_y = false;
-        global.text_renderer->render("ok, multi-line works nicely but needs some tweaks", text_rect, options);
+        options.center_text_x = true;
+        options.center_text_y = true;
+        global.text_renderer->render("ok, single-line works.", text_rect, options);
     }
 }

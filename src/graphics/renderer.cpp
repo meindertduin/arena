@@ -141,10 +141,11 @@ namespace graphics {
         }
 
         int y_pos;
+        int max_character_height = static_cast<int>((float) font.get_glyph('L').size.y * scale);
         if(options.center_text_y) {
-            y_pos = (rect.size().height() / 2 ) + options.text_size / 4 + rect.position().y();
+            y_pos = (rect.size().height() / 2 ) + max_character_height / 4 + rect.position().y() + 1;
         } else {
-            y_pos = rect.position().y() + options.text_size;
+            y_pos = rect.position().y() + max_character_height;
         }
 
         auto gl_pos = convert_to_gl_point({x_pos, y_pos});
@@ -169,10 +170,11 @@ namespace graphics {
 
     void TextRenderer::render_multiliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options) {
         auto sentences = split_in_sentences(text, scale, rect.size());
+        int max_character_height = static_cast<int>((float) font.get_glyph('L').size.y * scale) + 1;
 
         auto y_pos = rect.position().y();
         for (auto &[sentence_width, sentence] : sentences) {
-            IPoint pos = { rect.position().x(), y_pos + options.text_size };
+            IPoint pos = { rect.position().x(), y_pos + max_character_height };
             render_sentence(sentence, scale, pos, rect.size(), options, sentence_width);
             y_pos += options.text_size + options.line_height;
         }
