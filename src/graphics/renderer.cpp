@@ -172,7 +172,19 @@ namespace graphics {
         auto sentences = split_in_sentences(text, scale, rect.size());
         int max_character_height = static_cast<int>((float) font.get_glyph('L').size.y * scale) + 1;
 
-        auto y_pos = rect.position().y();
+        int y_pos;
+        if (options.center_text_y) {
+            auto text_height = calculate_text_height(sentences, options);
+
+            if (text_height >= rect.size().height()) {
+                y_pos = rect.position().y();
+            } else {
+                y_pos = ((rect.size().height() - text_height) / 2 ) + max_character_height / 4 + rect.position().y() + 1;
+            }
+        } else {
+            y_pos = rect.position().y();
+        }
+
         for (auto &[sentence_width, sentence] : sentences) {
             IPoint pos = { rect.position().x(), y_pos + max_character_height };
             render_sentence(sentence, scale, pos, rect.size(), options, sentence_width);
@@ -208,11 +220,11 @@ namespace graphics {
         }
     }
 
-    std::vector<std::pair<int, std::string>> TextRenderer::split_in_sentences(const std::string &text, float scale, const ISize &size) {
+     TextRenderer::WordsAndWidths TextRenderer::split_in_sentences(const std::string &text, float scale, const ISize &size) {
         int SpaceWidth = static_cast<float>(font.get_glyph(' ').advance >> 6) * scale;
 
         auto words = split_words(text, scale);
-        std::vector<std::pair<int, std::string>> sentences;
+        TextRenderer::WordsAndWidths sentences;
 
         int sentence_width = 0;
         std::string sentence;
@@ -256,8 +268,8 @@ namespace graphics {
         return static_cast<int>(std::round((float) text_width * scale));
     }
 
-    std::vector<std::pair<int, std::string>> TextRenderer::split_words(const std::string &text, float scale) {
-        std::vector<std::pair<int, std::string>> words;
+    TextRenderer::WordsAndWidths TextRenderer::split_words(const std::string &text, float scale) {
+        TextRenderer::WordsAndWidths words;
         std::string current_word;
 
         for (char c : text) {
@@ -275,5 +287,9 @@ namespace graphics {
         words.emplace_back(word_width, current_word);
 
         return words;
+    }
+
+    int TextRenderer::calculate_text_height(TextRenderer::WordsAndWidths &sentences, const TextRenderOptions &options) {
+        return static_cast<int>(sentences.size()) * (options.text_size + options.line_height) - options.line_height;
     }
 }
