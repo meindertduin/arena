@@ -133,45 +133,44 @@ namespace graphics {
     }
 
     void TextRenderer::render_oneliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options, int text_width) {
-        int x_pos;
+        IPoint pos;
         if (options.center_text_x && rect.size().width() > text_width) {
-            x_pos = (rect.size().width() - text_width) / 2 + rect.position().x();
+            pos.set_x((rect.size().width() - text_width) / 2 + rect.position().x());
         } else {
-            x_pos = rect.position().x();
+            pos.set_x(rect.position().x());
         }
 
-        int y_pos;
         int max_character_height = static_cast<int>((float) font.get_glyph('L').size.y * scale);
         if(options.center_text_y) {
-            y_pos = (rect.size().height() / 2 ) + max_character_height / 4 + rect.position().y() + 1;
+            pos.set_y((rect.size().height() / 2 ) + max_character_height / 4 + rect.position().y() + 1);
         } else {
-            y_pos = rect.position().y() + max_character_height;
+            pos.set_y(rect.position().y() + max_character_height);
         }
 
-        render_line(text, { x_pos, y_pos }, scale);
+        render_line(text, pos, scale);
     }
 
     void TextRenderer::render_multiliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options) {
+        auto pos = rect.position();
         auto sentences = split_in_sentences(text, scale, rect.size());
         int max_character_height = static_cast<int>((float) font.get_glyph('L').size.y * scale) + 1;
 
-        int y_pos;
         if (options.center_text_y) {
             auto text_height = calculate_text_height(sentences, options);
 
             if (text_height >= rect.size().height()) {
-                y_pos = rect.position().y();
+                pos.set_y(rect.position().y());
             } else {
-                y_pos = ((rect.size().height() - text_height) / 2 ) + max_character_height / 4 + rect.position().y() + 1;
+                pos.set_y(((rect.size().height() - text_height) / 2 ) + max_character_height / 4 + rect.position().y() + 1);
             }
         } else {
-            y_pos = rect.position().y();
+            pos.set_y(rect.position().y());
         }
 
         for (auto &[sentence_width, sentence] : sentences) {
-            IPoint pos = { rect.position().x(), y_pos + max_character_height };
-            render_sentence(sentence, scale, pos, rect.size(), options, sentence_width);
-            y_pos += options.text_size + options.line_height;
+            IPoint sentence_pos = { rect.position().x(), pos.y() + max_character_height };
+            render_sentence(sentence, scale, sentence_pos, rect.size(), options, sentence_width);
+            pos.set_y(pos.y() + options.text_size + options.line_height);
         }
     }
 

@@ -21,6 +21,6 @@ namespace ui {
         options.wrap = true;
         options.center_text_x = true;
         options.center_text_y = true;
-        global.text_renderer->render("ok, multi-line works.", text_rect, options);
+        global.text_renderer->render("Ok, multi-line works. And this proves that it still works!", text_rect, options);
     }
 }
