@@ -58,7 +58,7 @@ namespace graphics {
         glDepthFunc(GL_LEQUAL);
 
         shader.use();
-        shader.set_property("cameraPos", global.game->camera->transform.pos);
+        shader.set_property("cameraPos", global.game->camera().transform.pos);
 
         texture.bind(0);
 

@@ -8,12 +8,12 @@
 #include "../core/program_time.h"
 
 namespace game {
-    GameState::GameState() {
-        graphics::DirLight dir_light;                
+    GameState::GameState() : m_camera{ global.graphic_options->size().width(), global.graphic_options->size().height() } {
+        graphics::DirLight dir_light;
         dir_light.direction = { 0, -1.0f, -1.0f };  
         dir_light.ambient = {0.05f, 0.05f, 0.05f};
         dir_light.diffuse = {0.8f, 0.8f, 0.8f};   
-        dir_lights.push_back(dir_light);
+        m_dir_lights.push_back(dir_light);
 
         graphics::PointLight pointLight;
         pointLight.position = { 2.0f, 2.0f, 0 };
@@ -24,19 +24,14 @@ namespace game {
         pointLight.linear = 0.09f;
         pointLight.quadratic = 0.032f;
 
-        point_lights.push_back(pointLight);
-        this->camera = new entity::Camera { global.graphic_options->size().width(), global.graphic_options->size().height() };
-    }
-
-    GameState::~GameState() {
-        delete camera;
+        m_point_lights.push_back(pointLight);
     }
 
     void GameState::init() {
        // loading map
-        this->map = std::make_unique<Map>();
+        this->m_map = std::make_unique<Map>();
 
-        this->player = entity::ECPlayer::create(global.ecs->create_entity());
+        this->m_player = entity::ECPlayer::create(global.ecs->create_entity());
         this->cube = global.ecs->create_entity();
         auto mesh_renderer = entity::EcStaticMeshRenderer();
         mesh_renderer.init("assets/monkey.obj");
@@ -47,19 +42,19 @@ namespace game {
     void GameState::update() {
         global.systems->update();
 
-        if (ui_mode)
-            ui.on_tick(core::TotalTicks);
+        if (m_ui_mode)
+            m_ui.on_tick(core::TotalTicks);
     }
 
     void GameState::render() {
         global.renderer->before_render();
 
-        map->render_background();
+        m_map->render_background();
         global.systems->render();
-        skybox.render();
+        m_skybox.render();
 
-        if (ui_mode)
-            ui.render();
+        if (m_ui_mode)
+            m_ui.render();
 
         global.renderer->after_render();
     }

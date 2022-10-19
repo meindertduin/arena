@@ -6,12 +6,11 @@
 namespace entity {
     class Camera {
     public:
-        glm::mat4 view;
-        glm::mat4 projection;
+        glm::mat4 view{};
+        glm::mat4 projection{};
 
         ECTransform transform {  };
 
-        Camera() = default;
         Camera(uint32_t screen_width, uint32_t screen_height) {
             transform.pos.z += 10;
             set_projection(screen_width, screen_height);
@@ -22,7 +21,7 @@ namespace entity {
             });
         }
 
-        glm::mat4 get_view_4x4() const {
+        [[nodiscard]] glm::mat4 get_view_4x4() const {
             return glm::mat4_cast(transform.rotation) * glm::translate(glm::identity<glm::mat4>(), transform.pos * -1.0f);
         }
     private:
