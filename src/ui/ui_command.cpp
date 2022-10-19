@@ -16,7 +16,7 @@ namespace ui {
     }
 
     void ToggleEditModeCommand::execute() {
-        if (global.game->gamee_mode() == game::Mode::Playing) {
+        if (global.game->game_mode() == game::Mode::Playing) {
             global.game->ui().open_edit_tools();
             global.game->set_game_mode(game::Mode::Editing);
 

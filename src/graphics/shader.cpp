@@ -4,37 +4,38 @@
 #include <memory>
 
 #include <iostream>
+#include <utility>
 
 #include "../logging.h"
 #include "../assets/file_reader.h"
 
 namespace graphics {
-    Shader::Shader(ShaderType type, const std::string& path) : type(type), path(path) {
+    Shader::Shader(ShaderType type, std::string path) : type(type), m_path(std::move(path)) {
         if (type == ShaderType::Fragment)
-            id = glCreateShader(GL_FRAGMENT_SHADER);
+            m_id = glCreateShader(GL_FRAGMENT_SHADER);
         else
-            id = glCreateShader(GL_VERTEX_SHADER);
+            m_id = glCreateShader(GL_VERTEX_SHADER);
 
-        assets::FileReader file_reader { path };
+        assets::FileReader file_reader { m_path };
         auto data = file_reader.get_file_content();
 
         const char* charData = data.c_str();
 
-        glShaderSource(id, 1, &charData, nullptr);
-        glCompileShader(id);
+        glShaderSource(m_id, 1, &charData, nullptr);
+        glCompileShader(m_id);
 
         int success;
-        glGetShaderiv(id, GL_COMPILE_STATUS, &success);
+        glGetShaderiv(m_id, GL_COMPILE_STATUS, &success);
         if (!success) {
             GLchar infoLog[1024];
-            glGetShaderInfoLog(id, 1024, nullptr, infoLog);
+            glGetShaderInfoLog(m_id, 1024, nullptr, infoLog);
             std::cout << infoLog;
-            THROW_ERROR("GL ERROR: Failed to compile shader with path: %s", path);
+            THROW_ERROR("GL ERROR: Failed to compile shader with path: %s", m_path);
         }
     }
 
     Shader::~Shader() {
-        glDeleteShader(id);
+        glDeleteShader(m_id);
     }
 
     ShaderProgram::~ShaderProgram() {
@@ -47,8 +48,8 @@ namespace graphics {
         vertexShader = std::make_unique<Shader>(ShaderType::Vertex, vertex_shader_path);
         fragmentShader = std::make_unique<Shader>(ShaderType::Fragment, fragment_shader_path );
 
-        glAttachShader(program, vertexShader->id);
-        glAttachShader(program, fragmentShader->id);
+        glAttachShader(program, vertexShader->id());
+        glAttachShader(program, fragmentShader->id());
     }
 
     void ShaderProgram::use() const {
@@ -64,7 +65,7 @@ namespace graphics {
             GLchar infoLog[1024];
             glGetProgramInfoLog(program, 1024, nullptr, infoLog);
             std::cout << infoLog;
-            THROW_ERROR("GL ERROR: Failed to link shaders with paths: %s, %s", vertexShader->path, fragmentShader->path);
+            THROW_ERROR("GL ERROR: Failed to link shaders with paths: %s, %s", vertexShader->path(), fragmentShader->path());
         }
 
         // set the block bindings
