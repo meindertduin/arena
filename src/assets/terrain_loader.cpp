@@ -3,9 +3,6 @@
 #include "loaders.h"
 #include "file_reader.h"
 
-#include "../graphics/terrain.h"
-#include "cache.h"
-
 namespace assets {
     std::shared_ptr<graphics::Terrain> load_terrain(const std::string &filename) {
         FileReader file_reader { filename };

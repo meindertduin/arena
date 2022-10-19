@@ -9,7 +9,7 @@
 #include "../assets/cache.h"
 
 namespace game {
-    struct Map {
+    class Map {
     public:
         Map();
 

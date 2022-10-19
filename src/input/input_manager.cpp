@@ -16,22 +16,22 @@ namespace input {
     }
 
     void InputManager::on_mouse_movement(float mouse_x_offset, float mouse_y_offset) const {
-        if (global.game->ui_mode) {
-            global.game->ui.handle_mouse_move_event();
+        if (global.game->ui_mode()) {
+            global.game->ui().handle_mouse_move_event();
         } else {
             entity::RotateCommand command;
             command.degrees_x = mouse_x_offset * settings.mouse_sensitivity;
             command.degrees_y = mouse_y_offset * settings.mouse_sensitivity;
 
-            command.execute(global.game->player);
+            command.execute(global.game->player());
         }
     }
 
     void InputManager::on_mouse_button_event(KeyCombination combi) {
-        if (global.game->ui_mode) {
-            global.game->ui.handle_mouse_button_event(combi);
+        if (global.game->ui_mode()) {
+            global.game->ui().handle_mouse_button_event(combi);
         } else {
-            // let the player handle the event
+            // let the m_player handle the event
         }
     }
 
@@ -42,8 +42,8 @@ namespace input {
         if (handle_ui_command(combi, maskless_combi))
             return;
 
-        if (global.game->ui_mode) {
-            global.game->ui.handle_key_event(combi);
+        if (global.game->ui_mode()) {
+            global.game->ui().handle_key_event(combi);
         } else {
             handle_player_command(combi, maskless_combi);
         }
@@ -68,13 +68,13 @@ namespace input {
     bool InputManager::handle_player_command(const KeyCombination &combi, const KeyCombination &maskless_combi) {
         auto maskless_command_opt = key_bindings.get_player_command(maskless_combi);
         if (maskless_command_opt.has_value()) {
-            maskless_command_opt.value()->execute(global.game->player);
+            maskless_command_opt.value()->execute(global.game->player());
             return true;
         }
 
         auto command_opt = key_bindings.get_player_command(combi);
         if (command_opt.has_value()) {
-            command_opt.value()->execute(global.game->player);
+            command_opt.value()->execute(global.game->player());
             return true;
         }
 

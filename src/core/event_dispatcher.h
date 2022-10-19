@@ -6,7 +6,7 @@
 
 namespace core {
     template<typename T>
-    struct EventHandler;
+    class EventHandler;
 
     template<typename T>
     class EventDispatcher {
@@ -40,7 +40,7 @@ namespace core {
     };
 
     template<typename T>
-    struct EventHandler {
+    class EventHandler {
     public:
         EventHandler(std::function<void(const T&)> &callback)
             : eventDispatcher(EventDispatcher<T>::instance()), callback(callback)

@@ -5,7 +5,7 @@
 
 namespace entity {
     void EcStaticMeshRenderer::init(const std::string& filename) {
-        this->mesh = global.game->cache.get_resource<graphics::Mesh>(filename);
+        this->mesh = global.game->cache().get_resource<graphics::Mesh>(filename);
         this->material = global.material;
         this->texture = global.texture;
     }

@@ -28,7 +28,7 @@ namespace graphics {
         std::string material;
     };
 
-    struct TerrainTexturePack {
+    class TerrainTexturePack {
     public:
         TerrainTexturePack(const TerrainFile &file);
         void bind() const;
@@ -40,7 +40,7 @@ namespace graphics {
         std::shared_ptr<Texture> b_texture;
     };
 
-    struct Terrain {
+    class Terrain {
     public:
         float max_height = 20;
         float min_height = -20;

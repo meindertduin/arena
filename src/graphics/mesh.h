@@ -20,7 +20,7 @@ namespace graphics {
         std::vector<Vertex> vertices;
     };
 
-    struct Mesh : public Renderable {
+    class Mesh : public Renderable {
     public:
         Mesh(MeshData *mesh_data);
 

@@ -5,7 +5,7 @@
 #include "../logging.h"
 
 namespace entity {
-    struct IComponentArray {
+    class IComponentArray {
     public:
         virtual ~IComponentArray() = default;
         virtual void entity_destroyed(Entity entity) = 0;
@@ -14,7 +14,7 @@ namespace entity {
     };
 
     template<typename T>
-    struct ComponentArray : IComponentArray {
+    class ComponentArray : public IComponentArray {
     public:
         void insert(Entity entity, T component) {
             if (components.find(entity.id) != components.end()) {

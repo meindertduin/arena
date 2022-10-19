@@ -7,6 +7,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "../platform/platform.h"
 
 namespace graphics {
     constexpr int MATRICES_BLOCK_BINDING = 0;
@@ -17,12 +18,9 @@ namespace graphics {
         Fragment,
     };
 
-    struct Shader {
-        uint32_t id;
-        ShaderType type;
-        std::string path;
-
-        Shader(ShaderType type, const std::string& path);
+    class Shader {
+    public:
+        Shader(ShaderType type, std::string  path);
         ~Shader();
 
         Shader(const Shader &other) = delete;
@@ -30,12 +28,17 @@ namespace graphics {
 
         Shader& operator=(const Shader &other) = delete;
         Shader& operator=(Shader &&other) = delete;
+
+        [[nodiscard]] constexpr ALWAYS_INLINE uint32_t id() const { return m_id; }
+        [[nodiscard]] constexpr ALWAYS_INLINE std::string path() const { return m_path; }
+    private:
+        uint32_t m_id;
+        ShaderType type;
+        std::string m_path;
     };
 
-    struct ShaderProgram {
-        uint32_t id{};
-        uint32_t program;
-
+    class ShaderProgram {
+    public:
         std::unique_ptr<Shader> vertexShader;
         std::unique_ptr<Shader> fragmentShader;
 
@@ -50,10 +53,13 @@ namespace graphics {
         void set_property(const std::string& property_name, glm::vec3&&) const;
         void set_property(const std::string& property_name, glm::vec4&&) const;
         void set_property(const std::string& property_name, glm::mat4&&) const;
-        void set_property(const std::string& property_name, glm::vec3&) const;
-        void set_property(const std::string& property_name, glm::vec4&) const;
-        void set_property(const std::string& property_name, glm::mat4&) const;
+        void set_property(const std::string& property_name, const glm::vec3&) const;
+        void set_property(const std::string& property_name, const glm::vec4&) const;
+        void set_property(const std::string& property_name, const glm::mat4&) const;
 
         void set_uniform_loc(const std::string& name, int index) const;
+    private:
+        uint32_t id{};
+        uint32_t program;
     };
 }

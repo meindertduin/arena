@@ -27,7 +27,7 @@ namespace graphics {
 
         shader.use();
         global.texture->bind(0);
-        global.game->skybox.bind_texture(1);
+        global.game->skybox().bind_texture(1);
 
         shader.set_property("color", { 1.0f, 1.0f, 0 });
         shader.set_property("model", model_4x4);
@@ -36,7 +36,7 @@ namespace graphics {
         shader.set_property("specular", global.material->specular);
         shader.set_property("shininess", global.material->shininess);
 
-        shader.set_property("viewPos", global.game->camera->transform.pos);
+        shader.set_property("viewPos", global.game->camera().transform.pos);
 
         shader.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
@@ -53,26 +53,26 @@ namespace graphics {
         ubo_lights.reset();
 
         ubo_matrices.bind();
-        ubo_matrices.set_data(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(global.game->camera->projection));
-        ubo_matrices.set_data(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(global.game->camera->get_view_4x4()));
+        ubo_matrices.set_data(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(global.game->camera().projection));
+        ubo_matrices.set_data(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(global.game->camera().get_view_4x4()));
         ubo_matrices.unbind();
 
         ubo_lights.bind();
 
-        auto dir_lights_count = global.game->dir_lights.size();
-        auto point_lights_count = global.game->point_lights.size();
+        auto dir_lights_count = global.game->dir_lights().size();
+        auto point_lights_count = global.game->point_lights().size();
 
         ubo_lights.set_data(16, sizeof(int), &dir_lights_count);
         
         auto uboFilledSizeBefore = ubo_lights.offset;
-        for (auto &light : global.game->dir_lights) {
+        for (auto &light : global.game->dir_lights()) {
             light.set_data(ubo_lights);
         }
 
         ubo_lights.set_offset(uboFilledSizeBefore + (DIR_LIGHT_STD140_SIZE * MAX_DIR_LIGHTS));
         ubo_lights.set_data(16, sizeof(int), &point_lights_count);
 
-        for (auto &light : global.game->point_lights) {
+        for (auto &light : global.game->point_lights()) {
             light.set_data(ubo_lights);
         }
 
@@ -102,7 +102,7 @@ namespace graphics {
         shader.set_property("specular", global.material->specular);
         shader.set_property("shininess", global.material->shininess);
 
-        shader.set_property("viewPos", global.game->camera->transform.pos);
+        shader.set_property("viewPos", global.game->camera().transform.pos);
 
         shader.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
@@ -133,45 +133,44 @@ namespace graphics {
     }
 
     void TextRenderer::render_oneliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options, int text_width) {
-        int x_pos;
+        IPoint pos;
         if (options.center_text_x && rect.size().width() > text_width) {
-            x_pos = (rect.size().width() - text_width) / 2 + rect.position().x();
+            pos.set_x((rect.size().width() - text_width) / 2 + rect.position().x());
         } else {
-            x_pos = rect.position().x();
+            pos.set_x(rect.position().x());
         }
 
-        int y_pos;
         int max_character_height = static_cast<int>((float) font.get_glyph('L').size.y * scale);
         if(options.center_text_y) {
-            y_pos = (rect.size().height() / 2 ) + max_character_height / 4 + rect.position().y() + 1;
+            pos.set_y((rect.size().height() / 2 ) + max_character_height / 4 + rect.position().y() + 1);
         } else {
-            y_pos = rect.position().y() + max_character_height;
+            pos.set_y(rect.position().y() + max_character_height);
         }
 
-        render_line(text, { x_pos, y_pos }, scale);
+        render_line(text, pos, scale);
     }
 
     void TextRenderer::render_multiliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options) {
+        auto pos = rect.position();
         auto sentences = split_in_sentences(text, scale, rect.size());
         int max_character_height = static_cast<int>((float) font.get_glyph('L').size.y * scale) + 1;
 
-        int y_pos;
         if (options.center_text_y) {
             auto text_height = calculate_text_height(sentences, options);
 
             if (text_height >= rect.size().height()) {
-                y_pos = rect.position().y();
+                pos.set_y(rect.position().y());
             } else {
-                y_pos = ((rect.size().height() - text_height) / 2 ) + max_character_height / 4 + rect.position().y() + 1;
+                pos.set_y(((rect.size().height() - text_height) / 2 ) + max_character_height / 4 + rect.position().y() + 1);
             }
         } else {
-            y_pos = rect.position().y();
+            pos.set_y(rect.position().y());
         }
 
         for (auto &[sentence_width, sentence] : sentences) {
-            IPoint pos = { rect.position().x(), y_pos + max_character_height };
-            render_sentence(sentence, scale, pos, rect.size(), options, sentence_width);
-            y_pos += options.text_size + options.line_height;
+            IPoint sentence_pos = { rect.position().x(), pos.y() + max_character_height };
+            render_sentence(sentence, scale, sentence_pos, rect.size(), options, sentence_width);
+            pos.set_y(pos.y() + options.text_size + options.line_height);
         }
     }
 

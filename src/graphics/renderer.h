@@ -16,7 +16,7 @@
 #include "../entity/ec_transform.h"
 
 namespace graphics {
-    struct Renderer {
+    class Renderer {
     public:
         explicit Renderer(std::shared_ptr<RenderTarget> render_target);
         

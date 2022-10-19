@@ -9,19 +9,19 @@
 
 namespace entity {
     void SystemsCollection::init() {
-        static_render_system = global.ecs->create_system<entity::StaticRenderSystem>({ EcStaticMeshRenderer::_id });
-        physics_system = global.ecs->create_system<physics::PhysicsSystem>({ entity::ECPhysics::_id });
-        terrain_collision_system = global.ecs->create_system<entity::TerrainCollisionSystem>({ entity::ECCollisionBox::_id });
-        movement_system = global.ecs->create_system<entity::MovementSystem>({ entity::ECControl::_id, entity::ECTransform::_id });
+        pm_static_render_system = global.ecs->create_system<entity::StaticRenderSystem>({ EcStaticMeshRenderer::_id });
+        pm_physics_system = global.ecs->create_system<physics::PhysicsSystem>({ entity::ECPhysics::_id });
+        pm_terrain_collision_system = global.ecs->create_system<entity::TerrainCollisionSystem>({ entity::ECCollisionBox::_id });
+        pm_movement_system = global.ecs->create_system<entity::MovementSystem>({ entity::ECControl::_id, entity::ECTransform::_id });
     }
 
     void SystemsCollection::update() {
-        movement_system->update();
-        physics_system->update();
-        terrain_collision_system->update();
+        pm_movement_system->update();
+        pm_physics_system->update();
+        pm_terrain_collision_system->update();
     }
 
     void SystemsCollection::render() {
-        static_render_system->update();
+        pm_static_render_system->update();
     }
 }

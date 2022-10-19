@@ -4,7 +4,7 @@
 #include <vector>
 
 namespace graphics {
-    struct GpuBuffer {
+    class GpuBuffer {
     public:
         virtual ~GpuBuffer() = default;
 
@@ -14,7 +14,8 @@ namespace graphics {
         uint32_t id;
     };
 
-    struct ArrayBuffer : GpuBuffer {
+    class ArrayBuffer : GpuBuffer {
+    public:
         ArrayBuffer();
         ~ArrayBuffer() override;
 
@@ -29,7 +30,7 @@ namespace graphics {
         void set_data(int offset, std::size_t size, const void *data);
     };
 
-    struct VertexBuffer : GpuBuffer {
+    class VertexBuffer : GpuBuffer {
     public:
         struct VertexAttribute {
             int amount;
@@ -57,7 +58,8 @@ namespace graphics {
         std::vector<VertexAttribute> vertex_attributes;
     };
 
-    struct SharedDataBuffer : GpuBuffer {
+    class SharedDataBuffer : GpuBuffer {
+    public:
             int offset = 0;
             std::size_t size;
 

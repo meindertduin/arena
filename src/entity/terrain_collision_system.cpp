@@ -6,7 +6,7 @@
 
 namespace entity {
     void TerrainCollisionSystem::update() {
-        auto terrain = global.game->map->terrain;
+        auto terrain = global.game->map()->terrain;
         for (auto &entity : entities) {
             auto &collision_box = entity.get<ECCollisionBox>();
             auto &transform = entity.get<ECTransform>();

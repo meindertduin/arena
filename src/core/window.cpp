@@ -12,18 +12,18 @@ namespace core {
 
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        window = glfwCreateWindow(options.width, options.height, options.window_name.c_str(), nullptr, nullptr);
-        if (window == nullptr) {
+        pm_window = glfwCreateWindow(options.width, options.height, options.window_name.c_str(), nullptr, nullptr);
+        if (pm_window == nullptr) {
             glfwTerminate();
         }
 
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(pm_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         if (glfwRawMouseMotionSupported())
-            glfwSetInputMode(window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+            glfwSetInputMode(pm_window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 
-        glfwMakeContextCurrent(window);
-        glfwSetFramebufferSizeCallback(window, [](GLFWwindow *window, int width, int height) {
+        glfwMakeContextCurrent(pm_window);
+        glfwSetFramebufferSizeCallback(pm_window, [](GLFWwindow *window, int width, int height) {
             glViewport(0, 0, width, height);
         });
 
@@ -33,12 +33,12 @@ namespace core {
     }
 
     Window::~Window() {
-        glfwDestroyWindow(window);
+        glfwDestroyWindow(pm_window);
         glfwTerminate();
     }
 
     bool Window::close_requested() const  {
-        return glfwWindowShouldClose(window);
+        return glfwWindowShouldClose(pm_window);
     }
 
     void Window::poll_events() const {
@@ -46,7 +46,7 @@ namespace core {
     }
 
     void Window::end_frame() const {
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(pm_window);
     }
 
     void Window::enable_cursor() {
@@ -54,7 +54,7 @@ namespace core {
             return;
 
         win_options.cursor_enabled = true;
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        glfwSetInputMode(pm_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
     void Window::disable_cursor() {
@@ -62,6 +62,6 @@ namespace core {
             return;
 
         win_options.cursor_enabled = false;
-        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        glfwSetInputMode(pm_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
 }

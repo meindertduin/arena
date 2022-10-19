@@ -2,7 +2,6 @@
 
 #include "../core/event_dispatcher.h"
 #include "events.h"
-#include "../global.h"
 #include "../graphics/graphic_options.h"
 
 namespace input {
@@ -15,7 +14,7 @@ namespace input {
     void initialize_input(const core::Window &window) {
         keyboard_state.fill(0);
 
-        glfwSetKeyCallback(window.window,
+        glfwSetKeyCallback(window.window(),
                 [](GLFWwindow *window, int key, int scancode, int action, int mods)
         {
             auto dispatcher = core::EventDispatcher<KeyEvent>::instance();
@@ -33,7 +32,7 @@ namespace input {
             dispatcher->emit_event(event);
         });
 
-        glfwSetMouseButtonCallback(window.window, [](GLFWwindow *window, int button, int action, int mods) {
+        glfwSetMouseButtonCallback(window.window(), [](GLFWwindow *window, int button, int action, int mods) {
             auto dispatcher = core::EventDispatcher<MouseButtonEvent>::instance();
 
             MouseButtonEvent event{};
@@ -43,7 +42,7 @@ namespace input {
             dispatcher->emit_event(event);
         });
 
-        glfwSetCursorPosCallback(window.window,
+        glfwSetCursorPosCallback(window.window(),
                 [](GLFWwindow* window, double xpos_in, double ypos_in)
         {
             auto xpos = static_cast<float>(xpos_in);

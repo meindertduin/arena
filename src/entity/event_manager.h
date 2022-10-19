@@ -23,22 +23,19 @@ namespace entity {
 
     struct PositionChangeEvent : public Event<PositionChangeEvent> {
         PositionChangeEvent() = default;
-        PositionChangeEvent(Entity *entity) : Event<PositionChangeEvent>(entity) { }
+        explicit PositionChangeEvent(Entity *entity) : Event<PositionChangeEvent>(entity) { }
     };
     struct RotationChangeEvent : public Event<RotationChangeEvent> { 
         glm::quat rotation;
 
-        RotationChangeEvent(glm::quat rotation) : rotation(rotation) {  }
+        explicit RotationChangeEvent(glm::quat rotation) : rotation(rotation) {  }
         RotationChangeEvent(Entity *entity, glm::quat rotation) : Event<RotationChangeEvent>(entity), rotation(rotation) {  }
     };
 
-    struct TickEvent : public Event<TickEvent> {
-
-    };
-
+    struct TickEvent : public Event<TickEvent> { };
     using EventType = uint32_t;
 
-    struct EventManager {
+    class EventManager {
     public:
     template<typename T>
     static void register_event() {

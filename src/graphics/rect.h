@@ -16,8 +16,10 @@ namespace graphics {
         constexpr Size(T width, T height) : m_width{width}, m_height{height} {}
 
         constexpr ALWAYS_INLINE T width() const { return m_width; }
-
         constexpr ALWAYS_INLINE T height() const { return m_height; }
+
+        ALWAYS_INLINE void set_width(T width) { m_width = width; }
+        ALWAYS_INLINE void set_height(T height) { m_height = height; }
 
         constexpr ALWAYS_INLINE T area() const { return m_width * m_height; }
 
@@ -44,6 +46,9 @@ namespace graphics {
         constexpr ALWAYS_INLINE  T x() const { return m_x; }
         constexpr ALWAYS_INLINE T y() const { return m_y; }
 
+        ALWAYS_INLINE void set_x(T x) { m_x = x; }
+        ALWAYS_INLINE void set_y(T y) { m_y = y; }
+
         template<typename U>
         bool operator==(const Point<U> &other) const {
             return m_x == other.x() && m_y == other.y();
@@ -55,8 +60,8 @@ namespace graphics {
         }
 
     private:
-        T m_x;
-        T m_y;
+        T m_x { 0 };
+        T m_y { 0 };
     };
 
     template<typename T>
