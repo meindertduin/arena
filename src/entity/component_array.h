@@ -14,7 +14,7 @@ namespace entity {
     };
 
     template<typename T>
-    class ComponentArray : IComponentArray {
+    class ComponentArray : public IComponentArray {
     public:
         void insert(Entity entity, T component) {
             if (components.find(entity.id) != components.end()) {

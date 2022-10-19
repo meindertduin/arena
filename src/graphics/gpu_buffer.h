@@ -59,6 +59,7 @@ namespace graphics {
     };
 
     class SharedDataBuffer : GpuBuffer {
+    public:
             int offset = 0;
             std::size_t size;
 

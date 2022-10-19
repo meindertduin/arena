@@ -16,5 +16,7 @@ namespace entity {
         void init();
         void update();
         void render();
+    private:
+
     };
 }

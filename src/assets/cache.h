@@ -11,6 +11,8 @@
 #include "loaders.h"
 
 namespace assets {
+    class Cache;
+
     class Cache {
     public:
         Cache() = default;
