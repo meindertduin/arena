@@ -5,6 +5,7 @@
 
 #include <cstdint>
 #include <string>
+#include "../platform/platform.h"
 
 namespace core {
     struct WindowOptions {
@@ -14,7 +15,7 @@ namespace core {
         bool cursor_enabled = false;
     };
 
-    struct Window {
+    class Window {
     public:
         explicit Window(const WindowOptions &options);
         ~Window();
@@ -25,8 +26,10 @@ namespace core {
         void disable_cursor();
         void poll_events() const;
 
+        [[nodiscard]] ALWAYS_INLINE GLFWwindow* window() const { return pm_window; }
+    private:
         WindowOptions win_options;
-
-        GLFWwindow *window;
+        GLFWwindow *pm_window;
     };
 }
+

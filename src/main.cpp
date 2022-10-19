@@ -19,8 +19,6 @@
 #include "entity/component.h"
 #include "entity/systems_collection.h"
 
-#include <thread>
-
 Global global;
 
 int main () {

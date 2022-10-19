@@ -8,7 +8,7 @@
 #include "component.h"
 
 namespace entity {
-    struct EcStaticMeshRenderer : public Component<EcStaticMeshRenderer> {
+    class EcStaticMeshRenderer : public Component<EcStaticMeshRenderer> {
     public:
         graphics::Material *material = nullptr;
         std::shared_ptr<graphics::Texture> texture;

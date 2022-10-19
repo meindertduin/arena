@@ -5,7 +5,7 @@
 #include "graphic_options.h"
 
 namespace graphics {
-    struct RenderTarget {
+    class RenderTarget {
     public:
         RenderTarget();
         ~RenderTarget();

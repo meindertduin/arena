@@ -5,7 +5,7 @@
 #include "rect.h"
 
 namespace graphics {
-    struct GraphicOptions {
+    class GraphicOptions {
     public:
         bool antialiasing;
 

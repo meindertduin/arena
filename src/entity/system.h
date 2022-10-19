@@ -6,14 +6,14 @@
 #include <set>
 
 namespace entity {
-    struct System {
+    class System {
     public:
         std::set<Entity> entities;
 
         virtual void update() = 0;
     };
 
-    struct SystemsManager {
+    class SystemsManager {
     public:
         template<typename T>
             std::shared_ptr<T> register_system() {

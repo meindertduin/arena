@@ -4,7 +4,7 @@
 #include "../graphics/events.h"
 
 namespace entity {
-    struct Camera {
+    class Camera {
     public:
         glm::mat4 view;
         glm::mat4 projection;

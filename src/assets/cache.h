@@ -11,8 +11,6 @@
 #include "loaders.h"
 
 namespace assets {
-    struct Cache;
-
     class Cache {
     public:
         Cache() = default;

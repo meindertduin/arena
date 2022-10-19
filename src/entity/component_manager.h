@@ -5,7 +5,7 @@
 #include "../logging.h"
 
 namespace entity {
-    struct ComponentManager {
+    class ComponentManager {
     public:
         template<typename T>
         void register_component() {

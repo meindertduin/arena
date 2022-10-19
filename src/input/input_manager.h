@@ -9,7 +9,7 @@
 #include "key_bindings.h"
 
 namespace input {
-    struct InputManager {
+    class InputManager {
     public:
         InputManager();
 

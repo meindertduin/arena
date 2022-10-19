@@ -7,7 +7,7 @@
 #include "../utils/types.h"
 
 namespace entity {
-    struct Ecs {
+    class Ecs {
     public:
         Ecs(const Ecs &) = delete;
         Ecs(Ecs &&) = delete;

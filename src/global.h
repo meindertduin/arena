@@ -8,25 +8,25 @@
 #include <memory>
 
 namespace core {
-    struct Window;
+    class Window;
 }
 
 namespace game {
-    struct GameState;
+    class GameState;
 }
 
 namespace graphics {
-    struct Renderer;
-    struct TerrainRenderer;
+    class Renderer;
+    class TerrainRenderer;
     class TextRenderer;
     class UIRenderer;
-    struct Texture;
-    struct Material;
-    struct GraphicOptions;
+    class Texture;
+    class Material;
+    class GraphicOptions;
 }
 
 namespace entity {
-    struct Ecs;
+    class Ecs;
     class SystemsCollection;
 }
 

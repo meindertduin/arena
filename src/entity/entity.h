@@ -57,7 +57,7 @@ namespace entity {
 
     using Entity = Object<Ecs>;
 
-    struct EntityManager {
+    class EntityManager {
     public:
         EntityManager();
 
