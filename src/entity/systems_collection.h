@@ -8,15 +8,13 @@
 namespace entity {
     class SystemsCollection {
     public:
-        std::shared_ptr<StaticRenderSystem> static_render_system { nullptr };
-        std::shared_ptr<physics::PhysicsSystem> physics_system { nullptr };
-        std::shared_ptr<TerrainCollisionSystem> terrain_collision_system { nullptr };
-        std::shared_ptr<MovementSystem> movement_system { nullptr };
-
         void init();
         void update();
         void render();
     private:
-
+        std::shared_ptr<StaticRenderSystem> pm_static_render_system { nullptr };
+        std::shared_ptr<physics::PhysicsSystem> pm_physics_system { nullptr };
+        std::shared_ptr<TerrainCollisionSystem> pm_terrain_collision_system { nullptr };
+        std::shared_ptr<MovementSystem> pm_movement_system { nullptr };
     };
 }
