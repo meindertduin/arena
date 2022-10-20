@@ -1,8 +1,8 @@
 #include "loaders.h"
 
 #include <glm/glm.hpp>
-#include <memory>
 #include <sstream>
+#include <memory>
 #include <vector>
 
 #include "file_reader.h"

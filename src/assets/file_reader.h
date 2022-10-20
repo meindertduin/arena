@@ -6,7 +6,8 @@
 namespace assets {
     class FileReader {
     public:
-        FileReader(const std::string &filename);
+        FileReader() = default;
+        explicit FileReader(const std::string &filename);
         ~FileReader();
 
         FileReader(const FileReader &other) = delete;
@@ -15,9 +16,14 @@ namespace assets {
         void open_file(const std::string &filename);
         bool next_line(char *line, size_t size);
         bool next_line(std::string &line);
+        bool end_of_file() const;
+
+        void go_to_line(int line_number);
+        void go_to_previous_line();
 
         std::string get_file_content() const;
     private:
-        std::ifstream fs;
+        std::ifstream m_fs;
+        int m_current_line_number;
     };
 }
