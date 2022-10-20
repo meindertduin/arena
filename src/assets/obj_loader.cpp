@@ -7,6 +7,7 @@
 
 #include "file_reader.h"
 #include "../global.h"
+#include "obj_file.h"
 
 namespace assets {
     struct ObjIndex {
@@ -18,75 +19,12 @@ namespace assets {
     ObjIndex parse_object_index(std::string token, graphics::MeshData *meshData);
 
     std::shared_ptr<graphics::Mesh> load_obj(const std::string &filename) {
-        FileReader file_reader { filename };
+        ObjFileReader file_reader;
+        auto obj_file = file_reader.read_from_file(filename);
 
-        auto mesh_data = std::make_unique<graphics::MeshData>(graphics::MeshData{});
+        auto& first_obj = obj_file->objects()[0];
 
-        auto chained = core::ChainedAllocator<core::LinearAllocator>{ &global.list_allocator, 1024 * 1024, 8 };
-        core::StdLinearAllocator<core::LinearAllocator> allocator { chained.get(), 0 };
-
-        core::LinearAllocVector<glm::vec3> vertices(allocator);
-        core::LinearAllocVector<glm::u16vec2> textcoords(allocator);
-        core::LinearAllocVector<glm::vec3> normals(allocator);
-
-        std::string line;
-        while(file_reader.next_line(line)) {
-            std::stringstream ss;
-            std::vector<std::string> tokens;
-            ss << line;
-
-            std::string first_token;
-            ss >> first_token;
-
-            if (first_token == "v") {
-                float x, y, z;
-                ss >> x >> y >> z;
-
-                vertices.emplace_back(x, y, z);
-            }
-
-            if (first_token == "vt") {
-                float x, y;
-                ss >> x >> y;
-
-                textcoords.emplace_back(x * 65535.0f, y * 65535.0f);
-            }
-
-            if (first_token == "vn") {
-                float x, y, z;
-                ss >> x >> y >> z;
-                normals.emplace_back(x, y, z);
-            }
-
-            if (first_token == "f") {
-                std::string value;
-
-                while (std::getline(ss, value, ' '))
-                    tokens.push_back(value);
-
-                for (int i = 0; i < tokens.size() - 3; i++) {
-                    ObjIndex objIndices[3] = {
-                            parse_object_index(tokens[3 + i], mesh_data.get()),
-                            parse_object_index(tokens[2 + i], mesh_data.get()),
-                            parse_object_index(tokens[1], mesh_data.get()),
-                    };
-
-                    for (int i = 0; i < 3; i++) {
-                        graphics::Vertex vertex{};
-
-                        // set the ordering right
-                        auto index = objIndices[2 - i];
-                        vertex.pos = vertices[index.vertex_index];
-                        vertex.normal = normals[index.normal_index];
-                        vertex.textcoords = textcoords[index.tex_coord_index];
-
-                        mesh_data->vertices.push_back(vertex);
-                    }
-                }
-            }
-        }
-
-        return std::make_shared<graphics::Mesh>(mesh_data.get());
+        return std::make_shared<graphics::Mesh>(first_obj->mesh_data.get());
     }
 
     ObjIndex parse_object_index(std::string token, graphics::MeshData *mesh_data) {

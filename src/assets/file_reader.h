@@ -16,13 +16,14 @@ namespace assets {
         void open_file(const std::string &filename);
         bool next_line(char *line, size_t size);
         bool next_line(std::string &line);
-        bool end_of_file() const;
 
-        void go_to_line(int line_number);
-        void go_to_previous_line();
+        bool end_of_file() const;
+        std::string get_last_line() const;
 
         std::string get_file_content() const;
     private:
+        std::string m_last_line;
+
         std::ifstream m_fs;
         int m_current_line_number;
     };

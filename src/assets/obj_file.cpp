@@ -62,25 +62,27 @@ namespace assets {
             std::string first_token;
             ss >> first_token;
 
-            if (first_token == "mtlib") {
+            if (first_token == "mtllib") {
                 std::string mtl_filename;
                 ss >> mtl_filename;
                 file->m_mtl_filename = mtl_filename;
             }
 
             if (first_token == "o") {
-                file_reader.go_to_previous_line();
                 read_header = true;
             }
         }
     }
 
     void ObjFileReader::read_objects(std::unique_ptr<ObjFile> &file) {
-        std::string line;
-        while (!file_reader.end_of_file()) {
+        bool has_next_object = true;
+        std::string last_line;
+        while (has_next_object) {
+            last_line = file_reader.get_last_line();
+
             std::stringstream ss;
             std::vector<std::string> tokens;
-            ss << line;
+            ss << last_line;
 
             std::string first_token;
             ss >> first_token;
@@ -91,6 +93,8 @@ namespace assets {
 
                 read_object(object);
                 file->objects().push_back(std::move(object));
+            } else {
+                has_next_object = false;
             }
         }
     }
@@ -106,7 +110,6 @@ namespace assets {
         core::LinearAllocVector<glm::vec3> normals(allocator);
 
         std::string line;
-
         while(file_reader.next_line(line)) {
             std::stringstream ss;
             std::vector<std::string> tokens;
@@ -116,7 +119,6 @@ namespace assets {
             ss >> first_token;
 
             if (first_token == "o") {
-                file_reader.go_to_previous_line();
                 break;
             }
 

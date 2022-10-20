@@ -26,7 +26,7 @@ namespace assets {
 
         m_fs.getline(line, size);
 
-        m_current_line_number++;
+        m_last_line = line;
         return true;
     }
 
@@ -38,8 +38,8 @@ namespace assets {
 
         m_fs.getline(char_line, sizeof(char_line));
         line = char_line;
+        m_last_line = char_line;
 
-        m_current_line_number++;
         return true;
     }
 
@@ -49,20 +49,11 @@ namespace assets {
         return ss.str();
     }
 
-    void FileReader::go_to_previous_line() {
-        go_to_line(m_current_line_number - 1);
-    }
-
-    void FileReader::go_to_line(int line_number) {
-        m_fs.seekg(std::ios::beg);
-        for(int i = 0; i < line_number - 1; ++i){
-            m_fs.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-        }
-
-        m_current_line_number = line_number;
-    }
-
     bool FileReader::end_of_file() const {
         return m_fs.eof();
+    }
+
+    std::string FileReader::get_last_line() const {
+        return m_last_line;
     }
 }
