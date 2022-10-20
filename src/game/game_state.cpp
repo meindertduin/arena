@@ -36,7 +36,7 @@ namespace game {
         auto mesh_renderer = entity::EcStaticMeshRenderer();
         mesh_renderer.init("assets/fan_tree.obj");
         this->cube.add(mesh_renderer);
-        this->cube.add(entity::ECTransform({ 0, -18, -10 }, {}));
+        this->cube.add(entity::ECTransform({ 0, -24, -10 }, {}));
     }
 
     void GameState::update() {

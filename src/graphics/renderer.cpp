@@ -5,6 +5,7 @@
 #include "material.h"
 #include "../game/game_state.h"
 #include "ui_renderer.h"
+#include "glad/glad.h"
 
 
 namespace graphics {
@@ -24,6 +25,7 @@ namespace graphics {
 
     void Renderer::render(const Renderable *mesh, const entity::ECTransform &transform) const {
         auto model_4x4 = transform.get_transform_4x4();
+        glBlendFunc(GL_SRC_ALPHA, GL_SAMPLE_ALPHA_TO_ONE);
 
         shader.use();
         global.texture->bind(0);
