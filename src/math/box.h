@@ -34,7 +34,7 @@ namespace math {
         }
     private:
         Point3D<T> m_center;
-        Quaternion m_rotation{};
+        Quaternion m_rotation{ { 1, 0, 0, 0 } };
         glm::vec3 m_half{};
     };
 }

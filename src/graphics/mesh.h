@@ -4,6 +4,7 @@
 #include "../entity/ec_transform.h"
 
 #include "gpu_buffer.h"
+#include "../math/box.h"
 
 namespace graphics {
     struct Vertex {
@@ -17,22 +18,30 @@ namespace graphics {
     };
 
     struct MeshData {
+        float x_min;
+        float x_max;
+        float y_min;
+        float y_max;
+        float z_min;
+        float z_max;
+
         std::vector<Vertex> vertices;
     };
 
     class Mesh : public Renderable {
     public:
-        Mesh(MeshData *mesh_data);
-
+        Mesh(MeshData *mesh_data, const math::Box3D<float> &box);
         Mesh(const Mesh&) = delete;
+
         Mesh& operator=(const Mesh&) = delete;
 
         void render() const override;
         entity::ECTransform transform;
     private:
         std::size_t size;
+
         VertexBuffer vertex_buffer { sizeof(Vertex) };
         ArrayBuffer buffer_array;
+        math::Box3D<float> bounding_box {};
     };
 }
-

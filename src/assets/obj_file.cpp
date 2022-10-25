@@ -139,6 +139,25 @@ namespace assets {
             if (first_token == "vn") {
                 float x, y, z;
                 ss >> x >> y >> z;
+
+                if (mesh_data->x_min >= x) {
+                    mesh_data->x_min = x;
+                } else if(mesh_data->x_max <= x) {
+                    mesh_data->x_max = x;
+                }
+
+                if (mesh_data->y_min >= y) {
+                    mesh_data->y_min = y;
+                } else if(mesh_data->y_max <= y) {
+                    mesh_data->y_max = y;
+                }
+
+                if (mesh_data->z_min >= z) {
+                    mesh_data->z_min = z;
+                } else if(mesh_data->z_max <= z) {
+                    mesh_data->z_max = z;
+                }
+
                 normals.emplace_back(x, y, z);
             }
 

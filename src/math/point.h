@@ -7,10 +7,8 @@
 #include <glm/vec3.hpp>
 
 namespace math {
-    template<typename T>
-    concept Integral = std::is_integral<T>::value;
 
-    template<Integral T>
+    template<typename T>
     class Point2D {
     public:
         Point2D() = default;
@@ -20,7 +18,7 @@ namespace math {
             m_y{y}
             {}
 
-        template<Integral U>
+        template<typename U>
         constexpr Point2D(U &&x, U &&y) :
             m_x{std::forward<T>(x)},
             m_y{std::forward<T>(y)}
@@ -47,7 +45,7 @@ namespace math {
         T m_y { 0 };
     };
 
-    template<Integral T>
+    template<typename T>
     class Point3D {
     public:
         Point3D() = default;
@@ -58,7 +56,7 @@ namespace math {
             m_z{z}
             {}
 
-        template<Integral U>
+        template<typename U>
         constexpr Point3D(U &&x, U &&y, U &&z) :
             m_x{std::forward<T>(x)},
             m_y{std::forward<T>(y)},

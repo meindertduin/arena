@@ -139,7 +139,7 @@ namespace graphics {
             }
         }
         
-        this->mesh = std::make_unique<Mesh>(&mesh_data);
+        this->mesh = std::make_unique<Mesh>(&mesh_data, math::Box3D<float>{});
     }
 
     bool Terrain::get_height(float x, float z, float &y) const {
