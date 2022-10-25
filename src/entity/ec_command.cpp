@@ -43,7 +43,7 @@ namespace entity {
         auto &transform = entity.get<ECTransform>();
 
         transform.rotate(degrees_x, glm::vec3(0, 1, 0));
-        transform.rotate(-degrees_y, transform.get_right());
+        transform.rotate(-degrees_y, transform.rotation().get_right());
     }
 
 }

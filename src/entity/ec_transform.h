@@ -6,52 +6,39 @@
 
 #include "component.h"
 #include "event_manager.h"
+#include "../math/quaternion.h"
 
 namespace entity {
     struct ECTransform : public Component<ECTransform> {
         glm::vec3 pos;
-        glm::quat rotation;
 
         float scale = 1.0f;
 
-        constexpr ECTransform(): pos(0.0f, 0.0f, 0.0f), rotation(1.0f, 0.0f, 0.0f, 0.0f) { 
-        }
+        constexpr ECTransform(): Component(),
+            pos(0.0f, 0.0f, 0.0f),
+            m_rotation({ 1.0f, 0.0f, 0.0f, 0.0f })
+            {}
 
-        constexpr ECTransform(const glm::vec3 &pos, const glm::quat &rotation)
-            : pos(pos), rotation(rotation) {  }
-        constexpr ECTransform(glm::vec3 &&pos, glm::quat &&rotation)
-            : pos(pos), rotation(rotation) {  }
+        constexpr ECTransform(const glm::vec3 &pos, const glm::quat &rotation) : Component(),
+            pos(pos), m_rotation(rotation)
+            {}
 
-        glm::mat4 get_transform_4x4() const {
-            return glm::translate(glm::identity<glm::mat4>(), pos) * glm::mat4_cast(rotation);
+        constexpr ECTransform(glm::vec3 &&pos, glm::quat &&rotation) : Component(),
+            pos(pos), m_rotation(rotation)
+            {}
+
+        [[nodiscard]] glm::mat4 get_transform_4x4() const {
+            return glm::translate(glm::identity<glm::mat4>(), pos) * glm::mat4_cast(m_rotation.rotation());
         }
 
         void rotate(float degrees, const glm::vec3 &v);
         void move(const glm::vec3 &dir, float amount);
 
-        glm::vec3 get_forward() {
-            return glm::inverse(rotation) * glm::vec3(0.0, 0.0, -1.0);
-        }
+        [[nodiscard]] constexpr ALWAYS_INLINE const math::Quaternion& rotation() const { return m_rotation; }
+        [[nodiscard]] constexpr ALWAYS_INLINE math::Quaternion& rotation() { return m_rotation; }
 
-        glm::vec3 get_backward() {
-            return glm::inverse(rotation) * glm::vec3(0.0, 0.0, 1.0);
-        }
-
-        glm::vec3 get_left() {
-            return glm::inverse(rotation) * glm::vec3(-1.0, 0.0, 0.0);
-        }
-
-        glm::vec3 get_right() {
-            return glm::inverse(rotation) * glm::vec3(1.0, 0.0, 0.0);
-        }
-
-        glm::vec3 get_up() {
-            return glm::inverse(rotation) * glm::vec3(0.0, 1.0, 0.0);
-        }
-
-        glm::vec3 get_down() {
-            return glm::inverse(rotation) * glm::vec3(0.0, -1.0, 0.0);
-        }
+    private:
+        math::Quaternion m_rotation;
     };
 
     DECL_COMPONENT_HEADER(ECTransform);

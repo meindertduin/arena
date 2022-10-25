@@ -5,10 +5,6 @@
 #include <glm/glm.hpp>
 
 namespace math {
-    constexpr glm::vec3 Forward = { 0, 0, 1 };
-    constexpr glm::vec3 Up = { 0, 1, 0 };
-    constexpr glm::vec3 Right = { 1, 0, 0 };
-
     template<typename T>
     class Box3D {
     public:
