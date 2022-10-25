@@ -135,7 +135,7 @@ namespace graphics {
     }
 
     void TextRenderer::render_oneliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options, int text_width) {
-        IPoint pos;
+        IPoint2D pos;
         if (options.center_text_x && rect.size().width() > text_width) {
             pos.set_x((rect.size().width() - text_width) / 2 + rect.position().x());
         } else {
@@ -170,13 +170,13 @@ namespace graphics {
         }
 
         for (auto &[sentence_width, sentence] : sentences) {
-            IPoint sentence_pos = { rect.position().x(), pos.y() + max_character_height };
+            IPoint2D sentence_pos = {rect.position().x(), pos.y() + max_character_height };
             render_sentence(sentence, scale, sentence_pos, rect.size(), options, sentence_width);
             pos.set_y(pos.y() + options.text_size + options.line_height);
         }
     }
 
-    void TextRenderer::render_sentence(const std::string &sentence, float scale, const IPoint &pos, const ISize &size, const TextRenderOptions &options, int sentence_width) {
+    void TextRenderer::render_sentence(const std::string &sentence, float scale, const IPoint2D &pos, const ISize &size, const TextRenderOptions &options, int sentence_width) {
         int x_pos;
         if (options.center_text_x && size.width() > sentence_width) {
             x_pos = (size.width() - sentence_width) / 2 + pos.x();
@@ -187,7 +187,7 @@ namespace graphics {
         render_line(sentence, { x_pos, pos.y() }, scale);
     }
 
-    void TextRenderer::render_line(const std::string &line, const IPoint &pos, float scale) {
+    void TextRenderer::render_line(const std::string &line, const IPoint2D &pos, float scale) {
         auto gl_pos = convert_to_gl_point(pos);
         auto gl_x_pos = gl_pos.x();
 

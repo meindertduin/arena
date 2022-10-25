@@ -12,7 +12,7 @@ namespace assets {
         int normal_index;
     };
 
-    ObjIndex parse_object_index(std::string token) {
+    ObjIndex parse_object_index(const std::string& token) {
         ObjIndex result{};
         std::stringstream ss;
         ss << token;

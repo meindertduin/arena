@@ -21,11 +21,12 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/src/input/CMakeLists.txt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/physics/CMakeLists.txt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/ui/CMakeLists.txt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/platform/CMakeLists.txt)
+include(${CMAKE_CURRENT_SOURCE_DIR}/src/math/CMakeLists.txt)
 
 set(HEADERS include)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-omit-frame-pointer -D__extern_always_inline=inline -D_XOPEN_SOURCE_EXTENDED")
 
-add_executable(${PROJECT_NAME} ${SOURCES} ${ASSETS_SOURCES} ${CORE_SOURCES} ${ENTITY_SOURCES} ${GAME_SOURCES} ${GRAPHICS_SOURCES} ${INPUT_SOURCES} ${PHYSICS_SOURCES} ${UI_SOURCES} ${PLATFORM_SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES} ${ASSETS_SOURCES} ${CORE_SOURCES} ${ENTITY_SOURCES} ${GAME_SOURCES} ${GRAPHICS_SOURCES} ${INPUT_SOURCES} ${PHYSICS_SOURCES} ${UI_SOURCES} ${PLATFORM_SOURCES} ${MATH_SOURCES})
 target_include_directories(
     ${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/external
     ${PROJECT_NAME} PUBLIC

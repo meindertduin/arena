@@ -2,7 +2,6 @@
 #include "../logging.h"
 
 #include <sstream>
-#include <limits>
 
 namespace assets {
     FileReader::FileReader(const std::string &filename) {
