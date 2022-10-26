@@ -6,6 +6,7 @@
 
 #include "../graphics/renderer.h"
 #include "../core/program_time.h"
+#include "../entity/ec_collision.h"
 
 namespace game {
     GameState::GameState() : m_camera{ global.graphic_options->size().width(), global.graphic_options->size().height() } {
@@ -35,7 +36,10 @@ namespace game {
         this->cube = global.ecs->create_entity();
         auto mesh_renderer = entity::EcStaticMeshRenderer();
         mesh_renderer.init("assets/fan_tree.obj");
+        auto collision = entity::ECCollision();
+        collision.init("assets/fan_tree.obj");
         this->cube.add(mesh_renderer);
+        this->cube.add(collision);
         this->cube.add(entity::ECTransform({ 0, -24, -10 }, {}));
     }
 

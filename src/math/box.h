@@ -28,9 +28,8 @@ namespace math {
         [[nodiscard]] constexpr ALWAYS_INLINE const Quaternion& rotation() const { return m_rotation; }
         [[nodiscard]] constexpr ALWAYS_INLINE const glm::vec3& half() const { return m_half; }
 
-        float x_min() {
-
-        }
+        void set_rotation(const Quaternion &rotation) { m_rotation = rotation; }
+        void set_center(const Point3D<float> &center) { m_center = center; }
 
         bool inside(const Point3D<T> &point) const {
             auto delta = point - m_center;
@@ -42,14 +41,13 @@ namespace math {
         }
 
         [[nodiscard]] bool inside(const Box3D<T> &other) const {
-            static glm::vec3 RPos;
-            RPos = other.center() - center();
+            glm::vec3 RPos = other.center() - center();
 
             if (getSeparatingPlane(RPos, m_rotation.get_right(), other) || getSeparatingPlane(RPos, m_rotation.get_up(), other) || getSeparatingPlane(RPos, m_rotation.get_forward(), other) ||
                 getSeparatingPlane(RPos, other.rotation().get_right(), other) || getSeparatingPlane(RPos, other.rotation().get_up(), other) || getSeparatingPlane(RPos, other.rotation().get_forward(), other) ||
-                    getSeparatingPlane(RPos, glm::cross(rotation().get_right(), other.rotation().get_right(), other)) || getSeparatingPlane(RPos, glm::cross(rotation().get_right(), other.rotation().get_up(), other)) || getSeparatingPlane(RPos, glm::cross(rotation().get_right(), other.rotation().get_forward(), other)) ||
-                    getSeparatingPlane(RPos, glm::cross(rotation().get_up(), other.rotation().get_right(), other)) || getSeparatingPlane(RPos, glm::cross(rotation().get_up(), other.rotation().get_up(), other)) || getSeparatingPlane(RPos, glm::cross(rotation().get_up(), other.rotation().get_forward(), other)) ||
-                    getSeparatingPlane(RPos, glm::cross(rotation().get_forward(), other.rotation().get_right(), other)) || getSeparatingPlane(RPos, glm::cross(rotation().get_forward(), other.rotation().get_up(), other)) || getSeparatingPlane(RPos, glm::cross(rotation().get_forward(), other.rotation().get_forward(), other)))
+                    getSeparatingPlane(RPos, glm::cross(m_rotation.get_right(), other.rotation().get_right()), other) || getSeparatingPlane(RPos, glm::cross(rotation().get_right(), other.rotation().get_up()), other) || getSeparatingPlane(RPos, glm::cross(rotation().get_right(), other.rotation().get_forward()), other) ||
+                    getSeparatingPlane(RPos, glm::cross(m_rotation.get_up(), other.rotation().get_right()), other) || getSeparatingPlane(RPos, glm::cross(rotation().get_up(), other.rotation().get_up()), other) || getSeparatingPlane(RPos, glm::cross(rotation().get_up(), other.rotation().get_forward()), other) ||
+                    getSeparatingPlane(RPos, glm::cross(m_rotation.get_forward(), other.rotation().get_right()), other) || getSeparatingPlane(RPos, glm::cross(rotation().get_forward(), other.rotation().get_up()), other) || getSeparatingPlane(RPos, glm::cross(rotation().get_forward(), other.rotation().get_forward()), other))
             {
                 return false;
             }
