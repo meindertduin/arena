@@ -24,9 +24,13 @@ namespace math {
             m_rotation{rotation}
             {}
 
-        constexpr ALWAYS_INLINE const Point3D<T>& center() const { return m_center; }
+        [[nodiscard]] constexpr ALWAYS_INLINE const Point3D<T>& center() const { return m_center; }
         [[nodiscard]] constexpr ALWAYS_INLINE const Quaternion& rotation() const { return m_rotation; }
         [[nodiscard]] constexpr ALWAYS_INLINE const glm::vec3& half() const { return m_half; }
+
+        float x_min() {
+
+        }
 
         bool inside(const Point3D<T> &point) const {
             auto delta = point - m_center;
@@ -37,20 +41,18 @@ namespace math {
                    fabs(glm::dot(delta, m_rotation.get_forward())) <= m_half.z;
         }
 
-        bool inside(const Box3D<T> &other) const {
+        [[nodiscard]] bool inside(const Box3D<T> &other) const {
             static glm::vec3 RPos;
             RPos = other.center() - center();
 
-            if (getSeparatingPlane(RPos, m_rotation.get_right(), other) || getSeparatingPlane(RPos, m_rotation.get_up(), other) || getSeparatingPlane(RPos, m_rotation.get_forward(), other))
-
-
-            // if (getSeparatingPlane(RPos, box1.AxisX, box1, box2) || getSeparatingPlane(RPos, box1.AxisY, box1, box2) || getSeparatingPlane(RPos, box1.AxisZ, box1, box2) ||
-            //     getSeparatingPlane(RPos, box2.AxisX, box1, box2) || getSeparatingPlane(RPos, box2.AxisY, box1, box2) || getSeparatingPlane(RPos, box2.AxisZ, box1, box2) ||
-            //     getSeparatingPlane(RPos, box1.AxisX^box2.AxisX, box1, box2) || getSeparatingPlane(RPos, box1.AxisX^box2.AxisY, box1, box2) ||
-            //     getSeparatingPlane(RPos, box1.AxisX^box2.AxisZ, box1, box2) || getSeparatingPlane(RPos, box1.AxisY^box2.AxisX, box1, box2) ||
-            //     getSeparatingPlane(RPos, box1.AxisY^box2.AxisY, box1, box2) || getSeparatingPlane(RPos, box1.AxisY^box2.AxisZ, box1, box2) ||
-            //     getSeparatingPlane(RPos, box1.AxisZ^box2.AxisX, box1, box2) || getSeparatingPlane(RPos, box1.AxisZ^box2.AxisY, box1, box2) ||
-            //     getSeparatingPlane(RPos, box1.AxisZ^box2.AxisZ, box1, box2)) return false;
+            if (getSeparatingPlane(RPos, m_rotation.get_right(), other) || getSeparatingPlane(RPos, m_rotation.get_up(), other) || getSeparatingPlane(RPos, m_rotation.get_forward(), other) ||
+                getSeparatingPlane(RPos, other.rotation().get_right(), other) || getSeparatingPlane(RPos, other.rotation().get_up(), other) || getSeparatingPlane(RPos, other.rotation().get_forward(), other) ||
+                    getSeparatingPlane(RPos, glm::cross(rotation().get_right(), other.rotation().get_right(), other)) || getSeparatingPlane(RPos, glm::cross(rotation().get_right(), other.rotation().get_up(), other)) || getSeparatingPlane(RPos, glm::cross(rotation().get_right(), other.rotation().get_forward(), other)) ||
+                    getSeparatingPlane(RPos, glm::cross(rotation().get_up(), other.rotation().get_right(), other)) || getSeparatingPlane(RPos, glm::cross(rotation().get_up(), other.rotation().get_up(), other)) || getSeparatingPlane(RPos, glm::cross(rotation().get_up(), other.rotation().get_forward(), other)) ||
+                    getSeparatingPlane(RPos, glm::cross(rotation().get_forward(), other.rotation().get_right(), other)) || getSeparatingPlane(RPos, glm::cross(rotation().get_forward(), other.rotation().get_up(), other)) || getSeparatingPlane(RPos, glm::cross(rotation().get_forward(), other.rotation().get_forward(), other)))
+            {
+                return false;
+            }
 
             return true;
         }
@@ -60,7 +62,7 @@ namespace math {
         Quaternion m_rotation{ { 1, 0, 0, 0 } };
         glm::vec3 m_half{};
 
-        bool getSeparatingPlane(const glm::vec3& RPos, const glm::vec3 Plane, const Box3D<float> &other) const {
+        [[nodiscard]] bool getSeparatingPlane(const glm::vec3& RPos, const glm::vec3 Plane, const Box3D<float> &other) const {
             auto self_sep = fabs(glm::dot((m_rotation.get_right() * m_half.x), Plane)) +
                     fabs(glm::dot((m_rotation.get_up() * m_half.y), Plane)) +
                     fabs(glm::dot((m_rotation.get_forward() * m_half.z), Plane));
@@ -72,20 +74,4 @@ namespace math {
             return fabs(glm::dot(RPos, Plane)) > self_sep + other_sep;
         }
     };
-
-    bool getCollision(const OBB& box1, const OBB&box2)
-    {
-        static vec3 RPos;
-        RPos = box2.Pos - box1.Pos;
-
-        if (getSeparatingPlane(RPos, box1.AxisX, box1, box2) || getSeparatingPlane(RPos, box1.AxisY, box1, box2) || getSeparatingPlane(RPos, box1.AxisZ, box1, box2) ||
-            getSeparatingPlane(RPos, box2.AxisX, box1, box2) || getSeparatingPlane(RPos, box2.AxisY, box1, box2) || getSeparatingPlane(RPos, box2.AxisZ, box1, box2) ||
-            getSeparatingPlane(RPos, box1.AxisX^box2.AxisX, box1, box2) || getSeparatingPlane(RPos, box1.AxisX^box2.AxisY, box1, box2) ||
-            getSeparatingPlane(RPos, box1.AxisX^box2.AxisZ, box1, box2) || getSeparatingPlane(RPos, box1.AxisY^box2.AxisX, box1, box2) ||
-            getSeparatingPlane(RPos, box1.AxisY^box2.AxisY, box1, box2) || getSeparatingPlane(RPos, box1.AxisY^box2.AxisZ, box1, box2) ||
-            getSeparatingPlane(RPos, box1.AxisZ^box2.AxisX, box1, box2) || getSeparatingPlane(RPos, box1.AxisZ^box2.AxisY, box1, box2) ||
-            getSeparatingPlane(RPos, box1.AxisZ^box2.AxisZ, box1, box2)) return false;
-
-        return true;
-    }
 }
