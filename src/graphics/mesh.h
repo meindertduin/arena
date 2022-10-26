@@ -37,11 +37,13 @@ namespace graphics {
 
         void render() const override;
         entity::ECTransform transform;
+
+        constexpr ALWAYS_INLINE math::Box3D<float>& bounding_box() { return m_bounding_box; }
     private:
         std::size_t size;
 
         VertexBuffer vertex_buffer { sizeof(Vertex) };
         ArrayBuffer buffer_array;
-        math::Box3D<float> bounding_box {};
+        math::Box3D<float> m_bounding_box {};
     };
 }
