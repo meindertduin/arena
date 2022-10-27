@@ -126,20 +126,6 @@ namespace assets {
                 float x, y, z;
                 ss >> x >> y >> z;
 
-                vertices.emplace_back(x, y, z);
-            }
-
-            if (first_token == "vt") {
-                float x, y;
-                ss >> x >> y;
-
-                textcoords.emplace_back(x * 65535.0f, y * 65535.0f);
-            }
-
-            if (first_token == "vn") {
-                float x, y, z;
-                ss >> x >> y >> z;
-
                 if (mesh_data->x_min >= x) {
                     mesh_data->x_min = x;
                 } else if(mesh_data->x_max <= x) {
@@ -157,6 +143,20 @@ namespace assets {
                 } else if(mesh_data->z_max <= z) {
                     mesh_data->z_max = z;
                 }
+
+                vertices.emplace_back(x, y, z);
+            }
+
+            if (first_token == "vt") {
+                float x, y;
+                ss >> x >> y;
+
+                textcoords.emplace_back(x * 65535.0f, y * 65535.0f);
+            }
+
+            if (first_token == "vn") {
+                float x, y, z;
+                ss >> x >> y >> z;
 
                 normals.emplace_back(x, y, z);
             }
