@@ -30,7 +30,7 @@ namespace graphics {
 
     class Mesh : public Renderable {
     public:
-        Mesh(MeshData *mesh_data, const math::Box3D<float> &box);
+        Mesh(MeshData *mesh_data, const math::AABB &box);
         Mesh(const Mesh&) = delete;
 
         Mesh& operator=(const Mesh&) = delete;
@@ -38,12 +38,12 @@ namespace graphics {
         void render() const override;
         entity::ECTransform transform;
 
-        constexpr ALWAYS_INLINE math::Box3D<float>& bounding_box() { return m_bounding_box; }
+        constexpr ALWAYS_INLINE math::AABB& bounding_box() { return m_bounding_box; }
     private:
         std::size_t size;
 
         VertexBuffer vertex_buffer { sizeof(Vertex) };
         ArrayBuffer buffer_array;
-        math::Box3D<float> m_bounding_box {};
+        math::AABB m_bounding_box {};
     };
 }

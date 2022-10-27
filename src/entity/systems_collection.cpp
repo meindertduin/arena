@@ -14,7 +14,7 @@ namespace entity {
         pm_physics_system = global.ecs->create_system<physics::PhysicsSystem>({ entity::ECPhysics::_id });
         pm_terrain_collision_system = global.ecs->create_system<entity::TerrainCollisionSystem>({ entity::ECCollisionBox::_id });
         pm_movement_system = global.ecs->create_system<entity::MovementSystem>({ entity::ECControl::_id, entity::ECTransform::_id });
-        pm_collision_system = global.ecs->create_system<entity::CollisionSystem>({ entity::ECCollision::_id, entity::ECTransform::_id });
+        pm_collision_system = global.ecs->create_system<entity::CollisionSystem>({ entity::ECCollision::_id });
     }
 
     void SystemsCollection::update() {

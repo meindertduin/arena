@@ -32,7 +32,6 @@ namespace game {
        // loading map
         this->m_map = std::make_unique<Map>();
 
-        this->m_player = entity::ECPlayer::create(global.ecs->create_entity());
         this->cube = global.ecs->create_entity();
         auto mesh_renderer = entity::EcStaticMeshRenderer();
         mesh_renderer.init("assets/fan_tree.obj");
@@ -41,6 +40,8 @@ namespace game {
         this->cube.add(mesh_renderer);
         this->cube.add(collision);
         this->cube.add(entity::ECTransform({ 0, -24, -10 }, {}));
+
+        this->m_player = entity::ECPlayer::create(global.ecs->create_entity());
     }
 
     void GameState::update() {
