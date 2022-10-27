@@ -36,6 +36,6 @@ namespace math {
     private:
         glm::vec3 m_min;
         glm::vec3 m_max;
-        glm::vec3 m_center;
+        glm::vec3 m_center{};
     };
 }
