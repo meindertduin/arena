@@ -8,7 +8,6 @@
 #include "input/input.h"
 
 #include "entity/static_render_system.h"
-#include "entity/terrain_collision_system.h"
 
 #include "entity/ec_static_mesh.h"
 #include "entity/ec_physics.h"
