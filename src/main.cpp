@@ -8,7 +8,6 @@
 #include "input/input.h"
 
 #include "entity/static_render_system.h"
-#include "entity/terrain_collision_system.h"
 
 #include "entity/ec_static_mesh.h"
 #include "entity/ec_physics.h"
@@ -58,7 +57,7 @@ int main () {
     global.game->init();
 
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
-    global.texture = global.game->cache().get_resource<graphics::Texture>("assets/container.png");
+    global.texture = global.game->cache().get_resource<graphics::Texture>("assets/fan_tree.png");
 
     core::Timer program_timer;
     while(!global.window->close_requested()) {

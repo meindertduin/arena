@@ -10,8 +10,11 @@ set(ENTITY_SOURCES
         src/entity/ec_command.cpp
         src/entity/ec_player.cpp
         src/entity/static_render_system.cpp
-        src/entity/terrain_collision_system.cpp
         src/entity/ec_static_mesh.cpp
         src/entity/ec_control.h
         src/entity/movement_system.cpp
-        src/entity/movement_system.h)
+        src/entity/movement_system.h
+        src/entity/ec_collision.h
+        src/entity/ec_collision.cpp
+        src/entity/collision_system.h
+        src/entity/collision_system.cpp)

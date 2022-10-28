@@ -22,7 +22,7 @@ namespace entity {
         }
 
         [[nodiscard]] glm::mat4 get_view_4x4() const {
-            return glm::mat4_cast(transform.rotation) * glm::translate(glm::identity<glm::mat4>(), transform.pos * -1.0f);
+            return glm::mat4_cast(transform.rotation().rotation()) * glm::translate(glm::identity<glm::mat4>(), transform.pos * -1.0f);
         }
     private:
         std::unique_ptr<graphics::ScreenResizeEventHandler> resize_event_handler;

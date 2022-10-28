@@ -80,7 +80,9 @@ vec3 CalulateDirLight(DirLight light, vec3 normal, vec3 viewDir, vec3 pixel) {
 
 void main()
 {
-    vec3 texturePixel = vec3(texture(baseTexture, TexCoord));
+    vec4 texturePixel = texture(baseTexture, TexCoord);
+    if (texturePixel.a < 0.1f)
+        discard;
 
     vec3 normal = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
@@ -88,10 +90,10 @@ void main()
     vec3 result;
 
     for (int i = 0; i < dirLightsCount; i++) {
-        result += CalulateDirLight(dirLights[i], normal, viewDir, texturePixel);
+        result += CalulateDirLight(dirLights[i], normal, viewDir, vec3(texturePixel));
     }
     for (int i = 0; i < pointLightsCount; i++) {
-        result += CalculatePointLight(pointLights[i], normal, viewDir, texturePixel);
+        result += CalculatePointLight(pointLights[i], normal, viewDir, vec3(texturePixel));
     }
 
     FragColor = vec4(result, 1.0);

@@ -3,7 +3,8 @@
 #include "system.h"
 
 namespace entity {
-    struct TerrainCollisionSystem : public System {
+    class CollisionSystem : public System {
+    public:
         void update() override;
     };
 }

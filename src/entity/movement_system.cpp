@@ -11,15 +11,15 @@ namespace entity {
             auto movement = ec_control.base_movement_speed;
 
             if (ec_control.moves_forward && !ec_control.moves_backward) {
-                transform.move(transform.get_forward(), movement);
+                transform.move(transform.rotation().get_forward(), movement);
             } else if (ec_control.moves_backward && !ec_control.moves_forward) {
-                transform.move(transform.get_backward(), movement);
+                transform.move(transform.rotation().get_backward(), movement);
             }
 
             if (ec_control.moves_right && !ec_control.moves_left) {
-                transform.move(transform.get_right(), movement);
+                transform.move(transform.rotation().get_right(), movement);
             } else if (ec_control.moves_left && !ec_control.moves_right) {
-                transform.move(transform.get_left(), movement);
+                transform.move(transform.rotation().get_left(), movement);
             }
         }
     }

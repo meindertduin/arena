@@ -58,12 +58,12 @@ namespace graphics {
 
         void render_oneliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options, int text_width);
         void render_multiliner(const std::string &text, float scale, const IRect &rect, const TextRenderOptions &options);
-        void render_line(const std::string &line, const IPoint &pos, float scale);
+        void render_line(const std::string &line, const IPoint2D &pos, float scale);
 
         int calculate_text_width(const std::string &text, float scale);
         static int calculate_text_height(WidthStringPairs &sentences, const TextRenderOptions &options);
 
-        void render_sentence(const std::string &sentence, float scale, const IPoint &pos, const ISize &size, const TextRenderOptions &options, int sentence_width);
+        void render_sentence(const std::string &sentence, float scale, const IPoint2D &pos, const ISize &size, const TextRenderOptions &options, int sentence_width);
 
         WidthStringPairs split_words(const std::string &text, float scale);
         WidthStringPairs split_in_sentences(const std::string &text, float scale, const ISize &size);

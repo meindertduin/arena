@@ -9,7 +9,6 @@ namespace entity {
     class System {
     public:
         std::set<Entity> entities;
-
         virtual void update() = 0;
     };
 
@@ -54,7 +53,7 @@ namespace entity {
 
                 if ((signature & system_signature) == system_signature) {
                     system->entities.insert(entity);
-                    return;
+                    continue;
                 }
 
                 system->entities.erase(entity);
