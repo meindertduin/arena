@@ -32,12 +32,12 @@ namespace graphics {
     public:
         Mesh(MeshData *mesh_data, const math::AABB &box);
         Mesh(const Mesh&) = delete;
-
         Mesh& operator=(const Mesh&) = delete;
 
         void render() const override;
         entity::ECTransform transform;
 
+        constexpr ALWAYS_INLINE const std::unique_ptr<MeshData>& mesh_data() const { return m_mesh_data; }
         constexpr ALWAYS_INLINE math::AABB& bounding_box() { return m_bounding_box; }
     private:
         std::size_t size;
@@ -45,5 +45,7 @@ namespace graphics {
         VertexBuffer vertex_buffer { sizeof(Vertex) };
         ArrayBuffer buffer_array;
         math::AABB m_bounding_box {};
+
+        std::unique_ptr<MeshData> m_mesh_data;
     };
 }
