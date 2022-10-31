@@ -40,8 +40,21 @@ namespace physics {
 
     glm::vec3 MeshCollider::find_furthest_points(const glm::vec3 &direction) const {
         glm::vec3 max_point;
-
         float max_distance = -FLT_MAX;
+        auto &mesh_data = m_mesh->mesh_data();
+
+        for (auto &vertex : mesh_data->vertices) {
+            float distance = glm::dot(vertex.pos, direction);
+            if (distance > max_distance) {
+                max_distance = distance;
+                max_point = vertex.pos;
+            }
+        }
+
         return max_point;
+    }
+
+    glm::vec3 support(const Collider *c_a, const Collider *c_b, const glm::vec3 &direction) {
+        return c_a->find_furthest_points(direction) - c_b->find_furthest_points(-direction);
     }
 }
