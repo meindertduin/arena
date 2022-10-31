@@ -35,9 +35,13 @@ namespace graphics {
         Mesh& operator=(const Mesh&) = delete;
 
         void render() const override;
+        void add_collision_data(MeshData *collision_data);
+
         entity::ECTransform transform;
 
-        constexpr ALWAYS_INLINE const std::unique_ptr<MeshData>& mesh_data() const { return m_mesh_data; }
+        [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<MeshData>& mesh_data() const { return m_mesh_data; }
+        [[nodiscard]] constexpr ALWAYS_INLINE std::vector<std::shared_ptr<MeshData>> collisions_data() const { return m_collisions_data; }
+
         constexpr ALWAYS_INLINE math::AABB& bounding_box() { return m_bounding_box; }
     private:
         std::size_t size;
@@ -46,6 +50,7 @@ namespace graphics {
         ArrayBuffer buffer_array;
         math::AABB m_bounding_box {};
 
-        std::unique_ptr<MeshData> m_mesh_data;
+        std::shared_ptr<MeshData> m_mesh_data;
+        std::vector<std::shared_ptr<MeshData>> m_collisions_data;
     };
 }

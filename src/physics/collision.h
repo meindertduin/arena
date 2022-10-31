@@ -33,7 +33,7 @@ namespace physics {
                 const SphereCollider* collider,
                 const Transform &collider_transform) const = 0;
 
-        [[nodiscard]] virtual glm::vec3 find_furthest_points(const glm::vec3 &direction) const = 0;
+        [[nodiscard]] virtual glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const = 0;
     };
 
     class SphereCollider : public Collider {
@@ -51,13 +51,13 @@ namespace physics {
                 const SphereCollider* collider,
                 const Transform &sphere_transform) const override;
 
-        [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction) const override { };
+        [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const override { };
     };
 
     class MeshCollider : public Collider {
     public:
-        explicit MeshCollider(std::shared_ptr<graphics::Mesh> mesh) :
-            m_mesh{std::move(mesh)}
+        explicit MeshCollider(std::shared_ptr<graphics::MeshData> mesh_data) :
+            m_mesh_data{std::move(mesh_data)}
         {}
 
         CollisionPoints test(
@@ -70,9 +70,9 @@ namespace physics {
                 const SphereCollider* collider,
                 const Transform &sphere_transform) const override;
 
-        [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction) const override;
+        [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const override;
     private:
-        std::shared_ptr<graphics::Mesh> m_mesh;
+        std::shared_ptr<graphics::MeshData> m_mesh_data;
     };
 
     class Simplex {
@@ -86,7 +86,6 @@ namespace physics {
             for (auto v = list.begin(); v != list.end(); v++) {
                 m_points[std::distance(list.begin(), v)] = *v;
             }
-
             m_size = list.size();
 
             return *this;
@@ -101,15 +100,15 @@ namespace physics {
         [[nodiscard]] constexpr ALWAYS_INLINE uint32_t size() const { return m_size; }
 
         [[nodiscard]] constexpr auto begin() const { return m_points.begin(); }
-        [[nodiscard]] constexpr auto end() const { return m_points.end(); }
+        [[nodiscard]] constexpr auto end() const { return m_points.end() - (4 - m_size); }
     private:
         std::array<glm::vec3, 4> m_points;
         uint32_t m_size;
     };
 
-    inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const glm::vec3 &direction);
-    bool gjk(const Collider *c_a, const Collider *c_b);
-    inline bool next_simples(Simplex& points, glm::vec3 &direction);
+    inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b, const glm::vec3 &direction);
+    bool gjk(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b);
+    inline bool next_simplex(Simplex& points, glm::vec3 &direction);
     inline bool same_direction(const glm::vec3 &direction, const glm::vec3 &ao);
     inline bool line(Simplex &points, glm::vec3 &direction);
     inline bool triangle(Simplex &points, glm::vec3 &direction);

@@ -42,28 +42,29 @@ namespace physics {
         return {};
     }
 
-    glm::vec3 MeshCollider::find_furthest_points(const glm::vec3 &direction) const {
+    glm::vec3 MeshCollider::find_furthest_points(const glm::vec3 &direction, const Transform &transform) const {
         glm::vec3 max_point;
         float max_distance = -FLT_MAX;
-        auto &mesh_data = m_mesh->mesh_data();
 
-        for (auto &vertex: mesh_data->vertices) {
-            float distance = glm::dot(vertex.pos, direction);
+        for (auto &vertex: m_mesh_data->vertices) {
+            auto world_pos = vertex.pos + transform.pos;
+            float distance = glm::dot(world_pos, direction);
             if (distance > max_distance) {
                 max_distance = distance;
-                max_point = vertex.pos;
+                max_point = world_pos + transform.pos;
             }
         }
 
         return max_point;
     }
 
-    inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const glm::vec3 &direction) {
-        return c_a->find_furthest_points(direction) - c_b->find_furthest_points(-direction);
+    inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b, const glm::vec3 &direction) {
+        return c_a->find_furthest_points(direction, t_a) - c_b->find_furthest_points(-direction, t_b);
     }
 
-    bool gjk(const Collider *c_a, const Collider *c_b) {
-        auto sup = support(c_a, c_b, glm::vec3{1, 0, 0});
+    bool gjk(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b) {
+        auto sup = support(c_a, c_b, t_a, t_b, glm::vec3{1, 0, 0});
+
         Simplex points;
         points.push_front(sup);
 
@@ -71,7 +72,7 @@ namespace physics {
         glm::vec3 direction = -sup;
 
         while (true) {
-            sup = support(c_a, c_b, direction);
+            sup = support(c_a, c_b, t_a, t_b, direction);
 
             if (glm::dot(sup, direction) <= 0) {
                 return false; // no collsion
@@ -79,13 +80,13 @@ namespace physics {
 
             points.push_front(sup);
 
-            if (next_simples(points, direction)) {
+            if (next_simplex(points, direction)) {
                 return true;
             }
         }
     }
 
-    inline bool next_simples(Simplex &points, glm::vec3 &direction) {
+    inline bool next_simplex(Simplex &points, glm::vec3 &direction) {
         switch (points.size()) {
             case 2: return line(points, direction);
             case 3: return triangle(points, direction);

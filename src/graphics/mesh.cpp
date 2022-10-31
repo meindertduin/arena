@@ -22,5 +22,9 @@ namespace graphics {
         this->vertex_buffer.bind();
         glDrawArrays(GL_TRIANGLES, 0, this->size);
     }
+
+    void Mesh::add_collision_data(MeshData *collision_data) {
+        m_collisions_data.push_back(std::shared_ptr<MeshData>(collision_data));
+    }
 }
 
