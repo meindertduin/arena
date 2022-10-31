@@ -13,12 +13,15 @@ namespace entity {
             for (auto &other_entity : entities) {
                 if (other_entity.id != entity.id) {
                     auto &other_transform = other_entity.get<ECTransform>();
-                    auto &other_box = other_entity.get<ECCollision>().mesh()->bounding_box();
+                    auto &other_collider = other_entity.get<ECCollision>();
+                    auto &other_box = other_collider.mesh()->bounding_box();
 
                     other_box.set_center(other_transform.pos);
 
                     if (box.inside(other_box)) {
-                        printf("entities collide\n");
+                        if (physics::gjk(collision.collider().get(), other_collider.collider().get())) {
+                            printf("really inside\n");
+                        }
                     }
                 }
             }

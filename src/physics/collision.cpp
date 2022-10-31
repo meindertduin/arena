@@ -58,7 +58,7 @@ namespace physics {
         return max_point;
     }
 
-    glm::vec3 support(const Collider *c_a, const Collider *c_b, const glm::vec3 &direction) {
+    inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const glm::vec3 &direction) {
         return c_a->find_furthest_points(direction) - c_b->find_furthest_points(-direction);
     }
 
@@ -89,7 +89,7 @@ namespace physics {
         switch (points.size()) {
             case 2: return line(points, direction);
             case 3: return triangle(points, direction);
-            case 4: return line(points, direction);
+            case 4: return tetrahedron(points, direction);
         }
         return false;
     }
@@ -98,7 +98,7 @@ namespace physics {
         return glm::dot(direction, ao) > 0;
     }
 
-    bool line(Simplex &points, glm::vec3& direction) {
+    inline bool line(Simplex &points, glm::vec3& direction) {
         auto a = points[0];
         auto b = points[1];
 
@@ -115,7 +115,7 @@ namespace physics {
         return false;
     }
 
-    bool triangle(Simplex &points, glm::vec3 &direction) {
+    inline bool triangle(Simplex &points, glm::vec3 &direction) {
         auto a = points[0];
         auto b = points[1];
         auto c = points[2];
@@ -149,7 +149,7 @@ namespace physics {
         return false;
     }
 
-    bool tetrahedron(Simplex &points, glm::vec3 &direction) {
+    inline bool tetrahedron(Simplex &points, glm::vec3 &direction) {
         auto a = points[0];
         auto b = points[1];
         auto c = points[2];

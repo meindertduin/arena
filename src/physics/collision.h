@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/vec3.hpp>
+#include <utility>
 #include "../entity/ec_transform.h"
 #include "../graphics/mesh.h"
 
@@ -20,6 +21,8 @@ namespace physics {
 
     class Collider {
     public:
+        virtual ~Collider() = default;
+
         virtual CollisionPoints test(
                 const Transform &transform,
                 const Collider* collider,
@@ -53,6 +56,10 @@ namespace physics {
 
     class MeshCollider : public Collider {
     public:
+        explicit MeshCollider(std::shared_ptr<graphics::Mesh> mesh) :
+            m_mesh{std::move(mesh)}
+        {}
+
         CollisionPoints test(
                 const Transform &transform,
                 const Collider* collider,
@@ -101,7 +108,7 @@ namespace physics {
     };
 
     inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const glm::vec3 &direction);
-    inline bool gjk(const Collider *c_a, const Collider *c_b);
+    bool gjk(const Collider *c_a, const Collider *c_b);
     inline bool next_simples(Simplex& points, glm::vec3 &direction);
     inline bool same_direction(const glm::vec3 &direction, const glm::vec3 &ao);
     inline bool line(Simplex &points, glm::vec3 &direction);
