@@ -123,7 +123,7 @@ namespace physics {
 
         auto ab = b - a;
         auto ac = c - a;
-        auto ao = -a;
+        auto ao =   - a;
 
         auto abc = glm::cross(ab, ac);
 
@@ -141,7 +141,7 @@ namespace physics {
                 if (same_direction(abc, ao)) {
                     direction = abc;
                 } else {
-                    points = { a, b, c };
+                    points = { a, c, b };
                     direction = -abc;
                 }
             }
