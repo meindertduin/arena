@@ -68,8 +68,6 @@ namespace physics {
         std::shared_ptr<graphics::Mesh> m_mesh;
     };
 
-    inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const glm::vec3 &direction);
-
     class Simplex {
     public:
         Simplex() :
@@ -101,4 +99,12 @@ namespace physics {
         std::array<glm::vec3, 4> m_points;
         uint32_t m_size;
     };
+
+    inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const glm::vec3 &direction);
+    inline bool gjk(const Collider *c_a, const Collider *c_b);
+    inline bool next_simples(Simplex& points, glm::vec3 &direction);
+    inline bool same_direction(const glm::vec3 &direction, const glm::vec3 &ao);
+    inline bool line(Simplex &points, glm::vec3 &direction);
+    inline bool triangle(Simplex &points, glm::vec3 &direction);
+    inline bool tetrahedron(Simplex &points, glm::vec3 &direction);
  }
