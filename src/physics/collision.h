@@ -18,6 +18,7 @@ namespace physics {
 
     class Collider;
     class SphereCollider;
+    class MeshCollider;
 
     class Collider {
     public:
@@ -31,6 +32,11 @@ namespace physics {
         virtual CollisionPoints test(
                 const Transform &transform,
                 const SphereCollider* collider,
+                const Transform &collider_transform) const = 0;
+
+        virtual CollisionPoints test(
+                const Transform &transform,
+                const MeshCollider* collider,
                 const Transform &collider_transform) const = 0;
 
         [[nodiscard]] virtual glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const = 0;
@@ -51,6 +57,11 @@ namespace physics {
                 const SphereCollider* collider,
                 const Transform &sphere_transform) const override;
 
+        CollisionPoints test(
+                const Transform &transform,
+                const MeshCollider* collider,
+                const Transform &sphere_transform) const override;
+
         [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const override { };
     };
 
@@ -68,6 +79,11 @@ namespace physics {
         CollisionPoints test(
                 const Transform &transform,
                 const SphereCollider* collider,
+                const Transform &sphere_transform) const override;
+
+        CollisionPoints test(
+                const Transform &transform,
+                const MeshCollider* collider,
                 const Transform &sphere_transform) const override;
 
         [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const override;

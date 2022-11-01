@@ -32,6 +32,11 @@ namespace physics {
         return find_sphere_sphere_collision(this, transform, collider, sphere_transform);
     }
 
+    CollisionPoints SphereCollider::test(const Transform &transform, const MeshCollider *collider,
+                                         const Transform &sphere_transform) const {
+        return {};
+    }
+
     CollisionPoints MeshCollider::test(const Transform &transform, const Collider *collider,
                                        const Transform &collider_transform) const {
         return {};
@@ -56,6 +61,13 @@ namespace physics {
         }
 
         return max_point;
+    }
+
+    CollisionPoints MeshCollider::test(const Transform &transform, const MeshCollider *collider,
+                                       const Transform &mesh_transform) const {
+        CollisionPoints collision{};
+        collision.has_collision = gjk(this, collider, transform, mesh_transform);
+        return collision;
     }
 
     inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b, const glm::vec3 &direction) {

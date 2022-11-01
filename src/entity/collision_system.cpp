@@ -18,8 +18,10 @@ namespace entity {
 
                     other_box.set_center(other_transform.pos);
 
-                    if (physics::gjk(collision.collider().get(), other_collider.collider().get(), transform, other_transform)) {
-                        printf("really inside\n");
+                    if (box.inside(other_box)) {
+                        if (physics::gjk(collision.collider().get(), other_collider.collider().get(), transform, other_transform)) {
+                            printf("really collides\n");
+                        }
                     }
                 }
             }
