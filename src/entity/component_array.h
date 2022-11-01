@@ -78,6 +78,9 @@ namespace entity {
             auto &component = components[entity.id];
             event_handlers[event_id](&component, e);
         }
+
+        auto begin() { return components.begin(); }
+        auto end() { return components.end(); }
     private:
         std::unordered_map<uint32_t, T> components { 128 };
         std::unordered_map<EventType, std::function<void(T*, void*)>> event_handlers;

@@ -16,6 +16,12 @@ namespace physics {
         bool has_collision;
     };
 
+    struct Collision {
+        entity::Entity entity_a;
+        entity::Entity entity_b;
+        CollisionPoints points;
+    };
+
     class Collider;
     class SphereCollider;
     class MeshCollider;
