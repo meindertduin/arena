@@ -42,7 +42,7 @@ namespace physics {
                     auto [collides, simplex] = physics::gjk(collision.collider().get(), other_collider.collider().get(), transform, other_transform);
                     if (collides) {
                         auto collision_points = physics::epa(simplex, collision.collider().get(), other_collider.collider().get(), transform, other_transform);
-                        printf("collision direction: %f, %f, %f\n", collision_points.normal.x, collision_points.normal.y, collision_points.normal.z);
+                        printf("collision direction: %f, %f, %f depth: %f\n", collision_points.normal.x, collision_points.normal.y, collision_points.normal.z, collision_points.depth);
                     }
                 }
             }

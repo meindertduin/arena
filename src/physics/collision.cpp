@@ -101,11 +101,11 @@ namespace physics {
 
     CollisionPoints epa(const Simplex &simplex, const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b) {
         std::vector<glm::vec3> polytope(simplex.begin(), simplex.end());
-        std::vector<size_t> faces = {
-            0, 1, 2,
-            0, 3, 1,
-            0, 2, 3,
-            1, 3, 2
+        std::vector<size_t>  faces = {
+                0, 1, 2,
+                0, 3, 1,
+                0, 2, 3,
+                1, 3, 2
         };
 
         auto [normals, min_face] = get_face_normals(polytope, faces);
@@ -113,22 +113,23 @@ namespace physics {
         glm::vec3 min_normal;
         float min_distance = FLT_MAX;
 
-        while (min_distance == FLT_MAX) {
-            min_normal = glm::vec3{normals[min_face].x, normals[min_face].y, normals[min_face].z};
+        int iterations = 0;
+        while (min_distance == FLT_MAX && iterations++ < 30) {
+            min_normal   = { normals[min_face].x, normals[min_face].y, normals[min_face].z };
             min_distance = normals[min_face].w;
 
-            auto sup = support(c_a, c_b, t_a, t_b, min_normal);
+            glm::vec3 sup = support(c_a, c_b, t_a, t_b, min_normal);
             float s_distance = glm::dot(min_normal, sup);
 
-            if (std::abs(s_distance- min_distance) > 0.001f) {
+            if (std::abs(s_distance - min_distance) > 0.001f) {
                 min_distance = FLT_MAX;
                 std::vector<std::pair<size_t, size_t>> unique_edges;
 
                 for (size_t i = 0; i < normals.size(); i++) {
                     if (same_direction(normals[i], sup)) {
-                        auto f = i * 3;
+                        size_t f = i * 3;
 
-                        add_if_unique_edge(unique_edges, faces, f    , f + 1);
+                        add_if_unique_edge(unique_edges, faces, f, f + 1);
                         add_if_unique_edge(unique_edges, faces, f + 1, f + 2);
                         add_if_unique_edge(unique_edges, faces, f + 2, f    );
 
@@ -141,7 +142,6 @@ namespace physics {
                         i--;
                     }
                 }
-
                 std::vector<size_t> new_faces;
                 for (auto [edge_index_1, edge_index_2] : unique_edges) {
                     new_faces.push_back(edge_index_1);
@@ -171,7 +171,8 @@ namespace physics {
         }
 
         CollisionPoints points{};
-        points.normal = min_normal;
+
+        points.normal  = min_normal;
         points.depth = min_distance + 0.001f;
         points.has_collision = true;
 
