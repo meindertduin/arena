@@ -47,16 +47,15 @@ namespace physics {
         return {};
     }
 
-    glm::vec3 MeshCollider::find_furthest_points(const glm::vec3 &direction, const Transform &transform) const {
+    glm::vec3 MeshCollider::find_furthest_points(const glm::vec3 &direction) const {
         glm::vec3 max_point;
         float max_distance = -FLT_MAX;
 
         for (auto &vertex: m_mesh_data->vertices) {
-            auto world_pos = vertex.pos + transform.pos;
-            float distance = glm::dot(world_pos, direction);
+            float distance = glm::dot(vertex.pos, direction);
             if (distance > max_distance) {
                 max_distance = distance;
-                max_point = world_pos + transform.pos;
+                max_point = vertex.pos;
             }
         }
 
@@ -71,7 +70,7 @@ namespace physics {
     }
 
     inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b, const glm::vec3 &direction) {
-        return c_a->find_furthest_points(direction, t_a) - c_b->find_furthest_points(-direction, t_b);
+        return (c_a->find_furthest_points(direction) + t_a.pos) - (c_b->find_furthest_points(-direction) + t_b.pos);
     }
 
     bool gjk(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b) {
@@ -95,6 +94,124 @@ namespace physics {
             if (next_simplex(points, direction)) {
                 return true;
             }
+        }
+    }
+
+    CollisionPoints epa(const Simplex &simplex, const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b) {
+        std::vector<glm::vec3> polytope(simplex.begin(), simplex.end());
+        std::vector<size_t> faces = {
+            0, 1, 2,
+            0, 3, 1,
+            0, 2, 3,
+            1, 3, 2
+        };
+
+        auto [normals, min_face] = get_face_normals(polytope, faces);
+
+        glm::vec3 min_normal;
+        float min_distance = FLT_MAX;
+
+        while (min_distance == FLT_MAX) {
+            min_normal = glm::vec3{normals[min_face].x, normals[min_face].y, normals[min_face].z};
+            min_distance = normals[min_face].w;
+
+            auto sup = support(c_a, c_b, t_a, t_b, min_normal);
+            float s_distance = glm::dot(min_normal, sup);
+
+            if (std::abs(s_distance- min_distance) > 0.001f) {
+                min_distance = FLT_MAX;
+                std::vector<std::pair<size_t, size_t>> unique_edges;
+
+                for (size_t i = 0; i < normals.size(); i++) {
+                    if (same_direction(normals[i], sup)) {
+                        auto f = i * 3;
+
+                        add_if_unique_edge(unique_edges, faces, f    , f + 1);
+                        add_if_unique_edge(unique_edges, faces, f + 1, f + 2);
+                        add_if_unique_edge(unique_edges, faces, f + 2, f    );
+
+                        faces[f + 2] = faces.back(); faces.pop_back();
+                        faces[f + 1] = faces.back(); faces.pop_back();
+                        faces[f    ] = faces.back(); faces.pop_back();
+
+                        normals[i] = normals.back(); normals.pop_back();
+
+                        i--;
+                    }
+                }
+
+                std::vector<size_t> new_faces;
+                for (auto [edge_index_1, edge_index_2] : unique_edges) {
+                    new_faces.push_back(edge_index_1);
+                    new_faces.push_back(edge_index_2);
+                    new_faces.push_back(polytope.size());
+                }
+
+                polytope.push_back(sup);
+
+                auto [new_normals, new_min_face] = get_face_normals(polytope, new_faces);
+
+                float old_min_distance = FLT_MAX;
+                for (size_t i = 0; i < normals.size(); i++) {
+                    if (normals[i].w < old_min_distance) {
+                        old_min_distance = normals[i].w;
+                        min_face = i;
+                    }
+                }
+
+                if (new_normals[new_min_face].w < old_min_distance) {
+                    min_face = new_min_face + normals.size();
+                }
+
+                faces.insert(faces.end(), new_faces.begin(), new_faces.end());
+                normals.insert(normals.end(), new_normals.begin(), new_normals.end());
+            }
+        }
+
+        CollisionPoints points{};
+        points.normal = min_normal;
+        points.depth = min_distance + 0.001f;
+        points.has_collision = true;
+
+        return points;
+    }
+
+    std::pair<std::vector<glm::vec4>, size_t> get_face_normals(const std::vector<glm::vec3> &polytope, const std::vector<size_t> &faces) {
+        std::vector<glm::vec4> normals;
+        size_t min_triangle = 0;
+        float min_distance = FLT_MAX;
+
+        for (size_t i = 0; i < faces.size(); i += 3) {
+            auto a = polytope[faces[i]];
+            auto b = polytope[faces[i + 1]];
+            auto c = polytope[faces[i + 2]];
+
+            auto normal = glm::normalize(glm::cross((b - a), (c - a)));
+            float distance = glm::dot(normal, a);
+
+            if (distance < 0 ) {
+                normal *= -1;
+                distance *= -1;
+            }
+
+            normals.emplace_back(normal, distance);
+
+            if (distance < min_distance) {
+                min_triangle = i / 3;
+                min_distance = distance;
+            }
+        }
+
+        return { normals, min_triangle };
+    }
+
+    void add_if_unique_edge(std::vector<std::pair<size_t, size_t>> &edges, const std::vector<size_t> &faces, size_t a, size_t b) {
+        auto reverse = std::find(edges.begin(), edges.end(), std::make_pair(faces[b], faces[a]));
+
+        if (reverse != edges.end()) {
+            edges.erase(reverse);
+        } else {
+            edges.emplace_back(faces[a], faces[b]);
         }
     }
 

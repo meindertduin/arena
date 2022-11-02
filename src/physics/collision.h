@@ -45,7 +45,7 @@ namespace physics {
                 const MeshCollider* collider,
                 const Transform &collider_transform) const = 0;
 
-        [[nodiscard]] virtual glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const = 0;
+        [[nodiscard]] virtual glm::vec3 find_furthest_points(const glm::vec3 &direction) const = 0;
     };
 
     class SphereCollider : public Collider {
@@ -68,7 +68,7 @@ namespace physics {
                 const MeshCollider* collider,
                 const Transform &sphere_transform) const override;
 
-        [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const override { };
+        [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction) const override { };
     };
 
     class MeshCollider : public Collider {
@@ -92,7 +92,7 @@ namespace physics {
                 const MeshCollider* collider,
                 const Transform &sphere_transform) const override;
 
-        [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const override;
+        [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction) const override;
     private:
         std::shared_ptr<graphics::MeshData> m_mesh_data;
     };
@@ -130,6 +130,9 @@ namespace physics {
 
     inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b, const glm::vec3 &direction);
     bool gjk(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b);
+    CollisionPoints epa(const Simplex &simplex,const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b);
+    std::pair<std::vector<glm::vec4>, size_t> get_face_normals(const std::vector<glm::vec3> &polytope, const std::vector<size_t> &faces);
+    void add_if_unique_edge(std::vector<std::pair<size_t, size_t>> &edges, const std::vector<size_t> &faces, size_t a, size_t b);
     inline bool next_simplex(Simplex& points, glm::vec3 &direction);
     inline bool same_direction(const glm::vec3 &direction, const glm::vec3 &ao);
     inline bool line(Simplex &points, glm::vec3 &direction);

@@ -28,8 +28,8 @@ namespace physics {
             box.set_center(transform.pos);
 
             // Object collision
-            for (auto e_it = collision_component_array->begin(); e_it != collision_component_array->end(); e_it++) {
-                auto entity_b = e_it->second.entity;
+            for (auto & e_it : *collision_component_array) {
+                auto entity_b = e_it.second.entity;
                 if (entity_a == entity_b) continue;
 
                 auto &other_transform = entity_b.get<entity::ECTransform>();
