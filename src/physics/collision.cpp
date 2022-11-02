@@ -64,16 +64,18 @@ namespace physics {
 
     CollisionPoints MeshCollider::test(const Transform &transform, const MeshCollider *collider,
                                        const Transform &mesh_transform) const {
-        CollisionPoints collision{};
-        collision.has_collision = gjk(this, collider, transform, mesh_transform);
-        return collision;
+        auto [collides, simplex] = gjk(this, collider, transform, mesh_transform);
+        if (collides) {
+            return epa(simplex, this, collider, transform, mesh_transform);
+        }
+        return {};
     }
 
     inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b, const glm::vec3 &direction) {
         return (c_a->find_furthest_points(direction) + t_a.pos) - (c_b->find_furthest_points(-direction) + t_b.pos);
     }
 
-    bool gjk(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b) {
+    std::pair<bool, Simplex> gjk(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b) {
         auto sup = support(c_a, c_b, t_a, t_b, glm::vec3{1, 0, 0});
 
         Simplex points;
@@ -86,13 +88,13 @@ namespace physics {
             sup = support(c_a, c_b, t_a, t_b, direction);
 
             if (glm::dot(sup, direction) <= 0) {
-                return false; // no collsion
+                return { false, points }; // no collision
             }
 
             points.push_front(sup);
 
             if (next_simplex(points, direction)) {
-                return true;
+                return { true, points }; // no collision
             }
         }
     }
@@ -179,17 +181,17 @@ namespace physics {
     std::pair<std::vector<glm::vec4>, size_t> get_face_normals(const std::vector<glm::vec3> &polytope, const std::vector<size_t> &faces) {
         std::vector<glm::vec4> normals;
         size_t min_triangle = 0;
-        float min_distance = FLT_MAX;
+        float  min_distance = FLT_MAX;
 
         for (size_t i = 0; i < faces.size(); i += 3) {
-            auto a = polytope[faces[i]];
+            auto a = polytope[faces[i    ]];
             auto b = polytope[faces[i + 1]];
             auto c = polytope[faces[i + 2]];
 
-            auto normal = glm::normalize(glm::cross((b - a), (c - a)));
+            auto normal = glm::normalize(glm::cross((b - a),(c - a)));
             float distance = glm::dot(normal, a);
 
-            if (distance < 0 ) {
+            if (distance < 0) {
                 normal *= -1;
                 distance *= -1;
             }

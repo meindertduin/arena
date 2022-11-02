@@ -39,8 +39,10 @@ namespace physics {
                 other_box.set_center(other_transform.pos);
 
                 if (box.inside(other_box)) {
-                    if (physics::gjk(collision.collider().get(), other_collider.collider().get(), transform, other_transform)) {
-                        printf("really collides\n");
+                    auto [collides, simplex] = physics::gjk(collision.collider().get(), other_collider.collider().get(), transform, other_transform);
+                    if (collides) {
+                        auto collision_points = physics::epa(simplex, collision.collider().get(), other_collider.collider().get(), transform, other_transform);
+                        printf("collision direction: %f, %f, %f\n", collision_points.normal.x, collision_points.normal.y, collision_points.normal.z);
                     }
                 }
             }
