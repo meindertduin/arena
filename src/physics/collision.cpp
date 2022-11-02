@@ -72,7 +72,11 @@ namespace physics {
     }
 
     inline glm::vec3 support(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b, const glm::vec3 &direction) {
-        return (c_a->find_furthest_points(direction) + t_a.pos) - (c_b->find_furthest_points(-direction) + t_b.pos);
+        // TODO optimize this
+        auto furthest_point_a = glm::vec3(t_a.get_transform_4x4() * glm::vec4(c_a->find_furthest_points(direction), 1.0f));
+        auto furthest_point_b = glm::vec3(t_b.get_transform_4x4() * glm::vec4(c_b->find_furthest_points(-direction), 1.0f));
+
+        return furthest_point_a - furthest_point_b;
     }
 
     std::pair<bool, Simplex> gjk(const Collider *c_a, const Collider *c_b, const Transform &t_a, const Transform &t_b) {
