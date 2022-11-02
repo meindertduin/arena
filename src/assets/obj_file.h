@@ -30,6 +30,6 @@ namespace assets {
         FileReader file_reader;
         void read_header(std::unique_ptr<ObjFile> &file);
         void read_objects(std::unique_ptr<ObjFile> &file);
-        void read_object(std::unique_ptr<ObjObject> &object);
+        void read_object(std::unique_ptr<ObjObject> &object, std::vector<glm::vec3> &vertices, std::vector<glm::u16vec2> &textcoords, std::vector<glm::vec3> &normals);
     };
 }
