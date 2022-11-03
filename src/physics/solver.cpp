@@ -5,8 +5,6 @@
 namespace physics {
     void PositionSolver::solve(std::vector<Collision> &collisions, float dt) {
         for (auto &collision : collisions) {
-            auto &t_a = collision.entity_a.get<Transform>();
-            auto &t_b = collision.entity_b.get<Transform>();
             auto &collision_a = collision.entity_a.get<entity::ECCollision>();
             auto &collision_b = collision.entity_b.get<entity::ECCollision>();
 
@@ -15,9 +13,9 @@ namespace physics {
 
             auto resolution = collision.points.normal * (collision.points.depth / std::max(1, a_static + b_static));
             if (!a_static)
-                t_a.move(-resolution);
+                collision.transform_a.move(-resolution);
             if (!b_static)
-                t_b.move(resolution);
+                collision.transform_a.move(resolution);
         }
     }
 }

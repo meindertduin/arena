@@ -7,7 +7,6 @@
 #include "../game/game_state.h"
 #include "collision.h"
 #include "../entity/ec_collision.h"
-#include "algorithm.h"
 #include "solver.h"
 
 namespace physics {
@@ -42,7 +41,7 @@ namespace physics {
 
                 if (box.inside(other_box)) {
                     auto collision_points = ec_collision.collider()->test_collision(transform, other_collider.collider().get(), other_transform);
-                    collisions.push_back(physics::Collision{ entity_a, entity_b, collision_points });
+                    collisions.push_back(physics::Collision{ entity_a, entity_b, &transform, &other_transform, collision_points });
                 }
             }
 

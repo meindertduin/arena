@@ -3,6 +3,7 @@
 #include <glm/vec3.hpp>
 #include "../entity/ec_transform.h"
 #include "../graphics/mesh.h"
+#include "../entity/ec_collision.h"
 
 namespace physics {
     using Transform = entity::ECTransform;
@@ -18,6 +19,8 @@ namespace physics {
     struct Collision {
         entity::Entity entity_a;
         entity::Entity entity_b;
+        Transform *transform_a;
+        Transform *transform_b;
         CollisionPoints points;
     };
 

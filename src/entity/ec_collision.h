@@ -22,6 +22,7 @@ namespace entity {
     private:
         std::shared_ptr<graphics::Mesh> mp_mesh;
         std::shared_ptr<physics::Collider> m_collider;
+
         bool m_is_static;
         bool m_is_dynamic;
     };
