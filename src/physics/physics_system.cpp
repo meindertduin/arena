@@ -16,7 +16,7 @@ namespace physics {
         for (auto entity_a : entities) {
             auto &transform = entity_a.get<entity::ECTransform>();
             auto &physics = entity_a.get<entity::ECPhysics>();
-            auto &collision = entity_a.get<entity::ECCollision>();
+            auto &ec_collision = entity_a.get<entity::ECCollision>();
 
             physics.force += physics.mass * m_gravity;
             physics.velocity += physics.force / physics.mass * 1.0f/60.0f;
@@ -24,10 +24,11 @@ namespace physics {
 
             physics.force = glm::vec3 { 0, 0, 0 };
 
-            auto &box = collision.mesh()->bounding_box();
+            auto &box = ec_collision.mesh()->bounding_box();
             box.set_center(transform.pos);
 
-            // Object collision
+            // Object ec_collision
+            std::vector<physics::Collision> collisions;
             for (auto & e_it : *collision_component_array) {
                 auto entity_b = e_it.second.entity;
                 if (entity_a == entity_b) continue;
@@ -39,15 +40,19 @@ namespace physics {
                 other_box.set_center(other_transform.pos);
 
                 if (box.inside(other_box)) {
-                    auto [collides, simplex] = physics::gjk(collision.collider().get(), other_collider.collider().get(), transform, other_transform);
+                    auto [collides, simplex] = physics::gjk(ec_collision.collider().get(), other_collider.collider().get(), transform, other_transform);
                     if (collides) {
-                        auto collision_points = physics::epa(simplex, collision.collider().get(), other_collider.collider().get(), transform, other_transform);
-                        printf("collision direction: %f, %f, %f depth: %f\n", collision_points.normal.x, collision_points.normal.y, collision_points.normal.z, collision_points.depth);
+                        auto collision_points = physics::epa(simplex, ec_collision.collider().get(), other_collider.collider().get(), transform, other_transform);
+                        collisions.push_back(physics::Collision{ entity_a, entity_b, collision_points });
+                        printf("ec_collision direction: %f, %f, %f depth: %f\n", collision_points.normal.x, collision_points.normal.y, collision_points.normal.z, collision_points.depth);
                     }
                 }
             }
 
-            // Terrain collision
+            physics::PositionSolver solver;
+            solver.solve(collisions, 0.0f);
+
+            // Terrain ec_collision
             auto terrain = global.game->map()->terrain;
             float height;
             auto in_terrain_range = terrain->get_height(transform.pos.x, transform.pos.z, height);

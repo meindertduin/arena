@@ -16,4 +16,11 @@ namespace entity {
         PositionChangeEvent event { &this->entity };
         global.ecs->dispatch_event(&event);
     }
+
+    void ECTransform::move(const glm::vec3 &dir) {
+        pos = pos + dir;
+
+        PositionChangeEvent event { &this->entity };
+        global.ecs->dispatch_event(&event);
+    }
 }

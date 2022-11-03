@@ -22,6 +22,16 @@ namespace physics {
         CollisionPoints points;
     };
 
+    class Solver {
+    public:
+        virtual void solve(std::vector<Collision> &collisions, float dt) = 0;
+    };
+
+    class PositionSolver : public Solver {
+    public:
+        void solve(std::vector<Collision> &collisions, float dt) override;
+    };
+
     class Collider;
     class SphereCollider;
     class MeshCollider;

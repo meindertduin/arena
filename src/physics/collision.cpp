@@ -53,6 +53,7 @@ namespace physics {
         auto transform_matrix = transform.get_transform_4x4();
 
         for (auto &vertex: m_mesh_data->vertices) {
+            // TODO: use manual transforming and rotation calculation, instead of matrix multiplication
             auto world_pos = transform_matrix * glm::vec4(vertex.pos, 1.0f);
             float distance = glm::dot(world_pos, glm::vec4(direction, 1.0f));
 
@@ -313,5 +314,16 @@ namespace physics {
         }
 
         return true;
+    }
+
+    void PositionSolver::solve(std::vector<Collision> &collisions, float dt) {
+        for (auto &collision : collisions) {
+            auto &t_a = collision.entity_a.get<Transform>();
+            auto &t_b = collision.entity_b.get<Transform>();
+
+            auto resolution = collision.points.normal * (collision.points.depth / 2.0f);
+            t_a.move(-resolution);
+            t_b.move(resolution);
+        }
     }
 }
