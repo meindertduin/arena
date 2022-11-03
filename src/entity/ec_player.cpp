@@ -16,7 +16,7 @@ namespace entity {
         e.add(ECCollisionBox(-1, 1, -1, 1, -1, 1));
         e.add(ECControl());
 
-        auto collision = ECCollision();
+        auto collision = ECCollision(true);
         collision.init("assets/cube.obj");
         e.add(collision);
 

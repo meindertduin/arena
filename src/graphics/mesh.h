@@ -32,11 +32,15 @@ namespace graphics {
     public:
         Mesh(MeshData *mesh_data, const math::AABB &box);
         Mesh(const Mesh&) = delete;
-
         Mesh& operator=(const Mesh&) = delete;
 
         void render() const override;
+        void add_collision_data(MeshData *collision_data);
+
         entity::ECTransform transform;
+
+        [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<MeshData>& mesh_data() const { return m_mesh_data; }
+        [[nodiscard]] constexpr ALWAYS_INLINE std::vector<std::shared_ptr<MeshData>> collisions_data() const { return m_collisions_data; }
 
         constexpr ALWAYS_INLINE math::AABB& bounding_box() { return m_bounding_box; }
     private:
@@ -45,5 +49,8 @@ namespace graphics {
         VertexBuffer vertex_buffer { sizeof(Vertex) };
         ArrayBuffer buffer_array;
         math::AABB m_bounding_box {};
+
+        std::shared_ptr<MeshData> m_mesh_data;
+        std::vector<std::shared_ptr<MeshData>> m_collisions_data;
     };
 }

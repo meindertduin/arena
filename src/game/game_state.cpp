@@ -35,7 +35,7 @@ namespace game {
         this->cube = global.ecs->create_entity();
         auto mesh_renderer = entity::EcStaticMeshRenderer();
         mesh_renderer.init("assets/fan_tree.obj");
-        auto collision = entity::ECCollision();
+        auto collision = entity::ECCollision(false);
         collision.init("assets/fan_tree.obj");
         this->cube.add(mesh_renderer);
         this->cube.add(collision);

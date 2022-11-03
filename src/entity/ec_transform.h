@@ -33,6 +33,7 @@ namespace entity {
 
         void rotate(float degrees, const glm::vec3 &v);
         void move(const glm::vec3 &dir, float amount);
+        void move(const glm::vec3 &dir);
 
         [[nodiscard]] constexpr ALWAYS_INLINE const math::Quaternion& rotation() const { return m_rotation; }
         [[nodiscard]] constexpr ALWAYS_INLINE math::Quaternion& rotation() { return m_rotation; }

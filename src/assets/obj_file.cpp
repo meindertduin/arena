@@ -77,6 +77,11 @@ namespace assets {
     void ObjFileReader::read_objects(std::unique_ptr<ObjFile> &file) {
         bool has_next_object = true;
         std::string last_line;
+
+        std::vector<glm::vec3> vertices;
+        std::vector<glm::u16vec2> textcoords;
+        std::vector<glm::vec3> normals;
+
         while (has_next_object) {
             last_line = file_reader.get_last_line();
 
@@ -91,7 +96,8 @@ namespace assets {
                 auto object = std::make_unique<ObjObject>();
                 ss >> object->obj_name;
 
-                read_object(object);
+                // TODO, fix this quick-fix
+                read_object(object, vertices, textcoords, normals);
                 file->objects().push_back(std::move(object));
             } else {
                 has_next_object = false;
@@ -99,15 +105,15 @@ namespace assets {
         }
     }
 
-    void ObjFileReader::read_object(std::unique_ptr<ObjObject> &object) {
+    void ObjFileReader::read_object(std::unique_ptr<ObjObject> &object, std::vector<glm::vec3> &vertices, std::vector<glm::u16vec2> &textcoords, std::vector<glm::vec3> &normals) {
         auto mesh_data = std::make_unique<graphics::MeshData>(graphics::MeshData{});
 
-        auto chained = core::ChainedAllocator<core::LinearAllocator>{ &global.list_allocator, 1024 * 1024, 8 };
-        core::StdLinearAllocator<core::LinearAllocator> allocator { chained.get(), 0 };
+        // auto chained = core::ChainedAllocator<core::LinearAllocator>{ &global.list_allocator, 1024 * 1024, 8 };
+        // core::StdLinearAllocator<core::LinearAllocator> allocator { chained.get(), 0 };
 
-        core::LinearAllocVector<glm::vec3> vertices(allocator);
-        core::LinearAllocVector<glm::u16vec2> textcoords(allocator);
-        core::LinearAllocVector<glm::vec3> normals(allocator);
+        // core::LinearAllocVector<glm::vec3> vertices(allocator);
+        // core::LinearAllocVector<glm::u16vec2> textcoords(allocator);
+        // core::LinearAllocVector<glm::vec3> normals(allocator);
 
         std::string line;
         while(file_reader.next_line(line)) {
@@ -174,11 +180,11 @@ namespace assets {
                             parse_object_index(tokens[1]),
                     };
 
-                    for (int i = 0; i < 3; i++) {
+                    for (int j = 0; j < 3; j++) {
                         graphics::Vertex vertex{};
 
                         // set the ordering right
-                        auto index = objIndices[2 - i];
+                        auto index = objIndices[2 - j];
                         vertex.pos = vertices[index.vertex_index];
                         vertex.normal = normals[index.normal_index];
                         vertex.textcoords = textcoords[index.tex_coord_index];

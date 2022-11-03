@@ -1,7 +1,10 @@
 #include "collision.h"
+#include "algorithm.h"
 
 namespace physics {
-    inline CollisionPoints find_sphere_sphere_collision(const SphereCollider *a, const Transform &ta, const SphereCollider* b, const Transform &tb) {
+    inline CollisionPoints
+    find_sphere_sphere_collision(const SphereCollider *a, const Transform &ta, const SphereCollider *b,
+                                 const Transform &tb) {
         CollisionPoints result{};
         auto distance = glm::distance(a->center, b->center);
         auto radius_sum = a->radius + b->radius;
@@ -20,11 +23,56 @@ namespace physics {
         return result;
     }
 
-    CollisionPoints SphereCollider::test(const Transform &transform, const Collider *collider, const Transform &collider_transform) const {
+    CollisionPoints SphereCollider::test(const Transform &transform, const Collider *collider,
+                                         const Transform &collider_transform) const {
         return collider->test(collider_transform, this, transform);
     }
 
-    CollisionPoints SphereCollider::test(const Transform &transform, const SphereCollider *collider, const Transform &sphere_transform) const {
+    CollisionPoints SphereCollider::test(const Transform &transform, const SphereCollider *collider,
+                                         const Transform &sphere_transform) const {
         return find_sphere_sphere_collision(this, transform, collider, sphere_transform);
+    }
+
+    CollisionPoints SphereCollider::test(const Transform &transform, const MeshCollider *collider,
+                                         const Transform &sphere_transform) const {
+        return {};
+    }
+
+    CollisionPoints MeshCollider::test(const Transform &transform, const Collider *collider,
+                                       const Transform &collider_transform) const {
+        return {};
+    }
+
+    CollisionPoints MeshCollider::test(const Transform &transform, const SphereCollider *collider,
+                                       const Transform &sphere_transform) const {
+        return {};
+    }
+
+    glm::vec3 MeshCollider::find_furthest_points(const glm::vec3 &direction, const Transform &transform) const {
+        glm::vec4 max_point;
+        float max_distance = -FLT_MAX;
+        auto transform_matrix = transform.get_transform_4x4();
+
+        for (auto &vertex: m_mesh_data->vertices) {
+            // TODO: use manual transforming and rotation calculation, instead of matrix multiplication
+            auto world_pos = transform_matrix * glm::vec4(vertex.pos, 1.0f);
+            float distance = glm::dot(world_pos, glm::vec4(direction, 1.0f));
+
+            if (distance > max_distance) {
+                max_distance = distance;
+                max_point = world_pos;
+            }
+        }
+
+        return max_point;
+    }
+
+    CollisionPoints MeshCollider::test(const Transform &transform, const MeshCollider *collider,
+                                       const Transform &mesh_transform) const {
+        auto [collides, simplex] = gjk(this, collider, transform, mesh_transform);
+        if (collides) {
+            return epa(simplex, this, collider, transform, mesh_transform);
+        }
+        return {};
     }
 }

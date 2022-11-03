@@ -52,10 +52,6 @@ namespace entity {
         void add_event_handler(F && f) {
             get_component_array<C>()->template add_event_handler<E>(f);
         }
-    private:
-        std::unordered_map<uint32_t, std::shared_ptr<IComponentArray>> component_arrays;
-
-        uint32_t next_component_type;
 
         template<typename T>
         std::shared_ptr<ComponentArray<T>> get_component_array() {
@@ -65,6 +61,9 @@ namespace entity {
 
             return std::static_pointer_cast<ComponentArray<T>>(component_arrays[T::_id]);
         }
+    private:
+        std::unordered_map<uint32_t, std::shared_ptr<IComponentArray>> component_arrays;
+        uint32_t next_component_type;
     };
 }
 

@@ -65,6 +65,11 @@ namespace entity {
             return component_manager->get_component<T>(entity);
         }
 
+        template<typename C>
+        std::shared_ptr<ComponentArray<C>> get_component_array() {
+            return component_manager->template get_component_array<C>();
+        }
+
         template<typename T>
         std::shared_ptr<T> register_system() {
             return systems_manager->register_system<T>();
