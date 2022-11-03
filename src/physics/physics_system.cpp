@@ -10,7 +10,6 @@
 
 namespace physics {
     void PhysicsSystem::update() {
-        std::vector<Collision> collisions;
         auto collision_component_array = global.ecs->get_component_array<entity::ECCollision>();
 
         for (auto entity_a : entities) {
@@ -44,7 +43,6 @@ namespace physics {
                     if (collides) {
                         auto collision_points = physics::epa(simplex, ec_collision.collider().get(), other_collider.collider().get(), transform, other_transform);
                         collisions.push_back(physics::Collision{ entity_a, entity_b, collision_points });
-                        printf("ec_collision direction: %f, %f, %f depth: %f\n", collision_points.normal.x, collision_points.normal.y, collision_points.normal.z, collision_points.depth);
                     }
                 }
             }

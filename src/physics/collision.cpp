@@ -1,4 +1,5 @@
 #include "collision.h"
+#include "../entity/ec_collision.h"
 
 namespace physics {
     inline CollisionPoints
@@ -320,10 +321,17 @@ namespace physics {
         for (auto &collision : collisions) {
             auto &t_a = collision.entity_a.get<Transform>();
             auto &t_b = collision.entity_b.get<Transform>();
+            auto &collision_a = collision.entity_a.get<entity::ECCollision>();
+            auto &collision_b = collision.entity_b.get<entity::ECCollision>();
 
-            auto resolution = collision.points.normal * (collision.points.depth / 2.0f);
-            t_a.move(-resolution);
-            t_b.move(resolution);
+            int a_static = (int) collision_a.is_static();
+            int b_static = (int) collision_b.is_static();
+
+            auto resolution = collision.points.normal * (collision.points.depth / std::max(1, a_static + b_static));
+            if (!a_static)
+                t_a.move(-resolution);
+            if (!b_static)
+                t_b.move(resolution);
         }
     }
 }

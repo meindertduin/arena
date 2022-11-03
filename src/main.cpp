@@ -57,7 +57,7 @@ int main () {
     global.game->init();
 
     global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
-    global.texture = global.game->cache().get_resource<graphics::Texture>("assets/bricks.png");
+    global.texture = global.game->cache().get_resource<graphics::Texture>("assets/fan_tree.png");
 
     core::Timer program_timer;
     while(!global.window->close_requested()) {
