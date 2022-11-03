@@ -6,7 +6,6 @@
 #include "../global.h"
 #include "../game/game_state.h"
 #include "collision.h"
-#include "../entity/ec_collision.h"
 #include "solver.h"
 
 namespace physics {
@@ -24,8 +23,6 @@ namespace physics {
 
             physics.force = glm::vec3 { 0, 0, 0 };
 
-            auto &box = ec_collision.mesh()->bounding_box();
-            box.set_center(transform.pos);
 
             // Object ec_collision
             std::vector<physics::Collision> collisions;
@@ -35,12 +32,9 @@ namespace physics {
 
                 auto &other_transform = entity_b.get<entity::ECTransform>();
                 auto &other_collider = entity_b.get<entity::ECCollision>();
-                auto &other_box = other_collider.mesh()->bounding_box();
 
-                other_box.set_center(other_transform.pos);
-
-                if (box.inside(other_box)) {
-                    auto collision_points = ec_collision.collider()->test_collision(transform, other_collider.collider().get(), other_transform);
+                auto collision_points = ec_collision.collider()->test_collision(transform, other_collider.collider().get(), other_transform);
+                if (collision_points.has_collision) {
                     collisions.push_back(physics::Collision{ entity_a, entity_b, &transform, &other_transform, collision_points });
                 }
             }

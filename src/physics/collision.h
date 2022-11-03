@@ -35,8 +35,9 @@ namespace physics {
 
     class Collider {
     public:
-        explicit Collider(ColliderType collider_type) :
-            m_type{collider_type}
+        explicit Collider(ColliderType collider_type, const std::shared_ptr<graphics::Mesh> &mesh) :
+            m_type{collider_type},
+            m_aabb{mesh->bounding_box()}
         {}
 
         virtual ~Collider() = default;
@@ -44,7 +45,15 @@ namespace physics {
         [[nodiscard]] virtual glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const = 0;
         [[nodiscard]] constexpr ColliderType type() const { return m_type; }
 
-        CollisionPoints test_collision(const Transform &transform, Collider *collider, const Transform &other_transform) const {
+        constexpr ALWAYS_INLINE math::AABB& aabb() { return m_aabb; }
+
+        CollisionPoints test_collision(const Transform &transform, Collider *collider, const Transform &other_transform) {
+            this->aabb().set_center(transform.pos);
+            collider->aabb().set_center(other_transform.pos);
+
+            if (!this->m_aabb.inside(collider->aabb()))
+                return {};
+
             switch (collider->type()) {
                 case ColliderType::Sphere:
                     return this->test(transform, reinterpret_cast<SphereCollider*>(collider), other_transform);
@@ -65,6 +74,7 @@ namespace physics {
 
     private:
         const ColliderType m_type;
+        math::AABB m_aabb;
     };
 
     class SphereCollider : public Collider {
@@ -72,7 +82,7 @@ namespace physics {
         glm::vec3 center;
         float radius;
 
-        SphereCollider(ColliderType type) : Collider(type) {}
+        SphereCollider(const std::shared_ptr<graphics::Mesh> &mesh) : Collider(ColliderType::Sphere, mesh) {}
 
         [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const override { };
     protected:
@@ -90,10 +100,7 @@ namespace physics {
 
     class MeshCollider : public Collider {
     public:
-        explicit MeshCollider(ColliderType type, std::shared_ptr<graphics::MeshData> mesh_data)
-            : Collider(type),
-            m_mesh_data{std::move(mesh_data)}
-        {}
+        explicit MeshCollider(const std::shared_ptr<graphics::Mesh> &mesh);
 
         [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const override;
     protected:
