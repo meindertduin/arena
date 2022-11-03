@@ -45,7 +45,7 @@ namespace physics {
                 const MeshCollider* collider,
                 const Transform &collider_transform) const = 0;
 
-        [[nodiscard]] virtual glm::vec3 find_furthest_points(const glm::vec3 &direction) const = 0;
+        [[nodiscard]] virtual glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const = 0;
     };
 
     class SphereCollider : public Collider {
@@ -68,7 +68,7 @@ namespace physics {
                 const MeshCollider* collider,
                 const Transform &sphere_transform) const override;
 
-        [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction) const override { };
+        [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const override { };
     };
 
     class MeshCollider : public Collider {
@@ -92,7 +92,7 @@ namespace physics {
                 const MeshCollider* collider,
                 const Transform &sphere_transform) const override;
 
-        [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction) const override;
+        [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const override;
     private:
         std::shared_ptr<graphics::MeshData> m_mesh_data;
     };
