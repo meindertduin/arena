@@ -7,6 +7,8 @@
 #include "../game/game_state.h"
 #include "collision.h"
 #include "../entity/ec_collision.h"
+#include "algorithm.h"
+#include "solver.h"
 
 namespace physics {
     void PhysicsSystem::update() {
