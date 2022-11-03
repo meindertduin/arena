@@ -41,11 +41,8 @@ namespace physics {
                 other_box.set_center(other_transform.pos);
 
                 if (box.inside(other_box)) {
-                    auto [collides, simplex] = physics::gjk(ec_collision.collider().get(), other_collider.collider().get(), transform, other_transform);
-                    if (collides) {
-                        auto collision_points = physics::epa(simplex, ec_collision.collider().get(), other_collider.collider().get(), transform, other_transform);
-                        collisions.push_back(physics::Collision{ entity_a, entity_b, collision_points });
-                    }
+                    auto collision_points = ec_collision.collider()->test_collision(transform, other_collider.collider().get(), other_transform);
+                    collisions.push_back(physics::Collision{ entity_a, entity_b, collision_points });
                 }
             }
 

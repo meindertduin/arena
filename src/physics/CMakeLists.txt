@@ -8,4 +8,4 @@ set(PHYSICS_SOURCES
         src/physics/simplex.h
         src/physics/algorithm.h
         src/physics/algorithm.cpp
-        )
+        src/physics/collider.h)

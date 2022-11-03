@@ -23,11 +23,6 @@ namespace physics {
         return result;
     }
 
-    CollisionPoints SphereCollider::test(const Transform &transform, const Collider *collider,
-                                         const Transform &collider_transform) const {
-        return collider->test(collider_transform, this, transform);
-    }
-
     CollisionPoints SphereCollider::test(const Transform &transform, const SphereCollider *collider,
                                          const Transform &sphere_transform) const {
         return find_sphere_sphere_collision(this, transform, collider, sphere_transform);
@@ -35,11 +30,6 @@ namespace physics {
 
     CollisionPoints SphereCollider::test(const Transform &transform, const MeshCollider *collider,
                                          const Transform &sphere_transform) const {
-        return {};
-    }
-
-    CollisionPoints MeshCollider::test(const Transform &transform, const Collider *collider,
-                                       const Transform &collider_transform) const {
         return {};
     }
 
