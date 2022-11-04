@@ -23,7 +23,6 @@ namespace physics {
 
             physics.force = glm::vec3 { 0, 0, 0 };
 
-
             // Object ec_collision
             std::vector<physics::Collision> collisions;
             for (auto & e_it : *collision_component_array) {

@@ -2,6 +2,21 @@
 #include "algorithm.h"
 
 namespace physics {
+    CollisionPoints Collider::test_collision(const Transform &transform, Collider *collider, const Transform &other_transform) {
+        this->aabb().set_center(transform.pos);
+        collider->aabb().set_center(other_transform.pos);
+
+        if (!this->m_aabb.inside(collider->aabb()))
+            return {};
+
+        switch (collider->type()) {
+            case ColliderType::Sphere:
+                return this->test(transform, reinterpret_cast<SphereCollider*>(collider), other_transform);
+            case ColliderType::Mesh:
+                return this->test(transform, reinterpret_cast<MeshCollider*>(collider), other_transform);
+        }
+    }
+
     inline CollisionPoints
     find_sphere_sphere_collision(const SphereCollider *a, const Transform &ta, const SphereCollider *b,
                                  const Transform &tb) {

@@ -47,20 +47,7 @@ namespace physics {
 
         constexpr ALWAYS_INLINE math::AABB& aabb() { return m_aabb; }
 
-        CollisionPoints test_collision(const Transform &transform, Collider *collider, const Transform &other_transform) {
-            this->aabb().set_center(transform.pos);
-            collider->aabb().set_center(other_transform.pos);
-
-            if (!this->m_aabb.inside(collider->aabb()))
-                return {};
-
-            switch (collider->type()) {
-                case ColliderType::Sphere:
-                    return this->test(transform, reinterpret_cast<SphereCollider*>(collider), other_transform);
-                case ColliderType::Mesh:
-                    return this->test(transform, reinterpret_cast<MeshCollider*>(collider), other_transform);
-            }
-        }
+        CollisionPoints test_collision(const Transform &transform, Collider *collider, const Transform &other_transform);
     protected:
         virtual CollisionPoints test(
                 const Transform &transform,
