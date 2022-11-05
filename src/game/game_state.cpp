@@ -51,6 +51,7 @@ namespace game {
     void GameState::update() {
         global.systems->update();
 
+        // TODO: use state pattern for handling update
         if (m_ui_mode)
             m_ui.on_tick(core::TotalTicks);
     }

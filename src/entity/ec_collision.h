@@ -10,7 +10,6 @@ namespace physics {
 namespace entity {
     class ECCollision : public Component<ECCollision> {
     public:
-        ECCollision() = default;
         ECCollision(bool is_dynamic) :
             m_is_dynamic{is_dynamic},
             m_is_static{!is_dynamic}

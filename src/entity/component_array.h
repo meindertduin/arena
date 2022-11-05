@@ -21,7 +21,7 @@ namespace entity {
                 THROW_ERROR("Cannot insert entity that already exists");
             }
 
-            components[entity.id] = component;
+            components.insert({ entity.id, component });
 
             size++;
         }
@@ -37,11 +37,12 @@ namespace entity {
         }
 
         T& get(Entity entity) {
-            if (components.find(entity.id) == components.end()) {
+            auto component_it = components.find(entity.id);
+            if (component_it == components.end()) {
                 THROW_ERROR("Cannot retrieve entity that does not exist");
             }
 
-            return components[entity.id];
+            return component_it->second;
         }
 
         void entity_destroyed(Entity entity) override {
@@ -72,11 +73,11 @@ namespace entity {
             if (event_handlers.find(event_id) == event_handlers.end())
                 return;
 
-            if (components.find(entity.id) == components.end())
-                return;
+            auto component_it = components.find(entity.id);
+            if (component_it == components.end())
+                return
 
-            auto &component = components[entity.id];
-            event_handlers[event_id](&component, e);
+            event_handlers[event_id](&component_it->second, e);
         }
 
         auto begin() { return components.begin(); }

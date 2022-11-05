@@ -10,7 +10,6 @@
 namespace entity {
     class EcStaticMeshRenderer : public Component<EcStaticMeshRenderer> {
     public:
-        EcStaticMeshRenderer() = default;
         explicit EcStaticMeshRenderer(std::shared_ptr<graphics::Mesh> mesh);
 
         graphics::Material *material = nullptr;
