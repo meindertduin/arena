@@ -34,12 +34,12 @@ namespace game {
         this->m_map = std::make_unique<Map>();
 
         this->cube = global.ecs->create_entity();
-        auto mesh_renderer = entity::EcStaticMeshRenderer();
-        mesh_renderer.init("assets/fan_tree.obj");
         auto collision = entity::ECCollision(false);
 
-        auto tree = m_cache.get_resource<graphics::Mesh>("assets/fan_tree.obj");
-        collision.set_collider(std::make_shared<physics::MeshCollider>(tree));
+        auto tree_mesh = m_cache.get_resource<graphics::Mesh>("assets/fan_tree.obj");
+
+        auto mesh_renderer = entity::EcStaticMeshRenderer(tree_mesh);
+        collision.set_collider(std::make_shared<physics::MeshCollider>(tree_mesh));
 
         this->cube.add(mesh_renderer);
         this->cube.add(collision);
