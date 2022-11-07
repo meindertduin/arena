@@ -7,6 +7,7 @@
 #include "../graphics/renderer.h"
 #include "../core/program_time.h"
 #include "../entity/ec_collision.h"
+#include "../physics/collision.h"
 
 namespace game {
     GameState::GameState() : m_camera{ global.graphic_options->size().width(), global.graphic_options->size().height() } {
@@ -33,10 +34,13 @@ namespace game {
         this->m_map = std::make_unique<Map>();
 
         this->cube = global.ecs->create_entity();
-        auto mesh_renderer = entity::EcStaticMeshRenderer();
-        mesh_renderer.init("assets/fan_tree.obj");
         auto collision = entity::ECCollision(false);
-        collision.init("assets/fan_tree.obj");
+
+        auto tree_mesh = m_cache.get_resource<graphics::Mesh>("assets/fan_tree.obj");
+
+        auto mesh_renderer = entity::EcStaticMeshRenderer(tree_mesh);
+        collision.set_collider(std::make_shared<physics::MeshCollider>(tree_mesh));
+
         this->cube.add(mesh_renderer);
         this->cube.add(collision);
         this->cube.add(entity::ECTransform({ 0, -24, -10 }, {}));
@@ -47,6 +51,7 @@ namespace game {
     void GameState::update() {
         global.systems->update();
 
+        // TODO: use state pattern for handling update
         if (m_ui_mode)
             m_ui.on_tick(core::TotalTicks);
     }

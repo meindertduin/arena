@@ -2,6 +2,21 @@
 #include "algorithm.h"
 
 namespace physics {
+    CollisionPoints Collider::test_collision(const Transform &transform, Collider *collider, const Transform &other_transform) {
+        this->aabb().set_center(transform.pos);
+        collider->aabb().set_center(other_transform.pos);
+
+        if (!this->m_aabb.inside(collider->aabb()))
+            return {};
+
+        switch (collider->type()) {
+            case ColliderType::Sphere:
+                return this->test(transform, reinterpret_cast<SphereCollider*>(collider), other_transform);
+            case ColliderType::Mesh:
+                return this->test(transform, reinterpret_cast<MeshCollider*>(collider), other_transform);
+        }
+    }
+
     inline CollisionPoints
     find_sphere_sphere_collision(const SphereCollider *a, const Transform &ta, const SphereCollider *b,
                                  const Transform &tb) {
@@ -23,11 +38,6 @@ namespace physics {
         return result;
     }
 
-    CollisionPoints SphereCollider::test(const Transform &transform, const Collider *collider,
-                                         const Transform &collider_transform) const {
-        return collider->test(collider_transform, this, transform);
-    }
-
     CollisionPoints SphereCollider::test(const Transform &transform, const SphereCollider *collider,
                                          const Transform &sphere_transform) const {
         return find_sphere_sphere_collision(this, transform, collider, sphere_transform);
@@ -35,11 +45,6 @@ namespace physics {
 
     CollisionPoints SphereCollider::test(const Transform &transform, const MeshCollider *collider,
                                          const Transform &sphere_transform) const {
-        return {};
-    }
-
-    CollisionPoints MeshCollider::test(const Transform &transform, const Collider *collider,
-                                       const Transform &collider_transform) const {
         return {};
     }
 
@@ -74,5 +79,13 @@ namespace physics {
             return epa(simplex, this, collider, transform, mesh_transform);
         }
         return {};
+    }
+
+    MeshCollider::MeshCollider(const std::shared_ptr<graphics::Mesh> &mesh) : Collider(ColliderType::Mesh, mesh) {
+        if (mesh->collisions_data().empty()) {
+            this->m_mesh_data = mesh->mesh_data();
+        } else {
+            this->m_mesh_data = mesh->collisions_data()[0];
+        }
     }
 }

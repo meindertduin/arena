@@ -9,6 +9,7 @@ project(${PROJECT_NAME} VERSION ${arena_version} LANGUAGES CXX C)
 
 set(SOURCES
         src/main.cpp
+        src/global.cpp
         external/glad/glad.c
         src/entity/systems_collection.cpp src/entity/systems_collection.h)
 

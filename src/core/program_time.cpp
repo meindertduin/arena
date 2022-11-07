@@ -17,10 +17,14 @@ namespace core {
         start_time = std::chrono::system_clock::now();
     }
 
+    int Timer::get_time_ms() const {
+        auto current_time = std::chrono::system_clock::now();
+        DurationMs difference = current_time - start_time;
+        return static_cast<int>(difference.count());
+    }
+
     void Timer::stop() {
-        auto end_time = std::chrono::system_clock::now();
-        DurationMs difference = end_time - start_time;
-        duration_ms = static_cast<int>(difference.count());
+        duration_ms = get_time_ms();
     }
 
     int Timer::difference_ms() const {

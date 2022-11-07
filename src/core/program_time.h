@@ -18,6 +18,7 @@ namespace core {
     class Timer {
     public:
         void start();
+        [[nodiscard]] int get_time_ms() const;
         void stop();
 
         [[nodiscard]] int difference_ms() const;

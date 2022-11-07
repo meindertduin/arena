@@ -7,5 +7,4 @@ set(PHYSICS_SOURCES
         src/physics/solver.cpp
         src/physics/simplex.h
         src/physics/algorithm.h
-        src/physics/algorithm.cpp
-        )
+        src/physics/algorithm.cpp)

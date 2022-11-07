@@ -1,13 +1,10 @@
 #include "physics_system.h"
 #include "../entity/ec_transform.h"
 #include "../entity/ec_physics.h"
-#include "../entity/ec_collision_box.h"
 
 #include "../global.h"
 #include "../game/game_state.h"
 #include "collision.h"
-#include "../entity/ec_collision.h"
-#include "algorithm.h"
 #include "solver.h"
 
 namespace physics {
@@ -25,9 +22,6 @@ namespace physics {
 
             physics.force = glm::vec3 { 0, 0, 0 };
 
-            auto &box = ec_collision.mesh()->bounding_box();
-            box.set_center(transform.pos);
-
             // Object ec_collision
             std::vector<physics::Collision> collisions;
             for (auto & e_it : *collision_component_array) {
@@ -36,16 +30,10 @@ namespace physics {
 
                 auto &other_transform = entity_b.get<entity::ECTransform>();
                 auto &other_collider = entity_b.get<entity::ECCollision>();
-                auto &other_box = other_collider.mesh()->bounding_box();
 
-                other_box.set_center(other_transform.pos);
-
-                if (box.inside(other_box)) {
-                    auto [collides, simplex] = physics::gjk(ec_collision.collider().get(), other_collider.collider().get(), transform, other_transform);
-                    if (collides) {
-                        auto collision_points = physics::epa(simplex, ec_collision.collider().get(), other_collider.collider().get(), transform, other_transform);
-                        collisions.push_back(physics::Collision{ entity_a, entity_b, collision_points });
-                    }
+                auto collision_points = ec_collision.collider()->test_collision(transform, other_collider.collider().get(), other_transform);
+                if (collision_points.has_collision) {
+                    collisions.push_back(physics::Collision{ entity_a, entity_b, &transform, &other_transform, collision_points });
                 }
             }
 
