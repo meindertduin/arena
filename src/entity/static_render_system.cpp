@@ -5,7 +5,7 @@
 #include "../graphics/renderer.h"
 
 namespace entity {
-    void StaticRenderSystem::update() {
+    void StaticRenderSystem::update(float ft) {
         for (auto &entity : entities) {
             auto &ec_static_renderer = entity.get<EcStaticMeshRenderer>();
             auto &transform = entity.get<ECTransform>();

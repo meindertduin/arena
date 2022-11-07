@@ -60,22 +60,29 @@ int main () {
     global.texture = global.game->cache().get_resource<graphics::Texture>("assets/fan_tree.png");
 
     core::Timer program_timer;
+    int lag;
     while(!global.window->close_requested()) {
-        core::TotalTicks++;
+        lag = program_timer.difference_ms();
         program_timer.start();
-
         global.window->poll_events();
-        global.game->update();
+
+        while (lag >= core::TickTimeMs) {
+            float ft = (float)core::TickTimeMs / (float)lag;
+            global.game->update(ft);
+            core::TotalTicks++;
+            lag -= core::TickTimeMs;
+        }
 
         global.game->render();
         global.window->end_frame();
 
-        program_timer.stop();
-        auto difference_ms = program_timer.difference_ms();
+        auto difference_ms = program_timer.get_time_ms();
         int delay_time_ms = static_cast<int>(1000.0f / 60.0f) - difference_ms;
         global.telemetrics.last_frame_time_ms = difference_ms;
         if (delay_time_ms > 0)
             core::delay(delay_time_ms);
+
+        program_timer.stop();
     }
 
     graphics::font_quit();

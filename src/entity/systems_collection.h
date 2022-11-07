@@ -8,7 +8,7 @@ namespace entity {
     class SystemsCollection {
     public:
         void init();
-        void update();
+        void update(float ft);
         void render();
     private:
         std::shared_ptr<StaticRenderSystem> pm_static_render_system { nullptr };

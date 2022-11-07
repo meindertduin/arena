@@ -8,7 +8,7 @@
 #include "solver.h"
 
 namespace physics {
-    void PhysicsSystem::update() {
+    void PhysicsSystem::update(float ft) {
         auto collision_component_array = global.ecs->get_component_array<entity::ECCollision>();
 
         for (auto entity_a : entities) {

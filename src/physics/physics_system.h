@@ -6,7 +6,7 @@
 namespace physics {
     class PhysicsSystem : public entity::System {
     public:
-        void update() override;
+        void update(float ft) override;
     private:
         glm::vec3 m_gravity { 0, 9.81, 0 };
     };
