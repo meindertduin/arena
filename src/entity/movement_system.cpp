@@ -3,7 +3,7 @@
 #include "ec_control.h"
 
 namespace entity {
-    void MovementSystem::update(float ft) {
+    void MovementSystem::update() {
         for (auto &entity : entities) {
             auto &transform = entity.get<ECTransform>();
             const auto &ec_control = entity.get<ECControl>();

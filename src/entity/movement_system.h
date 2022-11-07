@@ -5,6 +5,6 @@
 namespace entity {
     class MovementSystem : public System {
     public:
-        void update(float ft) override;
+        void update() override;
     };
 }

@@ -48,8 +48,8 @@ namespace game {
         this->m_player = entity::ECPlayer::create(global.ecs->create_entity());
     }
 
-    void GameState::update(float ft) {
-        global.systems->update(ft);
+    void GameState::update() {
+        global.systems->update();
 
         // TODO: use state pattern for handling update
         if (m_ui_mode)

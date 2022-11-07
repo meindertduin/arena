@@ -4,6 +4,6 @@
 
 namespace entity {
     struct StaticRenderSystem : public System {
-        void update(float ft) override;
+        void update() override;
     };
 }

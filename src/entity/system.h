@@ -9,7 +9,7 @@ namespace entity {
     class System {
     public:
         std::set<Entity> entities;
-        virtual void update(float ft) = 0;
+        virtual void update() = 0;
     };
 
     class SystemsManager {

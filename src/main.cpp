@@ -23,13 +23,13 @@ int main () {
     core::Timer program_timer;
     int lag;
     while(!global.window->close_requested()) {
-        lag = program_timer.difference_ms();
+        lag += program_timer.difference_ms();
         program_timer.start();
         global.window->poll_events();
 
         while (lag >= core::TickTimeMs) {
-            float ft = (float)core::TickTimeMs / (float)lag;
-            global.game->update(ft);
+            global.game->update();
+
             core::TotalTicks++;
             lag -= core::TickTimeMs;
         }

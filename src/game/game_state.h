@@ -44,7 +44,7 @@ namespace game {
         constexpr ALWAYS_INLINE entity::Camera& camera() { return m_camera; }
 
         void init();
-        void update(float ft);
+        void update();
         void render();
     private:
         bool m_ui_mode { false };

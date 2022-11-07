@@ -13,12 +13,12 @@ namespace entity {
         pm_movement_system = global.ecs->create_system<entity::MovementSystem>({ entity::ECControl::_id, entity::ECTransform::_id });
     }
 
-    void SystemsCollection::update(float ft) {
-        pm_movement_system->update(ft);
-        pm_physics_system->update(ft);
+    void SystemsCollection::update() {
+        pm_movement_system->update();
+        pm_physics_system->update();
     }
 
     void SystemsCollection::render() {
-        pm_static_render_system->update(1.0f);
+        pm_static_render_system->update();
     }
 }
