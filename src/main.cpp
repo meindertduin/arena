@@ -1,13 +1,9 @@
 #include "global.h"
 
 #include "core/program_time.h"
-#include "graphics/renderer.h"
-#include "graphics/ui_renderer.h"
 #include "input/input.h"
-#include "entity/ec_static_mesh.h"
-#include "entity/ec_physics.h"
 #include "game/game_state.h"
-#include "entity/component.h"
+#include "graphics/font.h"
 
 Global global;
 
