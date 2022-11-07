@@ -30,7 +30,8 @@ namespace entity {
     class SystemsCollection;
 }
 
-struct Global {
+class Global {
+public:
     core::Window *window;
     core::LinearAllocator allocator { 1024 * 1024 };
     core::ListAllocator list_allocator {1024 * 1024 * 2, core::ListAllocator::PlacementPolicy::First };
@@ -50,6 +51,8 @@ struct Global {
     graphics::Material *material;
 
     entity::Ecs *ecs;
+
+    void init();
 };
 
 extern Global global;
