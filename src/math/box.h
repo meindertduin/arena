@@ -13,6 +13,11 @@ namespace math {
             m_max{max}
             {}
 
+        explicit AABB(float max) :
+            m_min(-max),
+            m_max(max)
+        {}
+
         [[nodiscard]] constexpr ALWAYS_INLINE const glm::vec3& min() const { return m_min; }
         [[nodiscard]] constexpr ALWAYS_INLINE const glm::vec3& max() const { return m_max; }
         [[nodiscard]] constexpr ALWAYS_INLINE const glm::vec3& center() const { return m_center; }
@@ -34,8 +39,8 @@ namespace math {
                    min.z < other_max.z);
         }
     private:
-        glm::vec3 m_min;
-        glm::vec3 m_max;
+        glm::vec3 m_min{};
+        glm::vec3 m_max{};
         glm::vec3 m_center{};
     };
 }
