@@ -26,8 +26,11 @@ namespace physics {
         int m_count {0};
     };
 
+    template<typename T>
     class Octree {
     public:
 
+    private:
+        OctreeNode<T>* root;
     };
 }

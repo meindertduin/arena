@@ -10,4 +10,5 @@ set(PHYSICS_SOURCES
         src/physics/algorithm.cpp
         src/physics/octree.h
         src/physics/octree.cpp
-        )
+        src/physics/physics_object.h
+        src/physics/physics_object.cpp)

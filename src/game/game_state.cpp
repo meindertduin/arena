@@ -6,7 +6,7 @@
 
 #include "../graphics/renderer.h"
 #include "../core/program_time.h"
-#include "../entity/ec_collision.h"
+#include "../entity/ec_rigid_body.h"
 #include "../physics/collision.h"
 
 namespace game {
@@ -34,7 +34,7 @@ namespace game {
         this->m_map = std::make_unique<Map>();
 
         this->cube = global.ecs->create_entity();
-        auto collision = entity::ECCollision(false);
+        auto collision = entity::ECRigidBody(false);
 
         auto tree_mesh = m_cache.get_resource<graphics::Mesh>("assets/fan_tree.obj");
 

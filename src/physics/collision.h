@@ -3,10 +3,11 @@
 #include <glm/vec3.hpp>
 #include "../entity/ec_transform.h"
 #include "../graphics/mesh.h"
-#include "../entity/ec_collision.h"
+#include "../entity/ec_rigid_body.h"
 
 namespace physics {
     using Transform = entity::ECTransform;
+    class PhysicsObject;
 
     struct CollisionPoints {
         glm::vec3 furthest_a;
@@ -17,10 +18,8 @@ namespace physics {
     };
 
     struct Collision {
-        entity::Entity entity_a;
-        entity::Entity entity_b;
-        Transform *transform_a;
-        Transform *transform_b;
+        PhysicsObject *physics_object_a;
+        PhysicsObject *physics_object_b;
         CollisionPoints points;
     };
 

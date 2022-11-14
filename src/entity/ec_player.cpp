@@ -4,7 +4,7 @@
 #include "ec_first_person_camera.h"
 #include "ec_physics.h"
 #include "ec_control.h"
-#include "ec_collision.h"
+#include "ec_rigid_body.h"
 #include "../global.h"
 #include "../game/game_state.h"
 #include "../physics/collision.h"
@@ -17,7 +17,7 @@ namespace entity {
         e.add(ECPhysics());
         e.add(ECControl());
 
-        auto collision = ECCollision(true);
+        auto collision = ECRigidBody(true);
         auto cube = global.game->cache().get_resource<graphics::Mesh>("assets/fan_tree.obj");
         collision.set_collider(std::make_shared<physics::MeshCollider>(cube));
 

@@ -8,9 +8,9 @@ namespace physics {
 }
 
 namespace entity {
-    class ECCollision : public Component<ECCollision> {
+    class ECRigidBody : public Component<ECRigidBody> {
     public:
-        ECCollision(bool is_dynamic) :
+        ECRigidBody(bool is_dynamic) :
             m_is_dynamic{is_dynamic},
             m_is_static{!is_dynamic}
         {}
@@ -27,6 +27,6 @@ namespace entity {
         bool m_is_dynamic { false };
     };
 
-    DECL_COMPONENT_HEADER(ECCollision);
+    DECL_COMPONENT_HEADER(ECRigidBody);
 }
 
