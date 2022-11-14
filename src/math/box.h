@@ -24,6 +24,10 @@ namespace math {
 
         void set_center(const glm::vec3& center) { m_center = center; }
 
+        [[nodiscard]] float smallest_side() const {
+            return std::min({ m_max.x - m_min.x, m_max.y - m_min.y, m_max.z - m_min.z });
+        }
+
         [[nodiscard]] bool inside(const AABB &other) const {
             auto other_min = other.min() + other.center();
             auto other_max = other.max() + other.center();

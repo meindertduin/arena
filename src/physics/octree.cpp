@@ -1,7 +1,7 @@
 #include "octree.h"
 
 namespace physics {
-    OctreeNode::OctreeNode(float half_size, const glm::vec3 &center_pos) {
+    OctreeNode::OctreeNode(float half_size, const glm::vec3 &center_pos, int layer) : m_layer{layer}{
         auto min = glm::vec3{ center_pos.x - half_size, center_pos.y - half_size, center_pos.z - half_size };
         auto max = glm::vec3{ center_pos.x + half_size, center_pos.y + half_size, center_pos.z + half_size };
 
@@ -40,12 +40,16 @@ namespace physics {
         }
     }
 
-    Octree::Octree(float half_size, int max_layers) : m_max_layers{max_layers} {
+    Octree::Octree(float half_size, int max_layers) :
+        m_max_layers{max_layers},
+        m_half_size{half_size},
+        m_grid_size{half_size * (float) std::pow(0.5f, max_layers)}
+    {
         auto center = glm::vec3 { 0 };
-        m_root = new OctreeNode { half_size, center };
+        m_root = new OctreeNode { half_size, center, 0 };
 
         auto quarter_size = half_size / 2.0f;
-        add_node_layers(m_root, center, quarter_size, 0);
+        add_node_layers(m_root, center, quarter_size, 1);
     }
 
     void Octree::fill_with_objects(const std::vector<PhysicsObject*> &physics_objects) {
@@ -55,18 +59,29 @@ namespace physics {
     }
 
     std::vector<OctreeNode*> Octree::get_colliding_nodes(PhysicsObject *object) {
-        auto &aabb = object->rigid_body()->collider()->aabb();
         std::vector<OctreeNode*> nodes;
+        auto &aabb = object->rigid_body()->collider()->aabb();
 
         if (!m_root->inside(aabb)) {
             return nodes;
         }
 
-        for (auto root_child : *m_root) {
-            root_child->fill_inside_nodes(aabb, nodes);
-        }
+        float smallest_side = aabb.smallest_side();
+
+        auto max_layer = get_max_layer(smallest_side, m_max_layers, m_grid_size);
+        m_root->get_inside_nodes(aabb, nodes, max_layer);
 
         return nodes;
+    }
+
+    int Octree::get_max_layer(float smallest_half, int max_layer, float grid_size) {
+        if (smallest_half > grid_size) {
+            max_layer--;
+            grid_size*= 2;
+            get_max_layer(smallest_half, max_layer, grid_size);
+        }
+
+        return max_layer;
     }
 
     void Octree::reset() {
@@ -80,7 +95,7 @@ namespace physics {
 
         for (auto part = 0; part < 8; part++) {
             auto new_center = create_octal_center((OctalPart)part, center, half_size);
-            auto new_node = new OctreeNode { half_size, new_center };
+            auto new_node = new OctreeNode { half_size, new_center, layer };
             node->add_child(new_node);
 
             add_node_layers(new_node, new_center, half_size / 2.0f, layer + 1);

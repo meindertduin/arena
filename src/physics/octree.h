@@ -11,30 +11,24 @@ namespace physics {
 
     class OctreeNode {
     public:
-        OctreeNode(float half_size, const glm::vec3 & center_pos);
+        OctreeNode(float half_size, const glm::vec3 & center_pos, int layer);
 
         [[nodiscard]] constexpr bool inside(const math::AABB &other) const {
             return m_aabb.inside(other);
         }
 
-        [[nodiscard]] bool inside_all(const math::AABB &other) const {
-            if (m_count > 0) {
-                return std::ranges::all_of(m_children.begin(), m_children.end(), [&other](auto child) {
-                    return child->inside(other);
-                });
+        void get_inside_nodes(const math::AABB &aabb, std::vector<OctreeNode*> &nodes, int max_layer) {
+            if (!m_aabb.inside(aabb)) {
+                return;
             }
 
-            return true;
-        }
-
-        void fill_inside_nodes(const math::AABB &aabb, std::vector<OctreeNode*> nodes) {
-            if (inside_all(aabb)) {
+            if ((m_layer + 1) < max_layer) {
                 nodes.push_back(this);
                 return;
             }
 
             for (auto child : m_children) {
-                child->fill_inside_nodes(aabb, nodes);
+                child->get_inside_nodes(aabb, nodes, max_layer);
             }
         }
 
@@ -67,7 +61,9 @@ namespace physics {
         std::vector<PhysicsObject*> m_values;
         math::AABB m_aabb;
         std::array<OctreeNode*, 8> m_children;
+
         int m_count {0};
+        int m_layer{0};
     };
 
     class Octree {
@@ -80,7 +76,10 @@ namespace physics {
     private:
         OctreeNode* m_root;
         int m_max_layers;
+        float m_half_size;
+        float m_grid_size;
 
         void add_node_layers(OctreeNode *node, const glm::vec3 &center, float half_size, int layer) const;
+        static int get_max_layer(float smallest_half, int max_layer, float grid_size);
     };
 }
