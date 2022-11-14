@@ -65,6 +65,11 @@ namespace entity {
             return component_manager->get_component<T>(entity);
         }
 
+        template<typename T>
+        std::optional<T*> get_component_opt(Entity entity) {
+            return component_manager->get_component_opt<T>(entity);
+        }
+
         template<typename C>
         std::shared_ptr<ComponentArray<C>> get_component_array() {
             return component_manager->template get_component_array<C>();

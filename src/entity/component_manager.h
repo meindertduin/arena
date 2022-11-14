@@ -35,6 +35,11 @@ namespace entity {
             return get_component_array<T>()->get(entity);
         }
 
+        template<typename T>
+        std::optional<T*> get_component_opt(Entity entity) {
+            return get_component_array<T>()->get_opt(entity);
+        }
+
         void entity_destroyed(Entity entity) {
             for (auto const &pair : component_arrays) {
                 pair.second->entity_destroyed(entity);

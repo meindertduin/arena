@@ -1,6 +1,5 @@
 #include "physics_system.h"
 #include "../entity/ec_transform.h"
-#include "../entity/ec_physics.h"
 
 #include "../global.h"
 #include "../game/game_state.h"
@@ -14,14 +13,15 @@ namespace physics {
 
         for (auto entity_a : entities) {
             PhysicsObject phy_object_a { entity_a };
-            auto &physics = entity_a.get<entity::ECPhysics>();
 
-            physics.force += physics.mass * m_gravity;
-            physics.velocity += physics.force / physics.mass * 1.0f/60.0f;
+            auto physics = phy_object_a.physics().value();
 
-            phy_object_a.transform()->move(physics.velocity, - 1.0f/60.0f);
+            physics->force += physics->mass * m_gravity;
+            physics->velocity += physics->force / physics->mass * 1.0f/60.0f;
 
-            physics.force = glm::vec3 { 0, 0, 0 };
+            phy_object_a.transform()->move(physics->velocity, - 1.0f/60.0f);
+
+            physics->force = glm::vec3 { 0, 0, 0 };
 
             // Object collision
             std::vector<physics::Collision> collisions;
@@ -46,7 +46,7 @@ namespace physics {
 
             if (in_terrain_range && height > phy_object_a.transform()->pos.y - 2) {
                 phy_object_a.transform()->pos.y = height + 2;
-                physics.velocity = glm::vec3 { 0, 0, 0 };
+                physics->velocity = glm::vec3 { 0, 0, 0 };
             }
         }
     }
