@@ -24,8 +24,6 @@ namespace physics {
             // Object collision
             std::vector<physics::Collision> collisions;
 
-            printf("colliding objects: %lu\n", colliding_objects.size());
-
             for (auto value : colliding_objects) {
                 auto collision_points = phy_object_a.test_collision(*value);
 

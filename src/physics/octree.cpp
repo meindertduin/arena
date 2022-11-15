@@ -1,11 +1,58 @@
 #include "octree.h"
 
 namespace physics {
-    OctreeNode::OctreeNode(float half_size, const glm::vec3 &center_pos, int layer) : m_layer{layer}{
+    Octree::OctreeNode::OctreeNode(float half_size, const glm::vec3 &center_pos, int layer) : m_layer{layer}{
         auto min = glm::vec3{ center_pos.x - half_size, center_pos.y - half_size, center_pos.z - half_size };
         auto max = glm::vec3{ center_pos.x + half_size, center_pos.y + half_size, center_pos.z + half_size };
 
         m_aabb = math::AABB { min, max };
+    }
+
+    void Octree::OctreeNode::get_inside_nodes(const math::AABB &aabb, std::vector<OctreeNode *> &nodes, int max_layer) {
+        if (!m_aabb.inside(aabb)) {
+            return;
+        }
+
+        if ((m_layer + 1) >= max_layer) {
+            nodes.push_back(this);
+            return;
+        }
+
+        for (auto child : m_children) {
+            child->get_inside_nodes(aabb, nodes, max_layer);
+        }
+    }
+
+    void Octree::OctreeNode::reset() {
+        if (m_values.empty()) {
+            return;
+        }
+
+        m_values.clear();
+        for (auto child : m_children) {
+            if (child == nullptr) {
+                break;
+            }
+
+            child->reset();
+        }
+    }
+
+    void Octree::OctreeNode::add_child(Octree::OctreeNode *node) {
+        m_children[m_count++] = node;
+    }
+
+    void Octree::OctreeNode::add_value(PhysicsObject *value, const math::AABB &aabb) {
+        m_values.push_back(value);
+        for (auto child : m_children) {
+            if (child == nullptr) {
+                break;
+            }
+
+            if (child->inside(aabb)) {
+                child->add_value(value, aabb);
+            }
+        }
     }
 
     enum OctalPart {
@@ -59,7 +106,7 @@ namespace physics {
         }
     }
 
-    std::vector<OctreeNode*> Octree::get_colliding_nodes(const PhysicsObject &object) {
+    std::vector<Octree::OctreeNode*> Octree::get_colliding_nodes(const PhysicsObject &object) {
         std::vector<OctreeNode*> nodes;
         auto aabb = object.rigid_body()->collider()->aabb()
                 .transformed(object.transform()->pos);
