@@ -1,6 +1,4 @@
 #include "physics_system.h"
-#include "../entity/ec_transform.h"
-
 #include "../global.h"
 #include "../game/game_state.h"
 #include "collision.h"
@@ -10,10 +8,8 @@
 namespace physics {
     void PhysicsSystem::update() {
         auto collision_component_array = global.ecs->get_component_array<entity::ECRigidBody>();
-
         for (auto entity_a : entities) {
             PhysicsObject phy_object_a { entity_a };
-
             auto physics = phy_object_a.physics().value();
 
             physics->force += physics->mass * m_gravity;
@@ -23,16 +19,19 @@ namespace physics {
 
             physics->force = glm::vec3 { 0, 0, 0 };
 
+            auto colliding_nodes = global.game->octree().get_colliding_nodes(&phy_object_a);
+
             // Object collision
             std::vector<physics::Collision> collisions;
-            for (auto & e_it : *collision_component_array) {
-                auto entity_b = e_it.second.entity;
-                if (entity_a == entity_b) continue;
-                PhysicsObject phy_object_b { entity_b };
 
-                auto collision_points = phy_object_a.test_collision(phy_object_b);
-                if (collision_points.has_collision) {
-                    collisions.push_back(physics::Collision { &phy_object_a, &phy_object_b, collision_points });
+            for (auto node : colliding_nodes) {
+                for (auto value : node->values()) {
+                    if (value->entity() == entity_a) continue;
+
+                    auto collision_points = phy_object_a.test_collision(*value);
+                    if (collision_points.has_collision) {
+                        collisions.push_back(physics::Collision { &phy_object_a, value, collision_points });
+                    }
                 }
             }
 

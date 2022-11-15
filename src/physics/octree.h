@@ -33,8 +33,16 @@ namespace physics {
         }
 
         void reset() {
+            if (m_values.empty()) {
+                return;
+            }
+
             m_values.clear();
             for (auto child : m_children) {
+                if (child == nullptr) {
+                    break;
+                }
+
                 child->reset();
             }
         }
@@ -47,6 +55,10 @@ namespace physics {
             m_values.push_back(value);
             auto &aabb = value->rigid_body()->collider()->aabb();
             for (auto child : m_children) {
+                if (child == nullptr) {
+                    break;
+                }
+
                 if (child->inside(aabb)) {
                     child->add_value(value);
                 }

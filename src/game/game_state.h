@@ -61,6 +61,7 @@ namespace game {
 
         std::vector<graphics::DirLight> m_dir_lights;
         std::vector<graphics::PointLight> m_point_lights;
+        std::vector<physics::PhysicsObject*> m_physics_objects;
 
         physics::Octree m_octree { 500.0f, 8 };
 

@@ -21,6 +21,10 @@ namespace physics {
             m_physics = entity.get_opt<Physics>();
         }
 
+        [[nodiscard]] constexpr ALWAYS_INLINE entity::Entity entity() const {
+            return m_entity;
+        }
+
         [[nodiscard]] constexpr ALWAYS_INLINE Transform* transform() const {
             return m_transform;
         }

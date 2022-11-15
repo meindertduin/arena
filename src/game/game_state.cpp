@@ -48,9 +48,17 @@ namespace game {
         this->cube.add(entity::ECTransform({ 0, -24, -10 }, {}));
 
         this->m_player = entity::ECPlayer::create(global.ecs->create_entity());
+
+        auto collision_component_array = global.ecs->get_component_array<entity::ECRigidBody>();
+        for (auto &col : *collision_component_array) {
+            m_physics_objects.push_back(new physics::PhysicsObject { col.second.entity });
+        }
     }
 
     void GameState::update() {
+        m_octree.reset();
+        m_octree.fill_with_objects(m_physics_objects);
+
         global.systems->update();
 
         // TODO: use state pattern for handling update
