@@ -2,6 +2,7 @@
 
 #include <glm/vec3.hpp>
 #include "../entity/system.h"
+#include "octree.h"
 
 namespace physics {
     class PhysicsSystem : public entity::System {

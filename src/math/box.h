@@ -3,6 +3,7 @@
 #include "point.h"
 #include "quaternion.h"
 #include <glm/glm.hpp>
+#include <algorithm>
 
 namespace math {
     class AABB {
@@ -25,7 +26,8 @@ namespace math {
         void set_center(const glm::vec3& center) { m_center = center; }
 
         [[nodiscard]] float smallest_side() const {
-            return std::min({ m_max.x - m_min.x, m_max.y - m_min.y, m_max.z - m_min.z });
+            auto comp = [](float a, float b) { return a < b; };
+            return std::min({ m_max.x - m_min.x, m_max.y - m_min.y, m_max.z - m_min.z}, comp);
         }
 
         [[nodiscard]] bool inside(const AABB &other) const {

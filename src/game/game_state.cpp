@@ -10,7 +10,9 @@
 #include "../physics/collision.h"
 
 namespace game {
-    GameState::GameState() : m_camera{ global.graphic_options->size().width(), global.graphic_options->size().height() } {
+    GameState::GameState() :
+        m_camera { global.graphic_options->size().width(), global.graphic_options->size().height() }
+    {
         graphics::DirLight dir_light;
         dir_light.direction = { 0, -1.0f, -1.0f };  
         dir_light.ambient = {0.05f, 0.05f, 0.05f};

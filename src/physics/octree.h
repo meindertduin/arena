@@ -13,7 +13,7 @@ namespace physics {
     public:
         OctreeNode(float half_size, const glm::vec3 & center_pos, int layer);
 
-        [[nodiscard]] constexpr bool inside(const math::AABB &other) const {
+        [[nodiscard]] bool inside(const math::AABB &other) const {
             return m_aabb.inside(other);
         }
 
@@ -43,7 +43,7 @@ namespace physics {
             m_children[m_count++] = node;
         }
 
-        constexpr void add_value(PhysicsObject* value) {
+        void add_value(PhysicsObject* value) {
             m_values.push_back(value);
             auto &aabb = value->rigid_body()->collider()->aabb();
             for (auto child : m_children) {
