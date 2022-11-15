@@ -19,19 +19,18 @@ namespace physics {
 
             physics->force = glm::vec3 { 0, 0, 0 };
 
-            auto colliding_nodes = global.game->octree().get_colliding_nodes(&phy_object_a);
+            auto colliding_objects = global.game->octree().get_colliding_objects(phy_object_a);
 
             // Object collision
             std::vector<physics::Collision> collisions;
 
-            for (auto node : colliding_nodes) {
-                for (auto value : node->values()) {
-                    if (value->entity() == entity_a) continue;
+            printf("colliding objects: %lu\n", colliding_objects.size());
 
-                    auto collision_points = phy_object_a.test_collision(*value);
-                    if (collision_points.has_collision) {
-                        collisions.push_back(physics::Collision { &phy_object_a, value, collision_points });
-                    }
+            for (auto value : colliding_objects) {
+                auto collision_points = phy_object_a.test_collision(*value);
+
+                if (collision_points.has_collision) {
+                    collisions.push_back(physics::Collision { &phy_object_a, value, collision_points });
                 }
             }
 

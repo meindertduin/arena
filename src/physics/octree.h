@@ -82,7 +82,8 @@ namespace physics {
     public:
         Octree(float half_size, int max_layers);
 
-        std::vector<OctreeNode *> get_colliding_nodes(PhysicsObject *object);
+        std::vector<OctreeNode *> get_colliding_nodes(const PhysicsObject &object);
+        std::set<PhysicsObject*> get_colliding_objects(const PhysicsObject &object);
         void fill_with_objects(const std::vector<PhysicsObject*>& physics_objects);
         void reset();
     private:

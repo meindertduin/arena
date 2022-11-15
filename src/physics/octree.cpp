@@ -58,9 +58,9 @@ namespace physics {
         }
     }
 
-    std::vector<OctreeNode*> Octree::get_colliding_nodes(PhysicsObject *object) {
+    std::vector<OctreeNode*> Octree::get_colliding_nodes(const PhysicsObject &object) {
         std::vector<OctreeNode*> nodes;
-        auto &aabb = object->rigid_body()->collider()->aabb();
+        auto &aabb = object.rigid_body()->collider()->aabb();
 
         if (!m_root->inside(aabb)) {
             return nodes;
@@ -72,6 +72,22 @@ namespace physics {
         m_root->get_inside_nodes(aabb, nodes, max_layer);
 
         return nodes;
+    }
+
+    std::set<PhysicsObject*> Octree::get_colliding_objects(const PhysicsObject &object) {
+        std::set<PhysicsObject*> colliding_objects;
+        auto colliding_nodes = get_colliding_nodes(object);
+        for (auto node : colliding_nodes) {
+            for (auto value : node->values()) {
+                if (object.entity() == value->entity()) {
+                    continue;
+                }
+
+                colliding_objects.insert(value);
+            }
+        }
+
+        return colliding_objects;
     }
 
     int Octree::get_max_layer(float smallest_half, int max_layer, float grid_size) {
