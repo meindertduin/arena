@@ -45,6 +45,15 @@ namespace entity {
             return component_it->second;
         }
 
+        std::optional<T*> get_opt(Entity entity) {
+            auto component_it = components.find(entity.id);
+            if (component_it == components.end()) {
+                return std::nullopt;
+            }
+
+            return &component_it->second;
+        }
+
         void entity_destroyed(Entity entity) override {
             remove(entity);
         }

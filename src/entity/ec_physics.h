@@ -1,4 +1,6 @@
+#pragma once
 #include "component.h"
+
 namespace entity {
     class ECPhysics : public Component<ECPhysics> {
     public:

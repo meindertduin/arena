@@ -132,22 +132,10 @@ namespace assets {
                 float x, y, z;
                 ss >> x >> y >> z;
 
-                if (mesh_data->x_min >= x) {
-                    mesh_data->x_min = x;
-                } else if(mesh_data->x_max <= x) {
-                    mesh_data->x_max = x;
-                }
-
-                if (mesh_data->y_min >= y) {
-                    mesh_data->y_min = y;
-                } else if(mesh_data->y_max <= y) {
-                    mesh_data->y_max = y;
-                }
-
-                if (mesh_data->z_min >= z) {
-                    mesh_data->z_min = z;
-                } else if(mesh_data->z_max <= z) {
-                    mesh_data->z_max = z;
+                if (x > mesh_data->max || y > mesh_data->max || z > mesh_data->max) {
+                    if (x > mesh_data->max) mesh_data->max = x;
+                    if (y > mesh_data->max) mesh_data->max = y;
+                    if (z > mesh_data->max) mesh_data->max = z;
                 }
 
                 vertices.emplace_back(x, y, z);

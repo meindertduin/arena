@@ -6,6 +6,7 @@
 #include <array>
 #include <unordered_map>
 #include <memory>
+#include <optional>
 
 namespace entity {
     struct Ecs;
@@ -26,6 +27,11 @@ namespace entity {
         template<typename C> 
         inline C& get() const {
             return this->p->template get_component<C>(*this);
+        }
+
+        template<typename C>
+        inline std::optional<C*> get_opt() const {
+            return this->p->template get_component_opt<C>(*this);
         }
 
         template<typename C>

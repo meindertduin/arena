@@ -6,11 +6,13 @@
 
 #include "../graphics/renderer.h"
 #include "../core/program_time.h"
-#include "../entity/ec_collision.h"
+#include "../entity/ec_rigid_body.h"
 #include "../physics/collision.h"
 
 namespace game {
-    GameState::GameState() : m_camera{ global.graphic_options->size().width(), global.graphic_options->size().height() } {
+    GameState::GameState() :
+        m_camera { global.graphic_options->size().width(), global.graphic_options->size().height() }
+    {
         graphics::DirLight dir_light;
         dir_light.direction = { 0, -1.0f, -1.0f };  
         dir_light.ambient = {0.05f, 0.05f, 0.05f};
@@ -34,7 +36,7 @@ namespace game {
         this->m_map = std::make_unique<Map>();
 
         this->cube = global.ecs->create_entity();
-        auto collision = entity::ECCollision(false);
+        auto collision = entity::ECRigidBody(false);
 
         auto tree_mesh = m_cache.get_resource<graphics::Mesh>("assets/fan_tree.obj");
 
@@ -46,9 +48,17 @@ namespace game {
         this->cube.add(entity::ECTransform({ 0, -24, -10 }, {}));
 
         this->m_player = entity::ECPlayer::create(global.ecs->create_entity());
+
+        auto collision_component_array = global.ecs->get_component_array<entity::ECRigidBody>();
+        for (auto &col : *collision_component_array) {
+            m_physics_objects.push_back(new physics::PhysicsObject { col.second.entity });
+        }
     }
 
     void GameState::update() {
+        m_octree.reset();
+        m_octree.fill_with_objects(m_physics_objects);
+
         global.systems->update();
 
         // TODO: use state pattern for handling update
