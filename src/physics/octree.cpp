@@ -54,13 +54,15 @@ namespace physics {
 
     void Octree::fill_with_objects(const std::vector<PhysicsObject*> &physics_objects) {
         for (auto object : physics_objects) {
-            m_root->add_value(object);
+            auto aabb = object->rigid_body()->collider()->aabb().transformed(object->transform()->pos);
+            m_root->add_value(object, aabb);
         }
     }
 
     std::vector<OctreeNode*> Octree::get_colliding_nodes(const PhysicsObject &object) {
         std::vector<OctreeNode*> nodes;
-        auto &aabb = object.rigid_body()->collider()->aabb();
+        auto aabb = object.rigid_body()->collider()->aabb()
+                .transformed(object.transform()->pos);
 
         if (!m_root->inside(aabb)) {
             return nodes;

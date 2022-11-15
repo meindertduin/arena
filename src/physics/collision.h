@@ -45,6 +45,7 @@ namespace physics {
         [[nodiscard]] constexpr ColliderType type() const { return m_type; }
 
         constexpr ALWAYS_INLINE math::AABB& aabb() { return m_aabb; }
+        constexpr ALWAYS_INLINE math::AABB& aabb(const Transform& transform) { return m_aabb; }
 
         CollisionPoints test_collision(const Transform &transform, Collider *collider, const Transform &other_transform);
     protected:

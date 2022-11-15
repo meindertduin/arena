@@ -23,6 +23,10 @@ namespace math {
         [[nodiscard]] constexpr ALWAYS_INLINE const glm::vec3& max() const { return m_max; }
         [[nodiscard]] constexpr ALWAYS_INLINE const glm::vec3& center() const { return m_center; }
 
+        [[nodiscard]] AABB transformed(const glm::vec3 &pos) const {
+            return { m_min + pos, m_max + pos };
+        }
+
         void set_center(const glm::vec3& center) { m_center = center; }
 
         [[nodiscard]] float smallest_side() const {

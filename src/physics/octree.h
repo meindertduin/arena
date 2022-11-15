@@ -22,7 +22,7 @@ namespace physics {
                 return;
             }
 
-            if ((m_layer + 1) < max_layer) {
+            if ((m_layer + 1) >= max_layer) {
                 nodes.push_back(this);
                 return;
             }
@@ -51,16 +51,15 @@ namespace physics {
             m_children[m_count++] = node;
         }
 
-        void add_value(PhysicsObject* value) {
+        void add_value(PhysicsObject* value, const math::AABB &aabb) {
             m_values.push_back(value);
-            auto &aabb = value->rigid_body()->collider()->aabb();
             for (auto child : m_children) {
                 if (child == nullptr) {
                     break;
                 }
 
                 if (child->inside(aabb)) {
-                    child->add_value(value);
+                    child->add_value(value, aabb);
                 }
             }
         }
