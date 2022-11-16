@@ -51,7 +51,7 @@ namespace physics {
         private:
             std::vector<PhysicsObject*> m_values;
             math::AABB m_aabb;
-            std::array<OctreeNode*, 8> m_children;
+            std::array<OctreeNode*, 8> m_children{};
 
             int m_count {0};
             int m_layer{0};

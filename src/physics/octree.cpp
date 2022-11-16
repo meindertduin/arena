@@ -1,60 +1,6 @@
 #include "octree.h"
 
 namespace physics {
-    Octree::OctreeNode::OctreeNode(float half_size, const glm::vec3 &center_pos, int layer) : m_layer{layer}{
-        auto min = glm::vec3{ center_pos.x - half_size, center_pos.y - half_size, center_pos.z - half_size };
-        auto max = glm::vec3{ center_pos.x + half_size, center_pos.y + half_size, center_pos.z + half_size };
-
-        m_aabb = math::AABB { min, max };
-    }
-
-    void Octree::OctreeNode::get_inside_nodes(const math::AABB &aabb, std::vector<OctreeNode *> &nodes, int max_layer) {
-        if (!m_aabb.inside(aabb)) {
-            return;
-        }
-
-        if ((m_layer + 1) >= max_layer) {
-            nodes.push_back(this);
-            return;
-        }
-
-        for (auto child : m_children) {
-            child->get_inside_nodes(aabb, nodes, max_layer);
-        }
-    }
-
-    void Octree::OctreeNode::reset() {
-        if (m_values.empty()) {
-            return;
-        }
-
-        m_values.clear();
-        for (auto child : m_children) {
-            if (child == nullptr) {
-                break;
-            }
-
-            child->reset();
-        }
-    }
-
-    void Octree::OctreeNode::add_child(Octree::OctreeNode *node) {
-        m_children[m_count++] = node;
-    }
-
-    void Octree::OctreeNode::add_value(PhysicsObject *value, const math::AABB &aabb) {
-        m_values.push_back(value);
-        for (auto child : m_children) {
-            if (child == nullptr) {
-                break;
-            }
-
-            if (child->inside(aabb)) {
-                child->add_value(value, aabb);
-            }
-        }
-    }
-
     enum OctalPart {
         LeftUpperFurthest = 0,
         RightUpperFurthest = 1,
@@ -164,6 +110,60 @@ namespace physics {
             node->add_child(new_node);
 
             add_node_layers(new_node, new_center, half_size / 2.0f, layer + 1);
+        }
+    }
+
+    Octree::OctreeNode::OctreeNode(float half_size, const glm::vec3 &center_pos, int layer) : m_layer{layer}{
+        auto min = glm::vec3{ center_pos.x - half_size, center_pos.y - half_size, center_pos.z - half_size };
+        auto max = glm::vec3{ center_pos.x + half_size, center_pos.y + half_size, center_pos.z + half_size };
+
+        m_aabb = math::AABB { min, max };
+    }
+
+    void Octree::OctreeNode::get_inside_nodes(const math::AABB &aabb, std::vector<OctreeNode *> &nodes, int max_layer) {
+        if (!m_aabb.inside(aabb)) {
+            return;
+        }
+
+        if ((m_layer + 1) >= max_layer) {
+            nodes.push_back(this);
+            return;
+        }
+
+        for (auto child : m_children) {
+            child->get_inside_nodes(aabb, nodes, max_layer);
+        }
+    }
+
+    void Octree::OctreeNode::reset() {
+        if (m_values.empty()) {
+            return;
+        }
+
+        m_values.clear();
+        for (auto child : m_children) {
+            if (child == nullptr) {
+                break;
+            }
+
+            child->reset();
+        }
+    }
+
+    void Octree::OctreeNode::add_child(Octree::OctreeNode *node) {
+        m_children[m_count++] = node;
+    }
+
+    void Octree::OctreeNode::add_value(PhysicsObject *value, const math::AABB &aabb) {
+        m_values.push_back(value);
+        for (auto child : m_children) {
+            if (child == nullptr) {
+                break;
+            }
+
+            if (child->inside(aabb)) {
+                child->add_value(value, aabb);
+            }
         }
     }
 }
