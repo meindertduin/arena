@@ -1,5 +1,8 @@
 #include "octree.h"
 
+#include "collision.h"
+#include "../entity/ec_collision_object.h"
+
 namespace physics {
     enum OctalPart {
         LeftUpperFurthest = 0,
@@ -45,17 +48,21 @@ namespace physics {
         add_node_layers(m_root, center, quarter_size, 1);
     }
 
-    void Octree::fill_with_objects(const std::vector<PhysicsObject*> &physics_objects) {
-        for (auto object : physics_objects) {
-            auto aabb = object->rigid_body()->collider()->aabb().transformed(object->transform()->pos);
+    void Octree::fill_with_objects(const std::vector<entity::Entity>& entities) {
+        for (auto object : entities) {
+            // TODO, decide some place else when objects get added
+            auto &collision_object = object.get<entity::ECCollisionObject>();
+            auto aabb = collision_object.collider()->aabb().transformed(collision_object.transform()->pos);
             m_root->add_value(object, aabb);
         }
     }
 
-    std::vector<Octree::OctreeNode*> Octree::get_colliding_nodes(const PhysicsObject &object) {
+    std::vector<Octree::OctreeNode*> Octree::get_colliding_nodes(entity::Entity entity) {
         std::vector<OctreeNode*> nodes;
-        auto aabb = object.rigid_body()->collider()->aabb()
-                .transformed(object.transform()->pos);
+        auto &collsion_object = entity.get<entity::ECCollisionObject>();
+
+        auto aabb = collsion_object.collider()->aabb()
+                .transformed(collsion_object.transform()->pos);
 
         if (!m_root->inside(aabb)) {
             return nodes;
@@ -69,12 +76,12 @@ namespace physics {
         return nodes;
     }
 
-    std::set<PhysicsObject*> Octree::get_colliding_objects(const PhysicsObject &object) {
-        std::set<PhysicsObject*> colliding_objects;
+    std::set<entity::Entity> Octree::get_colliding_objects(entity::Entity object) {
+        std::set<entity::Entity> colliding_objects;
         auto colliding_nodes = get_colliding_nodes(object);
         for (auto node : colliding_nodes) {
             for (auto value : node->values()) {
-                if (object.entity() == value->entity()) {
+                if (object == value) {
                     continue;
                 }
 
@@ -154,15 +161,15 @@ namespace physics {
         m_children[m_count++] = node;
     }
 
-    void Octree::OctreeNode::add_value(PhysicsObject *value, const math::AABB &aabb) {
-        m_values.push_back(value);
+    void Octree::OctreeNode::add_value(entity::Entity entity, const math::AABB &aabb) {
+        m_values.push_back(entity);
         for (auto child : m_children) {
             if (child == nullptr) {
                 break;
             }
 
             if (child->inside(aabb)) {
-                child->add_value(value, aabb);
+                child->add_value(entity, aabb);
             }
         }
     }

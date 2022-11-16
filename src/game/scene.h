@@ -2,7 +2,6 @@
 
 #include <vector>
 #include "../graphics/light.h"
-#include "../physics/physics_object.h"
 #include "../entity/camera.h"
 #include "../entity/entity.h"
 #include "../graphics/skybox.h"
@@ -37,7 +36,6 @@ namespace game {
 
         std::vector<graphics::DirLight> m_dir_lights;
         std::vector<graphics::PointLight> m_point_lights;
-        std::vector<physics::PhysicsObject*> m_physics_objects;
 
         entity::Camera m_camera;
 

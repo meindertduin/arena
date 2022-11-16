@@ -3,9 +3,9 @@
 #include <array>
 #include <vector>
 #include "../math/box.h"
-#include "physics_object.h"
-
+#include "../entity/entity.h"
 #include <algorithm>
+#include <set>
 
 namespace physics {
     class Octree {
@@ -14,8 +14,8 @@ namespace physics {
     public:
         Octree(float half_size, int max_layers);
 
-        std::set<PhysicsObject*> get_colliding_objects(const PhysicsObject &object);
-        void fill_with_objects(const std::vector<PhysicsObject*>& physics_objects);
+        std::set<entity::Entity> get_colliding_objects(entity::Entity object);
+        void fill_with_objects(const std::vector<entity::Entity>& entities);
         void reset();
     private:
         OctreeNode* m_root;
@@ -25,7 +25,7 @@ namespace physics {
 
         void add_node_layers(OctreeNode *node, const glm::vec3 &center, float half_size, int layer) const;
         static int get_max_layer(float smallest_half, int max_layer, float grid_size);
-        std::vector<OctreeNode *> get_colliding_nodes(const PhysicsObject &object);
+        std::vector<OctreeNode *> get_colliding_nodes(entity::Entity entity);
 
     private:
         class OctreeNode {
@@ -42,14 +42,14 @@ namespace physics {
 
             void add_child(OctreeNode *node);
 
-            void add_value(PhysicsObject* value, const math::AABB &aabb);
+            void add_value(entity::Entity entity, const math::AABB &aabb);
 
             constexpr auto begin() { return m_children.begin(); }
             constexpr auto end() { return m_children.end(); }
 
-            constexpr ALWAYS_INLINE std::vector<PhysicsObject*> values() { return m_values; }
+            constexpr ALWAYS_INLINE std::vector<entity::Entity> values() { return m_values; }
         private:
-            std::vector<PhysicsObject*> m_values;
+            std::vector<entity::Entity> m_values;
             math::AABB m_aabb;
             std::array<OctreeNode*, 8> m_children{};
 

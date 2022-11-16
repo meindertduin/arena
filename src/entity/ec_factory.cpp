@@ -2,7 +2,6 @@
 #include "../global.h"
 #include "ec_transform.h"
 #include "ec_first_person_camera.h"
-#include "ec_physics.h"
 #include "ec_control.h"
 #include "ec_rigid_body.h"
 #include "../game/game_state.h"

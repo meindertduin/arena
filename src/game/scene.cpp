@@ -4,6 +4,7 @@
 
 #include "../graphics/graphic_options.h"
 #include "../entity/ec_factory.h"
+#include "../entity/ec_collision_object.h"
 
 namespace game {
     void Scene::init() {
@@ -33,7 +34,14 @@ namespace game {
 
     void Scene::update() {
         m_octree.reset();
-        m_octree.fill_with_objects(m_physics_objects);
+        // TODO optimize
+        auto collision_objects = global.ecs->get_component_array<entity::ECCollisionObject>();
+        std::vector<entity::Entity> collision_entities;
+        for (auto &[_, collision_object] : *collision_objects) {
+            collision_entities.push_back(collision_object.entity);
+        }
+
+        m_octree.fill_with_objects(collision_entities);
     }
 
     void Scene::render() {
@@ -45,11 +53,5 @@ namespace game {
     Scene::Scene() :
         m_camera{global.graphic_options->size().width(), global.graphic_options->size().height()}
     {
-    }
-
-    void Scene::register_entity(entity::Entity entity) {
-        if (entity.has_component<entity::ECTransform>() && entity.has_component<entity::ECRigidBody>()) {
-            m_physics_objects.push_back(new physics::PhysicsObject { entity });
-        }
     }
 }
