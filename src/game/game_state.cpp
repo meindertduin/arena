@@ -8,19 +8,6 @@
 
 namespace game {
     void GameState::init() {
-       // loading map
-        this->cube = global.ecs->create_entity();
-        auto collision = entity::ECRigidBody(false);
-
-        auto tree_mesh = m_cache.get_resource<graphics::Mesh>("assets/fan_tree.obj");
-
-        auto mesh_renderer = entity::EcStaticMeshRenderer(tree_mesh);
-        collision.set_collider(std::make_shared<physics::MeshCollider>(tree_mesh));
-
-        this->cube.add(mesh_renderer);
-        this->cube.add(collision);
-        this->cube.add(entity::ECTransform({ 0, -24, -10 }, {}));
-
         m_active_scene->init();
     }
 

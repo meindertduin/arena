@@ -25,9 +25,6 @@ namespace game {
         GameState(const GameState&) = delete;
         GameState& operator=(const GameState&) = delete;
 
-        // TODO remove and implement entity storage
-        entity::Entity cube{};
-
         constexpr ALWAYS_INLINE bool ui_mode() const { return m_ui_mode; }
         ALWAYS_INLINE void set_ui_mode(bool new_ui_mode) { m_ui_mode = new_ui_mode; }
 

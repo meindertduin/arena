@@ -1,9 +1,9 @@
 #include "scene.h"
 #include "../global.h"
-#include "../entity/ec_player.h"
 #include "../entity/systems_collection.h"
 
 #include "../graphics/graphic_options.h"
+#include "../entity/ec_factory.h"
 
 namespace game {
     void Scene::init() {
@@ -26,7 +26,8 @@ namespace game {
 
         this->m_map = std::make_unique<Map>();
 
-        this->m_player = entity::ECPlayer::create(global.ecs->create_entity());
+       m_player = entity::ECFactory::create_player();
+        entity::ECFactory::create_tree();
 
         auto collision_component_array = global.ecs->get_component_array<entity::ECRigidBody>();
         for (auto &col : *collision_component_array) {
