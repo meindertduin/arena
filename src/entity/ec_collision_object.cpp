@@ -2,7 +2,7 @@
 #include "../physics/collision.h"
 
 namespace entity {
-    physics::CollisionPoints ECCollisionObject::test_collision(const ECCollisionObject &other) {
-        return m_collider->test_collision(*m_transform, other.collider().get(), *other.transform());
+    physics::CollisionPoints ECCollisionObject::test_collision(ECCollisionObject &other) {
+        return m_collider->test_collision(transform(), other.collider().get(), other.transform());
     }
 }

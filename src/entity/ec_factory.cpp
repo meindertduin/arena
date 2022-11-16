@@ -5,6 +5,7 @@
 #include "ec_control.h"
 #include "ec_rigid_body.h"
 #include "../game/game_state.h"
+#include "../physics/collision.h"
 
 namespace entity {
     Entity ECFactory::create_player() {
@@ -13,7 +14,6 @@ namespace entity {
         auto transform = ECTransform();
         e.add(transform);
         e.add(ECFirstPersonCamera());
-        e.add(ECPhysics());
         e.add(ECControl());
 
         auto collision = ECRigidBody(true);

@@ -11,13 +11,12 @@ namespace entity {
         glm::vec3 force;
         float mass { 50 };
 
-        explicit ECRigidBody(bool is_dynamic, ECTransform *transform) :
-            ECCollisionObject(is_dynamic, transform)
+        explicit ECRigidBody(bool is_dynamic) :
+            ECCollisionObject(is_dynamic)
         {}
 
-        ECRigidBody(bool detect_collisions, bool is_dynamic, ECTransform *transform) :
-            ECCollisionObject(detect_collisions ,is_dynamic, transform)
-        {}
+        ECRigidBody(bool detect_collisions, bool is_dynamic)
+            : ECCollisionObject(detect_collisions, is_dynamic) {}
     private:
     };
 

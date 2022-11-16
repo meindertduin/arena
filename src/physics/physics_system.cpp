@@ -9,11 +9,12 @@ namespace physics {
         auto collision_component_array = global.ecs->get_component_array<entity::ECCollisionObject>();
         for (auto entity_a : entities) {
             auto &rigid_body = entity_a.get<entity::ECRigidBody>();
+            auto &transform = rigid_body.transform();
 
             rigid_body.force += rigid_body.mass * m_gravity;
             rigid_body.velocity += rigid_body.force / rigid_body.mass * 1.0f/60.0f;
 
-            rigid_body.transform()->move(rigid_body.velocity, - 1.0f/60.0f);
+            transform.move(rigid_body.velocity, - 1.0f/60.0f);
 
             rigid_body.force = glm::vec3 { 0, 0, 0 };
 
@@ -39,10 +40,10 @@ namespace physics {
             // Terrain collision
             auto terrain = global.game->active_scene()->map()->terrain;
             float height;
-            auto in_terrain_range = terrain->get_height(rigid_body.transform()->pos.x, rigid_body.transform()->pos.z, height);
+            auto in_terrain_range = terrain->get_height(transform.pos.x, transform.pos.z, height);
 
-            if (in_terrain_range && height > rigid_body.transform()->pos.y - 2) {
-                rigid_body.transform()->pos.y = height + 2;
+            if (in_terrain_range && height > transform.pos.y - 2) {
+                transform.pos.y = height + 2;
                 rigid_body.velocity = glm::vec3 { 0, 0, 0 };
             }
         }

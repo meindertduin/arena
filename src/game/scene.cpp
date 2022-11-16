@@ -28,8 +28,7 @@ namespace game {
         this->m_map = std::make_unique<Map>();
 
         m_player = entity::ECFactory::create_player();
-        register_entity(m_player);
-        register_entity(entity::ECFactory::create_tree());
+        entity::ECFactory::create_tree();
     }
 
     void Scene::update() {

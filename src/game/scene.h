@@ -41,7 +41,5 @@ namespace game {
 
         entity::Entity m_player{};
         physics::Octree m_octree { 500.0f, 8 };
-
-        void register_entity(entity::Entity entity);
     };
 }

@@ -52,7 +52,7 @@ namespace physics {
         for (auto object : entities) {
             // TODO, decide some place else when objects get added
             auto &collision_object = object.get<entity::ECCollisionObject>();
-            auto aabb = collision_object.collider()->aabb().transformed(collision_object.transform()->pos);
+            auto aabb = collision_object.collider()->aabb().transformed(collision_object.transform().pos);
             m_root->add_value(object, aabb);
         }
     }
@@ -62,7 +62,7 @@ namespace physics {
         auto &collsion_object = entity.get<entity::ECCollisionObject>();
 
         auto aabb = collsion_object.collider()->aabb()
-                .transformed(collsion_object.transform()->pos);
+                .transformed(collsion_object.transform().pos);
 
         if (!m_root->inside(aabb)) {
             return nodes;

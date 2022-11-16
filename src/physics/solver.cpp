@@ -8,9 +8,9 @@ namespace physics {
 
             auto resolution = collision.points.normal * (collision.points.depth / std::max(1, a_static + b_static));
             if (!a_static)
-                collision.collision_object_a->transform()->move(-resolution);
+                collision.collision_object_a->transform().move(-resolution);
             if (!b_static)
-                collision.collision_object_a->transform()->move(resolution);
+                collision.collision_object_a->transform().move(resolution);
         }
     }
 }
