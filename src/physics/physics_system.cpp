@@ -19,7 +19,9 @@ namespace physics {
 
             physics->force = glm::vec3 { 0, 0, 0 };
 
-            auto colliding_objects = global.game->octree().get_colliding_objects(phy_object_a);
+            auto colliding_objects = global.game->active_scene()->octree().get_colliding_objects(phy_object_a);
+
+            printf("colliding objects: %lu\n", colliding_objects.size());
 
             // Object collision
             std::vector<physics::Collision> collisions;
@@ -36,7 +38,7 @@ namespace physics {
             solver.solve(collisions, 0.0f);
 
             // Terrain collision
-            auto terrain = global.game->map()->terrain;
+            auto terrain = global.game->active_scene()->map()->terrain;
             float height;
             auto in_terrain_range = terrain->get_height(phy_object_a.transform()->pos.x, phy_object_a.transform()->pos.z, height);
 

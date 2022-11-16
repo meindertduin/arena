@@ -23,7 +23,7 @@ namespace input {
             command.degrees_x = mouse_x_offset * settings.mouse_sensitivity;
             command.degrees_y = mouse_y_offset * settings.mouse_sensitivity;
 
-            command.execute(global.game->player());
+            command.execute(global.game->active_scene()->player());
         }
     }
 
@@ -68,13 +68,13 @@ namespace input {
     bool InputManager::handle_player_command(const KeyCombination &combi, const KeyCombination &maskless_combi) {
         auto maskless_command_opt = key_bindings.get_player_command(maskless_combi);
         if (maskless_command_opt.has_value()) {
-            maskless_command_opt.value()->execute(global.game->player());
+            maskless_command_opt.value()->execute(global.game->active_scene()->player());
             return true;
         }
 
         auto command_opt = key_bindings.get_player_command(combi);
         if (command_opt.has_value()) {
-            command_opt.value()->execute(global.game->player());
+            command_opt.value()->execute(global.game->active_scene()->player());
             return true;
         }
 

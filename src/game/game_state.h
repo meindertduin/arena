@@ -8,6 +8,7 @@
 #include "../ui/ui.h"
 #include "../graphics/skybox.h"
 #include "../physics/octree.h"
+#include "scene.h"
 
 #include <thread>
 
@@ -36,15 +37,7 @@ namespace game {
         constexpr ALWAYS_INLINE ui::UI& ui() { return m_ui; }
 
         constexpr ALWAYS_INLINE assets::Cache& cache() { return m_cache; }
-        constexpr ALWAYS_INLINE entity::Entity player() const { return m_player; }
-        constexpr ALWAYS_INLINE graphics::Skybox& skybox() { return m_skybox; }
-        constexpr ALWAYS_INLINE std::unique_ptr<Map>& map() { return m_map; }
-
-        constexpr ALWAYS_INLINE std::vector<graphics::DirLight>& dir_lights() { return m_dir_lights; }
-        constexpr ALWAYS_INLINE std::vector<graphics::PointLight>& point_lights() { return m_point_lights; }
-        constexpr ALWAYS_INLINE entity::Camera& camera() { return m_camera; }
-
-        constexpr ALWAYS_INLINE physics::Octree& octree() { return m_octree; }
+        constexpr ALWAYS_INLINE std::unique_ptr<Scene>& active_scene() { return m_active_scene; }
 
         void init();
         void update();
@@ -55,16 +48,6 @@ namespace game {
         ui::UI m_ui;
 
         assets::Cache m_cache;
-        entity::Entity m_player{};
-        graphics::Skybox m_skybox;
-        std::unique_ptr<Map> m_map;
-
-        std::vector<graphics::DirLight> m_dir_lights;
-        std::vector<graphics::PointLight> m_point_lights;
-        std::vector<physics::PhysicsObject*> m_physics_objects;
-
-        physics::Octree m_octree { 500.0f, 8 };
-
-        entity::Camera m_camera;
+        std::unique_ptr<Scene> m_active_scene;
     };
 }
