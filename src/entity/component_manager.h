@@ -40,6 +40,11 @@ namespace entity {
             return get_component_array<T>()->get_opt(entity);
         }
 
+        template<typename T>
+        bool has_component(Entity entity) {
+            return get_component_array<T>()->has_component(entity);
+        }
+
         void entity_destroyed(Entity entity) {
             for (auto const &pair : component_arrays) {
                 pair.second->entity_destroyed(entity);

@@ -70,6 +70,11 @@ namespace entity {
             return component_manager->get_component_opt<T>(entity);
         }
 
+        template<typename T>
+        bool has_component(Entity entity) {
+            return component_manager->has_component<T>(entity);
+        }
+
         template<typename C>
         std::shared_ptr<ComponentArray<C>> get_component_array() {
             return component_manager->template get_component_array<C>();

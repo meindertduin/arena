@@ -13,11 +13,13 @@ namespace game {
     class Scene {
     public:
         Scene();
+
         constexpr ALWAYS_INLINE graphics::Skybox& skybox() { return m_skybox; }
         constexpr ALWAYS_INLINE std::unique_ptr<Map>& map() { return m_map; }
 
         constexpr ALWAYS_INLINE std::vector<graphics::DirLight>& dir_lights() { return m_dir_lights; }
         constexpr ALWAYS_INLINE std::vector<graphics::PointLight>& point_lights() { return m_point_lights; }
+
         constexpr ALWAYS_INLINE entity::Camera& camera() { return m_camera; }
 
         constexpr ALWAYS_INLINE entity::Entity player() { return m_player; }
@@ -26,9 +28,12 @@ namespace game {
         void init();
         void update();
         void render();
+
     private:
         graphics::Skybox m_skybox;
         std::unique_ptr<Map> m_map;
+
+        std::unordered_map<int, entity::Entity> m_entities;
 
         std::vector<graphics::DirLight> m_dir_lights;
         std::vector<graphics::PointLight> m_point_lights;
@@ -38,5 +43,7 @@ namespace game {
 
         entity::Entity m_player{};
         physics::Octree m_octree { 500.0f, 8 };
+
+        void register_entity(entity::Entity entity);
     };
 }

@@ -26,13 +26,9 @@ namespace game {
 
         this->m_map = std::make_unique<Map>();
 
-       m_player = entity::ECFactory::create_player();
-        entity::ECFactory::create_tree();
-
-        auto collision_component_array = global.ecs->get_component_array<entity::ECRigidBody>();
-        for (auto &col : *collision_component_array) {
-            m_physics_objects.push_back(new physics::PhysicsObject { col.second.entity });
-        }
+        m_player = entity::ECFactory::create_player();
+        register_entity(m_player);
+        register_entity(entity::ECFactory::create_tree());
     }
 
     void Scene::update() {
@@ -49,5 +45,11 @@ namespace game {
     Scene::Scene() :
         m_camera{global.graphic_options->size().width(), global.graphic_options->size().height()}
     {
+    }
+
+    void Scene::register_entity(entity::Entity entity) {
+        if (entity.has_component<entity::ECTransform>() && entity.has_component<entity::ECRigidBody>()) {
+            m_physics_objects.push_back(new physics::PhysicsObject { entity });
+        }
     }
 }

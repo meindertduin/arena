@@ -35,6 +35,11 @@ namespace entity {
         }
 
         template<typename C>
+        inline bool has_component() const {
+            return this->p->template has_component<C>(*this);
+        }
+
+        template<typename C>
         inline void add(C component) const {
             this->p->template add_component<C>(*this, component);
         }
@@ -52,7 +57,7 @@ namespace entity {
             return this->id <=> rhs.id;
         }
 
-        inline void destory() const {
+        inline void destroy() const {
             this->p->template destroy_entity(*this);
         }
 

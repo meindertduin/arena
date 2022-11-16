@@ -54,6 +54,10 @@ namespace entity {
             return &component_it->second;
         }
 
+        bool has_component(Entity entity) {
+            return components.contains(entity.id);
+        }
+
         void entity_destroyed(Entity entity) override {
             remove(entity);
         }
