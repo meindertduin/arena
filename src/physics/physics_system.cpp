@@ -6,10 +6,9 @@
 
 namespace physics {
     void PhysicsSystem::update() {
-        auto collision_component_array = global.ecs->get_component_array<entity::ECCollisionObject>();
         for (auto entity_a : entities) {
             auto &rigid_body = entity_a.get<entity::ECRigidBody>();
-            auto &transform = rigid_body.transform();
+            auto &transform = entity_a.get<entity::ECTransform>();
 
             rigid_body.force += rigid_body.mass * m_gravity;
             rigid_body.velocity += rigid_body.force / rigid_body.mass * 1.0f/60.0f;

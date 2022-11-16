@@ -7,6 +7,7 @@
 namespace entity {
     DECL_COMPONENT_INIT(ECTransform) {}
     DECL_COMPONENT_INIT(ECControl) {}
+
     DECL_COMPONENT_INIT(ECCollisionObject) {}
     DECL_COMPONENT_INIT(ECRigidBody) {}
 

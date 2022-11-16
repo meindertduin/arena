@@ -10,7 +10,6 @@
 namespace entity {
     Entity ECFactory::create_player() {
         auto e = global.ecs->create_entity();
-
         auto transform = ECTransform();
         e.add(transform);
         e.add(ECFirstPersonCamera());
@@ -30,7 +29,8 @@ namespace entity {
 
     Entity ECFactory::create_tree() {
         auto e = global.ecs->create_entity();
-        auto collision = entity::ECRigidBody(false);
+        e.add(entity::ECTransform({ 0, -24, -10 }, {}));
+        auto collision = entity::ECCollisionObject(false);
 
         auto tree_mesh = global.game->cache().get_resource<graphics::Mesh>("assets/fan_tree.obj");
 
@@ -39,7 +39,6 @@ namespace entity {
 
         e.add(mesh_renderer);
         e.add(collision);
-        e.add(entity::ECTransform({ 0, -24, -10 }, {}));
 
         return e;
     }
