@@ -23,4 +23,14 @@ namespace physics {
                 return { center.x + quarter_size, center.y - quarter_size, center.z - quarter_size };
         }
     }
+
+    int get_max_layer(float smallest_half, int max_layer, float grid_size) {
+        if (smallest_half > grid_size) {
+            max_layer--;
+            grid_size*= 2;
+            get_max_layer(smallest_half, max_layer, grid_size);
+        }
+
+        return max_layer;
+    }
 }

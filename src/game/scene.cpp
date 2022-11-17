@@ -33,14 +33,8 @@ namespace game {
     void Scene::update() {
         m_octree.reset();
         // TODO optimize
-        auto collision_objects = global.ecs->get_component_array<entity::ECCollisionObject>();
-        std::vector<entity::ECCollisionObject*> collision_components;
-        for (auto &[_, collision_object] : *collision_objects) {
-            auto collision_component = collision_object.entity.get_ptr<entity::ECCollisionObject>();
-            collision_components.push_back(collision_component);
-        }
-
-        m_octree.fill_with_objects(collision_components);
+        auto collision_objects = global.ecs->get_component_array<entity::ECCollisionObject>()->values();
+        m_octree.fill_with_objects(collision_objects);
     }
 
     void Scene::render() {

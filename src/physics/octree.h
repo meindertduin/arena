@@ -26,6 +26,7 @@ namespace physics {
     };
 
     glm::vec3 create_octal_center(OctalPart part, const glm::vec3 &center, float quarter_size);
+    int get_max_layer(float smallest_half, int max_layer, float grid_size);
 
     template<CollisionComponent T>
     class Octree {
@@ -90,16 +91,6 @@ namespace physics {
 
                 add_node_layers(new_node, new_center, half_size / 2.0f, layer + 1);
             }
-        }
-
-        static int get_max_layer(float smallest_half, int max_layer, float grid_size) {
-            if (smallest_half > grid_size) {
-                max_layer--;
-                grid_size*= 2;
-                get_max_layer(smallest_half, max_layer, grid_size);
-            }
-
-            return max_layer;
         }
 
         std::vector<OctreeNode<T*>*> get_colliding_nodes(entity::ECRigidBody& object) {

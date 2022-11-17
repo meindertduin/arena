@@ -16,6 +16,14 @@ namespace entity {
     template<typename T>
     class ComponentArray : public IComponentArray {
     public:
+        std::vector<T*> values() {
+            std::vector<T*> result;
+            for (auto &[_, component] : components)
+                result.push_back(&component);
+
+            return result;
+        }
+
         void insert(Entity entity, T component) {
             if (components.find(entity.id) != components.end()) {
                 THROW_ERROR("Cannot insert entity that already exists");
