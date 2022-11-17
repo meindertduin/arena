@@ -19,7 +19,7 @@ namespace physics {
 
     struct Collision {
         entity::ECRigidBody *collision_object_a;
-        entity::ECCollisionObject *collision_object_b;
+        entity::CollisionObject *collision_object_b;
         CollisionPoints points;
     };
 

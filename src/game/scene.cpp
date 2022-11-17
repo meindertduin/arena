@@ -35,7 +35,9 @@ namespace game {
     }
 
     void Scene::update() {
-
+        m_dynamic_octree.reset();
+        auto collision_objects = global.ecs->get_component_array<entity::ECRigidBody>()->values();
+        m_dynamic_octree.fill_with_objects(collision_objects);
     }
 
     void Scene::render() {

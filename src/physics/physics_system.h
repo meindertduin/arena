@@ -10,5 +10,7 @@ namespace physics {
         void update() override;
     private:
         glm::vec3 m_gravity { 0, 9.81, 0 };
+
+        static void get_collisions(entity::ECRigidBody &rigid_body, std::vector<physics::Collision> &collisions) ;
     };
 }

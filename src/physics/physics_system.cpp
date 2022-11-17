@@ -17,20 +17,8 @@ namespace physics {
 
             rigid_body.force = glm::vec3 { 0, 0, 0 };
 
-            auto colliding_objects = global.game->active_scene()->static_octree().get_colliding_objects(rigid_body);
-
-            printf("colliding objects: %lu\n", colliding_objects.size());
-
-            // Object collision
             std::vector<physics::Collision> collisions;
-
-            for (auto value : colliding_objects) {
-                auto collision_points = rigid_body.test_collision(value);
-
-                if (collision_points.has_collision) {
-                    collisions.push_back(physics::Collision { &rigid_body, value, collision_points });
-                }
-            }
+            get_collisions(rigid_body, collisions);
 
             physics::PositionSolver solver;
             solver.solve(collisions, 0.0f);
@@ -43,6 +31,30 @@ namespace physics {
             if (in_terrain_range && height > transform.pos.y - 2) {
                 transform.pos.y = height + 2;
                 rigid_body.velocity = glm::vec3 { 0, 0, 0 };
+            }
+        }
+    }
+
+    void PhysicsSystem::get_collisions(entity::ECRigidBody &rigid_body, std::vector<physics::Collision> &collisions) {
+        auto colliding_static_objects = global.game->active_scene()->static_octree().get_colliding_objects(rigid_body);
+        auto colliding_dynamic_objects = global.game->active_scene()->dynamic_octree().get_colliding_objects(rigid_body);
+
+        printf("colliding objects: %lu\n", colliding_static_objects.size());
+
+        // Object collision
+        for (auto value : colliding_static_objects) {
+            auto collision_points = rigid_body.test_collision(value);
+
+            if (collision_points.has_collision) {
+                collisions.push_back(Collision {&rigid_body, value, collision_points });
+            }
+        }
+
+        for (auto value : colliding_dynamic_objects) {
+            auto collision_points = rigid_body.test_collision(value);
+
+            if (collision_points.has_collision) {
+                collisions.push_back(Collision {&rigid_body, value, collision_points });
             }
         }
     }

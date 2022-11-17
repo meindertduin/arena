@@ -23,6 +23,7 @@ namespace game {
 
         constexpr ALWAYS_INLINE entity::Entity player() { return m_player; }
         constexpr ALWAYS_INLINE physics::Octree<entity::ECCollisionObject>& static_octree() { return m_static_octree; }
+        constexpr ALWAYS_INLINE physics::Octree<entity::ECRigidBody>& dynamic_octree() { return m_dynamic_octree; }
 
         void init();
         void update();
@@ -41,5 +42,6 @@ namespace game {
 
         entity::Entity m_player{};
         physics::Octree<entity::ECCollisionObject> m_static_octree {500.0f, 8 };
+        physics::Octree<entity::ECRigidBody> m_dynamic_octree {500.0f, 8 };
     };
 }
