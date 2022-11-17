@@ -45,6 +45,15 @@ namespace entity {
             return component_it->second;
         }
 
+        T* get_ptr(Entity entity) {
+            auto component_it = components.find(entity.id);
+            if (component_it == components.end()) {
+                THROW_ERROR("Component is not registered for entity.");
+            }
+
+            return &component_it->second;
+        }
+
         std::optional<T*> get_opt(Entity entity) {
             auto component_it = components.find(entity.id);
             if (component_it == components.end()) {

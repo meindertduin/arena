@@ -30,6 +30,11 @@ namespace entity {
         }
 
         template<typename C>
+        inline C* get_ptr() const {
+            return this->p->template get_component_ptr<C>(*this);
+        }
+
+        template<typename C>
         inline std::optional<C*> get_opt() const {
             return this->p->template get_component_opt<C>(*this);
         }

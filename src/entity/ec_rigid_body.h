@@ -12,14 +12,20 @@ namespace entity {
         float mass { 50 };
 
         explicit ECRigidBody(bool is_dynamic) :
-            CollisionObject(is_dynamic)
-        {}
+            CollisionObject(is_dynamic),
+            Component<ECRigidBody>()
+        {
+            mp_transform = entity.get_ptr<ECTransform>();
+        }
 
         ECRigidBody(bool detect_collisions, bool is_dynamic)
-            : CollisionObject(detect_collisions, is_dynamic) {}
+            : CollisionObject(detect_collisions, is_dynamic),
+              Component<ECRigidBody>()
+        {
+            mp_transform = entity.get_ptr<ECTransform>();
+        }
 
         [[nodiscard]] physics::CollisionPoints test_collision(const ECCollisionObject &other);
-    private:
     };
 
     DECL_COMPONENT_HEADER(ECRigidBody);

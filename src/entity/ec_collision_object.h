@@ -29,6 +29,11 @@ namespace entity {
         [[nodiscard]] constexpr ALWAYS_INLINE bool is_static() const { return m_is_static; }
         [[nodiscard]] constexpr ALWAYS_INLINE bool is_dynamic() const { return m_is_dynamic; }
         [[nodiscard]] constexpr ALWAYS_INLINE bool detect_collisions() const { return m_detect_collisions; }
+
+        [[nodiscard]] constexpr ALWAYS_INLINE const entity::ECTransform* transform() const { return mp_transform; }
+        [[nodiscard]] constexpr ALWAYS_INLINE entity::ECTransform* transform() { return mp_transform; }
+    protected:
+        entity::ECTransform *mp_transform { nullptr };
     private:
         std::shared_ptr<physics::Collider> m_collider;
 
@@ -39,11 +44,19 @@ namespace entity {
 
     class ECCollisionObject : public Component<ECCollisionObject>, public CollisionObject {
     public:
-        explicit ECCollisionObject(bool is_dynamic) : CollisionObject(is_dynamic), Component<ECCollisionObject>() {}
+        explicit ECCollisionObject(bool is_dynamic) :
+            CollisionObject(is_dynamic),
+            Component<ECCollisionObject>()
+        {
+            mp_transform = entity.get_ptr<ECTransform>();
+        }
 
         ECCollisionObject(bool detect_collisions, bool is_dynamic) :
             CollisionObject(detect_collisions, is_dynamic),
-            Component<ECCollisionObject>() {}
+            Component<ECCollisionObject>()
+        {
+            mp_transform = entity.get_ptr<ECTransform>();
+        }
 
         [[nodiscard]] physics::CollisionPoints test_collision(const ECCollisionObject &other);
     };

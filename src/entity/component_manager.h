@@ -36,6 +36,11 @@ namespace entity {
         }
 
         template<typename T>
+        T* get_component_ptr(Entity entity) {
+            return get_component_array<T>()->get_ptr(entity);
+        }
+
+        template<typename T>
         std::optional<T*> get_component_opt(Entity entity) {
             return get_component_array<T>()->get_opt(entity);
         }

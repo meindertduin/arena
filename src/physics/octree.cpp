@@ -52,9 +52,8 @@ namespace physics {
         for (auto object : entities) {
             // TODO, decide some place else when objects get added
             auto &collision_object = object.get<entity::ECCollisionObject>();
-            auto &transform = object.get<entity::ECTransform>();
 
-            auto aabb = collision_object.collider()->aabb().transformed(transform.pos);
+            auto aabb = collision_object.collider()->aabb().transformed(collision_object.transform()->pos);
 
             m_root->add_value(object, aabb);
         }
@@ -63,10 +62,9 @@ namespace physics {
     std::vector<Octree::OctreeNode*> Octree::get_colliding_nodes(entity::Entity entity) {
         std::vector<OctreeNode*> nodes;
         auto &collision_object = entity.get<entity::ECRigidBody>();
-        auto &transform = entity.get<entity::ECTransform>();
 
         auto aabb = collision_object.collider()->aabb()
-                .transformed(transform.pos);
+                .transformed(collision_object.transform()->pos);
 
         if (!m_root->inside(aabb)) {
             return nodes;
