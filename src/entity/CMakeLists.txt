@@ -12,7 +12,6 @@ set(ENTITY_SOURCES
         src/entity/movement_system.cpp
         src/entity/movement_system.h
         src/entity/ec_rigid_body.h
-        src/entity/ec_rigid_body.cpp
         src/entity/ec_factory.h
         src/entity/ec_factory.cpp
         src/entity/ec_collision_object.h

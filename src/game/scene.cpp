@@ -28,13 +28,14 @@ namespace game {
 
         m_player = entity::ECFactory::create_player();
         entity::ECFactory::create_tree();
+
+        m_static_octree.reset();
+        auto collision_objects = global.ecs->get_component_array<entity::ECCollisionObject>()->values();
+        m_static_octree.fill_with_objects(collision_objects);
     }
 
     void Scene::update() {
-        m_octree.reset();
-        // TODO optimize
-        auto collision_objects = global.ecs->get_component_array<entity::ECCollisionObject>()->values();
-        m_octree.fill_with_objects(collision_objects);
+
     }
 
     void Scene::render() {

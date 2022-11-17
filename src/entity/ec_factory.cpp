@@ -5,7 +5,6 @@
 #include "ec_control.h"
 #include "ec_rigid_body.h"
 #include "../game/game_state.h"
-#include "../physics/collision.h"
 
 namespace entity {
     Entity ECFactory::create_player() {
@@ -15,7 +14,7 @@ namespace entity {
         e.add(ECFirstPersonCamera());
         e.add(ECControl());
 
-        auto collision = ECRigidBody(true);
+        auto collision = ECRigidBody(true, e.get_ptr<ECTransform>());
         auto cube = global.game->cache().get_resource<graphics::Mesh>("assets/fan_tree.obj");
         collision.set_collider(std::make_shared<physics::MeshCollider>(cube));
 
@@ -30,7 +29,7 @@ namespace entity {
     Entity ECFactory::create_tree() {
         auto e = global.ecs->create_entity();
         e.add(entity::ECTransform({ 0, -24, -10 }, {}));
-        auto collision = entity::ECCollisionObject(false);
+        auto collision = entity::ECCollisionObject(false, e.get_ptr<ECTransform>());
 
         auto tree_mesh = global.game->cache().get_resource<graphics::Mesh>("assets/fan_tree.obj");
 

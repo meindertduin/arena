@@ -22,7 +22,7 @@ namespace game {
         constexpr ALWAYS_INLINE entity::Camera& camera() { return m_camera; }
 
         constexpr ALWAYS_INLINE entity::Entity player() { return m_player; }
-        constexpr ALWAYS_INLINE physics::Octree<entity::ECCollisionObject>& octree() { return m_octree; }
+        constexpr ALWAYS_INLINE physics::Octree<entity::ECCollisionObject>& static_octree() { return m_static_octree; }
 
         void init();
         void update();
@@ -40,6 +40,6 @@ namespace game {
         entity::Camera m_camera;
 
         entity::Entity m_player{};
-        physics::Octree<entity::ECCollisionObject> m_octree { 500.0f, 8 };
+        physics::Octree<entity::ECCollisionObject> m_static_octree {500.0f, 8 };
     };
 }

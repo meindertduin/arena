@@ -12,15 +12,17 @@ namespace physics {
 namespace entity {
     class CollisionObject {
     public:
-        explicit CollisionObject(bool is_dynamic) :
+        explicit CollisionObject(bool is_dynamic, ECTransform *transform) :
             m_is_dynamic{is_dynamic},
-            m_is_static{!is_dynamic}
+            m_is_static{!is_dynamic},
+            mp_transform{transform}
         {}
 
-        CollisionObject(bool detect_collisions, bool is_dynamic) :
+        CollisionObject(bool detect_collisions, bool is_dynamic, ECTransform *transform) :
             m_detect_collisions{detect_collisions},
             m_is_dynamic{is_dynamic},
-            m_is_static{!is_dynamic}
+            m_is_static{!is_dynamic},
+            mp_transform{transform}
         {}
 
         [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<physics::Collider>& collider() const { return m_collider; }
@@ -32,6 +34,8 @@ namespace entity {
 
         [[nodiscard]] constexpr ALWAYS_INLINE const entity::ECTransform* transform() const { return mp_transform; }
         [[nodiscard]] constexpr ALWAYS_INLINE entity::ECTransform* transform() { return mp_transform; }
+
+        [[nodiscard]] physics::CollisionPoints test_collision(const CollisionObject *other);
     protected:
         entity::ECTransform *mp_transform { nullptr };
     private:
@@ -44,21 +48,15 @@ namespace entity {
 
     class ECCollisionObject : public Component<ECCollisionObject>, public CollisionObject {
     public:
-        explicit ECCollisionObject(bool is_dynamic) :
-            CollisionObject(is_dynamic),
+        explicit ECCollisionObject(bool is_dynamic, ECTransform *transform) :
+            CollisionObject(is_dynamic, transform),
             Component<ECCollisionObject>()
-        {
-            mp_transform = entity.get_ptr<ECTransform>();
-        }
+        {}
 
-        ECCollisionObject(bool detect_collisions, bool is_dynamic) :
-            CollisionObject(detect_collisions, is_dynamic),
+        ECCollisionObject(bool detect_collisions, bool is_dynamic, ECTransform *transform) :
+            CollisionObject(detect_collisions, is_dynamic, transform),
             Component<ECCollisionObject>()
-        {
-            mp_transform = entity.get_ptr<ECTransform>();
-        }
-
-        [[nodiscard]] physics::CollisionPoints test_collision(const ECCollisionObject &other);
+        {}
     };
 
     DECL_COMPONENT_HEADER(ECCollisionObject);

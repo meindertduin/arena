@@ -11,21 +11,15 @@ namespace entity {
         glm::vec3 force { 0 };
         float mass { 50 };
 
-        explicit ECRigidBody(bool is_dynamic) :
-            CollisionObject(is_dynamic),
+        explicit ECRigidBody(bool is_dynamic, ECTransform *transform) :
+            CollisionObject(is_dynamic, transform),
             Component<ECRigidBody>()
-        {
-            mp_transform = entity.get_ptr<ECTransform>();
-        }
+        {}
 
-        ECRigidBody(bool detect_collisions, bool is_dynamic)
-            : CollisionObject(detect_collisions, is_dynamic),
+        ECRigidBody(bool detect_collisions, bool is_dynamic, ECTransform *transform)
+            : CollisionObject(detect_collisions, is_dynamic, transform),
               Component<ECRigidBody>()
-        {
-            mp_transform = entity.get_ptr<ECTransform>();
-        }
-
-        [[nodiscard]] physics::CollisionPoints test_collision(const ECCollisionObject &other);
+        {}
     };
 
     DECL_COMPONENT_HEADER(ECRigidBody);
