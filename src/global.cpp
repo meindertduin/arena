@@ -36,7 +36,4 @@ void Global::init() {
     // initialize game state
     global.game = new game::GameState();
     global.game->init();
-
-    global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
-    global.texture = global.game->cache().get_resource<graphics::Texture>("assets/fan_tree.png");
 }

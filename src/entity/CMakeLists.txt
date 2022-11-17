@@ -7,7 +7,6 @@ set(ENTITY_SOURCES
         src/entity/ec_first_person_camera.cpp
         src/entity/ec_command.cpp
         src/entity/static_render_system.cpp
-        src/entity/ec_static_mesh.cpp
         src/entity/ec_control.h
         src/entity/movement_system.cpp
         src/entity/movement_system.h

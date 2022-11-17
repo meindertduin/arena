@@ -10,10 +10,13 @@
 namespace entity {
     class EcStaticMeshRenderer : public Component<EcStaticMeshRenderer> {
     public:
-        explicit EcStaticMeshRenderer(std::shared_ptr<graphics::Mesh> mesh);
+        explicit EcStaticMeshRenderer(std::shared_ptr<graphics::Mesh> mesh, std::shared_ptr<graphics::Material> material) :
+            Component(),
+            mesh{std::move(mesh)},
+            material{std::move(material)}
+        {}
 
-        graphics::Material *material = nullptr;
-        std::shared_ptr<graphics::Texture> texture;
+        std::shared_ptr<graphics::Material> material;
         std::shared_ptr<graphics::Mesh> mesh;
     };
 

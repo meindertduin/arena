@@ -23,20 +23,20 @@ namespace graphics {
         set_ubo_data();
     }
 
-    void Renderer::render(const Renderable *mesh, const entity::ECTransform &transform) const {
+    void Renderer::render(const Renderable *mesh, const std::shared_ptr<Material>& material, const entity::ECTransform &transform) const {
         auto model_4x4 = transform.get_transform_4x4();
         glBlendFunc(GL_SRC_ALPHA, GL_SAMPLE_ALPHA_TO_ONE);
 
         shader.use();
-        global.texture->bind(0);
+        material->texture()->bind(0);
         global.game->active_scene()->skybox().bind_texture(1);
 
         shader.set_property("color", { 1.0f, 1.0f, 0 });
         shader.set_property("model", model_4x4);
 
-        shader.set_property("diffuse", global.material->diffuse);
-        shader.set_property("specular", global.material->specular);
-        shader.set_property("shininess", global.material->shininess);
+        shader.set_property("diffuse", material->diffuse);
+        shader.set_property("specular", material->specular);
+        shader.set_property("shininess", material->shininess);
 
         shader.set_property("viewPos", global.game->active_scene()->camera().transform.pos);
 
@@ -92,7 +92,7 @@ namespace graphics {
         shader.set_uniform_loc("bTexture", 4);
     }
 
-    void TerrainRenderer::render(const Terrain &terrain) const {
+    void TerrainRenderer::render(const Terrain &terrain, const std::shared_ptr<Material>& material) const {
         auto model_4x4 = terrain.transform.get_transform_4x4();
 
         shader.use();
@@ -100,9 +100,9 @@ namespace graphics {
         terrain.textures.bind();
         shader.set_property("model", model_4x4);
 
-        shader.set_property("diffuse", global.material->diffuse);
-        shader.set_property("specular", global.material->specular);
-        shader.set_property("shininess", global.material->shininess);
+        shader.set_property("diffuse", material->diffuse);
+        shader.set_property("specular", material->specular);
+        shader.set_property("shininess", material->shininess);
 
         shader.set_property("viewPos", global.game->active_scene()->camera().transform.pos);
 

@@ -47,8 +47,6 @@ public:
     entity::SystemsCollection *systems;
 
     graphics::GraphicOptions *graphic_options;
-    std::shared_ptr<graphics::Texture> texture;
-    graphics::Material *material;
 
     entity::Ecs *ecs;
 
