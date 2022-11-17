@@ -24,9 +24,7 @@ namespace graphics {
 
     class DirLight : public Light {
     public:
-        DirLight() {  }
-        ~DirLight() {  }
-        void set_data(SharedDataBuffer &buffer) {
+        void set_data(SharedDataBuffer &buffer) override {
             buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(direction));
             buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(ambient));
             buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(diffuse));
@@ -38,9 +36,7 @@ namespace graphics {
 
     class PointLight : public Light {
     public:
-        PointLight() {  }
-        ~PointLight() {  }
-        void set_data(SharedDataBuffer &buffer) {
+        void set_data(SharedDataBuffer &buffer) override {
             buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(position));
             buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(ambient));
             buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(diffuse));

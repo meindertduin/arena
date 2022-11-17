@@ -16,6 +16,14 @@ namespace entity {
     template<typename T>
     class ComponentArray : public IComponentArray {
     public:
+        std::vector<T*> values() {
+            std::vector<T*> result;
+            for (auto &[_, component] : components)
+                result.push_back(&component);
+
+            return result;
+        }
+
         void insert(Entity entity, T component) {
             if (components.find(entity.id) != components.end()) {
                 THROW_ERROR("Cannot insert entity that already exists");
@@ -45,6 +53,15 @@ namespace entity {
             return component_it->second;
         }
 
+        T* get_ptr(Entity entity) {
+            auto component_it = components.find(entity.id);
+            if (component_it == components.end()) {
+                THROW_ERROR("Component is not registered for entity.");
+            }
+
+            return &component_it->second;
+        }
+
         std::optional<T*> get_opt(Entity entity) {
             auto component_it = components.find(entity.id);
             if (component_it == components.end()) {
@@ -52,6 +69,10 @@ namespace entity {
             }
 
             return &component_it->second;
+        }
+
+        bool has_component(Entity entity) {
+            return components.contains(entity.id);
         }
 
         void entity_destroyed(Entity entity) override {

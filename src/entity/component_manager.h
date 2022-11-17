@@ -36,8 +36,18 @@ namespace entity {
         }
 
         template<typename T>
+        T* get_component_ptr(Entity entity) {
+            return get_component_array<T>()->get_ptr(entity);
+        }
+
+        template<typename T>
         std::optional<T*> get_component_opt(Entity entity) {
             return get_component_array<T>()->get_opt(entity);
+        }
+
+        template<typename T>
+        bool has_component(Entity entity) {
+            return get_component_array<T>()->has_component(entity);
         }
 
         void entity_destroyed(Entity entity) {

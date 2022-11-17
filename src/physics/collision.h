@@ -18,8 +18,8 @@ namespace physics {
     };
 
     struct Collision {
-        PhysicsObject *physics_object_a;
-        PhysicsObject *physics_object_b;
+        entity::ECRigidBody *collision_object_a;
+        entity::CollisionObject *collision_object_b;
         CollisionPoints points;
     };
 

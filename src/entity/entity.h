@@ -30,8 +30,18 @@ namespace entity {
         }
 
         template<typename C>
+        inline C* get_ptr() const {
+            return this->p->template get_component_ptr<C>(*this);
+        }
+
+        template<typename C>
         inline std::optional<C*> get_opt() const {
             return this->p->template get_component_opt<C>(*this);
+        }
+
+        template<typename C>
+        inline bool has_component() const {
+            return this->p->template has_component<C>(*this);
         }
 
         template<typename C>
@@ -52,7 +62,7 @@ namespace entity {
             return this->id <=> rhs.id;
         }
 
-        inline void destory() const {
+        inline void destroy() const {
             this->p->template destroy_entity(*this);
         }
 
