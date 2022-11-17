@@ -42,7 +42,7 @@ namespace physics {
         m_grid_size{half_size * (float) std::pow(0.5f, max_layers)}
     {
         auto center = glm::vec3 { 0 };
-        m_root = new OctreeNode { half_size, center, 0 };
+        m_root = new OctreeNode<entity::Entity> { half_size, center, 0 };
 
         auto quarter_size = half_size / 2.0f;
         add_node_layers(m_root, center, quarter_size, 1);
@@ -59,8 +59,8 @@ namespace physics {
         }
     }
 
-    std::vector<Octree::OctreeNode*> Octree::get_colliding_nodes(entity::Entity entity) {
-        std::vector<OctreeNode*> nodes;
+    std::vector<OctreeNode<entity::Entity>*> Octree::get_colliding_nodes(entity::Entity entity) {
+        std::vector<OctreeNode<entity::Entity>*> nodes;
         auto &collision_object = entity.get<entity::ECRigidBody>();
 
         auto aabb = collision_object.collider()->aabb()
@@ -108,71 +108,17 @@ namespace physics {
         m_root->reset();
     }
 
-    void Octree::add_node_layers(OctreeNode *node, const glm::vec3 &center, float half_size, int layer) const {
+    void Octree::add_node_layers(OctreeNode<entity::Entity> *node, const glm::vec3 &center, float half_size, int layer) const {
         if (layer >= m_max_layers) {
             return;
         }
 
         for (auto part = 0; part < 8; part++) {
             auto new_center = create_octal_center((OctalPart)part, center, half_size);
-            auto new_node = new OctreeNode { half_size, new_center, layer };
+            auto new_node = new OctreeNode<entity::Entity> { half_size, new_center, layer };
             node->add_child(new_node);
 
             add_node_layers(new_node, new_center, half_size / 2.0f, layer + 1);
-        }
-    }
-
-    Octree::OctreeNode::OctreeNode(float half_size, const glm::vec3 &center_pos, int layer) : m_layer{layer}{
-        auto min = glm::vec3{ center_pos.x - half_size, center_pos.y - half_size, center_pos.z - half_size };
-        auto max = glm::vec3{ center_pos.x + half_size, center_pos.y + half_size, center_pos.z + half_size };
-
-        m_aabb = math::AABB { min, max };
-    }
-
-    void Octree::OctreeNode::get_inside_nodes(const math::AABB &aabb, std::vector<OctreeNode *> &nodes, int max_layer) {
-        if (!m_aabb.inside(aabb)) {
-            return;
-        }
-
-        if ((m_layer + 1) >= max_layer) {
-            nodes.push_back(this);
-            return;
-        }
-
-        for (auto child : m_children) {
-            child->get_inside_nodes(aabb, nodes, max_layer);
-        }
-    }
-
-    void Octree::OctreeNode::reset() {
-        if (m_values.empty()) {
-            return;
-        }
-
-        m_values.clear();
-        for (auto child : m_children) {
-            if (child == nullptr) {
-                break;
-            }
-
-            child->reset();
-        }
-    }
-
-    void Octree::OctreeNode::add_child(Octree::OctreeNode *node) {
-        m_children[m_count++] = node;
-    }
-
-    void Octree::OctreeNode::add_value(entity::Entity entity, const math::AABB &aabb) {
-        m_values.push_back(entity);
-        for (auto child : m_children) {
-            if (child == nullptr) {
-                break;
-            }
-
-            if (child->inside(aabb)) {
-                child->add_value(entity, aabb);
-            }
         }
     }
 }

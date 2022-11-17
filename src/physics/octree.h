@@ -1,16 +1,16 @@
 #pragma once
 
 #include <array>
-#include <vector>
-#include "../math/box.h"
 #include "../entity/entity.h"
+#include "collision.h"
+#include "../entity/ec_collision_object.h"
+#include "octree_node.h"
 #include <algorithm>
 #include <set>
 
 namespace physics {
+
     class Octree {
-    private:
-        class OctreeNode;
     public:
         Octree(float half_size, int max_layers);
 
@@ -18,43 +18,13 @@ namespace physics {
         void fill_with_objects(const std::vector<entity::Entity>& entities);
         void reset();
     private:
-        OctreeNode* m_root;
+        OctreeNode<entity::Entity>* m_root;
         int m_max_layers;
         float m_half_size;
         float m_grid_size;
 
-        void add_node_layers(OctreeNode *node, const glm::vec3 &center, float half_size, int layer) const;
+        void add_node_layers(OctreeNode<entity::Entity> *node, const glm::vec3 &center, float half_size, int layer) const;
         static int get_max_layer(float smallest_half, int max_layer, float grid_size);
-        std::vector<OctreeNode *> get_colliding_nodes(entity::Entity entity);
-
-    private:
-        class OctreeNode {
-        public:
-            OctreeNode(float half_size, const glm::vec3 & center_pos, int layer);
-
-            [[nodiscard]] bool inside(const math::AABB &other) const {
-                return m_aabb.inside(other);
-            }
-
-            void get_inside_nodes(const math::AABB &aabb, std::vector<OctreeNode*> &nodes, int max_layer);
-
-            void reset();
-
-            void add_child(OctreeNode *node);
-
-            void add_value(entity::Entity entity, const math::AABB &aabb);
-
-            constexpr auto begin() { return m_children.begin(); }
-            constexpr auto end() { return m_children.end(); }
-
-            constexpr ALWAYS_INLINE std::vector<entity::Entity> values() { return m_values; }
-        private:
-            std::vector<entity::Entity> m_values;
-            math::AABB m_aabb;
-            std::array<OctreeNode*, 8> m_children{};
-
-            int m_count {0};
-            int m_layer{0};
-        };
+        std::vector<OctreeNode<entity::Entity>*> get_colliding_nodes(entity::Entity entity);
     };
 }
