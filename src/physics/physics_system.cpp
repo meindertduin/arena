@@ -17,7 +17,7 @@ namespace physics {
 
             rigid_body.force = glm::vec3 { 0, 0, 0 };
 
-            auto colliding_objects = global.game->active_scene()->octree().get_colliding_objects(entity_a);
+            auto colliding_objects = global.game->active_scene()->octree().get_colliding_objects(rigid_body);
 
             printf("colliding objects: %lu\n", colliding_objects.size());
 
@@ -25,11 +25,10 @@ namespace physics {
             std::vector<physics::Collision> collisions;
 
             for (auto value : colliding_objects) {
-                auto &other_collision_object = value.get<entity::ECCollisionObject>();
-                auto collision_points = rigid_body.test_collision(other_collision_object);
+                auto collision_points = rigid_body.test_collision(*value);
 
                 if (collision_points.has_collision) {
-                    collisions.push_back(physics::Collision { &rigid_body, &other_collision_object, collision_points });
+                    collisions.push_back(physics::Collision { &rigid_body, value, collision_points });
                 }
             }
 

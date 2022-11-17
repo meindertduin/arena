@@ -4,7 +4,6 @@
 
 #include "../graphics/graphic_options.h"
 #include "../entity/ec_factory.h"
-#include "../entity/ec_collision_object.h"
 
 namespace game {
     void Scene::init() {
@@ -35,12 +34,13 @@ namespace game {
         m_octree.reset();
         // TODO optimize
         auto collision_objects = global.ecs->get_component_array<entity::ECCollisionObject>();
-        std::vector<entity::Entity> collision_entities;
+        std::vector<entity::ECCollisionObject*> collision_components;
         for (auto &[_, collision_object] : *collision_objects) {
-            collision_entities.push_back(collision_object.entity);
+            auto collision_component = collision_object.entity.get_ptr<entity::ECCollisionObject>();
+            collision_components.push_back(collision_component);
         }
 
-        m_octree.fill_with_objects(collision_entities);
+        m_octree.fill_with_objects(collision_components);
     }
 
     void Scene::render() {

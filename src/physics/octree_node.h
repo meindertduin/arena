@@ -56,15 +56,15 @@ namespace physics {
             m_children[m_count++] = node;
         }
 
-        void add_value(entity::Entity entity, const math::AABB &aabb) {
-            m_values.push_back(entity);
+        void add_value(T value, const math::AABB &aabb) {
+            m_values.push_back(value);
             for (auto child : m_children) {
                 if (child == nullptr) {
                     break;
                 }
 
                 if (child->inside(aabb)) {
-                    child->add_value(entity, aabb);
+                    child->add_value(value, aabb);
                 }
             }
         }
