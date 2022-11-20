@@ -92,7 +92,7 @@ namespace graphics {
         shader.set_uniform_loc("bTexture", 4);
     }
 
-    void TerrainRenderer::render(const Terrain &terrain, const std::shared_ptr<Material>& material) const {
+    void TerrainRenderer::render(const Terrain &terrain) const {
         auto model_4x4 = terrain.transform.get_transform_4x4();
 
         shader.use();
@@ -100,9 +100,9 @@ namespace graphics {
         terrain.textures.bind();
         shader.set_property("model", model_4x4);
 
-        shader.set_property("diffuse", material->diffuse);
-        shader.set_property("specular", material->specular);
-        shader.set_property("shininess", material->shininess);
+        shader.set_property("diffuse", terrain.material()->diffuse);
+        shader.set_property("specular", terrain.material()->specular);
+        shader.set_property("shininess", terrain.material()->shininess);
 
         shader.set_property("viewPos", global.game->active_scene()->camera().transform.pos);
 

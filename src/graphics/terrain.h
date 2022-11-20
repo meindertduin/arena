@@ -8,6 +8,7 @@
 #include "../entity/ec_transform.h"
 
 #include "texture.h"
+#include "material.h"
 
 namespace graphics {
     struct TerrainFile {
@@ -30,8 +31,9 @@ namespace graphics {
 
     class TerrainTexturePack {
     public:
-        TerrainTexturePack(const TerrainFile &file);
+        explicit TerrainTexturePack(const TerrainFile &file);
         void bind() const;
+
     private:
         std::shared_ptr<Texture> background_texture;
         std::shared_ptr<Texture> blendmap;
@@ -51,10 +53,14 @@ namespace graphics {
         Terrain(const TerrainFile &file);
 
         bool get_height(float x, float z, float &y) const;
+
+        [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<Material>& material() const { return m_material; }
     private:
         friend class TerrainRenderer;
 
         std::unique_ptr<Mesh> mesh;
+
+        std::shared_ptr<Material> m_material;
 
         TerrainTexturePack textures;
         entity::ECTransform transform;

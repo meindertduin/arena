@@ -35,7 +35,7 @@ namespace graphics {
     class TerrainRenderer {
     public:
         TerrainRenderer();
-        void render(const Terrain &terrain, const std::shared_ptr<Material>& material) const;
+        void render(const Terrain &terrain) const;
     private:
         ShaderProgram shader { "shaders/terrain.vert", "shaders/terrain.frag" };
     };

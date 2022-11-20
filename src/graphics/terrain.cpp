@@ -29,6 +29,10 @@ namespace graphics {
 
         this->transform.pos = file.pos;
 
+
+        // TODO read from file or something
+        m_material = std::make_shared<graphics::Material>(glm::vec3{ 0.2f, 0.2f, 0.2f }, glm::vec3{ 0.6f, 0.6f, 0.6f }, glm::vec3{ 0.2f, 0.2f, 0 }, 0.2f);
+
         Sprite16 sprite { file.heightmap };
 
         MeshData mesh_data;
