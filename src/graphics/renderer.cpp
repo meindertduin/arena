@@ -31,7 +31,6 @@ namespace graphics {
 
         global.game->active_scene()->skybox().bind_texture(1);
 
-
         material->shader()->set_property("color", { 1.0f, 1.0f, 0 });
         material->shader()->set_property("model", model_4x4);
         material->shader()->set_property("diffuse", material->diffuse);

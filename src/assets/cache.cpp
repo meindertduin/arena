@@ -5,54 +5,54 @@
 
 namespace assets {
     template<>
-    std::shared_ptr<graphics::Mesh> Cache::load_asset<graphics::Mesh>(const std::string& filename) {
-        auto mesh = load_obj(filename);
-        m_meshes[filename] = std::weak_ptr(mesh);
+    std::shared_ptr<graphics::Mesh> Cache::load_asset<graphics::Mesh>(const Path& path) {
+        auto mesh = load_obj(path);
+        m_meshes[path.hash()] = std::weak_ptr(mesh);
         return mesh;
     }
 
     template<>
-    std::shared_ptr<graphics::Terrain> Cache::load_asset<graphics::Terrain>(const std::string& filename) {
-        auto terrain = load_terrain(filename);
-        m_terrains[filename] = std::weak_ptr(terrain);
+    std::shared_ptr<graphics::Terrain> Cache::load_asset<graphics::Terrain>(const Path& path) {
+        auto terrain = load_terrain(path);
+        m_terrains[path.hash()] = std::weak_ptr(terrain);
         return terrain;
     }
 
     template<>
-    std::shared_ptr<graphics::Texture> Cache::load_asset<graphics::Texture>(const std::string &filename) {
-        auto texture = load_texture(filename);
-        m_textures[filename] = std::weak_ptr(texture);
+    std::shared_ptr<graphics::Texture> Cache::load_asset<graphics::Texture>(const Path& path) {
+        auto texture = load_texture(path);
+        m_textures[path.hash()] = std::weak_ptr(texture);
         return texture;
     }
 
     template<>
-    std::shared_ptr<graphics::ShaderProgram> Cache::load_asset<graphics::ShaderProgram>(const std::string &filename) {
-        auto shader = load_shader(filename);
-        m_shaders[filename] = std::weak_ptr(shader);
+    std::shared_ptr<graphics::ShaderProgram> Cache::load_asset<graphics::ShaderProgram>(const Path& path) {
+        auto shader = load_shader(path);
+        m_shaders[path.hash()] = std::weak_ptr(shader);
         return shader;
     }
 
     template<>
-    std::shared_ptr<graphics::Mesh> Cache::get_resource(const std::string &filename) {
-        auto &mesh = m_meshes[filename];
-        return get_shared_asset<graphics::Mesh>(mesh, filename);
+    std::shared_ptr<graphics::Mesh> Cache::get_resource(const Path& path) {
+        auto &mesh = m_meshes[path.hash()];
+        return get_shared_asset<graphics::Mesh>(mesh, path);
     }
 
     template<>
-    std::shared_ptr<graphics::Terrain> Cache::get_resource(const std::string &filename) {
-        auto &terrain = m_terrains[filename];
-        return get_shared_asset<graphics::Terrain>(terrain, filename);
+    std::shared_ptr<graphics::Terrain> Cache::get_resource(const Path& path) {
+        auto &terrain = m_terrains[path.hash()];
+        return get_shared_asset<graphics::Terrain>(terrain, path);
     }
 
     template<>
-    std::shared_ptr<graphics::Texture> Cache::get_resource(const std::string &filename) {
-        auto &texture = m_textures[filename];
-        return get_shared_asset<graphics::Texture>(texture, filename);
+    std::shared_ptr<graphics::Texture> Cache::get_resource(const Path& path) {
+        auto &texture = m_textures[path.hash()];
+        return get_shared_asset<graphics::Texture>(texture, path);
     }
 
     template<>
-    std::shared_ptr<graphics::ShaderProgram> Cache::get_resource(const std::string &filename) {
-        auto &shader = m_shaders[filename];
-        return get_shared_asset<graphics::ShaderProgram>(shader, filename);
+    std::shared_ptr<graphics::ShaderProgram> Cache::get_resource(const Path& path) {
+        auto &shader = m_shaders[path.hash()];
+        return get_shared_asset<graphics::ShaderProgram>(shader, path);
     }
 }

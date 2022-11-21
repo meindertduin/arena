@@ -1,13 +1,12 @@
 #include "loaders.h"
 
-#include <sstream>
 #include <memory>
 #include "obj_file.h"
 
 namespace assets {
-    std::shared_ptr<graphics::Mesh> load_obj(const std::string &filename) {
+    std::shared_ptr<graphics::Mesh> load_obj(const Path &path) {
         ObjFileReader file_reader;
-        auto obj_file = file_reader.read_from_file(filename);
+        auto obj_file = file_reader.read_from_file(path.path());
 
         auto& first_obj = obj_file->objects()[0];
         math::AABB bounding_box { first_obj->mesh_data->max };
