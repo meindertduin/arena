@@ -11,4 +11,7 @@ set(CORE_SOURCES
         src/core/program_time.cpp
         src/core/program_time.h
         src/core/telemetrics.h
-        )
+        src/core/path.h
+        src/core/path.cpp
+        src/core/hash.h
+        src/core/hash.cpp)
