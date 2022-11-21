@@ -22,19 +22,20 @@ namespace graphics {
         bool reflects { false };
         float shininess{};
 
-        [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<graphics::Texture>& texture() const { return m_texture; }
-        [[nodiscard]] constexpr ALWAYS_INLINE const ShaderProgram* shader() const { return m_shader; }
+        [[nodiscard]] constexpr ALWAYS_INLINE
+        const std::vector<std::shared_ptr<graphics::Texture>>& textures() const { return m_textures; }
 
-        void set_texture(const std::shared_ptr<graphics::Texture> &texture) {
-            m_texture = texture;
+        [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<ShaderProgram>& shader() const { return m_shader; }
+
+        void add_texture(const std::shared_ptr<graphics::Texture> &texture) {
+            m_textures.push_back(texture);
         }
 
-        void set_shader(ShaderProgram *shader) {
+        void set_shader(const std::shared_ptr<ShaderProgram> &shader) {
             m_shader = shader;
         }
-
     private:
-        std::shared_ptr<graphics::Texture> m_texture { nullptr };
-        ShaderProgram *m_shader { nullptr };
+        std::vector<std::shared_ptr<graphics::Texture>> m_textures;
+        std::shared_ptr<ShaderProgram> m_shader { nullptr };
     };
 }

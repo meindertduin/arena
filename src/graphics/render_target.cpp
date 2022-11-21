@@ -63,7 +63,7 @@ namespace graphics {
             glBindFramebuffer(GL_FRAMEBUFFER, intermediate_fbo);
         }
         
-        // setup texture for framebuffer
+        // setup textures for framebuffer
         glGenTextures(1, &texture_color_buffer);
         glBindTexture(GL_TEXTURE_2D, texture_color_buffer);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screen_width, screen_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);

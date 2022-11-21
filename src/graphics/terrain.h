@@ -50,7 +50,7 @@ namespace graphics {
         int width;
         int height;
 
-        Terrain(const TerrainFile &file);
+        explicit Terrain(const TerrainFile &file);
 
         bool get_height(float x, float z, float &y) const;
 

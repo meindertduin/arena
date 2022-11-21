@@ -25,7 +25,6 @@ namespace graphics {
         void after_render();
 
         void set_ubo_data();
-        ShaderProgram shader { "shaders/light_shader.vert", "shaders/light_shader.frag" };
     private:
         std::shared_ptr<RenderTarget> render_target;
         SharedDataBuffer ubo_matrices { 0, 2 * sizeof(glm::mat4) };

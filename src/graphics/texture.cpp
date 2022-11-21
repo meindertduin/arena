@@ -56,11 +56,11 @@ namespace graphics {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_SHORT, sprite.get_buffer());
         glGenerateMipmap(GL_TEXTURE_2D);
 
-        // set the texture wrapping/filtering options (on the currently bound texture object)
+        // set the texture wrapping/filtering options (on the currently bound textures object)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-                        GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
+                        GL_REPEAT);   // set textures wrapping to GL_REPEAT (default wrapping method)
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        // set texture filtering parameters
+        // set textures filtering parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }

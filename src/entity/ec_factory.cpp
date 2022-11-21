@@ -35,7 +35,8 @@ namespace entity {
         auto texture = global.game->cache().get_resource<graphics::Texture>("assets/fan_tree.png");
 
         auto material = std::make_shared<graphics::Material>(glm::vec3{ 0.2f, 0.2f, 0.2f }, glm::vec3{ 0.6f, 0.6f, 0.6f }, glm::vec3{ 0.2f, 0.2f, 0 }, 0.2f);
-        material->set_texture(texture);
+        material->add_texture(texture);
+        material->set_shader(global.game->cache().get_resource<graphics::ShaderProgram>("shaders/light_shader"));
         auto mesh_renderer = entity::EcStaticMeshRenderer(tree_mesh, material);
 
         collision.set_collider(std::make_shared<physics::MeshCollider>(tree_mesh));

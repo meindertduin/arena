@@ -57,7 +57,7 @@ namespace graphics {
         explicit Texture(const std::string& path);
         Texture(int width, int height, uint8_t *buffer);
 
-        // no copy constructor or assignment, because there is no reason to put same texture on the GPU 2x
+        // no copy constructor or assignment, because there is no reason to put same textures on the GPU 2x
         Texture(Texture &&other) = delete;
         Texture& operator=(Texture &&other) = delete;
     };

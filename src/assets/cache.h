@@ -30,9 +30,10 @@ namespace assets {
             return nullptr;
         }
     private:
-        std::unordered_map<std::string, std::weak_ptr<graphics::Mesh>> meshes;
-        std::unordered_map<std::string, std::weak_ptr<graphics::Terrain>> terrains;
-        std::unordered_map<std::string, std::weak_ptr<graphics::Texture>> textures;
+        std::unordered_map<std::string, std::weak_ptr<graphics::Mesh>> m_meshes;
+        std::unordered_map<std::string, std::weak_ptr<graphics::Terrain>> m_terrains;
+        std::unordered_map<std::string, std::weak_ptr<graphics::Texture>> m_textures;
+        std::unordered_map<std::string, std::weak_ptr<graphics::ShaderProgram>> m_shaders;
 
         template<typename T>
         std::shared_ptr<T> load_asset(const std::string& filename) {

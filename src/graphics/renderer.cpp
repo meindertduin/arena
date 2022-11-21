@@ -10,10 +10,6 @@
 
 namespace graphics {
     Renderer::Renderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
-        shader.link();
-
-        shader.set_uniform_loc("baseTexture", 0);
-        shader.set_uniform_loc("cubeMap", 1);
     }
 
     void Renderer::before_render() {
@@ -27,20 +23,22 @@ namespace graphics {
         auto model_4x4 = transform.get_transform_4x4();
         glBlendFunc(GL_SRC_ALPHA, GL_SAMPLE_ALPHA_TO_ONE);
 
-        shader.use();
-        material->texture()->bind(0);
+        material->shader()->use();
+        auto i = 0;
+        for (auto &texture : material->textures()) {
+            texture->bind(i++);
+        }
+
         global.game->active_scene()->skybox().bind_texture(1);
 
-        shader.set_property("color", { 1.0f, 1.0f, 0 });
-        shader.set_property("model", model_4x4);
 
-        shader.set_property("diffuse", material->diffuse);
-        shader.set_property("specular", material->specular);
-        shader.set_property("shininess", material->shininess);
-
-        shader.set_property("viewPos", global.game->active_scene()->camera().transform.pos);
-
-        shader.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
+        material->shader()->set_property("color", { 1.0f, 1.0f, 0 });
+        material->shader()->set_property("model", model_4x4);
+        material->shader()->set_property("diffuse", material->diffuse);
+        material->shader()->set_property("specular", material->specular);
+        material->shader()->set_property("shininess", material->shininess);
+        material->shader()->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
+        material->shader()->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
         mesh->render();
     }
