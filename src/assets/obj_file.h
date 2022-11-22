@@ -7,9 +7,14 @@
 #include "file_reader.h"
 
 namespace assets {
+    struct ObjData {
+        float max;
+        std::vector<graphics::Vertex> vertices;
+    };
+
     struct ObjObject {
         std::string obj_name;
-        std::unique_ptr<graphics::MeshData> mesh_data;
+        std::unique_ptr<ObjData> mesh_data;
     };
 
     class ObjFile {

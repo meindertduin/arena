@@ -142,8 +142,9 @@ namespace graphics {
                 mesh_data.vertices.push_back(v2);
             }
         }
-        
-        this->mesh = std::make_unique<Mesh>(&mesh_data, math::AABB{});
+
+        // TODO implement
+        // this->mesh = std::make_unique<Mesh>(&mesh_data, math::AABB{});
     }
 
     bool Terrain::get_height(float x, float z, float &y) const {

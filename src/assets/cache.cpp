@@ -6,7 +6,11 @@
 namespace assets {
     template<>
     std::shared_ptr<graphics::Mesh> Cache::load_asset<graphics::Mesh>(const Path& path) {
-        auto mesh = load_obj(path);
+        auto mesh = std::make_shared<graphics::Mesh>(path);
+        auto mesh_data = load_obj(path);
+
+        mesh->load(sizeof(mesh_data), reinterpret_cast<char*>(mesh_data.get()));
+
         m_meshes[path.hash()] = std::weak_ptr(mesh);
         return mesh;
     }

@@ -88,7 +88,7 @@ namespace entity {
             event_handlers[E::_id] = handler;
         }
 
-        // could not make this a template function, that's why e is type void*
+        // could not make this a template function, that's why e is m_type void*
         void dispatch(void *e, uint32_t event_id) override {
             if (event_handlers.find(event_id) == event_handlers.end()) {
                 return;

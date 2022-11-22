@@ -102,6 +102,6 @@ namespace physics {
                 const Transform &sphere_transform) const override;
 
     private:
-        std::shared_ptr<graphics::MeshData> m_mesh_data;
+        std::shared_ptr<graphics::CollisionData> m_mesh_data;
     };
  }

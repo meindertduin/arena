@@ -82,10 +82,6 @@ namespace physics {
     }
 
     MeshCollider::MeshCollider(const std::shared_ptr<graphics::Mesh> &mesh) : Collider(ColliderType::Mesh, mesh) {
-        if (mesh->collisions_data().empty()) {
-            this->m_mesh_data = mesh->mesh_data();
-        } else {
-            this->m_mesh_data = mesh->collisions_data()[0];
-        }
+        this->m_mesh_data = mesh->collisions_data();
     }
 }

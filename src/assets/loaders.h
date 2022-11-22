@@ -7,7 +7,7 @@
 #include "../core/path.h"
 
 namespace assets {
-    std::shared_ptr<graphics::Mesh> load_obj(const Path &path);
+    std::unique_ptr<graphics::MeshData> load_obj(const Path &path);
     std::shared_ptr<graphics::Terrain> load_terrain(const Path &path);
     std::shared_ptr<graphics::ShaderProgram> load_shader(const Path &path);
 

@@ -26,7 +26,7 @@ namespace assets {
 
         template<typename T>
         std::shared_ptr<T> get_resource(const Path &path) {
-            THROW_ERROR("specialization for function 'get_resource' of type %s not implemented for cache get()", typeid(T).name());
+            THROW_ERROR("specialization for function 'get_resource' of m_type %s not implemented for cache get()", typeid(T).name());
             return nullptr;
         }
 
@@ -43,7 +43,7 @@ namespace assets {
 
         template<typename T>
         std::shared_ptr<T> load_asset(const Path& path) {
-            THROW_ERROR("specialization for function 'load_asset' of type %s not implemented for cache get()", typeid(T).name());
+            THROW_ERROR("specialization for function 'load_asset' of m_type %s not implemented for cache get()", typeid(T).name());
             return nullptr;
         }
 

@@ -19,7 +19,7 @@ namespace graphics {
         set_ubo_data();
     }
 
-    void Renderer::render(const Renderable *mesh, const std::shared_ptr<Material>& material, const entity::ECTransform &transform) const {
+    void Renderer::render(const IRenderAble *mesh, const std::shared_ptr<Material>& material, const entity::ECTransform &transform) const {
         auto model_4x4 = transform.get_transform_4x4();
         glBlendFunc(GL_SRC_ALPHA, GL_SAMPLE_ALPHA_TO_ONE);
 

@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "../platform/platform.h"
+#include "../core/path.h"
 
 namespace graphics {
     constexpr int MATRICES_BLOCK_BINDING = 0;
@@ -20,7 +21,7 @@ namespace graphics {
 
     class Shader {
     public:
-        Shader(ShaderType type, std::string  path);
+        Shader(ShaderType type, std::string path);
         ~Shader();
 
         Shader(const Shader &other) = delete;
@@ -30,10 +31,11 @@ namespace graphics {
         Shader& operator=(Shader &&other) = delete;
 
         [[nodiscard]] constexpr ALWAYS_INLINE uint32_t id() const { return m_id; }
+        // TODO remove once shader inherits from resource
         [[nodiscard]] constexpr ALWAYS_INLINE std::string path() const { return m_path; }
     private:
         uint32_t m_id;
-        ShaderType type;
+        ShaderType m_type;
         std::string m_path;
     };
 
