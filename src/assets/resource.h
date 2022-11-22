@@ -7,6 +7,7 @@
 namespace assets {
     class Resource {
     public:
+        Resource() = default;
         explicit Resource(const Path &path) :
                 m_path{path}
         {}

@@ -24,7 +24,17 @@ namespace graphics {
             m_collisions_data = std::unique_ptr<CollisionData>(mesh_data->collision_data.release());
         } else {
             // TODO implement setting collision data from mesh
+
         }
+    }
+
+    Mesh::Mesh(MeshData *mesh_data) {
+        buffer_array.set_data(0, sizeof(Vertex) * mesh_data->vertices.size(), mesh_data->vertices.data());
+        vertex_buffer.add_vertex_attribute({3, GL_FLOAT, sizeof(float), false});
+        vertex_buffer.add_vertex_attribute({3, GL_FLOAT, sizeof(float), false});
+        vertex_buffer.add_vertex_attribute({2, GL_UNSIGNED_SHORT, sizeof(uint16_t), true});
+
+        m_gl_size = static_cast<int>(mesh_data->vertices.size());
     }
 }
 

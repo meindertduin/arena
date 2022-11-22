@@ -32,7 +32,7 @@ namespace graphics {
     class Mesh : public IRenderAble, public assets::Resource {
     public:
         explicit Mesh(const Path &path) : assets::Resource(path) {}
-
+        explicit Mesh(MeshData* mesh_data);
 
         Mesh(const Mesh&) = delete;
         Mesh& operator=(const Mesh&) = delete;
@@ -41,7 +41,9 @@ namespace graphics {
 
         entity::ECTransform transform;
 
-        [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<CollisionData>& collisions_data() const { return m_collisions_data; }
+        [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<CollisionData>& collisions_data() const {
+            return m_collisions_data;
+        }
 
         constexpr ALWAYS_INLINE math::AABB& bounding_box() { return m_bounding_box; }
 

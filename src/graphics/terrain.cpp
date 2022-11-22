@@ -143,8 +143,7 @@ namespace graphics {
             }
         }
 
-        // TODO implement
-        // this->mesh = std::make_unique<Mesh>(&mesh_data, math::AABB{});
+        this->mesh = std::make_unique<Mesh>(&mesh_data);
     }
 
     bool Terrain::get_height(float x, float z, float &y) const {
