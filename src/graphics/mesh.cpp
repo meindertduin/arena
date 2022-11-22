@@ -35,6 +35,7 @@ namespace graphics {
     }
 
     Mesh::Mesh(MeshData *mesh_data) {
+        // TODO remove duplication
         buffer_array.set_data(0, sizeof(Vertex) * mesh_data->vertices.size(), mesh_data->vertices.data());
         vertex_buffer.add_vertex_attribute({3, GL_FLOAT, sizeof(float), false});
         vertex_buffer.add_vertex_attribute({3, GL_FLOAT, sizeof(float), false});

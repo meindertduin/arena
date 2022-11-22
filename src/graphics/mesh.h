@@ -6,6 +6,7 @@
 #include "gpu_buffer.h"
 #include "../math/box.h"
 #include "../assets/resource.h"
+#include "material.h"
 
 namespace graphics {
     struct Vertex {
@@ -39,6 +40,11 @@ namespace graphics {
 
         void render() const override;
 
+        [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<Material>& material() const {
+            return m_material;
+        }
+        void set_material(const std::shared_ptr<Material> &material) { m_material = material; }
+
         entity::ECTransform transform;
 
         [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<CollisionData>& collisions_data() const {
@@ -53,6 +59,8 @@ namespace graphics {
         VertexBuffer vertex_buffer { sizeof(Vertex) };
         ArrayBuffer buffer_array;
         math::AABB m_bounding_box {};
+
+        std::shared_ptr<Material> m_material;
 
         int m_gl_size {0};
 
