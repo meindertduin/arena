@@ -9,7 +9,7 @@
 namespace assets {
     std::unique_ptr<graphics::MeshData> load_obj(const Path &path);
     std::shared_ptr<graphics::Terrain> load_terrain(const Path &path);
-    std::shared_ptr<graphics::ShaderProgram> load_shader(const Path &path);
+    graphics::ShaderProgram::ShaderProgramData load_shader(const Path &path);
 
     inline std::shared_ptr<graphics::Texture> load_texture(const Path &path) {
         return std::make_shared<graphics::Texture>(path.path());

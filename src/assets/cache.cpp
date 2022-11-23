@@ -34,7 +34,10 @@ namespace assets {
 
     template<>
     std::shared_ptr<graphics::ShaderProgram> Cache::load_asset<graphics::ShaderProgram>(const Path& path) {
-        auto shader = load_shader(path);
+        auto shader_data = load_shader(path);
+        auto shader = std::make_shared<graphics::ShaderProgram>(path);
+        shader->load(sizeof(shader_data), reinterpret_cast<char*>(&shader_data));
+
         m_shaders[path.hash()] = std::weak_ptr(shader);
         return shader;
     }

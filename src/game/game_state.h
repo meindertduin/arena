@@ -20,7 +20,7 @@ namespace game {
 
     class GameState {
     public:
-        GameState();
+        GameState() = default;
 
         GameState(const GameState&) = delete;
         GameState& operator=(const GameState&) = delete;
@@ -45,6 +45,6 @@ namespace game {
         ui::UI m_ui;
 
         assets::Cache m_cache;
-        std::unique_ptr<Scene> m_active_scene;
+        std::unique_ptr<Scene> m_active_scene { nullptr };
     };
 }

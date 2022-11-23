@@ -50,15 +50,16 @@ namespace graphics {
     };
 
     Skybox::Skybox() {
-        shader.link();
+        m_shader = global.game->cache().get_resource<ShaderProgram>("shaders/skybox");
+        m_shader->link();
         vertex_buffer.add_vertex_attribute({3, GL_FLOAT, sizeof(float), false });
     }
 
     void Skybox::render() {
         glDepthFunc(GL_LEQUAL);
 
-        shader.use();
-        shader.set_property("cameraPos", global.game->active_scene()->camera().transform.pos);
+        m_shader->use();
+        m_shader->set_property("cameraPos", global.game->active_scene()->camera().transform.pos);
 
         texture.bind(0);
 

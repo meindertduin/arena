@@ -19,6 +19,7 @@ void Global::init() {
 
     // Window must be initialized first
     window = new core::Window(window_options);
+    global.game = new game::GameState();
 
     auto render_target = std::make_shared<graphics::RenderTarget>();
 
@@ -34,6 +35,5 @@ void Global::init() {
     global.systems->init();
 
     // initialize game state
-    global.game = new game::GameState();
     global.game->init();
 }

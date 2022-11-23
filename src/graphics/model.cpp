@@ -13,6 +13,10 @@ namespace graphics {
         material->add_texture(texture);
         material->set_shader(global.game->cache().get_resource<graphics::ShaderProgram>("shaders/light_shader"));
 
+        // TODO remove test code
+        material->shader()->set_uniform_loc("baseTexture", 0);
+        material->shader()->set_uniform_loc("cubeMap", 1);
+
         m_aabb = math::AABB::create_min();
         for (auto mesh_data : model_data->meshes) {
             m_meshes.emplace_back(mesh_data, material);

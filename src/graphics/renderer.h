@@ -12,7 +12,6 @@
 #include "terrain.h"
 #include "font.h"
 #include "geometry.h"
-#include "skybox.h"
 #include "../entity/ec_transform.h"
 #include "model.h"
 
@@ -37,7 +36,7 @@ namespace graphics {
         TerrainRenderer();
         void render(const Terrain &terrain) const;
     private:
-        ShaderProgram shader { "shaders/terrain.vert", "shaders/terrain.frag" };
+        std::shared_ptr<ShaderProgram> m_shader;
     };
 
     struct TextRenderOptions {
@@ -69,7 +68,7 @@ namespace graphics {
         WidthStringPairs split_in_sentences(const std::string &text, float scale, const ISize &size);
 
         TrueTypeFont font { "assets/alagard.ttf", FontRenderSize };
-        ShaderProgram shader { "shaders/text.vert", "shaders/text.frag" };
+        std::shared_ptr<ShaderProgram> m_shader;
         GpuPlane plane;
     };
 }

@@ -25,7 +25,7 @@ namespace graphics {
 
         for (const auto &mesh : model->meshes()) {
             auto &material = *mesh.material();
-            
+
             material.shader()->use();
             auto i = 0;
             for (auto &texture : material.textures()) {
@@ -83,46 +83,47 @@ namespace graphics {
     }
 
     TerrainRenderer::TerrainRenderer() {
-        shader.link();
-        shader.use();
+        m_shader = global.game->cache().get_resource<ShaderProgram>("shaders/terrain");
 
-        shader.set_uniform_loc("baseTexture", 0);
-        shader.set_uniform_loc("blendMap", 1);
-        shader.set_uniform_loc("rTexture", 2);
-        shader.set_uniform_loc("gTexture", 3);
-        shader.set_uniform_loc("bTexture", 4);
+        m_shader->link();
+        m_shader->use();
+
+        m_shader->set_uniform_loc("baseTexture", 0);
+        m_shader->set_uniform_loc("blendMap", 1);
+        m_shader->set_uniform_loc("rTexture", 2);
+        m_shader->set_uniform_loc("gTexture", 3);
+        m_shader->set_uniform_loc("bTexture", 4);
     }
 
     void TerrainRenderer::render(const Terrain &terrain) const {
         auto model_4x4 = terrain.transform.get_transform_4x4();
 
-        shader.use();
+        m_shader->use();
 
         terrain.textures.bind();
-        shader.set_property("model", model_4x4);
 
-        shader.set_property("diffuse", terrain.material()->diffuse);
-        shader.set_property("specular", terrain.material()->specular);
-        shader.set_property("shininess", terrain.material()->shininess);
-
-        shader.set_property("viewPos", global.game->active_scene()->camera().transform.pos);
-
-        shader.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
+        m_shader->set_property("model", model_4x4);
+        m_shader->set_property("diffuse", terrain.material()->diffuse);
+        m_shader->set_property("specular", terrain.material()->specular);
+        m_shader->set_property("shininess", terrain.material()->shininess);
+        m_shader->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
+        m_shader->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
         terrain.mesh->render();
     }
 
     TextRenderer::TextRenderer() {
-        shader.link();
+        m_shader = global.game->cache().get_resource<ShaderProgram>("shaders/text");
+        m_shader->link();
     }
 
     void TextRenderer::render(const std::string &text, const IRect &rect, const TextRenderOptions &options) {
-        shader.use();
+        m_shader->use();
         glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
                                           0.0f, (float)global.graphic_options->size().height());
 
-        shader.set_property("projection", projection);
-        shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
+        m_shader->set_property("projection", projection);
+        m_shader->set_property("textColor", { 1.0f, 1.0f, 1.0f });
 
         float scale = static_cast<float>(options.text_size) / static_cast<float>(FontRenderSize);
         auto text_width = calculate_text_width(text, scale);

@@ -42,16 +42,6 @@ namespace graphics {
         glDeleteProgram(program);
     }
 
-    ShaderProgram::ShaderProgram(const std::string& vertex_shader_path, const std::string& fragment_shader_path) {
-        program = glCreateProgram();
-
-        vertexShader = std::make_unique<Shader>(ShaderType::Vertex, vertex_shader_path);
-        fragmentShader = std::make_unique<Shader>(ShaderType::Fragment, fragment_shader_path );
-
-        glAttachShader(program, vertexShader->id());
-        glAttachShader(program, fragmentShader->id());
-    }
-
     void ShaderProgram::use() const {
         glUseProgram(program);
     }
@@ -119,5 +109,20 @@ namespace graphics {
 
     void ShaderProgram::set_uniform_loc(const std::string& name, int index) const {
         glUniform1i(glGetUniformLocation(program, name.c_str()), index);
+    }
+
+    void ShaderProgram::load(std::size_t size, char *data) {
+        auto shader_data = reinterpret_cast<ShaderProgramData*>(data);
+
+        program = glCreateProgram();
+
+        vertexShader = std::make_unique<Shader>(ShaderType::Vertex, shader_data->vertex_shader_path);
+        fragmentShader = std::make_unique<Shader>(ShaderType::Fragment, shader_data->frag_shader_path);
+
+        glAttachShader(program, vertexShader->id());
+        glAttachShader(program, fragmentShader->id());
+
+        // TODO test code
+        link();
     }
 }
