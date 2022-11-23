@@ -30,6 +30,7 @@ namespace assets {
     template<>
     std::shared_ptr<graphics::Texture> Cache::load_asset<graphics::Texture>(const Path& path) {
         auto texture = load_texture(path);
+        texture->load(0, nullptr);
         m_textures[path.hash()] = std::weak_ptr(texture);
         return texture;
     }

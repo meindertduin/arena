@@ -12,6 +12,6 @@ namespace assets {
     graphics::ShaderProgram::ShaderProgramData load_shader(const Path &path);
 
     inline std::shared_ptr<graphics::Texture> load_texture(const Path &path) {
-        return std::make_shared<graphics::Texture>(path.path());
+        return std::make_shared<graphics::Texture>(path);
     }
 }

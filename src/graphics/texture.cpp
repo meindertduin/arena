@@ -46,8 +46,20 @@ namespace graphics {
         glBindTexture(GL_TEXTURE_2D, id);
     }
 
-    Texture::Texture(const std::string &path) : GpuTextureBase() {
-        Sprite16 sprite{path};
+    Texture::Texture(int width, int height, unsigned char *buffer) : GpuTextureBase(), width{width}, height{height} {
+        glBindTexture(GL_TEXTURE_2D, id);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, buffer);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+
+    void Texture::load(std::size_t size, char *data) {
+        Sprite16 sprite{path().path()};
         this->width = sprite.width;
         this->height = sprite.height;
 
@@ -62,18 +74,6 @@ namespace graphics {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         // set textures filtering parameters
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    }
-
-    Texture::Texture(int width, int height, unsigned char *buffer) : GpuTextureBase(), width{width}, height{height} {
-        glBindTexture(GL_TEXTURE_2D, id);
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, buffer);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
