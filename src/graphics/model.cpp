@@ -7,7 +7,7 @@ namespace graphics {
 
         m_aabb = math::AABB::create_min();
         for (auto mesh_data : model_data->meshes) {
-            m_meshes.push_back(std::make_unique<Mesh>(mesh_data));
+            m_meshes.emplace_back(mesh_data);
             auto mesh_aabb = math::AABB { mesh_data->max };
             m_aabb = { math::merge_min(m_aabb.min(), mesh_aabb.min()), math::merge_max(m_aabb.max(), mesh_aabb.max()) };
         }

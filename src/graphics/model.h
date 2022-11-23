@@ -26,13 +26,12 @@ namespace graphics {
             if (m_meshes.empty()) {
                 return nullptr;
             }
-            return m_meshes[0]->collisions_data();
+            return m_meshes[0].collisions_data();
         }
 
-        [[nodiscard]] constexpr ALWAYS_INLINE const std::vector<std::unique_ptr<Mesh>>& meshes() const { return m_meshes; }
+        [[nodiscard]] constexpr ALWAYS_INLINE const std::vector<Mesh>& meshes() const { return m_meshes; }
     private:
-        // TODO, have the meshes on the stack
-        std::vector<std::unique_ptr<Mesh>> m_meshes;
+        std::vector<Mesh> m_meshes;
         math::AABB m_aabb {};
 
         std::shared_ptr<CollisionData> m_collisions_data { nullptr };

@@ -4,17 +4,20 @@
 
 namespace graphics {
     void Mesh::render() const {
-        this->buffer_array.bind();
+        this->m_array_buffer->bind();
 
-        this->vertex_buffer.bind();
+        this->m_vertex_buffer->bind();
         glDrawArrays(GL_TRIANGLES, 0, m_gl_size);
     }
 
     Mesh::Mesh(MeshData *mesh_data) {
-        buffer_array.set_data(0, sizeof(Vertex) * mesh_data->vertices.size(), mesh_data->vertices.data());
-        vertex_buffer.add_vertex_attribute({3, GL_FLOAT, sizeof(float), false});
-        vertex_buffer.add_vertex_attribute({3, GL_FLOAT, sizeof(float), false});
-        vertex_buffer.add_vertex_attribute({2, GL_UNSIGNED_SHORT, sizeof(uint16_t), true});
+        m_vertex_buffer = std::make_shared<VertexBuffer>(sizeof(Vertex));
+        m_array_buffer = std::make_shared<ArrayBuffer>();
+
+        m_array_buffer->set_data(0, sizeof(Vertex) * mesh_data->vertices.size(), mesh_data->vertices.data());
+        m_vertex_buffer->add_vertex_attribute({3, GL_FLOAT, sizeof(float), false});
+        m_vertex_buffer->add_vertex_attribute({3, GL_FLOAT, sizeof(float), false});
+        m_vertex_buffer->add_vertex_attribute({2, GL_UNSIGNED_SHORT, sizeof(uint16_t), true});
 
         m_gl_size = static_cast<int>(mesh_data->vertices.size());
 

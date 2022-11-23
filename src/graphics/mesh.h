@@ -33,10 +33,6 @@ namespace graphics {
     class Mesh : public IRenderAble {
     public:
         explicit Mesh(MeshData* mesh_data);
-
-        Mesh(const Mesh&) = delete;
-        Mesh& operator=(const Mesh&) = delete;
-
         void render() const override;
 
         [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<Material>& material() const {
@@ -50,9 +46,8 @@ namespace graphics {
             return m_collisions_data;
         }
     private:
-        VertexBuffer vertex_buffer { sizeof(Vertex) };
-        ArrayBuffer buffer_array;
-
+        std::shared_ptr<VertexBuffer> m_vertex_buffer;
+        std::shared_ptr<ArrayBuffer> m_array_buffer;
         std::shared_ptr<Material> m_material;
 
         int m_gl_size {0};

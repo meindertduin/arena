@@ -39,8 +39,8 @@ namespace graphics {
         material->shader()->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
         material->shader()->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
-        for (auto &mesh : model->meshes()) {
-            mesh->render();
+        for (const auto &mesh : model->meshes()) {
+            mesh.render();
         }
     }
 
