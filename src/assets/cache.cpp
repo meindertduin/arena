@@ -5,6 +5,20 @@
 
 namespace assets {
     template<>
+    std::shared_ptr<graphics::Model> Cache::load_asset<graphics::Model>(const Path& path) {
+        // Todo add multiple meshes per model
+        auto model = std::make_shared<graphics::Model>(path);
+        auto mesh_data = load_obj(path);
+        graphics::ModelData model_data;
+        model_data.meshes.push_back(mesh_data.get());
+
+        model->load(sizeof(model_data), reinterpret_cast<char*>(&model_data));
+
+        m_models[path.hash()] = std::weak_ptr(model);
+        return model;
+    }
+
+    template<>
     std::shared_ptr<graphics::Mesh> Cache::load_asset<graphics::Mesh>(const Path& path) {
         auto mesh = std::make_shared<graphics::Mesh>(path);
         auto mesh_data = load_obj(path);
@@ -34,6 +48,12 @@ namespace assets {
         auto shader = load_shader(path);
         m_shaders[path.hash()] = std::weak_ptr(shader);
         return shader;
+    }
+
+    template<>
+    std::shared_ptr<graphics::Model> Cache::get_resource(const Path& path) {
+        auto &model = m_models[path.hash()];
+        return get_shared_asset<graphics::Model>(model, path);
     }
 
     template<>
