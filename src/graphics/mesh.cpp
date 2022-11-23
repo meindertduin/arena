@@ -20,13 +20,10 @@ namespace graphics {
 
         if (mesh_data->collision_data != nullptr) {
             m_collisions_data = std::unique_ptr<CollisionData>(mesh_data->collision_data.release());
-            m_bounding_box = math::AABB { m_collisions_data->max };
         } else {
             m_collisions_data = std::make_unique<CollisionData>();
             m_collisions_data->vertices.reserve(mesh_data->vertices.size());
             std::copy(mesh_data->vertices.begin(), mesh_data->vertices.end(), &m_collisions_data->vertices[0]);
-
-            m_bounding_box = math::AABB { mesh_data->max };
         }
     }
 }

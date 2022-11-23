@@ -49,12 +49,9 @@ namespace graphics {
         [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<CollisionData>& collisions_data() const {
             return m_collisions_data;
         }
-
-        constexpr ALWAYS_INLINE math::AABB& bounding_box() { return m_bounding_box; }
     private:
         VertexBuffer vertex_buffer { sizeof(Vertex) };
         ArrayBuffer buffer_array;
-        math::AABB m_bounding_box {};
 
         std::shared_ptr<Material> m_material;
 
