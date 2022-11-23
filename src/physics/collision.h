@@ -4,6 +4,7 @@
 #include "../entity/ec_transform.h"
 #include "../graphics/mesh.h"
 #include "../entity/ec_rigid_body.h"
+#include "../graphics/model.h"
 
 namespace physics {
     using Transform = entity::ECTransform;
@@ -34,9 +35,9 @@ namespace physics {
 
     class Collider {
     public:
-        explicit Collider(ColliderType collider_type, const std::shared_ptr<graphics::Mesh> &mesh) :
+        explicit Collider(ColliderType collider_type, const std::shared_ptr<graphics::Model> &model) :
             m_type{collider_type},
-            m_aabb{mesh->bounding_box()}
+            m_aabb{model->aabb()}
         {}
 
         virtual ~Collider() = default;
@@ -66,10 +67,10 @@ namespace physics {
 
     class SphereCollider : public Collider {
     public:
-        glm::vec3 center;
-        float radius;
+        glm::vec3 center{};
+        float radius{};
 
-        SphereCollider(const std::shared_ptr<graphics::Mesh> &mesh) : Collider(ColliderType::Sphere, mesh) {}
+        explicit SphereCollider(const std::shared_ptr<graphics::Model> &model) : Collider(ColliderType::Sphere, model) {}
 
         [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const override { };
     protected:
@@ -87,7 +88,7 @@ namespace physics {
 
     class MeshCollider : public Collider {
     public:
-        explicit MeshCollider(const std::shared_ptr<graphics::Mesh> &mesh);
+        explicit MeshCollider(const std::shared_ptr<graphics::Model> &model);
 
         [[nodiscard]] glm::vec3 find_furthest_points(const glm::vec3 &direction, const Transform &transform) const override;
     protected:

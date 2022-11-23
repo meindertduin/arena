@@ -19,7 +19,7 @@ namespace graphics {
         set_ubo_data();
     }
 
-    void Renderer::render(const IRenderAble *mesh, const std::shared_ptr<Material>& material, const entity::ECTransform &transform) const {
+    void Renderer::render(const Model *model, const std::shared_ptr<Material>& material, const entity::ECTransform &transform) const {
         auto model_4x4 = transform.get_transform_4x4();
         glBlendFunc(GL_SRC_ALPHA, GL_SAMPLE_ALPHA_TO_ONE);
 
@@ -39,7 +39,9 @@ namespace graphics {
         material->shader()->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
         material->shader()->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
-        mesh->render();
+        for (auto &mesh : model->meshes()) {
+            mesh->render();
+        }
     }
 
     void Renderer::after_render() {

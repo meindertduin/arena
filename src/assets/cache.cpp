@@ -19,17 +19,6 @@ namespace assets {
     }
 
     template<>
-    std::shared_ptr<graphics::Mesh> Cache::load_asset<graphics::Mesh>(const Path& path) {
-        auto mesh = std::make_shared<graphics::Mesh>(path);
-        auto mesh_data = load_obj(path);
-
-        mesh->load(sizeof(mesh_data), reinterpret_cast<char*>(mesh_data.get()));
-
-        m_meshes[path.hash()] = std::weak_ptr(mesh);
-        return mesh;
-    }
-
-    template<>
     std::shared_ptr<graphics::Terrain> Cache::load_asset<graphics::Terrain>(const Path& path) {
         auto terrain = load_terrain(path);
         m_terrains[path.hash()] = std::weak_ptr(terrain);
@@ -54,12 +43,6 @@ namespace assets {
     std::shared_ptr<graphics::Model> Cache::get_resource(const Path& path) {
         auto &model = m_models[path.hash()];
         return get_shared_asset<graphics::Model>(model, path);
-    }
-
-    template<>
-    std::shared_ptr<graphics::Mesh> Cache::get_resource(const Path& path) {
-        auto &mesh = m_meshes[path.hash()];
-        return get_shared_asset<graphics::Mesh>(mesh, path);
     }
 
     template<>

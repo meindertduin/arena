@@ -14,6 +14,7 @@
 #include "geometry.h"
 #include "skybox.h"
 #include "../entity/ec_transform.h"
+#include "model.h"
 
 namespace graphics {
     class Renderer {
@@ -21,7 +22,7 @@ namespace graphics {
         explicit Renderer(std::shared_ptr<RenderTarget> render_target);
         
         void before_render();
-        void render(const IRenderAble *mesh, const std::shared_ptr<Material>& material, const entity::ECTransform &transform) const;
+        void render(const Model *mesh, const std::shared_ptr<Material>& material, const entity::ECTransform &transform) const;
         void after_render();
 
         void set_ubo_data();

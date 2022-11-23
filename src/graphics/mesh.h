@@ -30,9 +30,8 @@ namespace graphics {
         std::unique_ptr<CollisionData> collision_data { nullptr };
     };
 
-    class Mesh : public IRenderAble, public assets::Resource {
+    class Mesh : public IRenderAble {
     public:
-        explicit Mesh(const Path &path) : assets::Resource(path) {}
         explicit Mesh(MeshData* mesh_data);
 
         Mesh(const Mesh&) = delete;
@@ -52,9 +51,6 @@ namespace graphics {
         }
 
         constexpr ALWAYS_INLINE math::AABB& bounding_box() { return m_bounding_box; }
-
-        void load(std::size_t size, char *data) override;
-        void unload() override { }
     private:
         VertexBuffer vertex_buffer { sizeof(Vertex) };
         ArrayBuffer buffer_array;
