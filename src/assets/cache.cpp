@@ -20,7 +20,9 @@ namespace assets {
 
     template<>
     std::shared_ptr<graphics::Terrain> Cache::load_asset<graphics::Terrain>(const Path& path) {
-        auto terrain = load_terrain(path);
+        auto terrain_file = load_terrain(path);
+        auto terrain = std::make_shared<graphics::Terrain>(path);
+        terrain->load(sizeof(terrain_file), reinterpret_cast<char*>(&terrain_file));
         m_terrains[path.hash()] = std::weak_ptr(terrain);
         return terrain;
     }

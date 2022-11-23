@@ -100,7 +100,7 @@ namespace graphics {
 
         m_shader->use();
 
-        terrain.textures.bind();
+        terrain.textures->bind();
 
         m_shader->set_property("model", model_4x4);
         m_shader->set_property("diffuse", terrain.material()->diffuse);

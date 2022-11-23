@@ -42,19 +42,22 @@ namespace graphics {
         std::shared_ptr<Texture> b_texture;
     };
 
-    class Terrain {
+    class Terrain : public assets::Resource {
     public:
         float max_height = 20;
         float min_height = -20;
 
-        int width;
-        int height;
+        int width{};
+        int height{};
 
-        explicit Terrain(const TerrainFile &file);
+        explicit Terrain(const Path &path) : assets::Resource(path) {}
 
         bool get_height(float x, float z, float &y) const;
 
         [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<Material>& material() const { return m_material; }
+
+        void load(std::size_t size, char *data) override;
+        void unload() override { }
     private:
         friend class TerrainRenderer;
 
@@ -62,7 +65,7 @@ namespace graphics {
 
         std::shared_ptr<Material> m_material;
 
-        TerrainTexturePack textures;
+        std::unique_ptr<TerrainTexturePack> textures;
         entity::ECTransform transform;
 
         static float barry_centric(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec2 &pos);

@@ -4,7 +4,7 @@
 #include "file_reader.h"
 
 namespace assets {
-    std::shared_ptr<graphics::Terrain> load_terrain(const Path &path) {
+    graphics::TerrainFile load_terrain(const Path &path) {
         FileReader file_reader { path.path() };
         graphics::TerrainFile terrain_file;
 
@@ -65,6 +65,6 @@ namespace assets {
             }
         }
 
-        return std::make_shared<graphics::Terrain>(terrain_file);
+        return terrain_file;
     }
 }
