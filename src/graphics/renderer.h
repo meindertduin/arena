@@ -22,7 +22,7 @@ namespace graphics {
         explicit Renderer(std::shared_ptr<RenderTarget> render_target);
         
         void before_render();
-        void render(const Model *mesh, const std::shared_ptr<Material>& material, const entity::ECTransform &transform) const;
+        void render(const Model *mesh, const entity::ECTransform &transform) const;
         void after_render();
 
         void set_ubo_data();

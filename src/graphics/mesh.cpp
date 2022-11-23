@@ -2,6 +2,8 @@
 
 #include <glad/glad.h>
 
+#include <utility>
+
 namespace graphics {
     void Mesh::render() const {
         this->m_array_buffer->bind();
@@ -11,6 +13,14 @@ namespace graphics {
     }
 
     Mesh::Mesh(MeshData *mesh_data) {
+        init(mesh_data);
+    }
+
+    Mesh::Mesh(MeshData* mesh_data, std::shared_ptr<Material> material) : m_material{std::move(material)} {
+        init(mesh_data);
+    }
+
+    void Mesh::init(MeshData *mesh_data) {
         m_vertex_buffer = std::make_shared<VertexBuffer>(sizeof(Vertex));
         m_array_buffer = std::make_shared<ArrayBuffer>();
 

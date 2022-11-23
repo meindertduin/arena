@@ -10,7 +10,7 @@ namespace entity {
             auto &ec_static_renderer = entity.get<EcStaticMeshRenderer>();
             auto &transform = entity.get<ECTransform>();
 
-            global.renderer->render(ec_static_renderer.m_model.get(), ec_static_renderer.m_material, transform);
+            global.renderer->render(ec_static_renderer.m_model.get(), transform);
         }
     }
 }

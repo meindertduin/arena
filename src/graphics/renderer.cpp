@@ -19,27 +19,29 @@ namespace graphics {
         set_ubo_data();
     }
 
-    void Renderer::render(const Model *model, const std::shared_ptr<Material>& material, const entity::ECTransform &transform) const {
+    void Renderer::render(const Model *model, const entity::ECTransform &transform) const {
         auto model_4x4 = transform.get_transform_4x4();
         glBlendFunc(GL_SRC_ALPHA, GL_SAMPLE_ALPHA_TO_ONE);
 
-        material->shader()->use();
-        auto i = 0;
-        for (auto &texture : material->textures()) {
-            texture->bind(i++);
-        }
-
-        global.game->active_scene()->skybox().bind_texture(1);
-
-        material->shader()->set_property("color", { 1.0f, 1.0f, 0 });
-        material->shader()->set_property("model", model_4x4);
-        material->shader()->set_property("diffuse", material->diffuse);
-        material->shader()->set_property("specular", material->specular);
-        material->shader()->set_property("shininess", material->shininess);
-        material->shader()->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
-        material->shader()->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
-
         for (const auto &mesh : model->meshes()) {
+            auto &material = *mesh.material();
+            
+            material.shader()->use();
+            auto i = 0;
+            for (auto &texture : material.textures()) {
+                texture->bind(i++);
+            }
+
+            global.game->active_scene()->skybox().bind_texture(1);
+
+            material.shader()->set_property("color", { 1.0f, 1.0f, 0 });
+            material.shader()->set_property("model", model_4x4);
+            material.shader()->set_property("diffuse", material.diffuse);
+            material.shader()->set_property("specular", material.specular);
+            material.shader()->set_property("shininess", material.shininess);
+            material.shader()->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
+            material.shader()->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
+
             mesh.render();
         }
     }

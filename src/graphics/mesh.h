@@ -33,6 +33,7 @@ namespace graphics {
     class Mesh : public IRenderAble {
     public:
         explicit Mesh(MeshData* mesh_data);
+        Mesh(MeshData* mesh_data, std::shared_ptr<Material> material);
         void render() const override;
 
         [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<Material>& material() const {
@@ -53,5 +54,7 @@ namespace graphics {
         int m_gl_size {0};
 
         std::shared_ptr<CollisionData> m_collisions_data { nullptr };
+
+        void init(MeshData *mesh_data);
     };
 }
