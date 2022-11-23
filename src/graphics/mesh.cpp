@@ -25,10 +25,7 @@ namespace graphics {
             m_bounding_box = math::AABB { m_collisions_data->max };
         } else {
             m_collisions_data = std::make_unique<CollisionData>();
-            for (auto &vertex : mesh_data->vertices) {
-                m_collisions_data->vertices.push_back(vertex);
-            }
-            m_collisions_data->max = mesh_data->max;
+            std::copy(mesh_data->vertices.begin(), mesh_data->vertices.end(), m_collisions_data->vertices.data());
 
             m_bounding_box = math::AABB { mesh_data->max };
         }
