@@ -54,19 +54,16 @@ namespace graphics {
 
         bool get_height(float x, float z, float &y) const;
 
-        [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<Material>& material() const { return m_material; }
+        [[nodiscard]] constexpr ALWAYS_INLINE const std::unique_ptr<Mesh>& mesh() const { return m_mesh; }
+        [[nodiscard]] constexpr ALWAYS_INLINE const entity::ECTransform& transform() const { return m_transform; }
 
         void load(std::size_t size, char *data) override;
         void unload() override { }
     private:
-        friend class TerrainRenderer;
-
-        std::unique_ptr<Mesh> mesh;
-
-        std::shared_ptr<Material> m_material;
+        std::unique_ptr<Mesh> m_mesh;
 
         std::unique_ptr<TerrainTexturePack> textures;
-        entity::ECTransform transform;
+        entity::ECTransform m_transform;
 
         static float barry_centric(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec2 &pos);
 

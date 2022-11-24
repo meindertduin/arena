@@ -41,7 +41,6 @@ public:
     input::InputManager input_manager;
     game::GameState *game;
     graphics::Renderer *renderer;
-    graphics::TerrainRenderer *terrain_renderer;
     graphics::TextRenderer *text_renderer;
     graphics::UIRenderer *ui_renderer;
     entity::SystemsCollection *systems;

@@ -24,8 +24,8 @@ namespace graphics {
     }
 
     bool Terrain::get_height(float x, float z, float &y) const {
-        auto xmin = (int) (x - this->transform.pos.x);
-        auto ymin = (int) (z - this->transform.pos.z);
+        auto xmin = (int) (x - m_transform.pos.x);
+        auto ymin = (int) (z - m_transform.pos.z);
 
         if (xmin > this->width - 2 || xmin < 0 || ymin > this->height - 2 || ymin < 0)
             return false;
@@ -36,16 +36,16 @@ namespace graphics {
             v2 = this->positions[xmin + 1][ymin]; // top right
             v3 = this->positions[xmin + 1][ymin + 1]; // bottom right
 
-            y = barry_centric(v1, v2, v3, { x - this->transform.pos.x, z - this->transform.pos.z});
+            y = barry_centric(v1, v2, v3, { x - m_transform.pos.x, z - m_transform.pos.z});
         } else {
             v1 = this->positions[xmin][ymin]; // top left
             v2 = this->positions[xmin + 1][ymin]; // top right
             v3 = this->positions[xmin][ymin + 1]; // bottom left
 
-            y = barry_centric(v1, v2, v3, { x - this->transform.pos.x, z - this->transform.pos.z});
+            y = barry_centric(v1, v2, v3, { x - m_transform.pos.x, z - m_transform.pos.z});
         }
 
-        y += this->transform.pos.y;
+        y += m_transform.pos.y;
         return true;
     }
 
@@ -67,11 +67,7 @@ namespace graphics {
         this->width = file.width;
         this->height = file.height;
 
-        this->transform.pos = file.pos;
-
-
-        // TODO read from file or something
-        m_material = std::make_shared<graphics::Material>(glm::vec3{ 0.2f, 0.2f, 0.2f }, glm::vec3{ 0.6f, 0.6f, 0.6f }, glm::vec3{ 0.2f, 0.2f, 0 }, 0.2f);
+        m_transform.pos = file.pos;
 
         Sprite16 sprite { file.heightmap };
 
@@ -183,6 +179,22 @@ namespace graphics {
             }
         }
 
-        this->mesh = std::make_unique<Mesh>(&mesh_data);
+        m_mesh = std::make_unique<Mesh>(&mesh_data);
+
+        // TODO abstract this code
+        auto material = std::make_shared<graphics::Material>(glm::vec3{ 0.2f, 0.2f, 0.2f }, glm::vec3{ 0.6f, 0.6f, 0.6f }, glm::vec3{ 0.2f, 0.2f, 0 }, 0.2f);
+        auto shader = global.game->cache().get_resource<ShaderProgram>("shaders/terrain");
+        shader->link();
+
+        shader->use();
+
+        shader->set_uniform_loc("baseTexture", 0);
+        shader->set_uniform_loc("blendMap", 1);
+        shader->set_uniform_loc("rTexture", 2);
+        shader->set_uniform_loc("gTexture", 3);
+        shader->set_uniform_loc("bTexture", 4);
+
+        material->set_shader(shader);
+        m_mesh->set_material(material);
     }
 }

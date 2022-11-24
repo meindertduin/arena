@@ -24,7 +24,6 @@ void Global::init() {
     auto render_target = std::make_shared<graphics::RenderTarget>();
 
     renderer = new graphics::Renderer(render_target);
-    terrain_renderer = new graphics::TerrainRenderer();
     text_renderer = new graphics::TextRenderer();
     ui_renderer = new graphics::UIRenderer(render_target);
     systems = new entity::SystemsCollection();

@@ -82,34 +82,25 @@ namespace graphics {
         ubo_lights.unbind();
     }
 
-    TerrainRenderer::TerrainRenderer() {
-        m_shader = global.game->cache().get_resource<ShaderProgram>("shaders/terrain");
+    void Renderer::render(const Mesh *mesh, const entity::ECTransform &transform) const {
+        auto &material = *mesh->material();
+        auto model_4x4 = transform.get_transform_4x4();
 
-        m_shader->link();
-        m_shader->use();
+        material.shader()->use();
 
-        m_shader->set_uniform_loc("baseTexture", 0);
-        m_shader->set_uniform_loc("blendMap", 1);
-        m_shader->set_uniform_loc("rTexture", 2);
-        m_shader->set_uniform_loc("gTexture", 3);
-        m_shader->set_uniform_loc("bTexture", 4);
-    }
+        int texture_index = 0;
+        for (const auto &texture : material.textures()) {
+            texture->bind(texture_index++);
+        }
 
-    void TerrainRenderer::render(const Terrain &terrain) const {
-        auto model_4x4 = terrain.transform.get_transform_4x4();
+        material.shader()->set_property("model", model_4x4);
+        material.shader()->set_property("diffuse", material.diffuse);
+        material.shader()->set_property("specular", material.specular);
+        material.shader()->set_property("shininess", material.shininess);
+        material.shader()->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
+        material.shader()->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
-        m_shader->use();
-
-        terrain.textures->bind();
-
-        m_shader->set_property("model", model_4x4);
-        m_shader->set_property("diffuse", terrain.material()->diffuse);
-        m_shader->set_property("specular", terrain.material()->specular);
-        m_shader->set_property("shininess", terrain.material()->shininess);
-        m_shader->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
-        m_shader->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
-
-        terrain.mesh->render();
+        mesh->render();
     }
 
     TextRenderer::TextRenderer() {
