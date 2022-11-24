@@ -34,7 +34,7 @@ namespace entity {
         auto tree_model = global.game->cache().get_resource<graphics::Model>("assets/fan_tree.obj");
         auto texture = global.game->cache().get_resource<graphics::Texture>("assets/fan_tree.png");
 
-        auto mesh_renderer = entity::EcStaticMeshRenderer(tree_model);
+        auto mesh_renderer = entity::ECStaticModel(tree_model);
 
         collision.set_collider(std::make_shared<physics::MeshCollider>(tree_model));
 

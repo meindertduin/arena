@@ -8,15 +8,17 @@
 #include "component.h"
 
 namespace entity {
-    class EcStaticMeshRenderer : public Component<EcStaticMeshRenderer> {
+    class ECStaticModel : public Component<ECStaticModel> {
     public:
-        explicit EcStaticMeshRenderer(std::shared_ptr<graphics::Model> model) :
+        explicit ECStaticModel(std::shared_ptr<graphics::Model> model) :
             Component(),
             m_model{std::move(model)}
         {}
 
+        [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<graphics::Model>& model() const { return m_model; }
+    private:
         std::shared_ptr<graphics::Model> m_model;
     };
 
-    DECL_COMPONENT_HEADER(EcStaticMeshRenderer);
+    DECL_COMPONENT_HEADER(ECStaticModel);
 }

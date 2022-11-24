@@ -4,7 +4,7 @@
 #include "../graphics/mesh.h"
 #include "../graphics/terrain.h"
 #include "../entity/ec_transform.h"
-#include "../entity/ec_static_mesh.h"
+#include "../entity/ec_static_model.h"
 
 #include "../assets/cache.h"
 
