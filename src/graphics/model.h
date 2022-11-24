@@ -23,9 +23,6 @@ namespace graphics {
 
         [[nodiscard]] const std::shared_ptr<CollisionData>& collision_data() const {
             // TODO have one collision data that lives in the model
-            if (m_meshes.empty()) {
-                return nullptr;
-            }
             return m_meshes[0].collisions_data();
         }
 
