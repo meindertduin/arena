@@ -46,25 +46,6 @@ namespace graphics {
         glBindTexture(GL_TEXTURE_2D, id);
     }
 
-    Texture::Texture(const std::string &path) : GpuTextureBase() {
-        Sprite16 sprite{path};
-        this->width = sprite.width;
-        this->height = sprite.height;
-
-        glBindTexture(GL_TEXTURE_2D, id);
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_SHORT, sprite.get_buffer());
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        // set the texture wrapping/filtering options (on the currently bound texture object)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
-                        GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        // set texture filtering parameters
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    }
-
     Texture::Texture(int width, int height, unsigned char *buffer) : GpuTextureBase(), width{width}, height{height} {
         glBindTexture(GL_TEXTURE_2D, id);
 
@@ -74,6 +55,25 @@ namespace graphics {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+
+    void Texture::load(std::size_t size, char *data) {
+        Sprite16 sprite{path().path()};
+        this->width = sprite.width;
+        this->height = sprite.height;
+
+        glBindTexture(GL_TEXTURE_2D, id);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_SHORT, sprite.get_buffer());
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        // set the texture wrapping/filtering options (on the currently bound textures object)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+                        GL_REPEAT);   // set textures wrapping to GL_REPEAT (default wrapping method)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        // set textures filtering parameters
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 

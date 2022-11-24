@@ -10,10 +10,6 @@
 
 namespace graphics {
     Renderer::Renderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
-        shader.link();
-
-        shader.set_uniform_loc("baseTexture", 0);
-        shader.set_uniform_loc("cubeMap", 1);
     }
 
     void Renderer::before_render() {
@@ -23,26 +19,31 @@ namespace graphics {
         set_ubo_data();
     }
 
-    void Renderer::render(const Renderable *mesh, const entity::ECTransform &transform) const {
+    void Renderer::render(const Model *model, const entity::ECTransform &transform) const {
         auto model_4x4 = transform.get_transform_4x4();
         glBlendFunc(GL_SRC_ALPHA, GL_SAMPLE_ALPHA_TO_ONE);
 
-        shader.use();
-        global.texture->bind(0);
-        global.game->active_scene()->skybox().bind_texture(1);
+        for (const auto &mesh : model->meshes()) {
+            auto &material = *mesh.material();
 
-        shader.set_property("color", { 1.0f, 1.0f, 0 });
-        shader.set_property("model", model_4x4);
+            material.shader()->use();
+            auto i = 0;
+            for (auto &texture : material.textures()) {
+                texture->bind(i++);
+            }
 
-        shader.set_property("diffuse", global.material->diffuse);
-        shader.set_property("specular", global.material->specular);
-        shader.set_property("shininess", global.material->shininess);
+            global.game->active_scene()->skybox().bind_texture(1);
 
-        shader.set_property("viewPos", global.game->active_scene()->camera().transform.pos);
+            material.shader()->set_property("color", { 1.0f, 1.0f, 0 });
+            material.shader()->set_property("model", model_4x4);
+            material.shader()->set_property("diffuse", material.diffuse);
+            material.shader()->set_property("specular", material.specular);
+            material.shader()->set_property("shininess", material.shininess);
+            material.shader()->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
+            material.shader()->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
-        shader.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
-
-        mesh->render();
+            mesh.render();
+        }
     }
 
     void Renderer::after_render() {
@@ -81,47 +82,39 @@ namespace graphics {
         ubo_lights.unbind();
     }
 
-    TerrainRenderer::TerrainRenderer() {
-        shader.link();
-        shader.use();
+    void Renderer::render(const Mesh *mesh, const entity::ECTransform &transform) const {
+        auto &material = *mesh->material();
+        auto model_4x4 = transform.get_transform_4x4();
 
-        shader.set_uniform_loc("baseTexture", 0);
-        shader.set_uniform_loc("blendMap", 1);
-        shader.set_uniform_loc("rTexture", 2);
-        shader.set_uniform_loc("gTexture", 3);
-        shader.set_uniform_loc("bTexture", 4);
-    }
+        material.shader()->use();
 
-    void TerrainRenderer::render(const Terrain &terrain) const {
-        auto model_4x4 = terrain.transform.get_transform_4x4();
+        int texture_index = 0;
+        for (const auto &texture : material.textures()) {
+            texture->bind(texture_index++);
+        }
 
-        shader.use();
+        material.shader()->set_property("model", model_4x4);
+        material.shader()->set_property("diffuse", material.diffuse);
+        material.shader()->set_property("specular", material.specular);
+        material.shader()->set_property("shininess", material.shininess);
+        material.shader()->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
+        material.shader()->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
-        terrain.textures.bind();
-        shader.set_property("model", model_4x4);
-
-        shader.set_property("diffuse", global.material->diffuse);
-        shader.set_property("specular", global.material->specular);
-        shader.set_property("shininess", global.material->shininess);
-
-        shader.set_property("viewPos", global.game->active_scene()->camera().transform.pos);
-
-        shader.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
-
-        terrain.mesh->render();
+        mesh->render();
     }
 
     TextRenderer::TextRenderer() {
-        shader.link();
+        m_shader = global.game->cache().get_resource<ShaderProgram>("shaders/text");
+        m_shader->link();
     }
 
     void TextRenderer::render(const std::string &text, const IRect &rect, const TextRenderOptions &options) {
-        shader.use();
+        m_shader->use();
         glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
                                           0.0f, (float)global.graphic_options->size().height());
 
-        shader.set_property("projection", projection);
-        shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
+        m_shader->set_property("projection", projection);
+        m_shader->set_property("textColor", { 1.0f, 1.0f, 1.0f });
 
         float scale = static_cast<float>(options.text_size) / static_cast<float>(FontRenderSize);
         auto text_width = calculate_text_width(text, scale);

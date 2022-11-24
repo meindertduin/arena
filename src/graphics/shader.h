@@ -8,6 +8,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "../platform/platform.h"
+#include "../core/path.h"
+#include "../assets/resource.h"
 
 namespace graphics {
     constexpr int MATRICES_BLOCK_BINDING = 0;
@@ -20,7 +22,7 @@ namespace graphics {
 
     class Shader {
     public:
-        Shader(ShaderType type, std::string  path);
+        Shader(ShaderType type, std::string path);
         ~Shader();
 
         Shader(const Shader &other) = delete;
@@ -30,19 +32,25 @@ namespace graphics {
         Shader& operator=(Shader &&other) = delete;
 
         [[nodiscard]] constexpr ALWAYS_INLINE uint32_t id() const { return m_id; }
+        // TODO remove once shader inherits from resource
         [[nodiscard]] constexpr ALWAYS_INLINE std::string path() const { return m_path; }
     private:
         uint32_t m_id;
-        ShaderType type;
+        ShaderType m_type;
         std::string m_path;
     };
 
-    class ShaderProgram {
+    class ShaderProgram : public assets::Resource {
     public:
+        struct ShaderProgramData {
+            std::string vertex_shader_path;
+            std::string frag_shader_path;
+        };
+
         std::unique_ptr<Shader> vertexShader;
         std::unique_ptr<Shader> fragmentShader;
 
-        ShaderProgram(const std::string& vertex_shader_path, const std::string& fragment_shader_path);
+        ShaderProgram(const Path &path) : assets::Resource(path) {}
         ~ShaderProgram();
 
         void use() const;
@@ -58,6 +66,9 @@ namespace graphics {
         void set_property(const std::string& property_name, const glm::mat4&) const;
 
         void set_uniform_loc(const std::string& name, int index) const;
+
+        void load(std::size_t size, char *data) override;
+        void unload() override { }
     private:
         uint32_t id{};
         uint32_t program;

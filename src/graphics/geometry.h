@@ -8,7 +8,7 @@
 #include "../graphics/graphic_options.h"
 
 namespace graphics {
-    class GpuPlane : public Renderable {
+    class GpuPlane : public IRenderAble {
     public:
         GpuPlane();
 

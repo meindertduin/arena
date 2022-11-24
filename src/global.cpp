@@ -19,11 +19,11 @@ void Global::init() {
 
     // Window must be initialized first
     window = new core::Window(window_options);
+    global.game = new game::GameState();
 
     auto render_target = std::make_shared<graphics::RenderTarget>();
 
     renderer = new graphics::Renderer(render_target);
-    terrain_renderer = new graphics::TerrainRenderer();
     text_renderer = new graphics::TextRenderer();
     ui_renderer = new graphics::UIRenderer(render_target);
     systems = new entity::SystemsCollection();
@@ -34,9 +34,5 @@ void Global::init() {
     global.systems->init();
 
     // initialize game state
-    global.game = new game::GameState();
     global.game->init();
-
-    global.material = new graphics::Material({ 0.2f, 0.2f, 0.2f }, { 0.6f, 0.6f, 0.6f }, { 0.2f, 0.2f, 0 }, 0.2f);
-    global.texture = global.game->cache().get_resource<graphics::Texture>("assets/fan_tree.png");
 }

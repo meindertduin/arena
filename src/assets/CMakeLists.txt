@@ -4,4 +4,6 @@ set(ASSETS_SOURCES
         src/assets/terrain_loader.cpp
         src/assets/file_reader.cpp
         src/assets/obj_file.h
-        src/assets/obj_file.cpp)
+        src/assets/obj_file.cpp
+        src/assets/shader_loader.cpp
+        src/assets/resource.h)

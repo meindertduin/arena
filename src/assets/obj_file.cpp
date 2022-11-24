@@ -106,7 +106,7 @@ namespace assets {
     }
 
     void ObjFileReader::read_object(std::unique_ptr<ObjObject> &object, std::vector<glm::vec3> &vertices, std::vector<glm::u16vec2> &textcoords, std::vector<glm::vec3> &normals) {
-        auto mesh_data = std::make_unique<graphics::MeshData>(graphics::MeshData{});
+        auto mesh_data = std::make_unique<ObjData>();
 
         // auto chained = core::ChainedAllocator<core::LinearAllocator>{ &global.list_allocator, 1024 * 1024, 8 };
         // core::StdLinearAllocator<core::LinearAllocator> allocator { chained.get(), 0 };

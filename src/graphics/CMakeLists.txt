@@ -1,5 +1,7 @@
 set(GRAPHICS_SOURCES
         src/graphics/mesh.cpp
+        src/graphics/model.h
+        src/graphics/model.cpp
         src/graphics/terrain.cpp
         src/graphics/renderer.cpp
         src/graphics/texture.cpp

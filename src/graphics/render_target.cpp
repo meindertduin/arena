@@ -3,6 +3,7 @@
 #include <glad/glad.h>
 
 #include "../global.h"
+#include "../game/game_state.h"
 
 constexpr static float quad_vertices[] = {
      -1.0f,  1.0f, 0.0f, 1.0f,
@@ -15,7 +16,8 @@ constexpr static float quad_vertices[] = {
 
 namespace graphics {
     RenderTarget::RenderTarget() {
-        screen_shader.link();
+        m_shader = global.game->cache().get_resource<ShaderProgram>("shaders/screen");
+        m_shader->link();
 
         screen_vertex_buffer.add_vertex_attribute({ 2, GL_FLOAT, sizeof(float), false });
         screen_vertex_buffer.add_vertex_attribute({ 2, GL_FLOAT, sizeof(float), false });
@@ -63,7 +65,7 @@ namespace graphics {
             glBindFramebuffer(GL_FRAMEBUFFER, intermediate_fbo);
         }
         
-        // setup texture for framebuffer
+        // setup textures for framebuffer
         glGenTextures(1, &texture_color_buffer);
         glBindTexture(GL_TEXTURE_2D, texture_color_buffer);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, screen_width, screen_height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
@@ -109,7 +111,7 @@ namespace graphics {
         // clear all relevant buffers
         glClear(GL_COLOR_BUFFER_BIT);
 
-        screen_shader.use();
+        m_shader->use();
         screen_array_buffer.set_data(0, sizeof(quad_vertices), &quad_vertices);
         screen_vertex_buffer.bind();
 

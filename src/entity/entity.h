@@ -58,6 +58,10 @@ namespace entity {
             return this->id == rhs.id;
         }
 
+        inline auto operator!=(const Object &rhs) const {
+            return this->id != rhs.id;
+        }
+
         inline auto operator<=>(const Object &rhs) const {
             return this->id <=> rhs.id;
         }

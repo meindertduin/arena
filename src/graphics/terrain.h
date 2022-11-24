@@ -8,6 +8,7 @@
 #include "../entity/ec_transform.h"
 
 #include "texture.h"
+#include "material.h"
 
 namespace graphics {
     struct TerrainFile {
@@ -28,39 +29,31 @@ namespace graphics {
         std::string material;
     };
 
-    class TerrainTexturePack {
-    public:
-        TerrainTexturePack(const TerrainFile &file);
-        void bind() const;
-    private:
-        std::shared_ptr<Texture> background_texture;
-        std::shared_ptr<Texture> blendmap;
-        std::shared_ptr<Texture> r_texture;
-        std::shared_ptr<Texture> g_texture;
-        std::shared_ptr<Texture> b_texture;
-    };
-
-    class Terrain {
+    class Terrain : public assets::Resource {
     public:
         float max_height = 20;
         float min_height = -20;
 
-        int width;
-        int height;
+        int width{};
+        int height{};
 
-        Terrain(const TerrainFile &file);
+        explicit Terrain(const Path &path) : assets::Resource(path) {}
 
         bool get_height(float x, float z, float &y) const;
+
+        [[nodiscard]] constexpr ALWAYS_INLINE const std::unique_ptr<Mesh>& mesh() const { return m_mesh; }
+        [[nodiscard]] constexpr ALWAYS_INLINE const entity::ECTransform& transform() const { return m_transform; }
+
+        void load(std::size_t size, char *data) override;
+        void unload() override { }
     private:
-        friend class TerrainRenderer;
-
-        std::unique_ptr<Mesh> mesh;
-
-        TerrainTexturePack textures;
-        entity::ECTransform transform;
+        std::unique_ptr<Mesh> m_mesh;
+        entity::ECTransform m_transform;
 
         static float barry_centric(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec2 &pos);
 
         std::vector<std::vector<glm::vec3>> positions;
+
+        void set_mesh_material(const TerrainFile &file);
     };
 }

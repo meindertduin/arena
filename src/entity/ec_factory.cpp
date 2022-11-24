@@ -15,7 +15,7 @@ namespace entity {
         e.add(ECControl());
 
         auto collision = ECRigidBody(true, e.get_ptr<ECTransform>());
-        auto cube = global.game->cache().get_resource<graphics::Mesh>("assets/fan_tree.obj");
+        auto cube = global.game->cache().get_resource<graphics::Model>("assets/fan_tree.obj");
         collision.set_collider(std::make_shared<physics::MeshCollider>(cube));
 
         e.add(collision);
@@ -31,10 +31,12 @@ namespace entity {
         e.add(entity::ECTransform({ 0, -24, -10 }, {}));
         auto collision = entity::ECCollisionObject(false, e.get_ptr<ECTransform>());
 
-        auto tree_mesh = global.game->cache().get_resource<graphics::Mesh>("assets/fan_tree.obj");
+        auto tree_model = global.game->cache().get_resource<graphics::Model>("assets/fan_tree.obj");
+        auto texture = global.game->cache().get_resource<graphics::Texture>("assets/fan_tree.png");
 
-        auto mesh_renderer = entity::EcStaticMeshRenderer(tree_mesh);
-        collision.set_collider(std::make_shared<physics::MeshCollider>(tree_mesh));
+        auto mesh_renderer = entity::ECStaticModel(tree_model);
+
+        collision.set_collider(std::make_shared<physics::MeshCollider>(tree_model));
 
         e.add(mesh_renderer);
         e.add(collision);

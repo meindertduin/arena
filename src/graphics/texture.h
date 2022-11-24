@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include "../assets/resource.h"
 
 namespace graphics {
     template<typename T>
@@ -49,17 +50,20 @@ namespace graphics {
         uint32_t  id{0};
     };
 
-    class Texture : public GpuTextureBase {
+    class Texture : public GpuTextureBase, public assets::Resource {
     public:
-        int width;
-        int height;
+        int width{};
+        int height{};
 
-        explicit Texture(const std::string& path);
+        explicit Texture(const Path &path) : GpuTextureBase(), assets::Resource(path) {}
         Texture(int width, int height, uint8_t *buffer);
 
-        // no copy constructor or assignment, because there is no reason to put same texture on the GPU 2x
+        // no copy constructor or assignment, because there is no reason to put same textures on the GPU 2x
         Texture(Texture &&other) = delete;
         Texture& operator=(Texture &&other) = delete;
+
+        void load(std::size_t size, char *data) override;
+        void unload() override {}
     };
 
     class SkyboxTexture : public GpuTextureBase {

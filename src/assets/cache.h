@@ -9,6 +9,7 @@
 
 #include "../logging.h"
 #include "loaders.h"
+#include "../graphics/model.h"
 
 namespace assets {
     class Cache;
@@ -25,29 +26,36 @@ namespace assets {
         Cache& operator=(Cache &&other) = delete;
 
         template<typename T>
-        std::shared_ptr<T> get_resource(const std::string &filename) {
-            THROW_ERROR("specialization for function 'get_resource' of type %s not implemented for cache get()", typeid(T).name());
+        std::shared_ptr<T> get_resource(const Path &path) {
+            THROW_ERROR("specialization for function 'get_resource' of m_type %s not implemented for cache get()", typeid(T).name());
             return nullptr;
         }
+
+        template<typename T>
+        std::shared_ptr<T> get_resource(const std::string &path) {
+            return get_resource<T>(Path {path});
+        }
+
     private:
-        std::unordered_map<std::string, std::weak_ptr<graphics::Mesh>> meshes;
-        std::unordered_map<std::string, std::weak_ptr<graphics::Terrain>> terrains;
-        std::unordered_map<std::string, std::weak_ptr<graphics::Texture>> textures;
+        std::unordered_map<Hash64, std::weak_ptr<graphics::Model>> m_models;
+        std::unordered_map<Hash64, std::weak_ptr<graphics::Terrain>> m_terrains;
+        std::unordered_map<Hash64, std::weak_ptr<graphics::Texture>> m_textures;
+        std::unordered_map<Hash64, std::weak_ptr<graphics::ShaderProgram>> m_shaders;
 
         template<typename T>
-        std::shared_ptr<T> load_asset(const std::string& filename) {
-            THROW_ERROR("specialization for function 'load_asset' of type %s not implemented for cache get()", typeid(T).name());
+        std::shared_ptr<T> load_asset(const Path& path) {
+            THROW_ERROR("specialization for function 'load_asset' of m_type %s not implemented for cache get()", typeid(T).name());
             return nullptr;
         }
 
         template<typename T>
-        std::shared_ptr<T> get_shared_asset(std::weak_ptr<T> &resource, const std::string &filename) {
+        std::shared_ptr<T> get_shared_asset(std::weak_ptr<T> &resource, const Path &path) {
             auto loaded_resource = resource.lock();
             if (loaded_resource) {
                 return loaded_resource;
             }
 
-            return load_asset<T>(filename);
+            return load_asset<T>(path);
         }
     };
 }

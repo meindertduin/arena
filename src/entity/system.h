@@ -19,7 +19,7 @@ namespace entity {
                 auto type_name = typeid(T).name();
 
                 if (systems.find(type_name) != systems.end()) {
-                    THROW_ERROR("System of type %s was already registered.", type_name);
+                    THROW_ERROR("System of m_type %s was already registered.", type_name);
                 }
 
                 auto system = std::make_shared<T>();
@@ -33,7 +33,7 @@ namespace entity {
             auto type_name = typeid(T).name();
 
             if (systems.find(type_name) == systems.end()) {
-                THROW_ERROR("System of type %s was not registered.", type_name);
+                THROW_ERROR("System of m_type %s was not registered.", type_name);
             }
 
             signatures.insert({type_name, signature});

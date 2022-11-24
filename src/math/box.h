@@ -19,6 +19,10 @@ namespace math {
             m_max(max)
         {}
 
+        static AABB create_min() {
+            return { glm::vec3{FLT_MAX}, glm::vec3{FLT_MIN} };
+        }
+
         [[nodiscard]] constexpr ALWAYS_INLINE const glm::vec3& min() const { return m_min; }
         [[nodiscard]] constexpr ALWAYS_INLINE const glm::vec3& max() const { return m_max; }
         [[nodiscard]] constexpr ALWAYS_INLINE const glm::vec3& center() const { return m_center; }

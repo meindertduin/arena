@@ -10,7 +10,7 @@ namespace entity {
         template<typename T>
         void register_component() {
             if (component_arrays.find(T::_id) != component_arrays.end()) {
-                THROW_ERROR("Registered Component of type: %s more than once.", typeid(T).name());
+                THROW_ERROR("Registered Component of m_type: %s more than once.", typeid(T).name());
             }
 
             auto component_array = std::make_shared<ComponentArray<T>>();
@@ -71,7 +71,7 @@ namespace entity {
         template<typename T>
         std::shared_ptr<ComponentArray<T>> get_component_array() {
             if (component_arrays.find(T::_id) == component_arrays.end()) {
-                THROW_ERROR("Could not find component of type: %s.", typeid(T).name());
+                THROW_ERROR("Could not find component of m_type: %s.", typeid(T).name());
             }
 
             return std::static_pointer_cast<ComponentArray<T>>(component_arrays[T::_id]);

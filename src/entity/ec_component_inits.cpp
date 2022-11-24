@@ -1,6 +1,6 @@
 #include "ec_transform.h"
 #include "ec_first_person_camera.h"
-#include "ec_static_mesh.h"
+#include "ec_static_model.h"
 #include "ec_control.h"
 #include "ec_rigid_body.h"
 
@@ -16,5 +16,5 @@ namespace entity {
         ECFirstPersonCamera::_p->add_event_handler(&ECFirstPersonCamera::on_rotation_change);
     }
 
-    DECL_COMPONENT_INIT(EcStaticMeshRenderer) {}
+    DECL_COMPONENT_INIT(ECStaticModel) {}
 }

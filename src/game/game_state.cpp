@@ -8,6 +8,7 @@
 
 namespace game {
     void GameState::init() {
+        m_active_scene = std::make_unique<Scene>();
         m_active_scene->init();
     }
 
@@ -30,9 +31,5 @@ namespace game {
             m_ui.render();
 
         global.renderer->after_render();
-    }
-
-    GameState::GameState() {
-        m_active_scene = std::make_unique<Scene>();
     }
 }
