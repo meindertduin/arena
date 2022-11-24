@@ -4,24 +4,6 @@
 #include "../game/game_state.h"
 
 namespace graphics {
-    TerrainTexturePack::TerrainTexturePack(const TerrainFile &file) {
-        background_texture = global.game->cache().get_resource<Texture>(file.background_texture);
-        blendmap = global.game->cache().get_resource<Texture>(file.blendmap);
-
-        r_texture = global.game->cache().get_resource<Texture>(file.r_texture);
-        g_texture = global.game->cache().get_resource<Texture>(file.g_texture);
-        b_texture = global.game->cache().get_resource<Texture>(file.b_texture);
-    }
-
-    void TerrainTexturePack::bind() const {
-        int i = 0;
-        background_texture->bind(i++);
-        blendmap->bind(i++);
-
-        r_texture->bind(i++);
-        g_texture->bind(i++);
-        b_texture->bind(i);
-    }
 
     bool Terrain::get_height(float x, float z, float &y) const {
         auto xmin = (int) (x - m_transform.pos.x);
@@ -60,7 +42,6 @@ namespace graphics {
     void Terrain::load(std::size_t size, char *data) {
         auto &file = *reinterpret_cast<TerrainFile*>(data);
 
-        textures = std::make_unique<TerrainTexturePack>(file);
         min_height = file.min_height;
         max_height = file.max_height;
 
@@ -183,6 +164,14 @@ namespace graphics {
 
         // TODO abstract this code
         auto material = std::make_shared<graphics::Material>(glm::vec3{ 0.2f, 0.2f, 0.2f }, glm::vec3{ 0.6f, 0.6f, 0.6f }, glm::vec3{ 0.2f, 0.2f, 0 }, 0.2f);
+
+        material->add_texture(global.game->cache().get_resource<Texture>(file.background_texture));
+        material->add_texture(global.game->cache().get_resource<Texture>(file.blendmap));
+
+        material->add_texture(global.game->cache().get_resource<Texture>(file.r_texture));
+        material->add_texture(global.game->cache().get_resource<Texture>(file.g_texture));
+        material->add_texture(global.game->cache().get_resource<Texture>(file.b_texture));
+
         auto shader = global.game->cache().get_resource<ShaderProgram>("shaders/terrain");
         shader->link();
 

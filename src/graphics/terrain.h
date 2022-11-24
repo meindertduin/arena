@@ -29,19 +29,6 @@ namespace graphics {
         std::string material;
     };
 
-    class TerrainTexturePack {
-    public:
-        explicit TerrainTexturePack(const TerrainFile &file);
-        void bind() const;
-
-    private:
-        std::shared_ptr<Texture> background_texture;
-        std::shared_ptr<Texture> blendmap;
-        std::shared_ptr<Texture> r_texture;
-        std::shared_ptr<Texture> g_texture;
-        std::shared_ptr<Texture> b_texture;
-    };
-
     class Terrain : public assets::Resource {
     public:
         float max_height = 20;
@@ -61,8 +48,6 @@ namespace graphics {
         void unload() override { }
     private:
         std::unique_ptr<Mesh> m_mesh;
-
-        std::unique_ptr<TerrainTexturePack> textures;
         entity::ECTransform m_transform;
 
         static float barry_centric(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec2 &pos);
