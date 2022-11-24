@@ -34,18 +34,17 @@ namespace graphics {
     public:
         explicit Mesh(MeshData* mesh_data);
         Mesh(MeshData* mesh_data, std::shared_ptr<Material> material);
-        void render() const override;
 
         [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<Material>& material() const {
             return m_material;
         }
-        void set_material(const std::shared_ptr<Material> &material) { m_material = material; }
-
-        entity::ECTransform transform;
 
         [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<CollisionData>& collisions_data() const {
             return m_collisions_data;
         }
+
+        void render() const override;
+        void set_material(const std::shared_ptr<Material> &material) { m_material = material; }
     private:
         std::shared_ptr<VertexBuffer> m_vertex_buffer;
         std::shared_ptr<ArrayBuffer> m_array_buffer;

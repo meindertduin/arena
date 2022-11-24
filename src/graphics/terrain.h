@@ -53,5 +53,7 @@ namespace graphics {
         static float barry_centric(const glm::vec3 &p1, const glm::vec3 &p2, const glm::vec3 &p3, const glm::vec2 &pos);
 
         std::vector<std::vector<glm::vec3>> positions;
+
+        void set_mesh_material(const TerrainFile &file);
     };
 }

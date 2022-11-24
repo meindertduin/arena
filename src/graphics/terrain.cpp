@@ -162,8 +162,11 @@ namespace graphics {
 
         m_mesh = std::make_unique<Mesh>(&mesh_data);
 
-        // TODO abstract this code
-        auto material = std::make_shared<graphics::Material>(glm::vec3{ 0.2f, 0.2f, 0.2f }, glm::vec3{ 0.6f, 0.6f, 0.6f }, glm::vec3{ 0.2f, 0.2f, 0 }, 0.2f);
+        set_mesh_material(file);
+    }
+
+    void Terrain::set_mesh_material(const TerrainFile &file) {
+        auto material = std::make_shared<Material>(glm::vec3{0.2f, 0.2f, 0.2f }, glm::vec3{0.6f, 0.6f, 0.6f }, glm::vec3{0.2f, 0.2f, 0 }, 0.2f);
 
         material->add_texture(global.game->cache().get_resource<Texture>(file.background_texture));
         material->add_texture(global.game->cache().get_resource<Texture>(file.blendmap));
