@@ -40,7 +40,7 @@ namespace assets {
         std::unordered_map<Hash64, std::weak_ptr<graphics::Model>> m_models;
         std::unordered_map<Hash64, std::weak_ptr<graphics::Terrain>> m_terrains;
         std::unordered_map<Hash64, std::weak_ptr<graphics::Texture>> m_textures;
-        std::unordered_map<Hash64, std::weak_ptr<graphics::ShaderProgram>> m_shaders;
+        std::unordered_map<Hash64, std::weak_ptr<graphics::Shader>> m_shaders;
 
         template<typename T>
         std::shared_ptr<T> load_asset(const Path& path) {
