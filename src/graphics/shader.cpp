@@ -114,7 +114,8 @@ namespace graphics {
     }
 
     void ShaderProgram::set_uniform_loc(const std::string& name, int index) const {
-        glUniform1i(glGetUniformLocation(program, name.c_str()), index);
+        int uniform_lock = glGetUniformLocation(program, name.c_str());
+        glUniform1i(uniform_lock, index);
     }
 
     ShaderProgram::ShaderProgram(const std::string &path) {
@@ -129,6 +130,7 @@ namespace graphics {
         glAttachShader(program, m_vertex_shader->id());
         glAttachShader(program, m_fragment_shader->id());
 
+        // Todo, make this a separate step
         link();
     }
 }

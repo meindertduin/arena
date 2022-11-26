@@ -14,10 +14,12 @@ namespace graphics {
         material->set_shader(std::make_shared<graphics::ShaderProgram>("shaders/light_shader"));
 
         // TODO remove test code
+        material->shader()->use();
         material->shader()->set_uniform_loc("baseTexture", 0);
         material->shader()->set_uniform_loc("cubeMap", 1);
 
         m_aabb = math::AABB::create_min();
+
         for (auto mesh_data : model_data->meshes) {
             m_meshes.emplace_back(mesh_data, material);
             auto mesh_aabb = math::AABB { mesh_data->max };

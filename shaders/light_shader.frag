@@ -96,7 +96,8 @@ void main()
         result += CalculatePointLight(pointLights[i], normal, viewDir, vec3(texturePixel));
     }
 
-    FragColor = vec4(result, 1.0);
+    FragColor = vec4(1.0, 0, 0, 1.0);
+    // FragColor = vec4(result, 1.0);
 }
 
 

@@ -51,7 +51,7 @@ namespace graphics {
         std::shared_ptr<Shader> m_vertex_shader;
         std::shared_ptr<Shader> m_fragment_shader;
 
-        ShaderProgram(const std::string &path);
+        explicit ShaderProgram(const std::string &path);
         ~ShaderProgram();
 
         void use() const;

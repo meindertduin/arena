@@ -31,7 +31,7 @@ namespace graphics {
         glGenFramebuffers(1, &framebuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
         
-        // creationg framebuffer for multi-sample or without
+        // creating framebuffer for multi-sample or without
         auto screen_width = global.graphic_options->size().width();
         auto screen_height = global.graphic_options->size().height();
 

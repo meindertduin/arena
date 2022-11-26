@@ -176,8 +176,6 @@ namespace graphics {
         material->add_texture(global.game->cache().get_resource<Texture>(file.b_texture));
 
         auto shader = std::make_shared<ShaderProgram>("shaders/terrain");
-        shader->link();
-
         shader->use();
 
         shader->set_uniform_loc("baseTexture", 0);
