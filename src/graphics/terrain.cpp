@@ -171,9 +171,9 @@ namespace graphics {
         material->add_texture(global.game->cache().get_resource<Texture>(file.background_texture));
         material->add_texture(global.game->cache().get_resource<Texture>(file.blendmap));
 
-        material->add_texture(global.game->cache().get_resource<Texture>(file.background_texture));
-        material->add_texture(global.game->cache().get_resource<Texture>(file.background_texture));
-        material->add_texture(global.game->cache().get_resource<Texture>(file.background_texture));
+        material->add_texture(global.game->cache().get_resource<Texture>(file.r_texture));
+        material->add_texture(global.game->cache().get_resource<Texture>(file.g_texture));
+        material->add_texture(global.game->cache().get_resource<Texture>(file.b_texture));
 
         auto shader = std::make_shared<ShaderProgram>("shaders/terrain");
         shader->use();
