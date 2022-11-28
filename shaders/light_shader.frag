@@ -18,33 +18,33 @@ struct Material {
 uniform Material material;
 
 struct DirLight {
-    vec3 direction;
+    vec3 direction; // 16
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-};
+    vec3 ambient; // 16
+    vec3 diffuse; // 16
+    vec3 specular; // 16
+}; // 64 total
 
 struct PointLight {
-    vec3 position;
+    vec3 position; // 16
 
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    vec3 ambient; // 16
+    vec3 diffuse; // 16
+    vec3 specular; // 16
 
-    float constant;
-    float linear;
-    float quadratic;
-};
+    float constant; // 16
+    float linear; // 16
+    float quadratic; // 16
+}; // 112
 
 #define MAX_DIR_LIGHTS 4
 #define MAX_POINT_LIGHTS 8
 
 layout (std140) uniform Lights {
-    int dirLightsCount;
-    DirLight dirLights[MAX_DIR_LIGHTS];
-    int pointLightsCount;
-    PointLight pointLights[MAX_POINT_LIGHTS];
+    int dirLightsCount; // 16
+    DirLight dirLights[MAX_DIR_LIGHTS]; // 64 * MAX
+    int pointLightsCount; // 16
+    PointLight pointLights[MAX_POINT_LIGHTS]; // 112 * MAX
 };
 
 vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 pixel) {
@@ -96,8 +96,8 @@ void main()
         result += CalculatePointLight(pointLights[i], normal, viewDir, vec3(texturePixel));
     }
 
-    FragColor = vec4(1.0, 0, 0, 1.0);
-    // FragColor = vec4(result, 1.0);
+    FragColor = vec4(result, 1.0);
+    // FragColor = texturePixel;
 }
 
 

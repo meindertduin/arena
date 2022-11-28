@@ -66,7 +66,6 @@ namespace graphics {
         auto point_lights_count = global.game->active_scene()->point_lights().size();
 
         ubo_lights.set_data(16, sizeof(int), &dir_lights_count);
-        
         auto uboFilledSizeBefore = ubo_lights.offset;
         for (auto &light : global.game->active_scene()->dir_lights()) {
             light.set_data(ubo_lights);

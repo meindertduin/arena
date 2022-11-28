@@ -25,10 +25,10 @@ namespace graphics {
     class DirLight : public Light {
     public:
         void set_data(SharedDataBuffer &buffer) override {
-            buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(direction));
-            buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(ambient));
-            buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(diffuse));
-            buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(specular));
+            buffer.set_data(16, sizeof(glm::vec3), glm::value_ptr(direction));
+            buffer.set_data(16, sizeof(glm::vec3), glm::value_ptr(ambient));
+            buffer.set_data(16, sizeof(glm::vec3), glm::value_ptr(diffuse));
+            buffer.set_data(16, sizeof(glm::vec3), glm::value_ptr(specular));
         }
 
         glm::vec3 direction;
@@ -37,10 +37,10 @@ namespace graphics {
     class PointLight : public Light {
     public:
         void set_data(SharedDataBuffer &buffer) override {
-            buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(position));
-            buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(ambient));
-            buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(diffuse));
-            buffer.set_data(sizeof(glm::vec4), sizeof(glm::vec3), glm::value_ptr(specular));
+            buffer.set_data(16, sizeof(glm::vec3), glm::value_ptr(position));
+            buffer.set_data(16, sizeof(glm::vec3), glm::value_ptr(ambient));
+            buffer.set_data(16, sizeof(glm::vec3), glm::value_ptr(diffuse));
+            buffer.set_data(16, sizeof(glm::vec3), glm::value_ptr(specular));
 
             buffer.set_data(16, sizeof(float), &constant);
             buffer.set_data(16, sizeof(float), &linear);
