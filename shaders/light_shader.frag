@@ -52,7 +52,6 @@ vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 pixel
     vec3 ambient = light.ambient * pixel;
 
     // diffuse
-    vec3 pos = vec3(0, 2, 0);
     vec3 lightDir = normalize(light.position - FragPos);
     float diff = max(dot(normal, lightDir), 0.0f);
     vec3 diffuse = light.diffuse * diff * pixel;
@@ -60,8 +59,8 @@ vec3 CalculatePointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 pixel
     float distance    = length(light.position - FragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
-    ambient  *= attenuation;
-    diffuse  *= attenuation;
+    ambient *= attenuation;
+    diffuse *= attenuation;
 
     return ambient + diffuse;
 }
@@ -87,7 +86,7 @@ void main()
     vec3 normal = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
 
-    vec3 result;
+    vec3 result = vec3(0);
 
     for (int i = 0; i < dirLightsCount; i++) {
         result += CalulateDirLight(dirLights[i], normal, viewDir, vec3(texturePixel));
@@ -97,7 +96,6 @@ void main()
     }
 
     FragColor = vec4(result, 1.0);
-    // FragColor = texturePixel;
 }
 
 
