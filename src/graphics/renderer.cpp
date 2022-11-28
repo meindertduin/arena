@@ -7,7 +7,6 @@
 #include "ui_renderer.h"
 #include "glad/glad.h"
 
-
 namespace graphics {
     Renderer::Renderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
     }

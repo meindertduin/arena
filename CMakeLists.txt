@@ -11,7 +11,7 @@ set(SOURCES
         src/main.cpp
         src/global.cpp
         external/glad/glad.c
-        src/entity/systems_collection.cpp src/entity/systems_collection.h)
+        src/entity/systems_collection.cpp src/entity/systems_collection.h src/lua/lua_script.cpp src/lua/lua_script.h)
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/assets/CMakeLists.txt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/core/CMakeLists.txt)
