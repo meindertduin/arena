@@ -21,6 +21,7 @@ namespace graphics {
             width = other.width;
             channels = other.channels;
         }
+
         Sprite<T>& operator=(const Sprite<T> &other) noexcept {
             *this = Sprite<T>(other);
             return *this;

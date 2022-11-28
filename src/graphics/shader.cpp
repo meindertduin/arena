@@ -1,7 +1,6 @@
 #include "shader.h"
 
 #include <glad/glad.h>
-#include <memory>
 
 #include <iostream>
 #include <utility>
@@ -9,17 +8,28 @@
 #include "../logging.h"
 #include "../assets/file_reader.h"
 
+#include "../global.h"
+#include "../game/game_state.h"
+
+
 namespace graphics {
-    Shader::Shader(ShaderType type, std::string path) : m_type{type}, m_path{std::move(path)} {
-        if (type == ShaderType::Fragment)
+    Shader::Shader(const Path &path) : Resource(path) {}
+
+
+    Shader::~Shader() {
+        glDeleteShader(m_id);
+    }
+
+    void Shader::load(std::size_t size, char *data) {
+        if (path().path().ends_with("frag"))
             m_id = glCreateShader(GL_FRAGMENT_SHADER);
         else
             m_id = glCreateShader(GL_VERTEX_SHADER);
 
-        assets::FileReader file_reader { m_path };
-        auto data = file_reader.get_file_content();
+        assets::FileReader file_reader { path().path() };
+        auto file_data = file_reader.get_file_content();
 
-        const char* charData = data.c_str();
+        const char* charData = file_data.c_str();
 
         glShaderSource(m_id, 1, &charData, nullptr);
         glCompileShader(m_id);
@@ -30,12 +40,8 @@ namespace graphics {
             GLchar infoLog[1024];
             glGetShaderInfoLog(m_id, 1024, nullptr, infoLog);
             std::cout << infoLog;
-            THROW_ERROR("GL ERROR: Failed to compile shader with path: %s", m_path);
+            THROW_ERROR("GL ERROR: Failed to compile shader with path: %s", path().path());
         }
-    }
-
-    Shader::~Shader() {
-        glDeleteShader(m_id);
     }
 
     ShaderProgram::~ShaderProgram() {
@@ -55,7 +61,7 @@ namespace graphics {
             GLchar infoLog[1024];
             glGetProgramInfoLog(program, 1024, nullptr, infoLog);
             std::cout << infoLog;
-            THROW_ERROR("GL ERROR: Failed to link shaders with paths: %s, %s", vertexShader->path(), fragmentShader->path());
+            THROW_ERROR("GL ERROR: Failed to link shaders with paths: %s, %s", m_vertex_shader->path().path(), m_fragment_shader->path().path());
         }
 
         // set the block bindings
@@ -108,21 +114,23 @@ namespace graphics {
     }
 
     void ShaderProgram::set_uniform_loc(const std::string& name, int index) const {
-        glUniform1i(glGetUniformLocation(program, name.c_str()), index);
+        int uniform_lock = glGetUniformLocation(program, name.c_str());
+        glUniform1i(uniform_lock, index);
     }
 
-    void ShaderProgram::load(std::size_t size, char *data) {
-        auto shader_data = reinterpret_cast<ShaderProgramData*>(data);
+    ShaderProgram::ShaderProgram(const std::string &path) {
+        auto vert_shader_filename = path + ".vert";
+        auto frag_shader_filename = path + ".frag";
 
         program = glCreateProgram();
 
-        vertexShader = std::make_unique<Shader>(ShaderType::Vertex, shader_data->vertex_shader_path);
-        fragmentShader = std::make_unique<Shader>(ShaderType::Fragment, shader_data->frag_shader_path);
+        m_vertex_shader = global.game->cache().get_resource<Shader>(vert_shader_filename);
+        m_fragment_shader = global.game->cache().get_resource<Shader>(frag_shader_filename);
 
-        glAttachShader(program, vertexShader->id());
-        glAttachShader(program, fragmentShader->id());
+        glAttachShader(program, m_vertex_shader->id());
+        glAttachShader(program, m_fragment_shader->id());
 
-        // TODO test code
+        // Todo, make this a separate step
         link();
     }
 }

@@ -13,4 +13,3 @@ namespace game {
         global.renderer->render(terrain->mesh().get(), terrain->transform());
     }
 }
-

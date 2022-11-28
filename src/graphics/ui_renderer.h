@@ -17,7 +17,7 @@ namespace graphics {
         void draw_rect(const IRect &rect, const Color &color);
     private:
         std::shared_ptr<RenderTarget> render_target;
-        std::shared_ptr<ShaderProgram> m_shader;
+        ShaderProgram m_shader { "shaders/ui" };
 
         graphics::GpuPlane plane;
 

@@ -98,7 +98,7 @@ void main()
     vec3 normal = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
 
-    vec3 result;
+    vec3 result = vec3(0);
     for (int i = 0; i < dirLightsCount; i++) {
         result += CalulateDirLight(dirLights[i], normal, viewDir, texturePixel);
     }

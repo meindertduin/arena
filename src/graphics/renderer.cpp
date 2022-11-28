@@ -66,7 +66,6 @@ namespace graphics {
         auto point_lights_count = global.game->active_scene()->point_lights().size();
 
         ubo_lights.set_data(16, sizeof(int), &dir_lights_count);
-        
         auto uboFilledSizeBefore = ubo_lights.offset;
         for (auto &light : global.game->active_scene()->dir_lights()) {
             light.set_data(ubo_lights);
@@ -104,17 +103,16 @@ namespace graphics {
     }
 
     TextRenderer::TextRenderer() {
-        m_shader = global.game->cache().get_resource<ShaderProgram>("shaders/text");
-        m_shader->link();
+        m_shader.link();
     }
 
     void TextRenderer::render(const std::string &text, const IRect &rect, const TextRenderOptions &options) {
-        m_shader->use();
+        m_shader.use();
         glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
                                           0.0f, (float)global.graphic_options->size().height());
 
-        m_shader->set_property("projection", projection);
-        m_shader->set_property("textColor", { 1.0f, 1.0f, 1.0f });
+        m_shader.set_property("projection", projection);
+        m_shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
 
         float scale = static_cast<float>(options.text_size) / static_cast<float>(FontRenderSize);
         auto text_width = calculate_text_width(text, scale);

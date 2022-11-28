@@ -20,9 +20,9 @@ namespace graphics {
         Fragment,
     };
 
-    class Shader {
+    class Shader : public assets::Resource {
     public:
-        Shader(ShaderType type, std::string path);
+        explicit Shader(const Path &path);
         ~Shader();
 
         Shader(const Shader &other) = delete;
@@ -32,25 +32,26 @@ namespace graphics {
         Shader& operator=(Shader &&other) = delete;
 
         [[nodiscard]] constexpr ALWAYS_INLINE uint32_t id() const { return m_id; }
-        // TODO remove once shader inherits from resource
-        [[nodiscard]] constexpr ALWAYS_INLINE std::string path() const { return m_path; }
+
+        // TODO make these functions private
+        void load(std::size_t size, char *data) override;
+        void unload() override { }
     private:
-        uint32_t m_id;
+        uint32_t m_id{};
         ShaderType m_type;
-        std::string m_path;
     };
 
-    class ShaderProgram : public assets::Resource {
+    class ShaderProgram  {
     public:
         struct ShaderProgramData {
             std::string vertex_shader_path;
             std::string frag_shader_path;
         };
 
-        std::unique_ptr<Shader> vertexShader;
-        std::unique_ptr<Shader> fragmentShader;
+        std::shared_ptr<Shader> m_vertex_shader;
+        std::shared_ptr<Shader> m_fragment_shader;
 
-        ShaderProgram(const Path &path) : assets::Resource(path) {}
+        explicit ShaderProgram(const std::string &path);
         ~ShaderProgram();
 
         void use() const;
@@ -66,9 +67,6 @@ namespace graphics {
         void set_property(const std::string& property_name, const glm::mat4&) const;
 
         void set_uniform_loc(const std::string& name, int index) const;
-
-        void load(std::size_t size, char *data) override;
-        void unload() override { }
     private:
         uint32_t id{};
         uint32_t program;

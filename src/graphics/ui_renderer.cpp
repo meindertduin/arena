@@ -5,8 +5,7 @@
 
 namespace graphics {
     UIRenderer::UIRenderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
-        m_shader = global.game->cache().get_resource<ShaderProgram>("shaders/ui");
-        m_shader->link();
+        m_shader.link();
     }
 
     void UIRenderer::before_ui_rendering() {
@@ -28,9 +27,9 @@ namespace graphics {
         glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
                                           0.0f, (float)global.graphic_options->size().height());
 
-        m_shader->set_property("projection", projection);
+        m_shader.set_property("projection", projection);
 
-        m_shader->set_property("color", color);
+        m_shader.set_property("color", color);
 
         if (size.x > 0 && size.y > 0 && color.w > 0.0f) {
             plane.set_pos_and_size(pos, size);
@@ -39,13 +38,13 @@ namespace graphics {
     }
 
     void UIRenderer::draw_rect(const IRect &rect, const Color &color) {
-        m_shader->use();
+        m_shader.use();
         glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
                                           0.0f, (float)global.graphic_options->size().height());
 
-        m_shader->set_property("projection", projection);
+        m_shader.set_property("projection", projection);
 
-        m_shader->set_property("color", color.color());
+        m_shader.set_property("color", color.color());
 
         if (rect.size().width() > 0 && rect.size().height() > 0 && color.alpha() > 0.0f) {
             plane.set_from_rect(rect);
