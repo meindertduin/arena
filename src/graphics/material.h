@@ -34,6 +34,7 @@ namespace graphics {
         void set_shader(const std::shared_ptr<ShaderProgram> &shader) {
             m_shader = shader;
         }
+
     private:
         std::vector<std::shared_ptr<graphics::Texture>> m_textures;
         std::shared_ptr<ShaderProgram> m_shader { nullptr };

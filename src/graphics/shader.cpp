@@ -13,6 +13,19 @@
 #include "../game/game_state.h"
 
 namespace graphics {
+    uint32_t Uniform::size() const {
+        switch (type) {
+            case Int: return sizeof(int);
+            case Float: return sizeof(float);
+            case Matrix4: return sizeof(glm::mat4);
+            case Vec2: return sizeof(glm::vec2);
+            case Vec3: return sizeof(glm::vec3);
+            case Vec4: return sizeof(glm::vec4);
+            default:
+                THROW_ERROR("Type is out of range");
+        }
+    }
+
     static Shader* get_shader(lua_State *L) {
         lua_getglobal(L, "this");
         auto shader = lua::convert_type<Shader*>(L, 1);
@@ -29,6 +42,45 @@ namespace graphics {
 
             shader->set_property(std::string { property_name }, p);
 
+            return 0;
+        }
+
+        static int uniform(lua_State *L) {
+            auto shader = get_shader(L);
+
+            auto name = lua::check_arg<const char*>(L, 2);
+            auto type = lua::check_arg<const char*>(L, 3);
+
+            Uniform uniform;
+            uniform.name = name;
+
+            const struct {
+                std::string name;
+                Uniform::Type type;
+            } types[] = {
+                    { "float", Uniform::Float },
+                    { "int", Uniform::Int },
+                    { "mat4", Uniform::Matrix4 },
+                    { "vec2", Uniform::Vec2 },
+                    { "vec3", Uniform::Vec3 },
+                    { "vec4", Uniform::Vec4 },
+            };
+
+            for (const auto &t: types) {
+                if (t.name == type) {
+                    uniform.type == t.type;
+                    break;
+                }
+            }
+
+            if (shader->uniforms().empty()) {
+                uniform.offset = 0;
+            } else {
+                auto last_uniform = shader->uniforms()[shader->uniforms().size() -1];
+                uniform.offset = last_uniform.offset + last_uniform.size();
+            }
+
+            shader->add_uniform(uniform);
             return 0;
         }
     }
@@ -84,6 +136,10 @@ namespace graphics {
 
     void Shader::set_property(const std::string &property_name, const glm::vec3 &v) const {
         printf("setting property %s: %f %f %f", property_name.c_str(), v.x, v.y, v.z);
+    }
+
+    void Shader::add_uniform(const Uniform &uniform) {
+        m_uniforms.push_back(uniform);
     }
 
     ShaderProgram::~ShaderProgram() {
@@ -175,4 +231,5 @@ namespace graphics {
         // Todo, make this a separate step
         link();
     }
+
 }

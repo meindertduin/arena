@@ -20,6 +20,30 @@ namespace graphics {
         Fragment,
     };
 
+    struct Uniform {
+        enum Type {
+            Int,
+            Float,
+            Matrix4,
+            Vec2,
+            Vec3,
+            Vec4,
+        };
+
+        union {
+            float float_value;
+            glm::vec4 v4;
+            glm::vec3 v3;
+            glm::vec2 v2;
+            glm::mat4 matrix4;
+        } value;
+
+        std::string name;
+        Type type;
+        uint32_t offset;
+        uint32_t size() const;
+    };
+
     class Shader : public assets::Resource {
     public:
         explicit Shader(const Path &path);
@@ -32,8 +56,10 @@ namespace graphics {
         Shader& operator=(Shader &&other) = delete;
 
         [[nodiscard]] constexpr ALWAYS_INLINE uint32_t id() const { return m_id; }
+        [[nodiscard]] constexpr ALWAYS_INLINE const std::vector<Uniform>& uniforms() const { return m_uniforms; }
 
         void set_property(const std::string& property_name, const glm::vec3& v) const;
+        void add_uniform(const Uniform &uniform);
 
         // TODO make these functions private
         void load(std::size_t size, char *data) override;
@@ -41,6 +67,7 @@ namespace graphics {
     private:
         uint32_t m_id{};
         ShaderType m_type;
+        std::vector<Uniform> m_uniforms;
     };
 
     class ShaderProgram  {
