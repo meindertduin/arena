@@ -9,4 +9,8 @@ v3[1] = 0.4
 v3[2] = 0.4
 v3[3] = 0.4
 
-setProperty("diffuse", v3, this)
+setProperty(this, "diffuse", v3)
+
+function render()
+    shader.setProperty("diffuse", material.diffuse())
+end

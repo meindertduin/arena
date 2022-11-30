@@ -43,6 +43,25 @@ namespace lua {
         return lua_tostring(L, index);
     }
 
+    template<>
+    inline glm::vec3 convert_type<glm::vec3>(lua_State *L, int index) {
+        glm::vec3 v;
+
+        lua_rawgeti(L, index, 1);
+        v.x = (float)lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_rawgeti(L, index, 2);
+        v.y = (float) lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_rawgeti(L, index, 3);
+        v.z = (float)lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        return v;
+    }
+
     template<typename T>
     T check_arg(lua_State* L, int index) {
         if (!is_type<T>(L, index)) {

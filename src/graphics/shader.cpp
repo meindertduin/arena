@@ -15,24 +15,23 @@
 namespace graphics {
     static Shader* get_shader(lua_State *L) {
         lua_getglobal(L, "this");
-        auto shader = lua::convert_type<Shader*>(L, -1);
+        auto shader = lua::convert_type<Shader*>(L, 1);
         lua_pop(L, 1);
         return shader;
     }
 
     namespace lua_api {
         static int set_property(lua_State *L) {
-            auto property_name = lua::check_arg<const char*>(L, 1);
-            // auto property = *lua::check_arg<glm::vec3*>(L, 2);
-            auto property = glm::vec3 {0.4f, 0.3f, 0.2f};
-
             auto shader = get_shader(L);
-            shader->set_property(std::string { property_name }, property);
+
+            auto property_name = lua::check_arg<const char*>(L, 2);
+            auto p = lua::check_arg<glm::vec3>(L, 3);
+
+            shader->set_property(std::string { property_name }, p);
 
             return 0;
         }
     }
-
 
     Shader::Shader(const Path &path) : Resource(path) {}
 
