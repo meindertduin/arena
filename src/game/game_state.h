@@ -20,7 +20,7 @@ namespace game {
 
     class GameState {
     public:
-        GameState() = default;
+        GameState();
 
         GameState(const GameState&) = delete;
         GameState& operator=(const GameState&) = delete;
@@ -35,6 +35,7 @@ namespace game {
 
         constexpr ALWAYS_INLINE assets::Cache& cache() { return m_cache; }
         constexpr ALWAYS_INLINE std::unique_ptr<Scene>& active_scene() { return m_active_scene; }
+        constexpr ALWAYS_INLINE lua_State* lua_state() { return m_lua_state; }
 
         void init();
         void update();
@@ -45,6 +46,7 @@ namespace game {
         ui::UI m_ui;
 
         assets::Cache m_cache;
+        lua_State *m_lua_state;
         std::unique_ptr<Scene> m_active_scene { nullptr };
     };
 }

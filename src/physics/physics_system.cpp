@@ -35,7 +35,7 @@ namespace physics {
         auto colliding_static_objects = global.game->active_scene()->static_octree().get_colliding_objects(rigid_body);
         auto colliding_dynamic_objects = global.game->active_scene()->dynamic_octree().get_colliding_objects(rigid_body);
 
-        printf("colliding objects: %lu\n", colliding_static_objects.size());
+        // printf("colliding objects: %lu\n", colliding_static_objects.size());
 
         for (auto value : colliding_static_objects) {
             auto collision_points = rigid_body.test_collision(value);

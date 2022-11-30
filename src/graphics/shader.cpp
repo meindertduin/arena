@@ -7,10 +7,10 @@
 
 #include "../logging.h"
 #include "../assets/file_reader.h"
+#include "../lua/helpers.h"
 
 #include "../global.h"
 #include "../game/game_state.h"
-
 
 namespace graphics {
     Shader::Shader(const Path &path) : Resource(path) {}
@@ -42,6 +42,14 @@ namespace graphics {
             std::cout << infoLog;
             THROW_ERROR("GL ERROR: Failed to compile shader with path: %s", path().path());
         }
+
+        auto script = global.game->cache().get_resource<lua::LuaScript>("scripts/lightsVertex.lua");
+
+        std::string script_name = "test";
+        auto L = global.game->lua_state();
+
+        lua::create_system_variable(L, "test", "test", 2);
+        lua::execute(L, script->script(), script_name, 0);
     }
 
     ShaderProgram::~ShaderProgram() {

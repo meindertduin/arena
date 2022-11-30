@@ -4,9 +4,4 @@
 --- DateTime: 11/28/22 8:37 PM
 ---
 
-setShaderProperty("model")
-setShaderProperty("diffuse")
-setShaderProperty("specular")
-setShaderProperty("shininess")
-setShaderProperty("viewPos")
-setShaderProperty("invtransmodel")
+print(test.test)
