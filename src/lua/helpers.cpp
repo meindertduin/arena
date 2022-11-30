@@ -42,4 +42,31 @@ namespace lua {
         lua_setfield(L, -2, var_name);
         lua_pop(L, 1);
     }
+
+    void create_system_function(lua_State *L, const char* system_name, const char* var_name, lua_CFunction function) {
+        lua_getglobal(L, system_name);
+        if (lua_type(L, -1) == LUA_TNIL) {
+            lua_pop(L, 1);
+            lua_newtable(L);
+            lua_setglobal(L, system_name);
+            lua_getglobal(L, system_name);
+        }
+        lua_pushcfunction(L, function);
+        lua_setfield(L, -2, var_name);
+        lua_pop(L, 1);
+    }
+
+    void create_system_closure(lua_State *L, const char* system_name, void* object_ptr, const char* var_name, lua_CFunction function) {
+        lua_getglobal(L, system_name);
+        if (lua_type(L, -1) == LUA_TNIL) {
+            lua_pop(L, 1);
+            lua_newtable(L);
+            lua_setglobal(L, system_name);
+            lua_getglobal(L, system_name);
+        }
+        lua_pushlightuserdata(L, object_ptr);
+        lua_pushcclosure(L, function, 1);
+        lua_setfield(L, -2, var_name);
+        lua_pop(L, 1);
+    }
 }

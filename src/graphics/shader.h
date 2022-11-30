@@ -33,6 +33,8 @@ namespace graphics {
 
         [[nodiscard]] constexpr ALWAYS_INLINE uint32_t id() const { return m_id; }
 
+        void set_property(const std::string& property_name, const glm::vec3& v) const;
+
         // TODO make these functions private
         void load(std::size_t size, char *data) override;
         void unload() override { }

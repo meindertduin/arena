@@ -4,4 +4,9 @@
 --- DateTime: 11/28/22 8:37 PM
 ---
 
-print(test.test)
+v3 = {}
+v3[1] = 0.4
+v3[2] = 0.4
+v3[3] = 0.4
+
+setProperty("diffuse", v3, this)

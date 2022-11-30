@@ -13,6 +13,27 @@
 #include "../game/game_state.h"
 
 namespace graphics {
+    static Shader* get_shader(lua_State *L) {
+        lua_getglobal(L, "this");
+        auto shader = lua::convert_type<Shader*>(L, -1);
+        lua_pop(L, 1);
+        return shader;
+    }
+
+    namespace lua_api {
+        static int set_property(lua_State *L) {
+            auto property_name = lua::check_arg<const char*>(L, 1);
+            // auto property = *lua::check_arg<glm::vec3*>(L, 2);
+            auto property = glm::vec3 {0.4f, 0.3f, 0.2f};
+
+            auto shader = get_shader(L);
+            shader->set_property(std::string { property_name }, property);
+
+            return 0;
+        }
+    }
+
+
     Shader::Shader(const Path &path) : Resource(path) {}
 
 
@@ -47,9 +68,23 @@ namespace graphics {
 
         std::string script_name = "test";
         auto L = global.game->lua_state();
+        struct Test {
+            int x;
+        };
 
-        lua::create_system_variable(L, "test", "test", 2);
+        auto test = Test { .x = 5 };
+
+        lua::create_system_variable(L, "test", "test", &test);
+        lua_pushlightuserdata(L, this);
+        lua_setglobal(L, "this");
+        lua_pushcfunction(L, lua_api::set_property);
+        lua_setglobal(L, "setProperty");
+
         lua::execute(L, script->script(), script_name, 0);
+    }
+
+    void Shader::set_property(const std::string &property_name, const glm::vec3 &v) const {
+        printf("setting property %s: %f %f %f", property_name.c_str(), v.x, v.y, v.z);
     }
 
     ShaderProgram::~ShaderProgram() {
