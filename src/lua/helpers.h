@@ -11,7 +11,7 @@ extern "C" {
 }
 
 namespace lua {
-    bool execute(lua_State* L, std::string &script, std::string &name, int results_count);
+    bool execute(lua_State* L, const std::string &script, const std::string &name, int results_count);
 
     template<typename T>
     inline bool is_type(lua_State *L, int index) {

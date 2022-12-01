@@ -1,7 +1,7 @@
 #include "helpers.h"
 
 namespace lua {
-    bool execute(lua_State* L, std::string &script, std::string &name, int results_count) {
+    bool execute(lua_State* L, const std::string &script, const std::string &name, int results_count) {
         if(luaL_loadbuffer(L, script.c_str(), script.length(), name.c_str()) != 0) {
             // TODO add logging
             lua_pop(L, 1);

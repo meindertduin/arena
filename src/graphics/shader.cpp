@@ -28,7 +28,7 @@ namespace graphics {
 
     static Shader* get_shader(lua_State *L) {
         lua_getglobal(L, "this");
-        auto shader = lua::convert_type<Shader*>(L, 1);
+        auto shader = lua::convert_type<Shader*>(L, -1);
         lua_pop(L, 1);
         return shader;
     }
@@ -48,8 +48,8 @@ namespace lua_api {
     static int uniform(lua_State *L) {
         auto shader = get_shader(L);
 
-        auto name = lua::check_arg<const char*>(L, 2);
-        auto type = lua::check_arg<const char*>(L, 3);
+        auto name = lua::check_arg<const char*>(L, 1);
+        auto type = lua::check_arg<const char*>(L, 2);
 
         Uniform uniform;
         uniform.name = name;
@@ -81,9 +81,9 @@ namespace lua_api {
         }
 
         if (lua_gettop(L) > 2) {
-            switch (lua_type(L, 4)) {
+            switch (lua_type(L, 3)) {
                 case LUA_TNUMBER:
-                    uniform.value.float_value = lua::check_arg<float>(L, 4);
+                    uniform.value.float_value = lua::check_arg<float>(L, 3);
                     break;
                 case LUA_TTABLE: {
                     auto len = luaL_len(L, 4);
@@ -92,10 +92,10 @@ namespace lua_api {
                             uniform.value.v2 = lua::check_arg<glm::vec2>(L, 3);
                             break;
                         case 3:
-                            uniform.value.v3 = lua::check_arg<glm::vec3>(L, 4);
+                            uniform.value.v3 = lua::check_arg<glm::vec3>(L, 3);
                             break;
                         case 4:
-                            uniform.value.v4 = lua::check_arg<glm::vec4>(L, 4);
+                            uniform.value.v4 = lua::check_arg<glm::vec4>(L, 3);
                             break;
                         default:
                             luaL_error(L, "Uniform %s is not supported", name);
@@ -149,15 +149,10 @@ namespace lua_api {
 
         auto script = global.game->cache().get_resource<lua::LuaScript>("scripts/lightsVertex.lua");
 
-        std::string script_name = "test";
-        auto L = global.game->lua_state();
-        struct Test {
-            int x;
-        };
+        auto root_state = global.game->lua_state();
+        auto L = lua_newthread(root_state);
+        const auto state_ref = luaL_ref(root_state, LUA_REGISTRYINDEX);
 
-        auto test = Test { .x = 5 };
-
-        lua::create_system_variable(L, "test", "test", &test);
         lua_pushlightuserdata(L, this);
         lua_setglobal(L, "this");
 
@@ -167,7 +162,9 @@ namespace lua_api {
         lua_pushcfunction(L, lua_api::uniform);
         lua_setglobal(L, "uniform");
 
-        lua::execute(L, script->script(), script_name, 0);
+        lua::execute(L, script->script(), script->path().path(), 0);
+
+        luaL_unref(root_state, LUA_REGISTRYINDEX, state_ref);
     }
 
     void Shader::set_property(const std::string &property_name, const glm::vec3 &v) const {
