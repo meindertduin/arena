@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <string>
 
 namespace graphics {
     class GpuBuffer {
@@ -60,22 +61,41 @@ namespace graphics {
 
     class SharedDataBuffer : GpuBuffer {
     public:
-            int offset = 0;
-            std::size_t size;
+        int offset = 0;
+        std::size_t size;
 
-            SharedDataBuffer(int binding_block, std::size_t size);
-            ~SharedDataBuffer() override;
+        SharedDataBuffer(int binding_block, std::size_t size);
+        ~SharedDataBuffer() override;
 
-            SharedDataBuffer(const SharedDataBuffer&) = delete;
-            SharedDataBuffer(SharedDataBuffer&&) = delete;
-            SharedDataBuffer& operator=(const SharedDataBuffer&) = delete;
-            SharedDataBuffer& operator=(SharedDataBuffer&&) = delete;
-        
-            void set_data(int format_size, std::size_t size, const void *data);
-            void reset();
-            void set_offset(int offset);
-        
-            void bind() const override;
-            void unbind() const override;
+        SharedDataBuffer(const SharedDataBuffer&) = delete;
+        SharedDataBuffer(SharedDataBuffer&&) = delete;
+        SharedDataBuffer& operator=(const SharedDataBuffer&) = delete;
+        SharedDataBuffer& operator=(SharedDataBuffer&&) = delete;
+
+        void set_data(int format_size, std::size_t size, const void *data);
+        void reset();
+        void set_offset(int offset);
+
+        void bind() const override;
+        void unbind() const override;
+    };
+
+    class ShaderProgram;
+    struct Uniform;
+
+    class UniformBuffer : GpuBuffer {
+    public:
+        UniformBuffer(const std::string &uniform_name, const Uniform &uniform, const ShaderProgram &program);
+        ~UniformBuffer() override;
+
+        void set_data(const Uniform &uniform);
+        void bind() const override;
+        void reset();
+
+    private:
+        std::string m_name;
+        int m_uniform_index;
+        uint32_t m_offset = 0;
+        uint32_t m_size;
     };
 }

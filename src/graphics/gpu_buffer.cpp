@@ -1,4 +1,5 @@
 #include "gpu_buffer.h"
+#include "shader.h"
 
 #include <glad/glad.h>
 #include <stdexcept>
@@ -101,4 +102,34 @@ namespace graphics {
         glBindBuffer(GL_UNIFORM_BUFFER, 0);
     }
 
+    UniformBuffer::UniformBuffer(const std::string &uniform_name, const Uniform &uniform, const ShaderProgram &program) {
+        m_name = uniform_name;
+        m_size = uniform.size();
+
+        glGenBuffers(1, &id);
+        glBindBuffer(GL_UNIFORM_BUFFER, id);
+        glBufferData(GL_UNIFORM_BUFFER, m_size, nullptr, GL_STATIC_DRAW);
+        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+        // define the range of the buffer that links to a uniform binding point
+        m_uniform_index = glGetUniformLocation(program.id(), uniform_name.c_str());
+        glBindBufferRange(GL_UNIFORM_BUFFER, m_uniform_index, id, 0, m_size);
+    }
+
+    UniformBuffer::~UniformBuffer() {
+        glDeleteBuffers(1, &id);
+    }
+
+    void UniformBuffer::bind() const {
+        glBindBuffer(GL_UNIFORM_BUFFER, id);
+    }
+
+    void UniformBuffer::reset() {
+        m_offset = 0;
+    }
+
+    void UniformBuffer::set_data(const Uniform &uniform) {
+        glad_glBufferSubData(GL_UNIFORM_BUFFER, m_offset, uniform.size(), &uniform.value);
+        m_offset += uniform.size();
+    }
 }

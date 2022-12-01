@@ -83,6 +83,7 @@ namespace graphics {
         explicit ShaderProgram(const std::string &path);
         ~ShaderProgram();
 
+        [[nodiscard]] constexpr ALWAYS_INLINE uint32_t id() const { return m_id; }
         void use() const;
         void link() const;
 
@@ -97,7 +98,7 @@ namespace graphics {
 
         void set_uniform_loc(const std::string& name, int index) const;
     private:
-        uint32_t id{};
+        uint32_t m_id{};
         uint32_t program;
     };
 }

@@ -35,6 +35,7 @@ namespace graphics {
 
             material.shader()->set_property("color", { 1.0f, 1.0f, 0 });
             material.shader()->set_property("model", model_4x4);
+
             material.shader()->set_property("diffuse", material.diffuse);
             material.shader()->set_property("specular", material.specular);
             material.shader()->set_property("shininess", material.shininess);
@@ -92,11 +93,13 @@ namespace graphics {
         }
 
         material.shader()->set_property("model", model_4x4);
+        material.shader()->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
+        material.shader()->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
+
+
         material.shader()->set_property("diffuse", material.diffuse);
         material.shader()->set_property("specular", material.specular);
         material.shader()->set_property("shininess", material.shininess);
-        material.shader()->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
-        material.shader()->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
         mesh->render();
     }
