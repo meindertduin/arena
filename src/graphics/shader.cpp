@@ -33,90 +33,90 @@ namespace graphics {
         return shader;
     }
 
-    namespace lua_api {
-        static int set_property(lua_State *L) {
-            auto shader = get_shader(L);
+namespace lua_api {
+    static int set_property(lua_State *L) {
+        auto shader = get_shader(L);
 
-            auto property_name = lua::check_arg<const char*>(L, 2);
-            auto p = lua::check_arg<glm::vec3>(L, 3);
+        auto property_name = lua::check_arg<const char*>(L, 2);
+        auto p = lua::check_arg<glm::vec3>(L, 3);
 
-            shader->set_property(std::string { property_name }, p);
+        shader->set_property(std::string { property_name }, p);
 
+        return 0;
+    }
+
+    static int uniform(lua_State *L) {
+        auto shader = get_shader(L);
+
+        auto name = lua::check_arg<const char*>(L, 2);
+        auto type = lua::check_arg<const char*>(L, 3);
+
+        Uniform uniform;
+        uniform.name = name;
+
+        const struct {
+            std::string name;
+            Uniform::Type type;
+        } types[] = {
+                { "float", Uniform::Float },
+                { "int", Uniform::Int },
+                { "mat4", Uniform::Matrix4 },
+                { "vec2", Uniform::Vec2 },
+                { "vec3", Uniform::Vec3 },
+                { "vec4", Uniform::Vec4 },
+        };
+
+        auto valid = false;
+        for (const auto &t: types) {
+            if (t.name == type) {
+                uniform.type = t.type;
+                valid = true;
+                break;
+            }
+        }
+
+        if (!valid) {
+            THROW_ERROR("Unknown uniform type");
             return 0;
         }
 
-        static int uniform(lua_State *L) {
-            auto shader = get_shader(L);
-
-            auto name = lua::check_arg<const char*>(L, 2);
-            auto type = lua::check_arg<const char*>(L, 3);
-
-            Uniform uniform;
-            uniform.name = name;
-
-            const struct {
-                std::string name;
-                Uniform::Type type;
-            } types[] = {
-                    { "float", Uniform::Float },
-                    { "int", Uniform::Int },
-                    { "mat4", Uniform::Matrix4 },
-                    { "vec2", Uniform::Vec2 },
-                    { "vec3", Uniform::Vec3 },
-                    { "vec4", Uniform::Vec4 },
-            };
-
-            auto valid = false;
-            for (const auto &t: types) {
-                if (t.name == type) {
-                    uniform.type = t.type;
-                    valid = true;
+        if (lua_gettop(L) > 2) {
+            switch (lua_type(L, 4)) {
+                case LUA_TNUMBER:
+                    uniform.value.float_value = lua::check_arg<float>(L, 4);
+                    break;
+                case LUA_TTABLE: {
+                    auto len = luaL_len(L, 4);
+                    switch(len) {
+                        case 2:
+                            uniform.value.v2 = lua::check_arg<glm::vec2>(L, 3);
+                            break;
+                        case 3:
+                            uniform.value.v3 = lua::check_arg<glm::vec3>(L, 4);
+                            break;
+                        case 4:
+                            uniform.value.v4 = lua::check_arg<glm::vec4>(L, 4);
+                            break;
+                        default:
+                            luaL_error(L, "Uniform %s is not supported", name);
+                            break;
+                    }
                     break;
                 }
             }
-
-            if (!valid) {
-                THROW_ERROR("Unknown uniform type");
-                return 0;
-            }
-
-            if (lua_gettop(L) > 2) {
-                switch (lua_type(L, 4)) {
-                    case LUA_TNUMBER:
-                        uniform.value.float_value = lua::check_arg<float>(L, 4);
-                        break;
-                    case LUA_TTABLE: {
-                        auto len = luaL_len(L, 4);
-                        switch(len) {
-                            case 2:
-                                uniform.value.v2 = lua::check_arg<glm::vec2>(L, 3);
-                                break;
-                            case 3:
-                                uniform.value.v3 = lua::check_arg<glm::vec3>(L, 4);
-                                break;
-                            case 4:
-                                uniform.value.v4 = lua::check_arg<glm::vec4>(L, 4);
-                                break;
-                            default:
-                                luaL_error(L, "Uniform %s is not supported", name);
-                                break;
-                        }
-                        break;
-                    }
-                }
-            }
-
-            if (shader->uniforms().empty()) {
-                uniform.offset = 0;
-            } else {
-                auto last_uniform = shader->uniforms()[shader->uniforms().size() -1];
-                uniform.offset = last_uniform.offset + last_uniform.size();
-            }
-
-            shader->add_uniform(uniform);
-            return 0;
         }
+
+        if (shader->uniforms().empty()) {
+            uniform.offset = 0;
+        } else {
+            auto last_uniform = shader->uniforms()[shader->uniforms().size() -1];
+            uniform.offset = last_uniform.offset + last_uniform.size();
+        }
+
+        shader->add_uniform(uniform);
+        return 0;
     }
+}
 
     Shader::Shader(const Path &path) : Resource(path) {}
 

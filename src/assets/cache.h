@@ -42,6 +42,7 @@ namespace assets {
         std::unordered_map<Hash64, std::weak_ptr<graphics::Terrain>> m_terrains;
         std::unordered_map<Hash64, std::weak_ptr<graphics::Texture>> m_textures;
         std::unordered_map<Hash64, std::weak_ptr<graphics::Shader>> m_shaders;
+        std::unordered_map<Hash64, std::weak_ptr<graphics::Material>> m_materials;
         std::unordered_map<Hash64, std::weak_ptr<lua::LuaScript>> m_lua_scripts;
 
         template<typename T>

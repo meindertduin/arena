@@ -166,7 +166,7 @@ namespace graphics {
     }
 
     void Terrain::set_mesh_material(const TerrainFile &file) {
-        auto material = std::make_shared<Material>(glm::vec3{0.2f, 0.2f, 0.2f }, glm::vec3{0.6f, 0.6f, 0.6f }, glm::vec3{0.2f, 0.2f, 0 }, 0.2f);
+        auto material = global.game->cache().get_resource<Material>("scripts/terrain_material.lua");
 
         material->add_texture(global.game->cache().get_resource<Texture>(file.background_texture));
         material->add_texture(global.game->cache().get_resource<Texture>(file.blendmap));

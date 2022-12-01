@@ -7,7 +7,7 @@ namespace graphics {
     void Model::load(std::size_t size, char *data) {
         auto model_data = reinterpret_cast<ModelData*>(data);
 
-        auto material = std::make_shared<graphics::Material>(glm::vec3{ 0.2f, 0.2f, 0.2f }, glm::vec3{ 0.6f, 0.6f, 0.6f }, glm::vec3{ 0.2f, 0.2f, 0 }, 0.2f);
+        auto material = global.game->cache().get_resource<graphics::Material>("scripts/material.lua");
         auto texture = global.game->cache().get_resource<graphics::Texture>("assets/fan_tree.png");
 
         material->add_texture(texture);

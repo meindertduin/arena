@@ -2,6 +2,7 @@
 
 #include "loaders.h"
 #include "../global.h"
+#include "file_reader.h"
 
 namespace assets {
     template<>
@@ -45,6 +46,15 @@ namespace assets {
     }
 
     template<>
+    std::shared_ptr<graphics::Material> Cache::load_asset<graphics::Material>(const Path& path) {
+        auto material = std::make_shared<graphics::Material>(path);
+        material->load(0, nullptr);
+
+        m_materials[path.hash()] = std::weak_ptr(material);
+        return material;
+    }
+
+    template<>
     std::shared_ptr<lua::LuaScript> Cache::load_asset<lua::LuaScript>(const Path& path) {
         auto script = std::make_shared<lua::LuaScript>(path);
         script->load(0, nullptr);
@@ -75,6 +85,12 @@ namespace assets {
     std::shared_ptr<graphics::Shader> Cache::get_resource(const Path& path) {
         auto &shader = m_shaders[path.hash()];
         return get_shared_asset<graphics::Shader>(shader, path);
+    }
+
+    template<>
+    std::shared_ptr<graphics::Material> Cache::get_resource(const Path& path) {
+        auto &material = m_materials[path.hash()];
+        return get_shared_asset<graphics::Material>(material, path);
     }
 
     template<>
