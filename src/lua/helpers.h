@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 #include "../logging.h"
 
 extern "C" {
@@ -24,8 +24,23 @@ namespace lua {
     }
 
     template<>
+    inline bool is_type<float>(lua_State *L, int index) {
+        return lua_isnumber(L, index) != 0;
+    }
+
+    template<>
+    inline bool is_type<glm::vec2>(lua_State *L, int index) {
+        return lua_istable(L, index) != 0 && luaL_len(L, index) == 2;
+    }
+
+    template<>
     inline bool is_type<glm::vec3>(lua_State *L, int index) {
         return lua_istable(L, index) != 0 && luaL_len(L, index) == 3;
+    }
+
+    template<>
+    inline bool is_type<glm::vec4>(lua_State *L, int index) {
+        return lua_istable(L, index) != 0 && luaL_len(L, index) == 4;
     }
 
     template<>
@@ -44,6 +59,26 @@ namespace lua {
     }
 
     template<>
+    inline float convert_type<float>(lua_State *L, int index) {
+        return lua_tonumber(L, index);
+    }
+
+    template<>
+    inline glm::vec2 convert_type<glm::vec2>(lua_State *L, int index) {
+        glm::vec2 v;
+
+        lua_rawgeti(L, index, 1);
+        v.x = (float)lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_rawgeti(L, index, 2);
+        v.y = (float) lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        return v;
+    }
+
+    template<>
     inline glm::vec3 convert_type<glm::vec3>(lua_State *L, int index) {
         glm::vec3 v;
 
@@ -57,6 +92,29 @@ namespace lua {
 
         lua_rawgeti(L, index, 3);
         v.z = (float)lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        return v;
+    }
+
+    template<>
+    inline glm::vec4 convert_type<glm::vec4>(lua_State *L, int index) {
+        glm::vec4 v;
+
+        lua_rawgeti(L, index, 1);
+        v.x = (float)lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_rawgeti(L, index, 2);
+        v.y = (float) lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_rawgeti(L, index, 3);
+        v.z = (float)lua_tonumber(L, -1);
+        lua_pop(L, 1);
+
+        lua_rawgeti(L, index, 4);
+        v.w = (float)lua_tonumber(L, -1);
         lua_pop(L, 1);
 
         return v;

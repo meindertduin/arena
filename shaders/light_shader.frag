@@ -6,7 +6,6 @@ in vec3 Normal;
 in vec3 FragPos;
 
 uniform sampler2D baseTexture;
-uniform samplerCube cubeMap;
 uniform vec3 viewPos;
 
 struct Material {

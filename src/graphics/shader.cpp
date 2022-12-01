@@ -66,10 +66,43 @@ namespace graphics {
                     { "vec4", Uniform::Vec4 },
             };
 
+            auto valid = false;
             for (const auto &t: types) {
                 if (t.name == type) {
-                    uniform.type == t.type;
+                    uniform.type = t.type;
+                    valid = true;
                     break;
+                }
+            }
+
+            if (!valid) {
+                THROW_ERROR("Unknown uniform type");
+                return 0;
+            }
+
+            if (lua_gettop(L) > 2) {
+                switch (lua_type(L, 4)) {
+                    case LUA_TNUMBER:
+                        uniform.value.float_value = lua::check_arg<float>(L, 4);
+                        break;
+                    case LUA_TTABLE: {
+                        auto len = luaL_len(L, 4);
+                        switch(len) {
+                            case 2:
+                                uniform.value.v2 = lua::check_arg<glm::vec2>(L, 3);
+                                break;
+                            case 3:
+                                uniform.value.v3 = lua::check_arg<glm::vec3>(L, 4);
+                                break;
+                            case 4:
+                                uniform.value.v4 = lua::check_arg<glm::vec4>(L, 4);
+                                break;
+                            default:
+                                luaL_error(L, "Uniform %s is not supported", name);
+                                break;
+                        }
+                        break;
+                    }
                 }
             }
 
@@ -86,7 +119,6 @@ namespace graphics {
     }
 
     Shader::Shader(const Path &path) : Resource(path) {}
-
 
     Shader::~Shader() {
         glDeleteShader(m_id);
@@ -128,8 +160,12 @@ namespace graphics {
         lua::create_system_variable(L, "test", "test", &test);
         lua_pushlightuserdata(L, this);
         lua_setglobal(L, "this");
+
         lua_pushcfunction(L, lua_api::set_property);
         lua_setglobal(L, "setProperty");
+
+        lua_pushcfunction(L, lua_api::uniform);
+        lua_setglobal(L, "uniform");
 
         lua::execute(L, script->script(), script_name, 0);
     }
