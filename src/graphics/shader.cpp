@@ -201,7 +201,6 @@ namespace lua_api {
  
          int32_t lights_block_index = glGetUniformBlockIndex(program, "Lights");
          glUniformBlockBinding(program, lights_block_index, LIGHTS_BLOCK_BINDING);
-
     }
 
     void ShaderProgram::set_property(const std::string& property_name, int value) const {

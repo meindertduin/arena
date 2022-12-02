@@ -76,4 +76,8 @@ namespace lua_api {
 
         luaL_unref(root_state, LUA_REGISTRYINDEX, state_ref);
     }
+
+    void Material::update() {
+        m_buffer->bind();
+    }
 }

@@ -31,7 +31,14 @@ namespace graphics {
         float shininess{};
 
         [[nodiscard]] constexpr ALWAYS_INLINE
-        const std::vector<std::shared_ptr<graphics::Texture>>& textures() const { return m_textures; }
+        const std::vector<std::shared_ptr<graphics::Texture>>& textures() const {
+            return m_textures;
+        }
+
+        [[nodiscard]] constexpr ALWAYS_INLINE
+        const std::vector<Material::Uniform>& uniforms() const {
+            return m_uniforms;
+        }
 
         [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<ShaderProgram>& shader() const { return m_shader; }
 
@@ -46,6 +53,8 @@ namespace graphics {
         void set_shader(const std::shared_ptr<ShaderProgram> &shader) {
             m_shader = shader;
         }
+
+        void update();
 
         void load(std::size_t size, char *data) override;
         void unload() override {}
