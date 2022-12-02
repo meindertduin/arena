@@ -12,6 +12,8 @@
 #include "../assets/resource.h"
 
 namespace graphics {
+    class ShaderProgram;
+
     constexpr int MATRICES_BLOCK_BINDING = 0;
     constexpr int LIGHTS_BLOCK_BINDING = 1;
 
@@ -41,7 +43,14 @@ namespace graphics {
         std::string name;
         Type type;
         uint32_t offset;
-        uint32_t size() const;
+        [[nodiscard]] uint32_t size() const;
+    };
+
+    struct Stage {
+        int id;
+        std::string path;
+        std::string content;
+        ShaderType type;
     };
 
     class Shader : public assets::Resource {
@@ -55,11 +64,21 @@ namespace graphics {
         Shader& operator=(const Shader &other) = delete;
         Shader& operator=(Shader &&other) = delete;
 
-        [[nodiscard]] constexpr ALWAYS_INLINE uint32_t id() const { return m_id; }
-        [[nodiscard]] constexpr ALWAYS_INLINE const std::vector<Uniform>& uniforms() const { return m_uniforms; }
+        [[nodiscard]] constexpr ALWAYS_INLINE
+        uint32_t id() const { return m_id; }
+
+        [[nodiscard]] constexpr ALWAYS_INLINE
+        const std::vector<Uniform>& uniforms() const {
+            return m_uniforms;
+        }
+
+        void compile();
+        void attach(const ShaderProgram &program);
 
         void set_property(const std::string& property_name, const glm::vec3& v) const;
+
         void add_uniform(const Uniform &uniform);
+        void add_stage(const Stage &stage);
 
         // TODO make these functions private
         void load(std::size_t size, char *data) override;
@@ -68,6 +87,7 @@ namespace graphics {
         uint32_t m_id{};
         ShaderType m_type;
         std::vector<Uniform> m_uniforms;
+        std::vector<Stage> m_stages;
     };
 
     class ShaderProgram  {
@@ -77,8 +97,7 @@ namespace graphics {
             std::string frag_shader_path;
         };
 
-        std::shared_ptr<Shader> m_vertex_shader;
-        std::shared_ptr<Shader> m_fragment_shader;
+        std::shared_ptr<Shader> m_shader;
 
         explicit ShaderProgram(const std::string &path);
         ~ShaderProgram();
@@ -98,7 +117,12 @@ namespace graphics {
 
         void set_uniform_loc(const std::string& name, int index) const;
     private:
+        friend class Shader;
+
         uint32_t m_id{};
         uint32_t program;
+
+        void attach(const Stage &stage) const;
+
     };
 }

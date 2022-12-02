@@ -45,6 +45,24 @@ namespace lua_api {
         return 0;
     }
 
+    static int add_stage(lua_State *L) {
+        auto shader = get_shader(L);
+        auto path = std::string { lua::check_arg<const char*>(L, 1) };
+
+        Stage new_stage;
+        if (path.ends_with(".frag")) {
+            new_stage.type = ShaderType::Fragment;
+        } else if (path.ends_with(".vert")) {
+            new_stage.type = ShaderType::Vertex;
+        }
+
+        assets::FileReader file_reader { path };
+        new_stage.content = file_reader.get_file_content();
+        new_stage.path = path;
+
+        shader->add_stage(new_stage);
+    }
+
     static int uniform(lua_State *L) {
         auto shader = get_shader(L);
 
@@ -125,28 +143,6 @@ namespace lua_api {
     }
 
     void Shader::load(std::size_t size, char *data) {
-        if (path().path().ends_with("frag"))
-            m_id = glCreateShader(GL_FRAGMENT_SHADER);
-        else
-            m_id = glCreateShader(GL_VERTEX_SHADER);
-
-        assets::FileReader file_reader { path().path() };
-        auto file_data = file_reader.get_file_content();
-
-        const char* charData = file_data.c_str();
-
-        glShaderSource(m_id, 1, &charData, nullptr);
-        glCompileShader(m_id);
-
-        int success;
-        glGetShaderiv(m_id, GL_COMPILE_STATUS, &success);
-        if (!success) {
-            GLchar infoLog[1024];
-            glGetShaderInfoLog(m_id, 1024, nullptr, infoLog);
-            std::cout << infoLog;
-            THROW_ERROR("GL ERROR: Failed to compile shader with path: %s", path().path());
-        }
-
         auto script = global.game->cache().get_resource<lua::LuaScript>("scripts/lightsVertex.lua");
 
         auto root_state = global.game->lua_state();
@@ -158,6 +154,9 @@ namespace lua_api {
 
         lua_pushcfunction(L, lua_api::set_property);
         lua_setglobal(L, "setProperty");
+
+        lua_pushcfunction(L, lua_api::add_stage);
+        lua_setglobal(L, "addStage");
 
         lua_pushcfunction(L, lua_api::uniform);
         lua_setglobal(L, "uniform");
@@ -173,6 +172,44 @@ namespace lua_api {
 
     void Shader::add_uniform(const Uniform &uniform) {
         m_uniforms.push_back(uniform);
+    }
+
+    void Shader::add_stage(const Stage &stage) {
+        m_stages.push_back(stage);
+    }
+
+    void Shader::attach(const ShaderProgram &program) {
+        for (auto &stage : m_stages) {
+            program.attach(stage);
+        }
+
+        program.link();
+    }
+
+    void Shader::compile() {
+        for (auto &stage : m_stages) {
+            switch (stage.type) {
+                case ShaderType::Vertex:
+                    stage.id = glCreateShader(GL_VERTEX_SHADER);
+                    break;
+                case ShaderType::Fragment:
+                    stage.id = glCreateShader(GL_FRAGMENT_SHADER);
+                    break;
+            }
+
+            const char* content_data =  stage.content.c_str();
+            glShaderSource(m_id, 1, &content_data, nullptr);
+            glCompileShader(m_id);
+
+            int success;
+            glGetShaderiv(m_id, GL_COMPILE_STATUS, &success);
+            if (!success) {
+                GLchar infoLog[1024];
+                glGetShaderInfoLog(m_id, 1024, nullptr, infoLog);
+                std::cout << infoLog;
+                THROW_ERROR("GL ERROR: Failed to compile shader with path: %s", stage.path);
+            }
+        }
     }
 
     ShaderProgram::~ShaderProgram() {
@@ -192,7 +229,7 @@ namespace lua_api {
             GLchar infoLog[1024];
             glGetProgramInfoLog(program, 1024, nullptr, infoLog);
             std::cout << infoLog;
-            THROW_ERROR("GL ERROR: Failed to link shaders with paths: %s, %s", m_vertex_shader->path().path(), m_fragment_shader->path().path());
+            THROW_ERROR("GL ERROR: Failed to link shaders");
         }
 
         // set the block bindings
@@ -249,18 +286,10 @@ namespace lua_api {
     }
 
     ShaderProgram::ShaderProgram(const std::string &path) {
-        auto vert_shader_filename = path + ".vert";
-        auto frag_shader_filename = path + ".frag";
-
         program = glCreateProgram();
+    }
 
-        m_vertex_shader = global.game->cache().get_resource<Shader>(vert_shader_filename);
-        m_fragment_shader = global.game->cache().get_resource<Shader>(frag_shader_filename);
-
-        glAttachShader(program, m_vertex_shader->id());
-        glAttachShader(program, m_fragment_shader->id());
-
-        // Todo, make this a separate step
-        link();
+    void ShaderProgram::attach(const Stage &stage) const {
+        glAttachShader(program, stage.id);
     }
 }
