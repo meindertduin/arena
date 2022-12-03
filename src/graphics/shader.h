@@ -102,7 +102,7 @@ namespace graphics {
             return m_uniforms;
         }
 
-        constexpr ALWAYS_INLINE ShaderProgram& program() { return m_program; }
+        constexpr ALWAYS_INLINE const ShaderProgram& program() const { return m_program; }
 
         void add_uniform(const Uniform &uniform);
         void add_stage(const Stage &stage);
