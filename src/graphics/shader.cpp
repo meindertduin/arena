@@ -34,17 +34,6 @@ namespace graphics {
     }
 
 namespace lua_api {
-    static int set_property(lua_State *L) {
-        auto shader = get_shader(L);
-
-        auto property_name = lua::check_arg<const char*>(L, 2);
-        auto p = lua::check_arg<glm::vec3>(L, 3);
-
-        shader->set_property(std::string { property_name }, p);
-
-        return 0;
-    }
-
     static int add_stage(lua_State *L) {
         auto shader = get_shader(L);
         auto path = std::string { lua::check_arg<const char*>(L, 1) };
@@ -95,7 +84,6 @@ namespace lua_api {
 
         if (!valid) {
             THROW_ERROR("Unknown uniform type");
-            return 0;
         }
 
         if (lua_gettop(L) > 2) {
@@ -136,14 +124,14 @@ namespace lua_api {
     }
 }
 
-    Shader::Shader(const Path &path) : Resource(path) {}
-
     Shader::~Shader() {
-        glDeleteShader(m_id);
+        for (auto &stage : m_stages) {
+            glDeleteShader(stage.id);
+        }
     }
 
     void Shader::load(std::size_t size, char *data) {
-        auto script = global.game->cache().get_resource<lua::LuaScript>("scripts/lightsVertex.lua");
+        auto script = global.game->cache().get_resource<lua::LuaScript>(path().path());
 
         auto root_state = global.game->lua_state();
         auto L = lua_newthread(root_state);
@@ -151,9 +139,6 @@ namespace lua_api {
 
         lua_pushlightuserdata(L, this);
         lua_setglobal(L, "this");
-
-        lua_pushcfunction(L, lua_api::set_property);
-        lua_setglobal(L, "setProperty");
 
         lua_pushcfunction(L, lua_api::add_stage);
         lua_setglobal(L, "addStage");
@@ -164,26 +149,8 @@ namespace lua_api {
         lua::execute(L, script->script(), script->path().path(), 0);
 
         luaL_unref(root_state, LUA_REGISTRYINDEX, state_ref);
-    }
 
-    void Shader::set_property(const std::string &property_name, const glm::vec3 &v) const {
-        printf("setting property %s: %f %f %f", property_name.c_str(), v.x, v.y, v.z);
-    }
-
-    void Shader::add_uniform(const Uniform &uniform) {
-        m_uniforms.push_back(uniform);
-    }
-
-    void Shader::add_stage(const Stage &stage) {
-        m_stages.push_back(stage);
-    }
-
-    void Shader::attach(const ShaderProgram &program) {
-        for (auto &stage : m_stages) {
-            program.attach(stage);
-        }
-
-        program.link();
+        compile();
     }
 
     void Shader::compile() {
@@ -198,18 +165,33 @@ namespace lua_api {
             }
 
             const char* content_data =  stage.content.c_str();
-            glShaderSource(m_id, 1, &content_data, nullptr);
-            glCompileShader(m_id);
+            glShaderSource(stage.id, 1, &content_data, nullptr);
+            glCompileShader(stage.id);
 
             int success;
-            glGetShaderiv(m_id, GL_COMPILE_STATUS, &success);
+            glGetShaderiv(stage.id, GL_COMPILE_STATUS, &success);
             if (!success) {
                 GLchar infoLog[1024];
-                glGetShaderInfoLog(m_id, 1024, nullptr, infoLog);
+                glGetShaderInfoLog(stage.id, 1024, nullptr, infoLog);
                 std::cout << infoLog;
                 THROW_ERROR("GL ERROR: Failed to compile shader with path: %s", stage.path);
             }
         }
+
+        // TODO make attaching and linking separate steps
+        for (auto &stage : m_stages) {
+            m_program.attach(stage);
+        }
+
+        m_program.link();
+    }
+
+    void Shader::add_uniform(const Uniform &uniform) {
+        m_uniforms.push_back(uniform);
+    }
+
+    void Shader::add_stage(const Stage &stage) {
+        m_stages.push_back(stage);
     }
 
     ShaderProgram::~ShaderProgram() {
@@ -226,9 +208,10 @@ namespace lua_api {
         int success;
         glGetProgramiv(program, GL_LINK_STATUS, &success);
         if (!success) {
-            GLchar infoLog[1024];
-            glGetProgramInfoLog(program, 1024, nullptr, infoLog);
-            std::cout << infoLog;
+            GLchar info_log[1024];
+            glGetProgramInfoLog(program, 1024, nullptr, info_log);
+            auto log = std::string {info_log};
+            std::cout << info_log;
             THROW_ERROR("GL ERROR: Failed to link shaders");
         }
 
@@ -285,7 +268,7 @@ namespace lua_api {
         glUniform1i(uniform_lock, index);
     }
 
-    ShaderProgram::ShaderProgram(const std::string &path) {
+    ShaderProgram::ShaderProgram() {
         program = glCreateProgram();
     }
 

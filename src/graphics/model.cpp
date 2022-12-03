@@ -9,14 +9,15 @@ namespace graphics {
 
         auto material = global.game->cache().get_resource<graphics::Material>("scripts/material.lua");
         auto texture = global.game->cache().get_resource<graphics::Texture>("assets/fan_tree.png");
+        auto shader = global.game->cache().get_resource<graphics::Shader>("scripts/light_shader.lua");
 
         material->add_texture(texture);
-        material->set_shader(std::make_shared<graphics::ShaderProgram>("shaders/light_shader"));
+        material->set_shader(shader);
 
         // TODO remove test code
-        material->shader()->use();
-        material->shader()->set_uniform_loc("baseTexture", 0);
-        material->shader()->set_uniform_loc("cubeMap", 1);
+        material->shader()->program().use();
+        material->shader()->program().set_uniform_loc("baseTexture", 0);
+        material->shader()->program().set_uniform_loc("cubeMap", 1);
 
         m_aabb = math::AABB::create_min();
 

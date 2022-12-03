@@ -40,7 +40,7 @@ namespace graphics {
             return m_uniforms;
         }
 
-        [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<ShaderProgram>& shader() const { return m_shader; }
+        [[nodiscard]] constexpr ALWAYS_INLINE const std::shared_ptr<Shader>& shader() const { return m_shader; }
 
         void add_texture(const std::shared_ptr<graphics::Texture> &texture) {
             m_textures.push_back(texture);
@@ -50,7 +50,7 @@ namespace graphics {
             m_uniforms.push_back(uniform);
         }
 
-        void set_shader(const std::shared_ptr<ShaderProgram> &shader) {
+        void set_shader(const std::shared_ptr<Shader> &shader) {
             m_shader = shader;
         }
 
@@ -60,7 +60,7 @@ namespace graphics {
         void unload() override {}
     private:
         std::vector<std::shared_ptr<graphics::Texture>> m_textures;
-        std::shared_ptr<ShaderProgram> m_shader { nullptr };
+        std::shared_ptr<Shader> m_shader { nullptr };
         std::shared_ptr<UniformBuffer> m_buffer{};
 
         std::vector<Material::Uniform> m_uniforms;

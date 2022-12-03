@@ -61,7 +61,7 @@ namespace graphics {
         WidthStringPairs split_in_sentences(const std::string &text, float scale, const ISize &size);
 
         TrueTypeFont font { "assets/alagard.ttf", FontRenderSize };
-        ShaderProgram m_shader { "shaders/text" };
+        std::shared_ptr<Shader> m_shader;
         GpuPlane plane;
     };
 }

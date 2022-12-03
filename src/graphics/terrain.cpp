@@ -175,14 +175,15 @@ namespace graphics {
         material->add_texture(global.game->cache().get_resource<Texture>(file.g_texture));
         material->add_texture(global.game->cache().get_resource<Texture>(file.b_texture));
 
-        auto shader = std::make_shared<ShaderProgram>("shaders/terrain");
-        shader->use();
+        auto shader = global.game->cache().get_resource<Shader>("scripts/terrain_shader.lua");
+        auto &program = shader->program();
+        program.use();
 
-        shader->set_uniform_loc("baseTexture", 0);
-        shader->set_uniform_loc("blendMap", 1);
-        shader->set_uniform_loc("rTexture", 2);
-        shader->set_uniform_loc("gTexture", 3);
-        shader->set_uniform_loc("bTexture", 4);
+        program.set_uniform_loc("baseTexture", 0);
+        program.set_uniform_loc("blendMap", 1);
+        program.set_uniform_loc("rTexture", 2);
+        program.set_uniform_loc("gTexture", 3);
+        program.set_uniform_loc("bTexture", 4);
 
         material->set_shader(shader);
         m_mesh->set_material(material);

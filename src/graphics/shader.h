@@ -53,43 +53,6 @@ namespace graphics {
         ShaderType type;
     };
 
-    class Shader : public assets::Resource {
-    public:
-        explicit Shader(const Path &path);
-        ~Shader();
-
-        Shader(const Shader &other) = delete;
-        Shader(Shader &&other) = delete;
-
-        Shader& operator=(const Shader &other) = delete;
-        Shader& operator=(Shader &&other) = delete;
-
-        [[nodiscard]] constexpr ALWAYS_INLINE
-        uint32_t id() const { return m_id; }
-
-        [[nodiscard]] constexpr ALWAYS_INLINE
-        const std::vector<Uniform>& uniforms() const {
-            return m_uniforms;
-        }
-
-        void compile();
-        void attach(const ShaderProgram &program);
-
-        void set_property(const std::string& property_name, const glm::vec3& v) const;
-
-        void add_uniform(const Uniform &uniform);
-        void add_stage(const Stage &stage);
-
-        // TODO make these functions private
-        void load(std::size_t size, char *data) override;
-        void unload() override { }
-    private:
-        uint32_t m_id{};
-        ShaderType m_type;
-        std::vector<Uniform> m_uniforms;
-        std::vector<Stage> m_stages;
-    };
-
     class ShaderProgram  {
     public:
         struct ShaderProgramData {
@@ -97,9 +60,7 @@ namespace graphics {
             std::string frag_shader_path;
         };
 
-        std::shared_ptr<Shader> m_shader;
-
-        explicit ShaderProgram(const std::string &path);
+        ShaderProgram();
         ~ShaderProgram();
 
         [[nodiscard]] constexpr ALWAYS_INLINE uint32_t id() const { return m_id; }
@@ -123,6 +84,39 @@ namespace graphics {
         uint32_t program;
 
         void attach(const Stage &stage) const;
+    };
 
+    class Shader : public assets::Resource {
+    public:
+        explicit Shader(const Path &path) : Resource(path) {}
+        ~Shader() override;
+
+        Shader(const Shader &other) = delete;
+        Shader(Shader &&other) = delete;
+
+        Shader& operator=(const Shader &other) = delete;
+        Shader& operator=(Shader &&other) = delete;
+
+        [[nodiscard]] constexpr ALWAYS_INLINE
+        const std::vector<Uniform>& uniforms() const {
+            return m_uniforms;
+        }
+
+        constexpr ALWAYS_INLINE ShaderProgram& program() { return m_program; }
+
+        void add_uniform(const Uniform &uniform);
+        void add_stage(const Stage &stage);
+
+        // TODO make these functions private
+        void load(std::size_t size, char *data) override;
+        void unload() override { }
+
+    private:
+        std::vector<Uniform> m_uniforms;
+        std::vector<Stage> m_stages;
+
+        ShaderProgram m_program;
+
+        void compile();
     };
 }

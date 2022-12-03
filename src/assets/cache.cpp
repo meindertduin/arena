@@ -2,7 +2,6 @@
 
 #include "loaders.h"
 #include "../global.h"
-#include "file_reader.h"
 
 namespace assets {
     template<>
