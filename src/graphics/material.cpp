@@ -78,6 +78,31 @@ namespace lua_api {
     }
 
     void Material::update() {
-        m_buffer->bind();
+        auto &program = m_shader->program();
+
+        for (auto &uniform : m_uniforms) {
+            for (auto &shader_uniform : m_shader->uniforms()) {
+                if (uniform.name == shader_uniform.name) {
+                    switch (shader_uniform.type) {
+                        case graphics::Uniform::Int:
+                            program.set_property(uniform.name, uniform.int_value);
+                            break;
+                        case graphics::Uniform::Float:
+                            program.set_property(uniform.name, uniform.float_value);
+                            break;
+                        case graphics::Uniform::Matrix4:
+                            program.set_property(uniform.name, uniform.matrix);
+                            break;
+                        case graphics::Uniform::Vec3:
+                            program.set_property(uniform.name, uniform.v3);
+                            break;
+                        default:
+                            THROW_ERROR("Uniform type not implemented");
+                    }
+
+                    break;
+                }
+            }
+        }
     }
 }

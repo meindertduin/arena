@@ -34,13 +34,9 @@ namespace graphics {
             }
 
             global.game->active_scene()->skybox().bind_texture(1);
-
+            material.update();
             program.set_property("color", { 1.0f, 1.0f, 0 });
             program.set_property("model", model_4x4);
-
-            program.set_property("diffuse", material.diffuse);
-            program.set_property("specular", material.specular);
-            program.set_property("shininess", material.shininess);
             program.set_property("viewPos", global.game->active_scene()->camera().transform.pos);
             program.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
