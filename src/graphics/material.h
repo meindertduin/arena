@@ -23,13 +23,6 @@ namespace graphics {
 
         explicit Material(const Path &path) : assets::Resource(path) {}
 
-        glm::vec3 ambient{};
-        glm::vec3 diffuse{};
-        glm::vec3 specular{};
-
-        bool reflects { false };
-        float shininess{};
-
         [[nodiscard]] constexpr ALWAYS_INLINE
         const std::vector<std::shared_ptr<graphics::Texture>>& textures() const {
             return m_textures;

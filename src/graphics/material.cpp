@@ -43,17 +43,6 @@ namespace lua_api {
                 }
         }
 
-        // TODO remove this once uniforms are implemented
-        if (uniform.name == "diffuse") {
-            material->diffuse = uniform.v3;
-        } else if (uniform.name == "ambient") {
-            material->ambient = uniform.v3;
-        } else if (uniform.name == "specular") {
-            material->specular = uniform.v3;
-        } else if (uniform.name == "shininess") {
-            material->shininess = uniform.float_value;
-        }
-
         material->add_uniform(uniform);
     }
 }
