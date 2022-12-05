@@ -102,7 +102,10 @@ namespace graphics {
             return m_uniforms;
         }
 
-        constexpr ALWAYS_INLINE const ShaderProgram& program() const { return m_program; }
+        [[nodiscard]] constexpr ALWAYS_INLINE
+        const ShaderProgram& program() const {
+            return m_program;
+        }
 
         void add_uniform(const Uniform &uniform);
         void add_stage(const Stage &stage);
@@ -110,7 +113,6 @@ namespace graphics {
         // TODO make these functions private
         void load(std::size_t size, char *data) override;
         void unload() override { }
-
     private:
         std::vector<Uniform> m_uniforms;
         std::vector<Stage> m_stages;

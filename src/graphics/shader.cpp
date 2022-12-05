@@ -122,6 +122,23 @@ namespace lua_api {
         shader->add_uniform(uniform);
         return 0;
     }
+
+    static lua_State* get_shader_state() {
+        static lua_State* L { nullptr };
+
+        if (L == nullptr) {
+            L = luaL_newstate();
+            luaL_openlibs(L);
+
+            lua_pushcfunction(L, lua_api::add_stage);
+            lua_setglobal(L, "addStage");
+
+            lua_pushcfunction(L, lua_api::uniform);
+            lua_setglobal(L, "uniform");
+        }
+
+        return L;
+    }
 }
 
     Shader::~Shader() {
@@ -133,18 +150,12 @@ namespace lua_api {
     void Shader::load(std::size_t size, char *data) {
         auto script = global.game->cache().get_resource<lua::LuaScript>(path().path());
 
-        auto root_state = global.game->lua_state();
+        auto root_state = lua_api::get_shader_state();
         auto L = lua_newthread(root_state);
         const auto state_ref = luaL_ref(root_state, LUA_REGISTRYINDEX);
 
         lua_pushlightuserdata(L, this);
         lua_setglobal(L, "this");
-
-        lua_pushcfunction(L, lua_api::add_stage);
-        lua_setglobal(L, "addStage");
-
-        lua_pushcfunction(L, lua_api::uniform);
-        lua_setglobal(L, "uniform");
 
         lua::execute(L, script->script(), script->path().path(), 0);
 
