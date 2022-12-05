@@ -79,23 +79,4 @@ namespace graphics {
         void bind() const override;
         void unbind() const override;
     };
-
-    class ShaderProgram;
-    struct Uniform;
-
-    class UniformBuffer : GpuBuffer {
-    public:
-        UniformBuffer(const std::string &uniform_name, const Uniform &uniform, const ShaderProgram &program);
-        ~UniformBuffer() override;
-
-        void set_data(const Uniform &uniform);
-        void bind() const override;
-        void reset();
-
-    private:
-        std::string m_name;
-        int m_uniform_index;
-        uint32_t m_offset = 0;
-        uint32_t m_size;
-    };
 }

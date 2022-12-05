@@ -61,8 +61,6 @@ namespace graphics {
     private:
         std::vector<std::shared_ptr<graphics::Texture>> m_textures;
         std::shared_ptr<Shader> m_shader { nullptr };
-        std::shared_ptr<UniformBuffer> m_buffer{};
-
         std::vector<Material::Uniform> m_uniforms;
     };
 }

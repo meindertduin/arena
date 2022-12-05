@@ -99,7 +99,6 @@ namespace lua_api {
                         default:
                             THROW_ERROR("Uniform type not implemented");
                     }
-
                     break;
                 }
             }
