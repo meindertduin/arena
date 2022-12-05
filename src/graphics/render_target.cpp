@@ -16,7 +16,7 @@ constexpr static float quad_vertices[] = {
 
 namespace graphics {
     RenderTarget::RenderTarget() {
-        m_shader = global.game->cache().get_resource<Shader>("scripts/screen_shader.lua");
+        m_shader = global.cache->get_resource<Shader>("scripts/screen_shader.lua");
 
         screen_vertex_buffer.add_vertex_attribute({ 2, GL_FLOAT, sizeof(float), false });
         screen_vertex_buffer.add_vertex_attribute({ 2, GL_FLOAT, sizeof(float), false });

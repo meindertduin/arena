@@ -50,7 +50,7 @@ namespace graphics {
     };
 
     Skybox::Skybox() {
-        m_shader = global.game->cache().get_resource<Shader>("scripts/skybox_shader.lua");
+        m_shader = global.cache->get_resource<Shader>("scripts/skybox_shader.lua");
         vertex_buffer.add_vertex_attribute({3, GL_FLOAT, sizeof(float), false });
     }
 

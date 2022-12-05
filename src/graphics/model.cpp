@@ -1,15 +1,15 @@
 #include "model.h"
 #include "../math/helpers.h"
 #include "../global.h"
-#include "../game/game_state.h"
+#include "../assets/cache.h"
 
 namespace graphics {
     void Model::load(std::size_t size, char *data) {
         auto model_data = reinterpret_cast<ModelData*>(data);
 
-        auto material = global.game->cache().get_resource<graphics::Material>("scripts/material.lua");
-        auto texture = global.game->cache().get_resource<graphics::Texture>("assets/fan_tree.png");
-        auto shader = global.game->cache().get_resource<graphics::Shader>("scripts/light_shader.lua");
+        auto material = global.cache->get_resource<graphics::Material>("scripts/material.lua");
+        auto texture = global.cache->get_resource<graphics::Texture>("assets/fan_tree.png");
+        auto shader = global.cache->get_resource<graphics::Shader>("scripts/light_shader.lua");
 
         material->add_texture(texture);
         material->set_shader(shader);

@@ -98,7 +98,7 @@ namespace graphics {
     }
 
     TextRenderer::TextRenderer() {
-        m_shader = global.game->cache().get_resource<Shader>("scripts/text_shader.lua");
+        m_shader = global.cache->get_resource<Shader>("scripts/text_shader.lua");
     }
 
     void TextRenderer::render(const std::string &text, const IRect &rect, const TextRenderOptions &options) {
