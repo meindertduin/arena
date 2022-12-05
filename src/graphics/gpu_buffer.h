@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include "../platform/platform.h"
 
 namespace graphics {
     class GpuBuffer {
@@ -61,9 +62,6 @@ namespace graphics {
 
     class SharedDataBuffer : GpuBuffer {
     public:
-        int offset = 0;
-        std::size_t size;
-
         SharedDataBuffer(int binding_block, std::size_t size);
         ~SharedDataBuffer() override;
 
@@ -78,5 +76,10 @@ namespace graphics {
 
         void bind() const override;
         void unbind() const override;
+
+        [[nodiscard]] constexpr ALWAYS_INLINE int offset() const { return m_offset; }
+    private:
+        int m_offset = 0;
+        std::size_t m_size;
     };
 }

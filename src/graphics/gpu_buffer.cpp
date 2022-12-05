@@ -58,7 +58,7 @@ namespace graphics {
         auto to_add_size = attribute.size_type * attribute.amount;
 
         if (to_add_size + current_size > total_size) {
-            throw std::runtime_error("Runtime Error: Adding extra attribute to the VertexArray will exceed the total size.");
+            throw std::runtime_error("Runtime Error: Adding extra attribute to the VertexArray will exceed the total m_size.");
         }
 
         current_size += to_add_size;
@@ -74,7 +74,7 @@ namespace graphics {
         // define the range of the buffer that links to a uniform binding point
         glBindBufferRange(GL_UNIFORM_BUFFER, binding_block, id, 0, size);
   
-        this->size = size;
+        m_size = size;
     }
 
     SharedDataBuffer::~SharedDataBuffer() {
@@ -82,16 +82,16 @@ namespace graphics {
     }
 
     void SharedDataBuffer::set_data(int format_size, std::size_t size, const void *data) {
-        glBufferSubData(GL_UNIFORM_BUFFER, offset, size, data);
-        offset += format_size;
+        glBufferSubData(GL_UNIFORM_BUFFER, m_offset, size, data);
+        m_offset += format_size;
     }
 
     void SharedDataBuffer::reset() {
-        offset = 0;
+        m_offset = 0;
     }
 
     void SharedDataBuffer::set_offset(int offset) {
-        this->offset = offset;
+        m_offset = offset;
     }
 
     void SharedDataBuffer::bind() const {

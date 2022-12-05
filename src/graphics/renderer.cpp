@@ -64,7 +64,7 @@ namespace graphics {
         auto point_lights_count = global.game->active_scene()->point_lights().size();
 
         ubo_lights.set_data(16, sizeof(int), &dir_lights_count);
-        auto uboFilledSizeBefore = ubo_lights.offset;
+        auto uboFilledSizeBefore = ubo_lights.offset();
         for (auto &light : global.game->active_scene()->dir_lights()) {
             light.set_data(ubo_lights);
         }
@@ -117,7 +117,7 @@ namespace graphics {
         float scale = static_cast<float>(options.text_size) / static_cast<float>(FontRenderSize);
         auto text_width = calculate_text_width(text, scale);
 
-        // text is on one line if text width is smaller than the size or text isn't wrapped
+        // text is on one line if text width is smaller than the m_size or text isn't wrapped
         if (rect.size().width() >= text_width || !options.wrap) {
             render_oneliner(text, scale, rect, options, text_width);
         } else {
@@ -208,7 +208,7 @@ namespace graphics {
         int sentence_width = 0;
         std::string sentence;
         for (auto &[word_width, word] : words) {
-            // TODO handle edge case if word is too small to fit in size
+            // TODO handle edge case if word is too small to fit in m_size
             if (sentence_width + word_width + SpaceWidth > size.width()) {
                 sentences.emplace_back(sentence_width, std::string{sentence});
                 sentence = word;
