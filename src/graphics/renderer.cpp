@@ -5,7 +5,6 @@
 #include "material.h"
 #include "../game/game_state.h"
 #include "ui_renderer.h"
-#include "glad/glad.h"
 
 namespace graphics {
     Renderer::Renderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
@@ -20,7 +19,6 @@ namespace graphics {
 
     void Renderer::render(const Model *model, const entity::ECTransform &transform) const {
         auto model_4x4 = transform.get_transform_4x4();
-        glBlendFunc(GL_SRC_ALPHA, GL_SAMPLE_ALPHA_TO_ONE);
 
         for (const auto &mesh : model->meshes()) {
             auto &material = *mesh.material();
