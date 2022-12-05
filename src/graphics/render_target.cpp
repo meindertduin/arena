@@ -16,7 +16,7 @@ constexpr static float quad_vertices[] = {
 
 namespace graphics {
     RenderTarget::RenderTarget() {
-        m_shader.link();
+        m_shader = global.game->cache().get_resource<Shader>("scripts/screen_shader.lua");
 
         screen_vertex_buffer.add_vertex_attribute({ 2, GL_FLOAT, sizeof(float), false });
         screen_vertex_buffer.add_vertex_attribute({ 2, GL_FLOAT, sizeof(float), false });
@@ -25,7 +25,7 @@ namespace graphics {
         
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        
+
         glEnable(GL_CULL_FACE);
         
         glGenFramebuffers(1, &framebuffer);
@@ -110,7 +110,7 @@ namespace graphics {
         // clear all relevant buffers
         glClear(GL_COLOR_BUFFER_BIT);
 
-        m_shader.use();
+        m_shader->program().use();
         screen_array_buffer.set_data(0, sizeof(quad_vertices), &quad_vertices);
         screen_vertex_buffer.bind();
 

@@ -15,7 +15,7 @@ public:
         throw std::runtime_error((replace_str_format(error, args), ...));
     }
 
-    static inline void log_error(const std::string error) {
+    static inline void log_error(const std::string& error) {
         throw std::runtime_error(error);
     }
 
@@ -48,8 +48,6 @@ private:
         return str;
     }
 };
-
-
 
 #define THROW_ERROR(...) Logger::log_error(__VA_ARGS__)
 

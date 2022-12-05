@@ -12,6 +12,8 @@
 #include "../assets/resource.h"
 
 namespace graphics {
+    class ShaderProgram;
+
     constexpr int MATRICES_BLOCK_BINDING = 0;
     constexpr int LIGHTS_BLOCK_BINDING = 1;
 
@@ -20,25 +22,35 @@ namespace graphics {
         Fragment,
     };
 
-    class Shader : public assets::Resource {
-    public:
-        explicit Shader(const Path &path);
-        ~Shader();
+    struct Uniform {
+        enum Type {
+            Int,
+            Float,
+            Matrix4,
+            Vec2,
+            Vec3,
+            Vec4,
+        };
 
-        Shader(const Shader &other) = delete;
-        Shader(Shader &&other) = delete;
+        union {
+            float float_value;
+            glm::vec4 v4;
+            glm::vec3 v3;
+            glm::vec2 v2;
+            glm::mat4 matrix4;
+        } value;
 
-        Shader& operator=(const Shader &other) = delete;
-        Shader& operator=(Shader &&other) = delete;
+        std::string name;
+        Type type;
+        uint32_t offset;
+        [[nodiscard]] uint32_t size() const;
+    };
 
-        [[nodiscard]] constexpr ALWAYS_INLINE uint32_t id() const { return m_id; }
-
-        // TODO make these functions private
-        void load(std::size_t size, char *data) override;
-        void unload() override { }
-    private:
-        uint32_t m_id{};
-        ShaderType m_type;
+    struct Stage {
+        int id;
+        std::string path;
+        std::string content;
+        ShaderType type;
     };
 
     class ShaderProgram  {
@@ -48,12 +60,10 @@ namespace graphics {
             std::string frag_shader_path;
         };
 
-        std::shared_ptr<Shader> m_vertex_shader;
-        std::shared_ptr<Shader> m_fragment_shader;
-
-        explicit ShaderProgram(const std::string &path);
+        ShaderProgram();
         ~ShaderProgram();
 
+        [[nodiscard]] constexpr ALWAYS_INLINE uint32_t id() const { return m_id; }
         void use() const;
         void link() const;
 
@@ -68,7 +78,47 @@ namespace graphics {
 
         void set_uniform_loc(const std::string& name, int index) const;
     private:
-        uint32_t id{};
+        friend class Shader;
+
+        uint32_t m_id{};
         uint32_t program;
+
+        void attach(const Stage &stage) const;
+    };
+
+    class Shader : public assets::Resource {
+    public:
+        explicit Shader(const Path &path) : Resource(path) {}
+        ~Shader() override;
+
+        Shader(const Shader &other) = delete;
+        Shader(Shader &&other) = delete;
+
+        Shader& operator=(const Shader &other) = delete;
+        Shader& operator=(Shader &&other) = delete;
+
+        [[nodiscard]] constexpr ALWAYS_INLINE
+        const std::vector<Uniform>& uniforms() const {
+            return m_uniforms;
+        }
+
+        [[nodiscard]] constexpr ALWAYS_INLINE
+        const ShaderProgram& program() const {
+            return m_program;
+        }
+
+        void add_uniform(const Uniform &uniform);
+        void add_stage(const Stage &stage);
+
+        // TODO make these functions private
+        void load(std::size_t size, char *data) override;
+        void unload() override { }
+    private:
+        std::vector<Uniform> m_uniforms;
+        std::vector<Stage> m_stages;
+
+        ShaderProgram m_program;
+
+        void compile();
     };
 }

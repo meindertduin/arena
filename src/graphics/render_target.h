@@ -26,7 +26,7 @@ namespace graphics {
     private:
         VertexBuffer screen_vertex_buffer { 4 * sizeof(float) };
         ArrayBuffer screen_array_buffer;
-        ShaderProgram m_shader { "shaders/screen" };
+        std::shared_ptr<Shader> m_shader;
 
         uint32_t framebuffer;
         uint32_t texture_color_buffer;

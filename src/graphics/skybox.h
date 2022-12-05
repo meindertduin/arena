@@ -13,7 +13,7 @@ namespace graphics {
     private:
         VertexBuffer vertex_buffer {3 * sizeof(float) };
         ArrayBuffer array_buffer;
-        ShaderProgram m_shader { "shaders/skybox" };
+        std::shared_ptr<Shader> m_shader;
         SkyboxTexture texture { "assets/skybox" };
     };
 }

@@ -1,3 +1,4 @@
+#include <lua.hpp>
 #include "game_state.h"
 #include "../global.h"
 
@@ -31,5 +32,10 @@ namespace game {
             m_ui.render();
 
         global.renderer->after_render();
+    }
+
+    GameState::GameState() {
+        m_lua_state = luaL_newstate();
+        luaL_openlibs(m_lua_state);
     }
 }

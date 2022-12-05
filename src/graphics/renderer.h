@@ -29,7 +29,7 @@ namespace graphics {
     private:
         std::shared_ptr<RenderTarget> render_target;
         SharedDataBuffer ubo_matrices { 0, 2 * sizeof(glm::mat4) };
-        SharedDataBuffer ubo_lights { 1, 16 * 2 + (DIR_LIGHT_STD140_SIZE * MAX_DIR_LIGHTS) + (POINT_LIGHT_STD140_SIZE * MAX_POINT_LIGHTS) }; // std140 alignment size: 64 = dirlight, int = 16, 112 = pointLight
+        SharedDataBuffer ubo_lights { 1, 16 * 2 + (DIR_LIGHT_STD140_SIZE * MAX_DIR_LIGHTS) + (POINT_LIGHT_STD140_SIZE * MAX_POINT_LIGHTS) }; // std140 alignment m_size: 64 = dirlight, int = 16, 112 = pointLight
     };
 
     struct TextRenderOptions {
@@ -61,7 +61,7 @@ namespace graphics {
         WidthStringPairs split_in_sentences(const std::string &text, float scale, const ISize &size);
 
         TrueTypeFont font { "assets/alagard.ttf", FontRenderSize };
-        ShaderProgram m_shader { "shaders/text" };
+        std::shared_ptr<Shader> m_shader;
         GpuPlane plane;
     };
 }

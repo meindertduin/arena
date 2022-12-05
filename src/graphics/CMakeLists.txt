@@ -1,4 +1,5 @@
 set(GRAPHICS_SOURCES
+        src/graphics/material.cpp
         src/graphics/mesh.cpp
         src/graphics/model.h
         src/graphics/model.cpp

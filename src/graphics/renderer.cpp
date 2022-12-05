@@ -5,8 +5,6 @@
 #include "material.h"
 #include "../game/game_state.h"
 #include "ui_renderer.h"
-#include "glad/glad.h"
-
 
 namespace graphics {
     Renderer::Renderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
@@ -21,26 +19,24 @@ namespace graphics {
 
     void Renderer::render(const Model *model, const entity::ECTransform &transform) const {
         auto model_4x4 = transform.get_transform_4x4();
-        glBlendFunc(GL_SRC_ALPHA, GL_SAMPLE_ALPHA_TO_ONE);
 
         for (const auto &mesh : model->meshes()) {
             auto &material = *mesh.material();
+            auto &program = material.shader()->program();
 
-            material.shader()->use();
+            program.use();
+
             auto i = 0;
             for (auto &texture : material.textures()) {
                 texture->bind(i++);
             }
 
             global.game->active_scene()->skybox().bind_texture(1);
-
-            material.shader()->set_property("color", { 1.0f, 1.0f, 0 });
-            material.shader()->set_property("model", model_4x4);
-            material.shader()->set_property("diffuse", material.diffuse);
-            material.shader()->set_property("specular", material.specular);
-            material.shader()->set_property("shininess", material.shininess);
-            material.shader()->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
-            material.shader()->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
+            material.update();
+            program.set_property("color", { 1.0f, 1.0f, 0 });
+            program.set_property("model", model_4x4);
+            program.set_property("viewPos", global.game->active_scene()->camera().transform.pos);
+            program.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
             mesh.render();
         }
@@ -66,7 +62,7 @@ namespace graphics {
         auto point_lights_count = global.game->active_scene()->point_lights().size();
 
         ubo_lights.set_data(16, sizeof(int), &dir_lights_count);
-        auto uboFilledSizeBefore = ubo_lights.offset;
+        auto uboFilledSizeBefore = ubo_lights.offset();
         for (auto &light : global.game->active_scene()->dir_lights()) {
             light.set_data(ubo_lights);
         }
@@ -83,41 +79,43 @@ namespace graphics {
 
     void Renderer::render(const Mesh *mesh, const entity::ECTransform &transform) const {
         auto &material = *mesh->material();
+        auto &program = material.shader()->program();
         auto model_4x4 = transform.get_transform_4x4();
 
-        material.shader()->use();
+        program.use();
 
         int texture_index = 0;
         for (const auto &texture : material.textures()) {
             texture->bind(texture_index++);
         }
 
-        material.shader()->set_property("model", model_4x4);
-        material.shader()->set_property("diffuse", material.diffuse);
-        material.shader()->set_property("specular", material.specular);
-        material.shader()->set_property("shininess", material.shininess);
-        material.shader()->set_property("viewPos", global.game->active_scene()->camera().transform.pos);
-        material.shader()->set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
+        program.set_property("model", model_4x4);
+        program.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
+        program.set_property("viewPos", global.game->active_scene()->camera().transform.pos);
+        program.set_property("diffuse", material.diffuse);
+        program.set_property("specular", material.specular);
+        program.set_property("shininess", material.shininess);
 
         mesh->render();
     }
 
     TextRenderer::TextRenderer() {
-        m_shader.link();
+        m_shader = global.game->cache().get_resource<Shader>("scripts/text_shader.lua");
     }
 
     void TextRenderer::render(const std::string &text, const IRect &rect, const TextRenderOptions &options) {
-        m_shader.use();
+        auto &program = m_shader->program();
+        program.use();
         glm::mat4 projection = glm::ortho(0.0f, (float)global.graphic_options->size().width(),
                                           0.0f, (float)global.graphic_options->size().height());
 
-        m_shader.set_property("projection", projection);
-        m_shader.set_property("textColor", { 1.0f, 1.0f, 1.0f });
+        program.set_property("projection", projection);
+        program.set_property("textColor", { 1.0f, 1.0f, 1.0f });
 
         float scale = static_cast<float>(options.text_size) / static_cast<float>(FontRenderSize);
         auto text_width = calculate_text_width(text, scale);
 
-        // text is on one line if text width is smaller than the size or text isn't wrapped
+        // text is on one line if text width is smaller than the m_size or text isn't wrapped
         if (rect.size().width() >= text_width || !options.wrap) {
             render_oneliner(text, scale, rect, options, text_width);
         } else {
@@ -208,7 +206,7 @@ namespace graphics {
         int sentence_width = 0;
         std::string sentence;
         for (auto &[word_width, word] : words) {
-            // TODO handle edge case if word is too small to fit in size
+            // TODO handle edge case if word is too small to fit in m_size
             if (sentence_width + word_width + SpaceWidth > size.width()) {
                 sentences.emplace_back(sentence_width, std::string{sentence});
                 sentence = word;

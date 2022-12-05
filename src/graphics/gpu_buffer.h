@@ -2,6 +2,8 @@
 
 #include <cstdint>
 #include <vector>
+#include <string>
+#include "../platform/platform.h"
 
 namespace graphics {
     class GpuBuffer {
@@ -60,22 +62,24 @@ namespace graphics {
 
     class SharedDataBuffer : GpuBuffer {
     public:
-            int offset = 0;
-            std::size_t size;
+        SharedDataBuffer(int binding_block, std::size_t size);
+        ~SharedDataBuffer() override;
 
-            SharedDataBuffer(int binding_block, std::size_t size);
-            ~SharedDataBuffer() override;
+        SharedDataBuffer(const SharedDataBuffer&) = delete;
+        SharedDataBuffer(SharedDataBuffer&&) = delete;
+        SharedDataBuffer& operator=(const SharedDataBuffer&) = delete;
+        SharedDataBuffer& operator=(SharedDataBuffer&&) = delete;
 
-            SharedDataBuffer(const SharedDataBuffer&) = delete;
-            SharedDataBuffer(SharedDataBuffer&&) = delete;
-            SharedDataBuffer& operator=(const SharedDataBuffer&) = delete;
-            SharedDataBuffer& operator=(SharedDataBuffer&&) = delete;
-        
-            void set_data(int format_size, std::size_t size, const void *data);
-            void reset();
-            void set_offset(int offset);
-        
-            void bind() const override;
-            void unbind() const override;
+        void set_data(int format_size, std::size_t size, const void *data);
+        void reset();
+        void set_offset(int offset);
+
+        void bind() const override;
+        void unbind() const override;
+
+        [[nodiscard]] constexpr ALWAYS_INLINE int offset() const { return m_offset; }
+    private:
+        int m_offset = 0;
+        std::size_t m_size;
     };
 }
