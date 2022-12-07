@@ -14,10 +14,12 @@ public:
     template<typename ...Args>
     static inline void log_error(std::string error, Args... args) {
         log(LogStatus::Error, (replace_str_format(error, args), ...));
+        throw std::runtime_error("An error has occurred while running this program");
     }
 
     static inline void log_error(const std::string& error) {
         log(LogStatus::Error, error);
+        throw std::runtime_error("An error has occurred while running this program");
     }
 
     static inline void debug(const std::string& message) {
