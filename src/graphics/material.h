@@ -48,6 +48,8 @@ namespace graphics {
         }
 
         void update();
+    protected:
+        friend class assets::Cache;
 
         void load(std::size_t size, char *data) override;
         void unload() override {}

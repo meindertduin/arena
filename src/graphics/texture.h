@@ -63,6 +63,9 @@ namespace graphics {
         Texture(Texture &&other) = delete;
         Texture& operator=(Texture &&other) = delete;
 
+    protected:
+        friend class assets::Cache;
+
         void load(std::size_t size, char *data) override;
         void unload() override {}
     };

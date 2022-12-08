@@ -14,10 +14,12 @@ namespace lua {
         LuaScript(const LuaScript&) = delete;
         LuaScript& operator=(const LuaScript&) = delete;
 
+        constexpr std::string& script() { return m_script; }
+    protected:
+        friend class assets::Cache;
+
         void load(std::size_t size, char *data) override;
         void unload() override {}
-
-        constexpr std::string& script() { return m_script; }
     private:
         std::string m_script;
     };

@@ -43,9 +43,11 @@ namespace graphics {
 
         [[nodiscard]] constexpr ALWAYS_INLINE const std::unique_ptr<Mesh>& mesh() const { return m_mesh; }
         [[nodiscard]] constexpr ALWAYS_INLINE const entity::ECTransform& transform() const { return m_transform; }
+    protected:
+        friend class assets::Cache;
 
         void load(std::size_t size, char *data) override;
-        void unload() override { }
+        void unload() override {}
     private:
         std::unique_ptr<Mesh> m_mesh;
         entity::ECTransform m_transform;

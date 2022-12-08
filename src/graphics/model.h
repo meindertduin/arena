@@ -14,9 +14,6 @@ namespace graphics {
     public:
         explicit Model(const Path &path) : Resource(path) {}
 
-        void load(std::size_t size, char *data) override;
-        void unload() override { }
-
         [[nodiscard]] constexpr ALWAYS_INLINE const math::AABB& aabb() const {
             return m_aabb;
         }
@@ -27,6 +24,11 @@ namespace graphics {
         }
 
         [[nodiscard]] constexpr ALWAYS_INLINE const std::vector<Mesh>& meshes() const { return m_meshes; }
+    protected:
+        friend class assets::Cache;
+
+        void load(std::size_t size, char *data) override;
+        void unload() override {}
     private:
         std::vector<Mesh> m_meshes;
         math::AABB m_aabb {};
