@@ -2,6 +2,7 @@
 
 #include "../global.h"
 #include "../game/game_state.h"
+#include "../assets/loaders.h"
 
 namespace graphics {
 
@@ -40,7 +41,6 @@ namespace graphics {
     }
 
     void Terrain::load() {
-        // TODO optimize this
         auto file = assets::load_terrain(path());
 
         min_height = file.min_height;

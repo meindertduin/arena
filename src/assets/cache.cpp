@@ -1,6 +1,4 @@
 #include "cache.h"
-
-#include "loaders.h"
 #include "../global.h"
 
 namespace assets {
@@ -24,7 +22,7 @@ namespace assets {
 
     template<>
     std::shared_ptr<graphics::Texture> Cache::load_asset<graphics::Texture>(const Path& path) {
-        auto texture = load_texture(path);
+        auto texture = std::make_shared<graphics::Texture>(path);
         texture->load();
 
         m_textures[path.hash()] = std::weak_ptr(texture);

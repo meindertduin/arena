@@ -2,6 +2,7 @@
 #include "../math/helpers.h"
 #include "../global.h"
 #include "../assets/cache.h"
+#include "../assets/loaders.h"
 
 namespace graphics {
     void Model::load() {

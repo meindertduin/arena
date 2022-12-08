@@ -8,7 +8,6 @@
 #include "../graphics/terrain.h"
 
 #include "../logging.h"
-#include "loaders.h"
 #include "../graphics/model.h"
 #include "../lua/lua_script.h"
 
