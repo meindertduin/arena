@@ -58,7 +58,7 @@ namespace graphics {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
 
-    void Texture::load(std::size_t size, char *data) {
+    void Texture::load() {
         Sprite16 sprite{path().path()};
         this->width = sprite.width;
         this->height = sprite.height;

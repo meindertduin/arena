@@ -18,7 +18,7 @@ namespace lua {
     protected:
         friend class assets::Cache;
 
-        void load(std::size_t size, char *data) override;
+        void load() override;
     private:
         std::string m_script;
     };

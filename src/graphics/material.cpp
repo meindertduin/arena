@@ -47,7 +47,7 @@ namespace lua_api {
     }
 }
 
-    void Material::load(std::size_t size, char *data) {
+    void Material::load() {
         assets::FileReader file_reader { path().path() };
         auto file_content = file_reader.get_file_content();
 

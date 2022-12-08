@@ -7,7 +7,7 @@ extern "C" {
 }
 
 namespace lua {
-    void LuaScript::load(std::size_t size, char *data) {
+    void LuaScript::load() {
         assets::FileReader reader { path().path() };
         m_script = reader.get_file_content();
 

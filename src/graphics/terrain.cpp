@@ -39,8 +39,9 @@ namespace graphics {
         return l1 * p1.y + l2 * p2.y + l3 * p3.y;
     }
 
-    void Terrain::load(std::size_t size, char *data) {
-        auto &file = *reinterpret_cast<TerrainFile*>(data);
+    void Terrain::load() {
+        // TODO optimize this
+        auto file = assets::load_terrain(path());
 
         min_height = file.min_height;
         max_height = file.max_height;

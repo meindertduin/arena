@@ -147,7 +147,7 @@ namespace lua_api {
         }
     }
 
-    void Shader::load(std::size_t size, char *data) {
+    void Shader::load() {
         auto script = global.cache->get_resource<lua::LuaScript>(path().path());
 
         auto root_state = lua_api::get_shader_state();

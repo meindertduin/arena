@@ -22,7 +22,7 @@ namespace assets {
         [[nodiscard]] constexpr ALWAYS_INLINE const Path& path() const { return m_path; }
 
     protected:
-        virtual void load(std::size_t size, char *data) = 0;
+        virtual void load() = 0;
     private:
          int m_size {};
          Path m_path;

@@ -46,7 +46,7 @@ namespace graphics {
     protected:
         friend class assets::Cache;
 
-        void load(std::size_t size, char *data) override;
+        void load() override;
     private:
         std::unique_ptr<Mesh> m_mesh;
         entity::ECTransform m_transform;
