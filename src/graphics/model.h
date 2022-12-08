@@ -28,7 +28,6 @@ namespace graphics {
         friend class assets::Cache;
 
         void load(std::size_t size, char *data) override;
-        void unload() override {}
     private:
         std::vector<Mesh> m_meshes;
         math::AABB m_aabb {};

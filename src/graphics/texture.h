@@ -67,7 +67,6 @@ namespace graphics {
         friend class assets::Cache;
 
         void load(std::size_t size, char *data) override;
-        void unload() override {}
     };
 
     class SkyboxTexture : public GpuTextureBase {

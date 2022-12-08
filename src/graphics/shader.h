@@ -114,7 +114,6 @@ namespace graphics {
         friend class assets::Cache;
 
         void load(std::size_t size, char *data) override;
-        void unload() override { }
     private:
         std::vector<Uniform> m_uniforms;
         std::vector<Stage> m_stages;

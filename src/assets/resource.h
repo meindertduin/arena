@@ -23,7 +23,6 @@ namespace assets {
 
     protected:
         virtual void load(std::size_t size, char *data) = 0;
-        virtual void unload() = 0;
     private:
          int m_size {};
          Path m_path;
