@@ -10,14 +10,22 @@ static std::string EscSeqFgYellow = "\x1b[93m";
 
 class Logger {
 public:
-
     template<typename ...Args>
     static inline void log_error(std::string error, Args... args) {
+        log(LogStatus::Error, (replace_str_format(error, args), ...));
+    }
+
+    static inline void log_error(const std::string& error) {
+        log(LogStatus::Error, error);
+    }
+
+    template<typename ...Args>
+    static inline void log_and_throw_error(std::string error, Args... args) {
         log(LogStatus::Error, (replace_str_format(error, args), ...));
         throw std::runtime_error("An error has occurred while running this program");
     }
 
-    static inline void log_error(const std::string& error) {
+    static inline void log_and_throw_error(const std::string& error) {
         log(LogStatus::Error, error);
         throw std::runtime_error("An error has occurred while running this program");
     }
@@ -73,5 +81,5 @@ private:
     }
 };
 
-#define THROW_ERROR(...) Logger::log_error(__VA_ARGS__)
+#define THROW_ERROR(...) Logger::log_and_throw_error(__VA_ARGS__)
 
