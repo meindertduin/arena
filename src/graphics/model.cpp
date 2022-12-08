@@ -17,11 +17,6 @@ namespace graphics {
         material->add_texture(texture);
         material->set_shader(shader);
 
-        // TODO remove test code
-        material->shader()->program().use();
-        material->shader()->program().set_uniform_loc("baseTexture", 0);
-        material->shader()->program().set_uniform_loc("cubeMap", 1);
-
         m_aabb = math::AABB::create_min();
 
         for (auto mesh_data : model_data.meshes) {

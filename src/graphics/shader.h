@@ -46,6 +46,11 @@ namespace graphics {
         [[nodiscard]] uint32_t size() const;
     };
 
+    struct UniformLoc {
+        std::string name;
+        int index;
+    };
+
     struct Stage {
         int id;
         std::string path;
@@ -103,19 +108,25 @@ namespace graphics {
         }
 
         [[nodiscard]] constexpr ALWAYS_INLINE
+        const std::vector<UniformLoc>& uniforms_locs() const {
+            return m_uniform_locs;
+        }
+
+        [[nodiscard]] constexpr ALWAYS_INLINE
         const ShaderProgram& program() const {
             return m_program;
         }
 
         void add_uniform(const Uniform &uniform);
         void add_stage(const Stage &stage);
-
+        void add_uniform_loc(const UniformLoc& loc);
     protected:
         friend class assets::Cache;
 
         void load() override;
     private:
         std::vector<Uniform> m_uniforms;
+        std::vector<UniformLoc> m_uniform_locs;
         std::vector<Stage> m_stages;
 
         ShaderProgram m_program;

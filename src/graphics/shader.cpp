@@ -50,6 +50,19 @@ namespace lua_api {
         new_stage.path = path;
 
         shader->add_stage(new_stage);
+
+        return 0;
+    }
+
+    static int set_uniform_loc(lua_State *L) {
+        auto shader = get_shader(L);
+
+        auto name = std::string { lua::check_arg<const char*>(L, 1) };
+        auto index = lua::check_arg<int>(L, 2);
+
+        shader->add_uniform_loc({ name, index });
+
+        return 0;
     }
 
     static int uniform(lua_State *L) {
@@ -133,6 +146,9 @@ namespace lua_api {
             lua_pushcfunction(L, lua_api::add_stage);
             lua_setglobal(L, "addStage");
 
+            lua_pushcfunction(L, lua_api::set_uniform_loc);
+            lua_setglobal(L, "setUniformLoc");
+
             lua_pushcfunction(L, lua_api::uniform);
             lua_setglobal(L, "uniform");
         }
@@ -193,8 +209,11 @@ namespace lua_api {
         for (auto &stage : m_stages) {
             m_program.attach(stage);
         }
-
         m_program.link();
+
+        for (auto &uniform_loc : m_uniform_locs) {
+            m_program.set_uniform_loc(uniform_loc.name, uniform_loc.index);
+        }
     }
 
     void Shader::add_uniform(const Uniform &uniform) {
@@ -203,6 +222,10 @@ namespace lua_api {
 
     void Shader::add_stage(const Stage &stage) {
         m_stages.push_back(stage);
+    }
+
+    void Shader::add_uniform_loc(const UniformLoc &loc) {
+        m_uniform_locs.push_back(loc);
     }
 
     ShaderProgram::~ShaderProgram() {

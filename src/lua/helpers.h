@@ -64,6 +64,11 @@ namespace lua {
     }
 
     template<>
+    inline int convert_type<int>(lua_State *L, int index) {
+        return lua_tonumber(L, index);
+    }
+
+    template<>
     inline glm::vec2 convert_type<glm::vec2>(lua_State *L, int index) {
         glm::vec2 v;
 
