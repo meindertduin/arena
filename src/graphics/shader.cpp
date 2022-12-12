@@ -73,7 +73,7 @@ namespace lua_api {
         Uniform uniform;
         uniform.name = name;
 
-        const struct {
+        static struct {
             std::string name;
             Uniform::Type type;
         } types[] = {
@@ -104,7 +104,7 @@ namespace lua_api {
                     uniform.value.float_value = lua::check_arg<float>(L, 3);
                     break;
                 case LUA_TTABLE: {
-                    auto len = luaL_len(L, 4);
+                    auto len = luaL_len(L, 3);
                     switch(len) {
                         case 2:
                             uniform.value.v2 = lua::check_arg<glm::vec2>(L, 3);
