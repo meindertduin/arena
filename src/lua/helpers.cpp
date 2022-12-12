@@ -9,7 +9,9 @@ namespace lua {
         }
 
         if (lua_pcall(L, 0, results_count, -2) != 0) {
-            Logger::log_error("Lua script named: %s, stopped executing due to a runtime error in the lua script.", name);
+            auto function_name = lua_tostring(L, -1);
+            auto str = std::string { function_name };
+            Logger::log_error("Lua script named: %s had an error: '%s'", name, str);
             lua_pop(L, 1);
             return false;
         }

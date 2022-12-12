@@ -25,4 +25,8 @@ namespace graphics {
             m_aabb = { math::merge_min(m_aabb.min(), mesh_aabb.min()), math::merge_max(m_aabb.max(), mesh_aabb.max()) };
         }
     }
+
+    void Model::set_state(ModelState state) {
+        m_state = state;
+    }
 }

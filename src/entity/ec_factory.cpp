@@ -15,9 +15,13 @@ namespace entity {
         e.add(ECControl());
 
         auto collision = ECRigidBody(true, e.get_ptr<ECTransform>());
-        auto cube = global.cache->get_resource<graphics::Model>("assets/fan_tree.obj");
-        collision.set_collider(std::make_shared<physics::MeshCollider>(cube));
+        auto cube = global.cache->get_resource<graphics::Model>("assets/cube.obj");
+        cube->set_state(graphics::MODEL_HIDDEN);
 
+        collision.set_collider(std::make_shared<physics::MeshCollider>(cube));
+        auto mesh_renderer = entity::ECStaticModel(cube);
+
+        e.add(mesh_renderer);
         e.add(collision);
 
         auto &camera_component = e.get<ECFirstPersonCamera>();

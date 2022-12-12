@@ -3,7 +3,6 @@
 #include <glad/glad.h>
 
 #include <iostream>
-#include <utility>
 
 #include "../logging.h"
 #include "../assets/file_reader.h"
