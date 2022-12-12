@@ -210,6 +210,7 @@ namespace lua_api {
         }
         m_program.link();
 
+        m_program.use();
         for (auto &uniform_loc : m_uniform_locs) {
             m_program.set_uniform_loc(uniform_loc.name, uniform_loc.index);
         }
