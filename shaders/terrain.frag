@@ -14,6 +14,7 @@ uniform sampler2D bTexture;
 uniform vec3 viewPos;
 
 struct Material {
+    vec3 ambient;
     vec3 diffuse;
     vec3 specular;
     float shininess;

@@ -9,6 +9,7 @@ uniform sampler2D baseTexture;
 uniform vec3 viewPos;
 
 struct Material {
+    vec3 ambient;
     vec3 diffuse;
     vec3 specular;
     float shininess;
