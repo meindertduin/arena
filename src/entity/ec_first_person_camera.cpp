@@ -16,6 +16,7 @@ namespace entity {
     }
 
     void ECFirstPersonCamera::on_rotation_change(RotationChangeEvent event) {
+        // TODO clean this train of a function up
         global.game->active_scene()->camera().transform.rotation().set_rotation(event.rotation);
     }
 }

@@ -63,8 +63,10 @@ namespace graphics {
         Texture(Texture &&other) = delete;
         Texture& operator=(Texture &&other) = delete;
 
-        void load(std::size_t size, char *data) override;
-        void unload() override {}
+    protected:
+        friend class assets::Cache;
+
+        void load() override;
     };
 
     class SkyboxTexture : public GpuTextureBase {

@@ -3,12 +3,15 @@
 namespace lua {
     bool execute(lua_State* L, const std::string &script, const std::string &name, int results_count) {
         if(luaL_loadbuffer(L, script.c_str(), script.length(), name.c_str()) != 0) {
-            // TODO add logging
+            Logger::log_error("Lua failed to load script named: %s", name);
             lua_pop(L, 1);
             return false;
         }
 
         if (lua_pcall(L, 0, results_count, -2) != 0) {
+            auto function_name = lua_tostring(L, -1);
+            auto str = std::string { function_name };
+            Logger::log_error("Lua script named: %s had an error: '%s'", name, str);
             lua_pop(L, 1);
             return false;
         }

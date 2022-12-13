@@ -10,6 +10,10 @@ namespace entity {
             auto &ec_static_renderer = entity.get<ECStaticModel>();
             auto &transform = entity.get<ECTransform>();
 
+            if (ec_static_renderer.model()->state() == graphics::MODEL_HIDDEN) {
+                continue;
+            }
+
             global.renderer->render(ec_static_renderer.model().get(), transform);
         }
     }

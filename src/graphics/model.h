@@ -5,17 +5,18 @@
 #include "material.h"
 
 namespace graphics {
-
     struct ModelData {
         std::vector<MeshData*> meshes;
+    };
+
+    enum ModelState {
+        MODEL_VISIBLE = 1 << 0,
+        MODEL_HIDDEN = 1 << 1,
     };
 
     class Model : public assets::Resource {
     public:
         explicit Model(const Path &path) : Resource(path) {}
-
-        void load(std::size_t size, char *data) override;
-        void unload() override { }
 
         [[nodiscard]] constexpr ALWAYS_INLINE const math::AABB& aabb() const {
             return m_aabb;
@@ -27,10 +28,18 @@ namespace graphics {
         }
 
         [[nodiscard]] constexpr ALWAYS_INLINE const std::vector<Mesh>& meshes() const { return m_meshes; }
+        [[nodiscard]] constexpr ALWAYS_INLINE ModelState state() const { return m_state; }
+
+        void set_state(ModelState state);
+    protected:
+        friend class assets::Cache;
+
+        void load() override;
     private:
         std::vector<Mesh> m_meshes;
         math::AABB m_aabb {};
 
         std::shared_ptr<CollisionData> m_collisions_data { nullptr };
+        ModelState m_state { MODEL_VISIBLE };
     };
 }

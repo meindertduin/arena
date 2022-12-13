@@ -2,6 +2,7 @@
 
 #include "../global.h"
 #include "../game/game_state.h"
+#include "../assets/loaders.h"
 
 namespace graphics {
 
@@ -39,8 +40,8 @@ namespace graphics {
         return l1 * p1.y + l2 * p2.y + l3 * p3.y;
     }
 
-    void Terrain::load(std::size_t size, char *data) {
-        auto &file = *reinterpret_cast<TerrainFile*>(data);
+    void Terrain::load() {
+        auto file = assets::load_terrain(path());
 
         min_height = file.min_height;
         max_height = file.max_height;
@@ -166,16 +167,16 @@ namespace graphics {
     }
 
     void Terrain::set_mesh_material(const TerrainFile &file) {
-        auto material = global.game->cache().get_resource<Material>("scripts/terrain_material.lua");
+        auto material = global.cache->get_resource<Material>("scripts/terrain_material.lua");
 
-        material->add_texture(global.game->cache().get_resource<Texture>(file.background_texture));
-        material->add_texture(global.game->cache().get_resource<Texture>(file.blendmap));
+        material->add_texture(global.cache->get_resource<Texture>(file.background_texture));
+        material->add_texture(global.cache->get_resource<Texture>(file.blendmap));
 
-        material->add_texture(global.game->cache().get_resource<Texture>(file.r_texture));
-        material->add_texture(global.game->cache().get_resource<Texture>(file.g_texture));
-        material->add_texture(global.game->cache().get_resource<Texture>(file.b_texture));
+        material->add_texture(global.cache->get_resource<Texture>(file.r_texture));
+        material->add_texture(global.cache->get_resource<Texture>(file.g_texture));
+        material->add_texture(global.cache->get_resource<Texture>(file.b_texture));
 
-        auto shader = global.game->cache().get_resource<Shader>("scripts/terrain_shader.lua");
+        auto shader = global.cache->get_resource<Shader>("scripts/terrain_shader.lua");
         auto &program = shader->program();
         program.use();
 

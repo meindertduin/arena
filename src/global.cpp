@@ -19,6 +19,8 @@ void Global::init() {
 
     // Window must be initialized first
     window = new core::Window(window_options);
+
+    cache = new assets::Cache();
     global.game = new game::GameState();
 
     auto render_target = std::make_shared<graphics::RenderTarget>();

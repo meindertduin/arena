@@ -1,18 +1,11 @@
 #include "cache.h"
-
-#include "loaders.h"
 #include "../global.h"
 
 namespace assets {
     template<>
     std::shared_ptr<graphics::Model> Cache::load_asset<graphics::Model>(const Path& path) {
-        // Todo add multiple meshes per model
         auto model = std::make_shared<graphics::Model>(path);
-        auto mesh_data = load_obj(path);
-        graphics::ModelData model_data;
-        model_data.meshes.push_back(mesh_data.get());
-
-        model->load(sizeof(model_data), reinterpret_cast<char*>(&model_data));
+        model->load();
 
         m_models[path.hash()] = std::weak_ptr(model);
         return model;
@@ -20,17 +13,18 @@ namespace assets {
 
     template<>
     std::shared_ptr<graphics::Terrain> Cache::load_asset<graphics::Terrain>(const Path& path) {
-        auto terrain_file = load_terrain(path);
         auto terrain = std::make_shared<graphics::Terrain>(path);
-        terrain->load(sizeof(terrain_file), reinterpret_cast<char*>(&terrain_file));
+        terrain->load();
+
         m_terrains[path.hash()] = std::weak_ptr(terrain);
         return terrain;
     }
 
     template<>
     std::shared_ptr<graphics::Texture> Cache::load_asset<graphics::Texture>(const Path& path) {
-        auto texture = load_texture(path);
-        texture->load(0, nullptr);
+        auto texture = std::make_shared<graphics::Texture>(path);
+        texture->load();
+
         m_textures[path.hash()] = std::weak_ptr(texture);
         return texture;
     }
@@ -38,7 +32,7 @@ namespace assets {
     template<>
     std::shared_ptr<graphics::Shader> Cache::load_asset<graphics::Shader>(const Path& path) {
         auto shader = std::make_shared<graphics::Shader>(path);
-        shader->load(0, nullptr);
+        shader->load();
 
         m_shaders[path.hash()] = std::weak_ptr(shader);
         return shader;
@@ -47,7 +41,7 @@ namespace assets {
     template<>
     std::shared_ptr<graphics::Material> Cache::load_asset<graphics::Material>(const Path& path) {
         auto material = std::make_shared<graphics::Material>(path);
-        material->load(0, nullptr);
+        material->load();
 
         m_materials[path.hash()] = std::weak_ptr(material);
         return material;
@@ -56,7 +50,7 @@ namespace assets {
     template<>
     std::shared_ptr<lua::LuaScript> Cache::load_asset<lua::LuaScript>(const Path& path) {
         auto script = std::make_shared<lua::LuaScript>(path);
-        script->load(0, nullptr);
+        script->load();
 
         m_lua_scripts[path.hash()] = std::weak_ptr(script);
         return script;

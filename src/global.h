@@ -7,6 +7,10 @@
 
 #include <memory>
 
+namespace assets {
+    class Cache;
+}
+
 namespace core {
     class Window;
 }
@@ -40,6 +44,8 @@ public:
 
     input::InputManager input_manager;
     game::GameState *game;
+    assets::Cache *cache;
+
     graphics::Renderer *renderer;
     graphics::TextRenderer *text_renderer;
     graphics::UIRenderer *ui_renderer;

@@ -12,15 +12,26 @@ class Logger {
 public:
     template<typename ...Args>
     static inline void log_error(std::string error, Args... args) {
-        throw std::runtime_error((replace_str_format(error, args), ...));
+        log(LogStatus::Error, (replace_str_format(error, args), ...));
     }
 
     static inline void log_error(const std::string& error) {
-        throw std::runtime_error(error);
+        log(LogStatus::Error, error);
     }
 
-    static inline void debug(const std::string& msg) {
-        color_write_console(msg, EscSeqFgGreen);
+    template<typename ...Args>
+    static inline void log_and_throw_error(std::string error, Args... args) {
+        log(LogStatus::Error, (replace_str_format(error, args), ...));
+        throw std::runtime_error("An error has occurred while running this program");
+    }
+
+    static inline void log_and_throw_error(const std::string& error) {
+        log(LogStatus::Error, error);
+        throw std::runtime_error("An error has occurred while running this program");
+    }
+
+    static inline void debug(const std::string& message) {
+        log(LogStatus::Debug, message);
     }
 
     template<typename ...Args>
@@ -28,26 +39,47 @@ public:
         color_write_console((replace_str_format(msg, args), ...), EscSeqFgGreen);
     }
 
-    static inline void warning(const std::string &msg) {
-        color_write_console(msg, EscSeqFgYellow);
+    static inline void warning(const std::string &message) {
+        log(LogStatus::Warning, message);
     }
 
     template<typename ...Args>
-    static inline void warning(std::string msg, Args... args) {
-        color_write_console((replace_str_format(msg, args), ...), EscSeqFgYellow);
+    static inline void warning(std::string message, Args... args) {
+        log(LogStatus::Warning, (replace_str_format(message, args), ...));
     }
 private:
-    static inline void color_write_console(std::string msg, const std::string &color_sequence) {
-        auto str = color_sequence + msg + EscSeqResetColor;
-        std::cout << str << std::endl;
-    }
+    enum class LogStatus {
+        Info,
+        Warning,
+        Debug,
+        Error,
+    };
 
     static inline constexpr std::string& replace_str_format(std::string &str, std::string arg) {
         auto pos = str.find("%s");
         str.replace(pos, 2, arg);
         return str;
     }
+
+    static inline void log(LogStatus status, std::string message) {
+        switch (status) {
+            case LogStatus::Info:
+                message = "[info] " + message;
+                break;
+            case LogStatus::Warning:
+                message = EscSeqFgYellow + "[warning] " + message + EscSeqResetColor;
+                break;
+            case LogStatus::Error:
+                message = EscSeqFgYellow + "[error] " + message + EscSeqResetColor;
+                break;
+            case LogStatus::Debug:
+                message = EscSeqFgGreen + "[debug] " + message + EscSeqResetColor;
+                break;
+        }
+
+        std::cout << message << std::endl;
+    }
 };
 
-#define THROW_ERROR(...) Logger::log_error(__VA_ARGS__)
+#define THROW_ERROR(...) Logger::log_and_throw_error(__VA_ARGS__)
 

@@ -48,9 +48,10 @@ namespace graphics {
         }
 
         void update();
+    protected:
+        friend class assets::Cache;
 
-        void load(std::size_t size, char *data) override;
-        void unload() override {}
+        void load() override;
     private:
         std::vector<std::shared_ptr<graphics::Texture>> m_textures;
         std::shared_ptr<Shader> m_shader { nullptr };

@@ -36,7 +36,7 @@ namespace graphics {
         } else {
             m_collisions_data = std::make_unique<CollisionData>();
             m_collisions_data->vertices.reserve(mesh_data->vertices.size());
-            std::copy(mesh_data->vertices.begin(), mesh_data->vertices.end(), &m_collisions_data->vertices[0]);
+            m_collisions_data->vertices.insert(m_collisions_data->vertices.begin(), mesh_data->vertices.begin(), mesh_data->vertices.end());
         }
     }
 }

@@ -15,9 +15,13 @@ namespace entity {
         e.add(ECControl());
 
         auto collision = ECRigidBody(true, e.get_ptr<ECTransform>());
-        auto cube = global.game->cache().get_resource<graphics::Model>("assets/fan_tree.obj");
-        collision.set_collider(std::make_shared<physics::MeshCollider>(cube));
+        auto cube = global.cache->get_resource<graphics::Model>("assets/cube.obj");
+        cube->set_state(graphics::MODEL_HIDDEN);
 
+        collision.set_collider(std::make_shared<physics::MeshCollider>(cube));
+        auto mesh_renderer = entity::ECStaticModel(cube);
+
+        e.add(mesh_renderer);
         e.add(collision);
 
         auto &camera_component = e.get<ECFirstPersonCamera>();
@@ -31,8 +35,8 @@ namespace entity {
         e.add(entity::ECTransform({ 0, -24, -10 }, {}));
         auto collision = entity::ECCollisionObject(false, e.get_ptr<ECTransform>());
 
-        auto tree_model = global.game->cache().get_resource<graphics::Model>("assets/fan_tree.obj");
-        auto texture = global.game->cache().get_resource<graphics::Texture>("assets/fan_tree.png");
+        auto tree_model = global.cache->get_resource<graphics::Model>("assets/fan_tree.obj");
+        auto texture = global.cache->get_resource<graphics::Texture>("assets/fan_tree.png");
 
         auto mesh_renderer = entity::ECStaticModel(tree_model);
 
