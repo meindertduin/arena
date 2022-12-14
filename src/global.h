@@ -34,13 +34,19 @@ namespace entity {
     class SystemsCollection;
 }
 
+namespace editor {
+    class Editor;
+}
+
+
 class Global {
 public:
     core::Window *window;
     core::LinearAllocator allocator { 1024 * 1024 };
     core::ListAllocator list_allocator {1024 * 1024 * 2, core::ListAllocator::PlacementPolicy::First };
-
     core::Telemetrics telemetrics;
+
+    editor::Editor *editor;
 
     input::InputManager input_manager;
     game::GameState *game;

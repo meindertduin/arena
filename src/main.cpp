@@ -5,9 +5,7 @@
 #include "game/game_state.h"
 #include "graphics/font.h"
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_opengl3.h"
-#include "imgui/imgui_impl_glfw.h"
+#include "editor/editor.h"
 
 Global global;
 
@@ -18,21 +16,16 @@ int main () {
 
     global.init();
 
-    input::initialize_input(*global.window);
+    // input::initialize_input(*global.window);
 
     core::Timer program_timer;
     int lag;
     while(!global.window->close_requested()) {
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-        ImGui::Begin("Wow");
-        ImGui::Text("Hello world");
-        ImGui::End();
-
         lag += program_timer.difference_ms();
         program_timer.start();
         global.window->poll_events();
+
+        global.editor->update();
 
         while (lag >= core::TickTimeMs) {
             global.game->update();

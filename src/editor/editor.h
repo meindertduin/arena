@@ -1,8 +1,11 @@
 #pragma once
 
 namespace editor {
-    class  Editor  {
+    class Editor  {
     public:
-        static void initialize();
+        void initialize();
+        void update();
+    private:
+        bool my_tool_active = false;
     };
 }

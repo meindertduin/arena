@@ -4,6 +4,7 @@
 #include "graphics/ui_renderer.h"
 #include "entity/systems_collection.h"
 #include "game/game_state.h"
+#include "editor/editor.h"
 
 void Global::init() {
     auto window_options = core::WindowOptions {
@@ -19,6 +20,8 @@ void Global::init() {
 
     // Window must be initialized first
     window = new core::Window(window_options);
+    editor = new editor::Editor();
+    editor->initialize();
 
     cache = new assets::Cache();
     global.game = new game::GameState();

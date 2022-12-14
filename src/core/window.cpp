@@ -40,21 +40,22 @@ namespace core {
         ImGui::CreateContext();
         ImGuiIO& io = ImGui::GetIO();
 
-        ImGui_ImplGlfw_InitForOpenGL(pm_window, true);
-
         // TODO parse the actual openGL version
         const char* glsl_version = "#version 330";
+
+        ImGui_ImplGlfw_InitForOpenGL(pm_window, true);
         ImGui_ImplOpenGL3_Init(glsl_version);
 
         ImGui::StyleColorsDark();
     }
 
     Window::~Window() {
-        glfwDestroyWindow(pm_window);
-        glfwTerminate();
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
+
+        glfwDestroyWindow(pm_window);
+        glfwTerminate();
     }
 
     bool Window::close_requested() const  {
