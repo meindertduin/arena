@@ -16,7 +16,7 @@ int main () {
 
     global.init();
 
-    // input::initialize_input(*global.window);
+    input::initialize_input(*global.window);
 
     core::Timer program_timer;
     int lag;

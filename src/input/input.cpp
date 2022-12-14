@@ -3,6 +3,7 @@
 #include "../core/event_dispatcher.h"
 #include "events.h"
 #include "../graphics/graphic_options.h"
+#include "imgui/imgui_impl_glfw.h"
 
 namespace input {
     static float mouse_x;
@@ -30,6 +31,8 @@ namespace input {
             event.key_combination = KeyCombination(key, mods, action);
 
             dispatcher->emit_event(event);
+
+            ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
         });
 
         glfwSetMouseButtonCallback(window.window(), [](GLFWwindow *window, int button, int action, int mods) {
@@ -40,6 +43,8 @@ namespace input {
             event.key_combination = KeyCombination(button, mods, action);
 
             dispatcher->emit_event(event);
+
+            ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
         });
 
         glfwSetCursorPosCallback(window.window(),
@@ -63,6 +68,8 @@ namespace input {
             event.mouse_y_offset = mouse_y_offset;
 
             dispatcher->emit_event(event);
+
+            ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
         });
 
     }
