@@ -5,6 +5,10 @@
 #include "game/game_state.h"
 #include "graphics/font.h"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_glfw.h"
+
 Global global;
 
 int main () {
@@ -19,6 +23,13 @@ int main () {
     core::Timer program_timer;
     int lag;
     while(!global.window->close_requested()) {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        ImGui::Begin("Wow");
+        ImGui::Text("Hello world");
+        ImGui::End();
+
         lag += program_timer.difference_ms();
         program_timer.start();
         global.window->poll_events();

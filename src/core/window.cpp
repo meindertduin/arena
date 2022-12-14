@@ -1,6 +1,10 @@
 #include "window.h"
 #include <glad/glad.h>
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_glfw.h"
+
 namespace core {
     Window::Window(const WindowOptions &options) {
         this->win_options = options;
@@ -30,11 +34,27 @@ namespace core {
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
             printf("Couldnt setup GLAD\n");
         }
+
+        // setup imGUI
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO();
+
+        ImGui_ImplGlfw_InitForOpenGL(pm_window, true);
+
+        // TODO parse the actual openGL version
+        const char* glsl_version = "#version 330";
+        ImGui_ImplOpenGL3_Init(glsl_version);
+
+        ImGui::StyleColorsDark();
     }
 
     Window::~Window() {
         glfwDestroyWindow(pm_window);
         glfwTerminate();
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
     }
 
     bool Window::close_requested() const  {
@@ -46,6 +66,9 @@ namespace core {
     }
 
     void Window::end_frame() const {
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
         glfwSwapBuffers(pm_window);
     }
 
