@@ -43,10 +43,20 @@ namespace core {
         // TODO parse the actual openGL version
         const char* glsl_version = "#version 330";
 
-        ImGui_ImplGlfw_InitForOpenGL(pm_window, true);
-        ImGui_ImplOpenGL3_Init(glsl_version);
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
         ImGui::StyleColorsDark();
+
+        ImGuiStyle& style = ImGui::GetStyle();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            style.WindowRounding = 0.0f;
+            style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+        }
+
+        ImGui_ImplGlfw_InitForOpenGL(pm_window, true);
+        ImGui_ImplOpenGL3_Init(glsl_version);
     }
 
     Window::~Window() {
@@ -69,6 +79,15 @@ namespace core {
     void Window::end_frame() const {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        ImGuiIO& io = ImGui::GetIO();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
 
         glfwSwapBuffers(pm_window);
     }
