@@ -6,20 +6,13 @@
 #include "game/game_state.h"
 #include "editor/editor.h"
 
-void Global::init() {
-    auto window_options = core::WindowOptions {
-            .width = 1280,
-            .height = 720,
-            .window_name = "Arena"
-    };
+void Global::init(Application *app) {
+    application = app;
 
     graphic_options = new graphics::GraphicOptions {
             true,
-            { window_options.width, window_options.height },
+            { 640, 480 },
     };
-
-    // Window must be initialized first
-    window = new core::Window(window_options);
 
     cache = new assets::Cache();
     global.game = new game::GameState();

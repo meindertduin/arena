@@ -112,12 +112,13 @@ namespace graphics {
 
         m_shader->program().use();
         screen_array_buffer.set_data(0, sizeof(quad_vertices), &quad_vertices);
-        screen_vertex_buffer.bind();
+        // TODO output screen shader results to the screen texture
+        // screen_vertex_buffer.bind();
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture_color_buffer);
+        // glActiveTexture(GL_TEXTURE0);
+        // glBindTexture(GL_TEXTURE_2D, texture_color_buffer);
 
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        // glDrawArrays(GL_TRIANGLES, 0, 6);
     }
 
     void RenderTarget::enable_depth_test() {

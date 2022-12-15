@@ -7,6 +7,7 @@
 
 #include <array>
 #include <glm/glm.hpp>
+#include <memory>
 
 namespace input {
     constexpr int KEY_PRESS = GLFW_PRESS;
@@ -159,7 +160,7 @@ namespace input {
 
     inline static std::array<int, MAX_KEYBOARD_NUM> keyboard_state;
 
-    void initialize_input(const core::Window &window);
+    void initialize_input(const std::unique_ptr<core::Window> &window);
     glm::ivec2 get_mouse_position();
     void get_mouse_movement(int &dx, int &dy);
     int get_pressed_keys();

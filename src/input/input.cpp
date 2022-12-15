@@ -12,10 +12,10 @@ namespace input {
     static float mouse_x_offset;
     static float mouse_y_offset;
 
-    void initialize_input(const core::Window &window) {
+    void initialize_input(const std::unique_ptr<core::Window> &window) {
         keyboard_state.fill(0);
 
-        glfwSetKeyCallback(window.window(),
+        glfwSetKeyCallback(window->window(),
                 [](GLFWwindow *window, int key, int scancode, int action, int mods)
         {
             auto dispatcher = core::EventDispatcher<KeyEvent>::instance();
@@ -35,7 +35,7 @@ namespace input {
             ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
         });
 
-        glfwSetMouseButtonCallback(window.window(), [](GLFWwindow *window, int button, int action, int mods) {
+        glfwSetMouseButtonCallback(window->window(), [](GLFWwindow *window, int button, int action, int mods) {
             auto dispatcher = core::EventDispatcher<MouseButtonEvent>::instance();
 
             MouseButtonEvent event{};
@@ -47,7 +47,7 @@ namespace input {
             ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
         });
 
-        glfwSetCursorPosCallback(window.window(),
+        glfwSetCursorPosCallback(window->window(),
                 [](GLFWwindow* window, double xpos_in, double ypos_in)
         {
             auto xpos = static_cast<float>(xpos_in);

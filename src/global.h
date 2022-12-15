@@ -4,6 +4,7 @@
 #include "core/linear_allocator.h"
 #include "core/list_allocator.h"
 #include "core/telemetrics.h"
+#include "core/application.h"
 
 #include <memory>
 
@@ -41,7 +42,7 @@ namespace editor {
 
 class Global {
 public:
-    core::Window *window;
+    Application *application;
     core::LinearAllocator allocator { 1024 * 1024 };
     core::ListAllocator list_allocator {1024 * 1024 * 2, core::ListAllocator::PlacementPolicy::First };
     core::Telemetrics telemetrics;
@@ -61,7 +62,7 @@ public:
 
     entity::Ecs *ecs;
 
-    void init();
+    void init(Application *app);
 };
 
 extern Global global;

@@ -7,11 +7,11 @@ namespace ui {
     void ToggleOverlayCommand::execute() {
         if (global.game->ui_mode()) {
             global.game->set_ui_mode(false);
-            global.window->disable_cursor();
+            global.application->window()->disable_cursor();
         } else {
             global.game->ui().open_dev_info();
             global.game->set_ui_mode(true);
-            global.window->enable_cursor();
+            global.application->window()->enable_cursor();
         }
     }
 
@@ -21,11 +21,11 @@ namespace ui {
             global.game->set_game_mode(game::Mode::Editing);
 
             global.game->set_ui_mode(true);
-            global.window->enable_cursor();
+            global.application->window()->enable_cursor();
         } else {
             global.game->set_game_mode(game::Mode::Playing);
             global.game->set_ui_mode(false);
-            global.window->disable_cursor();
+            global.application->window()->disable_cursor();
         }
     }
 }
