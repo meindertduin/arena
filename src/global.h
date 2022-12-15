@@ -50,8 +50,6 @@ public:
     editor::Editor *editor;
 
     input::InputManager input_manager;
-    game::GameState *game;
-    assets::Cache *cache;
 
     graphics::Renderer *renderer;
     graphics::TextRenderer *text_renderer;

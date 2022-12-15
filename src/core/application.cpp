@@ -1,5 +1,7 @@
 #include "application.h"
 
+#include "engine.h"
+
 // Shared imports
 #include "../global.h"
 #include "../game/game_state.h"
@@ -36,6 +38,9 @@ void Application::initialize() {
 
     global.init(this);
 
+    m_engine = std::make_unique<core::Engine>();
+    m_engine->initialize();
+
     input::initialize_input(m_window);
 
     m_initialized = true;
@@ -54,14 +59,7 @@ void Application::run() {
             global.editor->update();
         }
 
-        while (lag >= core::TickTimeMs) {
-            global.game->update();
-
-            core::TotalTicks++;
-            lag -= core::TickTimeMs;
-        }
-
-        global.game->render();
+        m_engine->update(lag);
 
         m_window->end_frame();
 

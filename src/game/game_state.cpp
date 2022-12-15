@@ -3,8 +3,6 @@
 #include "../global.h"
 
 #include "../graphics/renderer.h"
-#include "../core/program_time.h"
-
 #include "../entity/systems_collection.h"
 
 namespace game {

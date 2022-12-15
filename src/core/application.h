@@ -3,6 +3,7 @@
 #include <memory>
 #include "program_time.h"
 #include "window.h"
+#include "engine.h"
 
 class Application {
 public:
@@ -16,6 +17,11 @@ public:
         return m_window;
     }
 
+    constexpr ALWAYS_INLINE
+    std::unique_ptr<core::Engine>& engine() {
+        return m_engine;
+    }
+
 private:
     bool m_initialized { false };
     bool m_editor { true };
@@ -23,4 +29,5 @@ private:
     core::Timer m_program_timer;
 
     std::unique_ptr<core::Window> m_window;
+    std::unique_ptr<core::Engine> m_engine;
 };

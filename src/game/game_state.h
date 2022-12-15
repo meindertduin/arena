@@ -12,11 +12,6 @@
 #include <thread>
 
 namespace game {
-    enum class Mode {
-        Editing,
-        Playing,
-    };
-
     class GameState {
     public:
         GameState();
@@ -26,9 +21,6 @@ namespace game {
 
         [[nodiscard]] constexpr ALWAYS_INLINE bool ui_mode() const { return m_ui_mode; }
         ALWAYS_INLINE void set_ui_mode(bool new_ui_mode) { m_ui_mode = new_ui_mode; }
-
-        [[nodiscard]] constexpr ALWAYS_INLINE Mode game_mode() const { return m_game_mode; }
-        ALWAYS_INLINE void set_game_mode(Mode new_game_mode) { m_game_mode = new_game_mode; }
 
         constexpr ALWAYS_INLINE ui::UI& ui() { return m_ui; }
 
@@ -41,7 +33,6 @@ namespace game {
 
     private:
         bool m_ui_mode { false };
-        Mode m_game_mode { Mode::Playing };
         ui::UI m_ui;
 
         lua_State *m_lua_state;

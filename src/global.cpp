@@ -14,9 +14,6 @@ void Global::init(Application *app) {
             { 640, 480 },
     };
 
-    cache = new assets::Cache();
-    global.game = new game::GameState();
-
     auto render_target = std::make_shared<graphics::RenderTarget>();
 
     renderer = new graphics::Renderer(render_target);
@@ -28,9 +25,6 @@ void Global::init(Application *app) {
     global.ecs = entity::Ecs::instance();
 
     global.systems->init();
-
-    // initialize game state
-    global.game->init();
 
     editor = new editor::Editor();
     editor->initialize();
