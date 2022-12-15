@@ -7,12 +7,12 @@
 #include "ui_renderer.h"
 
 namespace graphics {
-    Renderer::Renderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
+    Renderer::Renderer(std::shared_ptr<RenderTarget> render_target) : m_render_target{std::move(render_target )} {
     }
 
     void Renderer::before_render() {
-        render_target->bind();
-        render_target->clear();
+        m_render_target->bind();
+        m_render_target->clear();
 
         set_ubo_data();
     }
@@ -43,8 +43,8 @@ namespace graphics {
     }
 
     void Renderer::after_render() {
-        render_target->unbind();
-        render_target->render();
+        m_render_target->unbind();
+        m_render_target->render();
     }
 
     void Renderer::set_ubo_data() {

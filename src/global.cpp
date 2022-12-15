@@ -20,8 +20,6 @@ void Global::init() {
 
     // Window must be initialized first
     window = new core::Window(window_options);
-    editor = new editor::Editor();
-    editor->initialize();
 
     cache = new assets::Cache();
     global.game = new game::GameState();
@@ -40,4 +38,7 @@ void Global::init() {
 
     // initialize game state
     global.game->init();
+
+    editor = new editor::Editor();
+    editor->initialize();
 }

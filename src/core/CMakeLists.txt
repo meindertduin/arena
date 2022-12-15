@@ -1,4 +1,6 @@
 set(CORE_SOURCES
+        src/core/application.h
+        src/core/application.cpp
         src/core/window.cpp
         src/core/linear_allocator.h
         src/core/linear_allocator.cpp
