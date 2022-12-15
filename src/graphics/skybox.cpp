@@ -50,16 +50,19 @@ namespace graphics {
     };
 
     Skybox::Skybox() {
-        m_shader = global.cache->get_resource<Shader>("scripts/skybox_shader.lua");
+        auto cache = global.application->engine()->cache();
+
+        m_shader = cache->get_resource<Shader>("scripts/skybox_shader.lua");
         vertex_buffer.add_vertex_attribute({3, GL_FLOAT, sizeof(float), false });
     }
 
     void Skybox::render() {
+        auto game = global.application->engine()->game();
         glDepthFunc(GL_LEQUAL);
 
         auto &program = m_shader->program();
         program.use();
-        program.set_property("cameraPos", global.game->active_scene()->camera().transform.pos);
+        program.set_property("cameraPos", game->active_scene()->camera().transform.pos);
 
         texture.bind(0);
 

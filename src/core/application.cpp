@@ -34,12 +34,21 @@ void Application::initialize() {
             .window_name = "Arena"
     };
 
+    global.application = this;
+    global.graphic_options = new graphics::GraphicOptions {
+            true,
+            { 640, 480 },
+    };
+
     m_window = std::make_unique<core::Window>(window_options);
-
-    global.init(this);
-
     m_engine = std::make_unique<core::Engine>();
+
+    // setting up ecs and systems
+    global.ecs = entity::Ecs::instance();
+
     m_engine->initialize();
+
+    global.init();
 
     input::initialize_input(m_window);
 

@@ -6,7 +6,8 @@
 
 namespace game {
     Map::Map() {
-        terrain = global.cache->get_resource<graphics::Terrain>("assets/terrain.ter");
+        auto cache = global.application->engine()->cache();
+        terrain = cache->get_resource<graphics::Terrain>("assets/terrain.ter");
     }
 
     void Map::render_background() const {

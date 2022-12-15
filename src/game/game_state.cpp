@@ -31,9 +31,4 @@ namespace game {
 
         global.renderer->after_render();
     }
-
-    GameState::GameState() {
-        m_lua_state = luaL_newstate();
-        luaL_openlibs(m_lua_state);
-    }
 }

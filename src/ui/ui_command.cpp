@@ -5,27 +5,19 @@
 
 namespace ui {
     void ToggleOverlayCommand::execute() {
-        if (global.game->ui_mode()) {
-            global.game->set_ui_mode(false);
+        auto game = global.application->engine()->game();
+        if (game->ui_mode()) {
+            game->set_ui_mode(false);
             global.application->window()->disable_cursor();
         } else {
-            global.game->ui().open_dev_info();
-            global.game->set_ui_mode(true);
+            game->ui().open_dev_info();
+            game->set_ui_mode(true);
             global.application->window()->enable_cursor();
         }
     }
 
     void ToggleEditModeCommand::execute() {
-        if (global.game->game_mode() == game::Mode::Playing) {
-            global.game->ui().open_edit_tools();
-            global.game->set_game_mode(game::Mode::Editing);
-
-            global.game->set_ui_mode(true);
-            global.application->window()->enable_cursor();
-        } else {
-            global.game->set_game_mode(game::Mode::Playing);
-            global.game->set_ui_mode(false);
-            global.application->window()->disable_cursor();
-        }
+        // TODO test code
+        global.application->window()->enable_cursor();
     }
 }

@@ -32,8 +32,9 @@ namespace physics {
     }
 
     void PhysicsSystem::get_collisions(entity::ECRigidBody &rigid_body, std::vector<physics::Collision> &collisions) {
-        auto colliding_static_objects = global.game->active_scene()->static_octree().get_colliding_objects(rigid_body);
-        auto colliding_dynamic_objects = global.game->active_scene()->dynamic_octree().get_colliding_objects(rigid_body);
+        auto game = global.application->engine()->game();
+        auto colliding_static_objects = game->active_scene()->static_octree().get_colliding_objects(rigid_body);
+        auto colliding_dynamic_objects = game->active_scene()->dynamic_octree().get_colliding_objects(rigid_body);
 
         for (auto value : colliding_static_objects) {
             auto collision_points = rigid_body.test_collision(value);
@@ -53,7 +54,9 @@ namespace physics {
     }
 
     void PhysicsSystem::test_terrain_collision(entity::ECRigidBody &rigid_body, entity::ECTransform &transform) {
-        auto terrain = global.game->active_scene()->map()->terrain;
+        auto game = global.application->engine()->game();
+
+        auto terrain = game->active_scene()->map()->terrain;
         float height;
         auto in_terrain_range = terrain->get_height(transform.pos.x, transform.pos.z, height);
 

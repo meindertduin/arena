@@ -5,7 +5,8 @@
 
 namespace graphics {
     UIRenderer::UIRenderer(std::shared_ptr<RenderTarget> render_target) : render_target{std::move( render_target )} {
-        m_shader = global.cache->get_resource<Shader>("scripts/ui_shader.lua");
+        auto cache = global.application->engine()->cache();
+        m_shader = cache->get_resource<Shader>("scripts/ui_shader.lua");
     }
 
     void UIRenderer::before_ui_rendering() {

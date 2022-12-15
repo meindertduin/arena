@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <lua.hpp>
 #include "../platform/platform.h"
 
 namespace game {
@@ -32,6 +33,7 @@ namespace core {
         [[nodiscard]] constexpr ALWAYS_INLINE State state() const { return m_state; }
         [[nodiscard]] constexpr ALWAYS_INLINE assets::Cache* cache() const { return m_cache; }
         [[nodiscard]] constexpr ALWAYS_INLINE game::GameState* game() const { return m_game; }
+        [[nodiscard]] constexpr ALWAYS_INLINE lua_State* lua_state() const { return m_lua_state; }
 
         void set_state(State state);
     private:
@@ -40,5 +42,7 @@ namespace core {
 
         assets::Cache *m_cache { nullptr };
         game::GameState *m_game { nullptr };
+
+        lua_State *m_lua_state;
     };
 }

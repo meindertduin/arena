@@ -16,34 +16,37 @@ namespace input {
     }
 
     void InputManager::on_mouse_movement(float mouse_x_offset, float mouse_y_offset) const {
-        if (global.game->ui_mode()) {
-            global.game->ui().handle_mouse_move_event();
+        auto game = global.application->engine()->game();
+        if (game->ui_mode()) {
+            game->ui().handle_mouse_move_event();
         } else {
             entity::RotateCommand command;
             command.degrees_x = mouse_x_offset * settings.mouse_sensitivity;
             command.degrees_y = mouse_y_offset * settings.mouse_sensitivity;
 
-            command.execute(global.game->active_scene()->player());
+            command.execute(game->active_scene()->player());
         }
     }
 
     void InputManager::on_mouse_button_event(KeyCombination combi) {
-        if (global.game->ui_mode()) {
-            global.game->ui().handle_mouse_button_event(combi);
+        auto game = global.application->engine()->game();
+        if (game->ui_mode()) {
+            game->ui().handle_mouse_button_event(combi);
         } else {
             // let the m_player handle the event
         }
     }
 
     void InputManager::on_key_event(KeyCombination combi) {
+        auto game = global.application->engine()->game();
         auto maskless_combi = combi;
         maskless_combi.mods_mask = 0;
 
         if (handle_ui_command(combi, maskless_combi))
             return;
 
-        if (global.game->ui_mode()) {
-            global.game->ui().handle_key_event(combi);
+        if (game->ui_mode()) {
+            game->ui().handle_key_event(combi);
         } else {
             handle_player_command(combi, maskless_combi);
         }
@@ -66,15 +69,16 @@ namespace input {
     }
 
     bool InputManager::handle_player_command(const KeyCombination &combi, const KeyCombination &maskless_combi) {
+        auto game = global.application->engine()->game();
         auto maskless_command_opt = key_bindings.get_player_command(maskless_combi);
         if (maskless_command_opt.has_value()) {
-            maskless_command_opt.value()->execute(global.game->active_scene()->player());
+            maskless_command_opt.value()->execute(game->active_scene()->player());
             return true;
         }
 
         auto command_opt = key_bindings.get_player_command(combi);
         if (command_opt.has_value()) {
-            command_opt.value()->execute(global.game->active_scene()->player());
+            command_opt.value()->execute(game->active_scene()->player());
             return true;
         }
 

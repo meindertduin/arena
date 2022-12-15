@@ -10,9 +10,10 @@ namespace graphics {
         ModelData model_data;
         model_data.meshes.push_back(model_mesh_data.get());
 
-        auto material = global.cache->get_resource<graphics::Material>("scripts/material.lua");
-        auto texture = global.cache->get_resource<graphics::Texture>("assets/fan_tree.png");
-        auto shader = global.cache->get_resource<graphics::Shader>("scripts/light_shader.lua");
+        auto cache = global.application->engine()->cache();
+        auto material = cache->get_resource<graphics::Material>("scripts/material.lua");
+        auto texture = cache->get_resource<graphics::Texture>("assets/fan_tree.png");
+        auto shader = cache->get_resource<graphics::Shader>("scripts/light_shader.lua");
 
         material->add_texture(texture);
         material->set_shader(shader);

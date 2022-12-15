@@ -6,7 +6,6 @@ namespace core {
     Engine::Engine()
             :   m_state(State::Running)
     {
-
     }
 
     Engine::~Engine() {
@@ -21,6 +20,9 @@ namespace core {
     void Engine::initialize() {
         m_cache = new assets::Cache();
         m_game = new game::GameState();
+
+        m_lua_state = luaL_newstate();
+        luaL_openlibs(m_lua_state);
 
         m_game->init();
     }

@@ -60,7 +60,7 @@ public:
 
     entity::Ecs *ecs;
 
-    void init(Application *app);
+    void init();
 };
 
 extern Global global;

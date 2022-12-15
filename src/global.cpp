@@ -6,23 +6,13 @@
 #include "game/game_state.h"
 #include "editor/editor.h"
 
-void Global::init(Application *app) {
-    application = app;
-
-    graphic_options = new graphics::GraphicOptions {
-            true,
-            { 640, 480 },
-    };
-
+void Global::init() {
     auto render_target = std::make_shared<graphics::RenderTarget>();
 
     renderer = new graphics::Renderer(render_target);
     text_renderer = new graphics::TextRenderer();
     ui_renderer = new graphics::UIRenderer(render_target);
     systems = new entity::SystemsCollection();
-
-    // setting up ecs and systems
-    global.ecs = entity::Ecs::instance();
 
     global.systems->init();
 
