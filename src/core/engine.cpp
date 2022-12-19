@@ -1,5 +1,5 @@
 #include "engine.h"
-#include "../game/game_state.h"
+#include "../game/scene.h"
 #include "program_time.h"
 
 namespace core {
@@ -9,7 +9,7 @@ namespace core {
     }
 
     Engine::~Engine() {
-        delete m_game;
+        delete m_active_scene;
         delete m_cache;
     }
 
@@ -19,23 +19,21 @@ namespace core {
 
     void Engine::initialize() {
         m_cache = new assets::Cache();
-        m_game = new game::GameState();
+        m_active_scene = new game::Scene();
 
         m_lua_state = luaL_newstate();
         luaL_openlibs(m_lua_state);
 
-        m_game->init();
+        m_active_scene->initialize();
     }
 
     void Engine::update(int lag) {
-
-        m_game->update();
+        m_active_scene->update();
         while (lag >= core::TickTimeMs) {
-
             core::TotalTicks++;
             lag -= core::TickTimeMs;
         }
 
-        m_game->render();
+        m_active_scene->render();
     }
 }

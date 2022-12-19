@@ -3,12 +3,11 @@
 #include <utility>
 
 #include "material.h"
-#include "../game/game_state.h"
+#include "../game/scene.h"
 
 namespace graphics {
     Renderer::Renderer(std::shared_ptr<RenderTarget> render_target)
-        :   m_render_target{std::move(render_target )},
-            m_game{global.application->engine()->game()}
+        :   m_render_target{std::move(render_target )}
     {
     }
 
@@ -20,6 +19,7 @@ namespace graphics {
     }
 
     void Renderer::render(const Model *model, const entity::ECTransform &transform) const {
+        auto active_scene = global.application->engine()->active_scene();
         auto model_4x4 = transform.get_transform_4x4();
 
         for (const auto &mesh : model->meshes()) {
@@ -33,12 +33,12 @@ namespace graphics {
                 texture->bind(i++);
             }
 
-            m_game->active_scene()->skybox().bind_texture(1);
+            active_scene->skybox().bind_texture(1);
 
             material.update();
             program.set_property("color", { 1.0f, 1.0f, 0 });
             program.set_property("model", model_4x4);
-            program.set_property("viewPos", m_game->active_scene()->camera().transform.pos);
+            program.set_property("viewPos", active_scene->camera().transform.pos);
             program.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
 
             mesh.render();
@@ -51,29 +51,30 @@ namespace graphics {
     }
 
     void Renderer::set_ubo_data() {
+        auto active_scene = global.application->engine()->active_scene();
         ubo_matrices.reset();
         ubo_lights.reset();
 
         ubo_matrices.bind();
-        ubo_matrices.set_data(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(m_game->active_scene()->camera().projection));
-        ubo_matrices.set_data(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(m_game->active_scene()->camera().get_view_4x4()));
+        ubo_matrices.set_data(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(active_scene->camera().projection));
+        ubo_matrices.set_data(sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(active_scene->camera().get_view_4x4()));
         ubo_matrices.unbind();
 
         ubo_lights.bind();
 
-        auto dir_lights_count = m_game->active_scene()->dir_lights().size();
-        auto point_lights_count = m_game->active_scene()->point_lights().size();
+        auto dir_lights_count = active_scene->dir_lights().size();
+        auto point_lights_count = active_scene->point_lights().size();
 
         ubo_lights.set_data(16, sizeof(int), &dir_lights_count);
         auto uboFilledSizeBefore = ubo_lights.offset();
-        for (auto &light : m_game->active_scene()->dir_lights()) {
+        for (auto &light : active_scene->dir_lights()) {
             light.set_data(ubo_lights);
         }
 
         ubo_lights.set_offset(uboFilledSizeBefore + (DIR_LIGHT_STD140_SIZE * MAX_DIR_LIGHTS));
         ubo_lights.set_data(16, sizeof(int), &point_lights_count);
 
-        for (auto &light : m_game->active_scene()->point_lights()) {
+        for (auto &light : active_scene->point_lights()) {
             light.set_data(ubo_lights);
         }
 
@@ -81,6 +82,7 @@ namespace graphics {
     }
 
     void Renderer::render(const Mesh *mesh, const entity::ECTransform &transform) const {
+        auto active_scene = global.application->engine()->active_scene();
         auto &material = *mesh->material();
         auto &program = material.shader()->program();
         auto model_4x4 = transform.get_transform_4x4();
@@ -94,7 +96,7 @@ namespace graphics {
 
         program.set_property("model", model_4x4);
         program.set_property("invtransmodel", glm::inverse(glm::transpose(model_4x4)));
-        program.set_property("viewPos", m_game->active_scene()->camera().transform.pos);
+        program.set_property("viewPos", active_scene->camera().transform.pos);
         material.update();
 
         mesh->render();

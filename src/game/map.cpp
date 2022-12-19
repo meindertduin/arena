@@ -2,7 +2,6 @@
 
 #include "../global.h"
 #include "../graphics/renderer.h"
-#include "game_state.h"
 
 namespace game {
     Map::Map() {

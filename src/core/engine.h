@@ -5,8 +5,9 @@
 #include "../platform/platform.h"
 
 namespace game {
-    class GameState;
+    class Scene;
 }
+
 namespace assets {
     class Cache;
 }
@@ -32,7 +33,7 @@ namespace core {
 
         [[nodiscard]] constexpr ALWAYS_INLINE State state() const { return m_state; }
         [[nodiscard]] constexpr ALWAYS_INLINE assets::Cache* cache() const { return m_cache; }
-        [[nodiscard]] constexpr ALWAYS_INLINE game::GameState* game() const { return m_game; }
+        [[nodiscard]] constexpr ALWAYS_INLINE game::Scene* active_scene() const { return m_active_scene; }
         [[nodiscard]] constexpr ALWAYS_INLINE lua_State* lua_state() const { return m_lua_state; }
 
         void set_state(State state);
@@ -41,7 +42,7 @@ namespace core {
         State m_state;
 
         assets::Cache *m_cache { nullptr };
-        game::GameState *m_game { nullptr };
+        game::Scene *m_active_scene { nullptr };
 
         lua_State *m_lua_state;
     };

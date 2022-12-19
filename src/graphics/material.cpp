@@ -3,7 +3,6 @@
 
 #include "../lua/helpers.h"
 #include "../global.h"
-#include "../game/game_state.h"
 
 namespace graphics {
 namespace lua_api {

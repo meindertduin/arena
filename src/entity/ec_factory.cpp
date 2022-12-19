@@ -4,7 +4,9 @@
 #include "ec_first_person_camera.h"
 #include "ec_control.h"
 #include "ec_rigid_body.h"
-#include "../game/game_state.h"
+#include "../graphics/model.h"
+#include "../physics/collision.h"
+#include "ec_static_model.h"
 
 namespace entity {
     Entity ECFactory::create_player() {

@@ -3,6 +3,7 @@
 #include "../entity/systems_collection.h"
 
 #include "../graphics/graphic_options.h"
+#include "../graphics/renderer.h"
 #include "../entity/ec_factory.h"
 
 namespace game {
@@ -38,12 +39,18 @@ namespace game {
         m_dynamic_octree.reset();
         auto collision_objects = global.ecs->get_component_array<entity::ECRigidBody>()->values();
         m_dynamic_octree.fill_with_objects(collision_objects);
+
+        global.systems->update();
     }
 
     void Scene::render() {
+        global.renderer->before_render();
+
         m_map->render_background();
         global.systems->render();
         m_skybox.render();
+
+        global.renderer->after_render();
     }
 
     Scene::Scene() :

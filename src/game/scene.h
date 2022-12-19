@@ -13,6 +13,9 @@ namespace game {
     public:
         Scene();
 
+        Scene(const Scene&) = delete;
+        Scene& operator=(const Scene&) = delete;
+
         constexpr ALWAYS_INLINE graphics::Skybox& skybox() { return m_skybox; }
         constexpr ALWAYS_INLINE std::unique_ptr<Map>& map() { return m_map; }
 

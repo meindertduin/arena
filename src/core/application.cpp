@@ -4,7 +4,6 @@
 
 // Shared imports
 #include "../global.h"
-#include "../game/game_state.h"
 #include "../graphics/font.h"
 #include "../entity/systems_collection.h"
 

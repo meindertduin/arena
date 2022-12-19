@@ -1,8 +1,8 @@
 #include "terrain.h"
 
 #include "../global.h"
-#include "../game/game_state.h"
 #include "../assets/loaders.h"
+#include "../assets/cache.h"
 
 namespace graphics {
 

@@ -2,7 +2,6 @@
 #include "graphics/render_target.h"
 #include "graphics/renderer.h"
 #include "entity/systems_collection.h"
-#include "game/game_state.h"
 #include "editor/editor.h"
 
 void Global::init() {

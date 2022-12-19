@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 
 #include "../global.h"
-#include "../game/game_state.h"
+#include "../assets/cache.h"
 
 constexpr static float quad_vertices[] = {
      -1.0f,  1.0f, 0.0f, 1.0f,

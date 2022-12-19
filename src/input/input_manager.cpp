@@ -1,7 +1,7 @@
 #include "input_manager.h"
 #include "input.h"
 #include "../global.h"
-#include "../game/game_state.h"
+#include "../game/scene.h"
 
 namespace input {
     InputManager::InputManager() {
@@ -16,13 +16,13 @@ namespace input {
     }
 
     void InputManager::on_mouse_movement(float mouse_x_offset, float mouse_y_offset) const {
-        auto game = global.application->engine()->game();
+        auto active_scene = global.application->engine()->active_scene();
 
         entity::RotateCommand command;
         command.degrees_x = mouse_x_offset * settings.mouse_sensitivity;
         command.degrees_y = mouse_y_offset * settings.mouse_sensitivity;
 
-        command.execute(game->active_scene()->player());
+        command.execute(active_scene->player());
     }
 
     void InputManager::on_mouse_button_event(KeyCombination combi) {
@@ -37,16 +37,16 @@ namespace input {
     }
 
     bool InputManager::handle_player_command(const KeyCombination &combi, const KeyCombination &maskless_combi) {
-        auto game = global.application->engine()->game();
+        auto active_scene = global.application->engine()->active_scene();
         auto maskless_command_opt = key_bindings.get_player_command(maskless_combi);
         if (maskless_command_opt.has_value()) {
-            maskless_command_opt.value()->execute(game->active_scene()->player());
+            maskless_command_opt.value()->execute(active_scene->player());
             return true;
         }
 
         auto command_opt = key_bindings.get_player_command(combi);
         if (command_opt.has_value()) {
-            command_opt.value()->execute(game->active_scene()->player());
+            command_opt.value()->execute(active_scene->player());
             return true;
         }
 

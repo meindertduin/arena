@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 #include "../global.h"
-#include "../game/game_state.h"
+#include "../game/scene.h"
 
 namespace graphics {
     static constexpr float skybox_vertices[] = {
@@ -57,12 +57,12 @@ namespace graphics {
     }
 
     void Skybox::render() {
-        auto game = global.application->engine()->game();
+        auto active_scene = global.application->engine()->active_scene();
         glDepthFunc(GL_LEQUAL);
 
         auto &program = m_shader->program();
         program.use();
-        program.set_property("cameraPos", game->active_scene()->camera().transform.pos);
+        program.set_property("cameraPos", active_scene->camera().transform.pos);
 
         texture.bind(0);
 

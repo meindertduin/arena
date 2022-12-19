@@ -9,7 +9,8 @@
 #include "../lua/helpers.h"
 
 #include "../global.h"
-#include "../game/game_state.h"
+#include "../lua/lua_script.h"
+#include "../assets/cache.h"
 
 namespace graphics {
     uint32_t Uniform::size() const {
