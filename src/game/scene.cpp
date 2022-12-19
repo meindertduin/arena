@@ -6,7 +6,7 @@
 #include "../entity/ec_factory.h"
 
 namespace game {
-    void Scene::init() {
+    void Scene::initialize() {
         graphics::DirLight dir_light;
         dir_light.direction = { 0, -1.0f, -1.0f };
         dir_light.ambient = {0.05f, 0.05f, 0.05f};

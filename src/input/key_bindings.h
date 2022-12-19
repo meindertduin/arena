@@ -5,7 +5,6 @@
 #include <memory>
 
 #include "../entity/ec_command.h"
-#include "../ui/ui_command.h"
 #include "input.h"
 
 namespace input {
@@ -18,9 +17,7 @@ namespace input {
         Keybindings& operator=(const Keybindings &other) = delete;
 
         std::optional<entity::ECCommand*> get_player_command(const KeyCombination &combination);
-        std::optional<ui::UICommand*> get_ui_command(const KeyCombination &combination);
     private:
         std::unordered_map<uint32_t , std::unique_ptr<entity::ECCommand>> player_commands;
-        std::unordered_map<uint32_t , std::unique_ptr<ui::UICommand>> ui_commands;
     };
 }

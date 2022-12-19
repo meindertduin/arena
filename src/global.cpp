@@ -1,7 +1,6 @@
 #include "global.h"
 #include "graphics/render_target.h"
 #include "graphics/renderer.h"
-#include "graphics/ui_renderer.h"
 #include "entity/systems_collection.h"
 #include "game/game_state.h"
 #include "editor/editor.h"
@@ -11,7 +10,6 @@ void Global::init() {
 
     renderer = new graphics::Renderer(render_target);
     text_renderer = new graphics::TextRenderer();
-    ui_renderer = new graphics::UIRenderer(render_target);
 
     editor = new editor::Editor();
     editor->initialize();

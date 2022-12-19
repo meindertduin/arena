@@ -4,7 +4,6 @@
 
 #include "material.h"
 #include "../game/game_state.h"
-#include "ui_renderer.h"
 
 namespace graphics {
     Renderer::Renderer(std::shared_ptr<RenderTarget> render_target)

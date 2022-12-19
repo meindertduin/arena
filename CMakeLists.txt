@@ -30,7 +30,6 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/src/game/CMakeLists.txt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/graphics/CMakeLists.txt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/input/CMakeLists.txt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/physics/CMakeLists.txt)
-include(${CMAKE_CURRENT_SOURCE_DIR}/src/ui/CMakeLists.txt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/platform/CMakeLists.txt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/math/CMakeLists.txt)
 include(${CMAKE_CURRENT_SOURCE_DIR}/src/lua/CMakeLists.txt)
@@ -49,7 +48,6 @@ add_executable(
         ${GRAPHICS_SOURCES}
         ${INPUT_SOURCES}
         ${PHYSICS_SOURCES}
-        ${UI_SOURCES}
         ${PLATFORM_SOURCES}
         ${MATH_SOURCES}
         ${LUA_SOURCES}

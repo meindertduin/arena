@@ -25,7 +25,7 @@ namespace game {
         constexpr ALWAYS_INLINE physics::Octree<entity::ECCollisionObject>& static_octree() { return m_static_octree; }
         constexpr ALWAYS_INLINE physics::Octree<entity::ECRigidBody>& dynamic_octree() { return m_dynamic_octree; }
 
-        void init();
+        void initialize();
         void update();
         void render();
 

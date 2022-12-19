@@ -15,18 +15,18 @@ namespace entity {
     class SystemsManager {
     public:
         template<typename T>
-            std::shared_ptr<T> register_system() {
-                auto type_name = typeid(T).name();
+        std::shared_ptr<T> register_system() {
+            auto type_name = typeid(T).name();
 
-                if (systems.find(type_name) != systems.end()) {
-                    THROW_ERROR("System of m_type %s was already registered.", type_name);
-                }
-
-                auto system = std::make_shared<T>();
-                systems.insert({type_name, system});
-
-                return system;
+            if (systems.find(type_name) != systems.end()) {
+                THROW_ERROR("System of m_type %s was already registered.", type_name);
             }
+
+            auto system = std::make_shared<T>();
+            systems.insert({type_name, system});
+
+            return system;
+        }
 
         template<typename T>
         void set_signature(Signature signature) {

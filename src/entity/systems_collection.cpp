@@ -9,6 +9,7 @@
 namespace entity {
     void SystemsCollection::init() {
         pm_static_render_system = global.ecs->create_system<entity::StaticRenderSystem>({ECStaticModel::_id });
+        // TODO, some signatures need to be OR instead of AND
         pm_physics_system = global.ecs->create_system<physics::PhysicsSystem>({ entity::ECRigidBody::_id });
         pm_movement_system = global.ecs->create_system<entity::MovementSystem>({ entity::ECControl::_id, entity::ECTransform::_id });
     }
