@@ -1,4 +1,3 @@
-#include <lua.hpp>
 #include "game_state.h"
 #include "../global.h"
 

@@ -28,8 +28,9 @@ namespace core {
     }
 
     void Engine::update(int lag) {
+
+        m_game->update();
         while (lag >= core::TickTimeMs) {
-            m_game->update();
 
             core::TotalTicks++;
             lag -= core::TickTimeMs;

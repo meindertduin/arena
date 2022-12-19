@@ -12,9 +12,6 @@ void Global::init() {
     renderer = new graphics::Renderer(render_target);
     text_renderer = new graphics::TextRenderer();
     ui_renderer = new graphics::UIRenderer(render_target);
-    systems = new entity::SystemsCollection();
-
-    global.systems->init();
 
     editor = new editor::Editor();
     editor->initialize();

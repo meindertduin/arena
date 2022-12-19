@@ -6,6 +6,7 @@
 #include "../global.h"
 #include "../game/game_state.h"
 #include "../graphics/font.h"
+#include "../entity/systems_collection.h"
 
 // Editor imports
 #include "../editor/editor.h"
@@ -46,6 +47,9 @@ void Application::initialize() {
     // setting up ecs and systems
     global.ecs = entity::Ecs::instance();
 
+    global.systems = new entity::SystemsCollection();
+    global.systems->init();
+
     m_engine->initialize();
 
     global.init();
@@ -60,7 +64,7 @@ void Application::run() {
 
     int lag;
     while(!m_window->close_requested()) {
-        lag += m_program_timer.difference_ms();
+        lag = m_program_timer.difference_ms();
         m_program_timer.start();
         m_window->poll_events();
 
