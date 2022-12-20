@@ -3,6 +3,7 @@
 #include "entity.h"
 #include "event_manager.h"
 #include "../logging.h"
+#include "component_registry.h"
 
 namespace entity {
     class IComponentArray {
@@ -16,6 +17,11 @@ namespace entity {
     template<typename T>
     class ComponentArray : public IComponentArray {
     public:
+        explicit ComponentArray(ComponentArrayStaticData<T> *component_data)
+            : m_component_data(component_data)
+        {
+        }
+
         std::vector<T*> values() {
             std::vector<T*> result;
             for (auto &[_, component] : components)
@@ -79,17 +85,10 @@ namespace entity {
             remove(entity);
         }
 
-        template<typename E, typename F>
-        void add_event_handler(F &&f) {
-            auto handler = [f = std::forward<F>(f)](void *c, void *e) {
-                ((reinterpret_cast<T*>(c)->*f)(*reinterpret_cast<const E*>(e)));
-            };
-            
-            event_handlers[E::_id] = handler;
-        }
-
         // could not make this a template function, that's why e is m_type void*
         void dispatch(void *e, uint32_t event_id) override {
+            auto &event_handlers = m_component_data->event_handlers;
+
             if (event_handlers.find(event_id) == event_handlers.end()) {
                 return;
             }
@@ -100,6 +99,8 @@ namespace entity {
         }
 
         constexpr void dispatch(void *e, uint32_t event_id, Entity entity) override {
+            auto &event_handlers = m_component_data->event_handlers;
+
             if (event_handlers.find(event_id) == event_handlers.end())
                 return;
 
@@ -114,7 +115,7 @@ namespace entity {
         auto end() { return components.end(); }
     private:
         std::unordered_map<uint32_t, T> components { 128 };
-        std::unordered_map<EventType, std::function<void(T*, void*)>> event_handlers;
+        ComponentArrayStaticData<T> *m_component_data;
 
         size_t size{0};
     };

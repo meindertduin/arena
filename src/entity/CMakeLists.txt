@@ -1,5 +1,6 @@
 
 set(ENTITY_SOURCES
+        src/entity/component_registry.h
         src/entity/event_manager.cpp
         src/entity/entity.cpp
         src/entity/ec_component_inits.cpp
