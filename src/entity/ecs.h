@@ -125,7 +125,7 @@ namespace entity {
             typename M = types::member_function_traits<F>,
             typename C = typename M::instance_type,
             typename E = typename M::first_argument>
-        void add_event_handler(F &&f) {
+        static void add_event_handler(F &&f) {
             // TODO maybe use move f
             component_manager->add_event_handler<C, E>(f);
         }
