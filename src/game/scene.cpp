@@ -34,13 +34,7 @@ namespace game {
     }
 
     void Scene::render() {
-        global.renderer->before_render();
-
-        m_map->render_background();
         m_render_world->update();
-        m_skybox.render();
-
-        global.renderer->after_render();
     }
 
     Scene::Scene() :

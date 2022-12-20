@@ -14,7 +14,6 @@ namespace entity {
     class Ecs {
     public:
         Ecs(game::Scene *scene) : m_scene{scene} {
-            component_manager = std::make_unique<ComponentManager>();
             systems_manager = std::make_unique<SystemsManager>();
             entity_manager = std::make_unique<EntityManager>();
 
@@ -127,6 +126,7 @@ namespace entity {
             typename C = typename M::instance_type,
             typename E = typename M::first_argument>
         void add_event_handler(F &&f) {
+            // TODO maybe use move f
             component_manager->add_event_handler<C, E>(f);
         }
     private:

@@ -35,8 +35,6 @@ namespace game {
         std::unique_ptr<entity::Ecs> m_ecs;
 
         std::unique_ptr<RenderWorld> m_render_world;
-        graphics::Skybox m_skybox;
-        std::unique_ptr<Map> m_map;
 
         std::unordered_map<int, entity::Entity> m_entities;
 

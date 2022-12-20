@@ -41,8 +41,10 @@ namespace game {
         }
 
         void update() override {
+            m_renderer.before_render();
             auto components = m_scene.ecs()->get_component_array<entity::ECStaticModel>()->values();
 
+            m_map->render_background();
             for (auto component : components) {
                 auto entity = component->entity;
                 auto &ec_static_renderer = entity.get<entity::ECStaticModel>();
@@ -54,6 +56,9 @@ namespace game {
 
                 m_renderer.render(*this, ec_static_renderer.model().get(), transform);
             }
+
+            m_skybox.render();
+            m_renderer.after_render();
         }
 
         constexpr ALWAYS_INLINE entity::Camera& camera() override { return m_camera; }

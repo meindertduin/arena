@@ -1,6 +1,9 @@
 #include "engine.h"
 #include "../game/scene.h"
 #include "program_time.h"
+#include "../graphics/render_target.h"
+#include "../global.h"
+#include "../graphics/renderer.h"
 
 namespace core {
     Engine::Engine()
@@ -20,6 +23,9 @@ namespace core {
     void Engine::initialize() {
         m_cache = new assets::Cache();
         m_active_scene = new game::Scene();
+
+        auto render_target = std::make_shared<graphics::RenderTarget>();
+        global.renderer = new graphics::Renderer(render_target);
 
         m_lua_state = luaL_newstate();
         luaL_openlibs(m_lua_state);
