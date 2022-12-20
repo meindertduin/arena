@@ -3,6 +3,7 @@
 namespace game {
     class IWorld {
     public:
-        virtual update() = 0;
+        virtual ~IWorld() = default;
+        virtual void update() = 0;
     };
 }

@@ -4,14 +4,17 @@
 #include "component_array.h"
 #include "ecs.h"
 
-namespace entity {
+namespace game {
+    class Scene;
+}
 
+namespace entity {
     template<typename T>
     struct Component {
         Entity entity;
+        game::Scene *scene;
 
         inline static uint32_t _id;
-        inline static Ecs* _p;
     };
 
     inline uint32_t next_component = 0;
@@ -35,13 +38,11 @@ namespace entity {
 
 #define DECL_COMPONENT_HEADER(_c) \
     template<> uint32_t Component<_c>::_id; \
-    template<> Ecs* Component<_c>::_p; \
     struct __##_c##_init : InitComponent<_c> {}
 
 #define DECL_COMPONENT_INIT(_c) \
     template struct Component<_c>; \
     template <> uint32_t Component<_c>::_id = 0; \
-    template <> Ecs* Component<_c>::_p = nullptr; \
     __##_c##_init _c##__COUNTER__; \
     template <> void InitComponent<_c>::init()
 }

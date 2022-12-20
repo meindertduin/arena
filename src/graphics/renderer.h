@@ -15,14 +15,18 @@
 #include "../entity/ec_transform.h"
 #include "model.h"
 
+namespace game {
+    class RenderWorld;
+}
+
 namespace graphics {
     class Renderer {
     public:
         explicit Renderer(std::shared_ptr<RenderTarget> render_target);
         
         void before_render();
-        void render(const Model *mesh, const entity::ECTransform &transform) const;
-        void render(const Mesh *mesh, const entity::ECTransform &transform) const;
+        void render(game::RenderWorld &render_world, const Model *model, const entity::ECTransform &transform) const;
+        void render(game::RenderWorld &render_world, const Mesh *mesh, const entity::ECTransform &transform) const;
         void after_render();
 
         void set_ubo_data();

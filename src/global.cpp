@@ -1,7 +1,6 @@
 #include "global.h"
 #include "graphics/render_target.h"
 #include "graphics/renderer.h"
-#include "entity/systems_collection.h"
 #include "editor/editor.h"
 
 void Global::init() {

@@ -56,7 +56,7 @@ namespace physics {
     void PhysicsSystem::test_terrain_collision(entity::ECRigidBody &rigid_body, entity::ECTransform &transform) {
         auto active_scene = global.application->engine()->active_scene();
 
-        auto terrain = active_scene->map()->terrain;
+        auto terrain = active_scene->render_world()->map()->terrain;
         float height;
         auto in_terrain_range = terrain->get_height(transform.pos.x, transform.pos.z, height);
 

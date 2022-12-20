@@ -5,10 +5,10 @@
 // Shared imports
 #include "../global.h"
 #include "../graphics/font.h"
-#include "../entity/systems_collection.h"
 
 // Editor imports
 #include "../editor/editor.h"
+#include "../logging.h"
 
 // Game imports
 
@@ -42,12 +42,6 @@ void Application::initialize() {
 
     m_window = std::make_unique<core::Window>(window_options);
     m_engine = std::make_unique<core::Engine>();
-
-    // setting up ecs and systems
-    global.ecs = entity::Ecs::instance();
-
-    global.systems = new entity::SystemsCollection();
-    global.systems->init();
 
     m_engine->initialize();
 

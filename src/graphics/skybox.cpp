@@ -62,7 +62,7 @@ namespace graphics {
 
         auto &program = m_shader->program();
         program.use();
-        program.set_property("cameraPos", active_scene->camera().transform.pos);
+        program.set_property("cameraPos", active_scene->render_world()->camera().transform.pos);
 
         texture.bind(0);
 

@@ -2,6 +2,7 @@
 
 #include "../global.h"
 #include "../graphics/renderer.h"
+#include "scene.h"
 
 namespace game {
     Map::Map() {
@@ -10,6 +11,7 @@ namespace game {
     }
 
     void Map::render_background() const {
-        global.renderer->render(terrain->mesh().get(), terrain->transform());
+        auto &render_world = global.application->engine()->active_scene()->render_world();
+        global.renderer->render(*render_world, terrain->mesh().get(), terrain->transform());
     }
 }

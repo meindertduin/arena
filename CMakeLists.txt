@@ -11,7 +11,6 @@ set(SOURCES
         src/main.cpp
         src/global.cpp
         external/glad/glad.c
-        src/entity/systems_collection.cpp src/entity/systems_collection.h
 
         external/imgui/imgui.cpp
         external/imgui/imgui_draw.cpp

@@ -54,11 +54,8 @@ public:
     graphics::Renderer *renderer;
     graphics::TextRenderer *text_renderer;
     graphics::UIRenderer *ui_renderer;
-    entity::SystemsCollection *systems;
 
     graphics::GraphicOptions *graphic_options;
-
-    entity::Ecs *ecs;
 
     void init();
 };

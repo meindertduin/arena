@@ -9,10 +9,9 @@
 #include "ec_static_model.h"
 
 namespace entity {
-    Entity ECFactory::create_player() {
+    Entity ECFactory::create_player(Entity e) {
         auto cache = global.application->engine()->cache();
 
-        auto e = global.ecs->create_entity();
         auto transform = ECTransform();
         e.add(transform);
         e.add(ECFirstPersonCamera());
@@ -34,10 +33,9 @@ namespace entity {
         return e;
     }
 
-    Entity ECFactory::create_tree() {
+    Entity ECFactory::create_tree(Entity e) {
         auto cache = global.application->engine()->cache();
 
-        auto e = global.ecs->create_entity();
         e.add(entity::ECTransform({ 0, -24, -10 }, {}));
         auto collision = entity::ECCollisionObject(false, e.get_ptr<ECTransform>());
 
