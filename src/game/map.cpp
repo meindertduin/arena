@@ -12,6 +12,6 @@ namespace game {
 
     void Map::render_background() const {
         auto &render_world = global.application->engine()->active_scene()->render_world();
-        global.renderer->render(*render_world, terrain->mesh().get(), terrain->transform());
+        global.application->renderer()->render(*render_world, terrain->mesh().get(), terrain->transform());
     }
 }

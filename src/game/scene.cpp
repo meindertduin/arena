@@ -13,7 +13,7 @@ namespace game {
         pm_physics_system = m_ecs->create_system<physics::PhysicsSystem>({ entity::ECRigidBody::_id });
         pm_movement_system = m_ecs->create_system<entity::MovementSystem>({ entity::ECControl::_id, entity::ECTransform::_id });
 
-        m_render_world = RenderWorld::create(*this, *global.renderer);
+        m_render_world = RenderWorld::create(*this, *global.application->renderer());
 
         m_player = entity::ECFactory::create_player(m_ecs->create_entity());
         entity::ECFactory::create_tree(m_ecs->create_entity());

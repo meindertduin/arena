@@ -2,8 +2,16 @@
 
 #include <memory>
 #include "program_time.h"
-#include "window.h"
+#include "../platform/platform.h"
 #include "engine.h"
+
+namespace core {
+    class Window;
+}
+
+namespace graphics {
+    class Renderer;
+}
 
 class Application {
 public:
@@ -12,14 +20,16 @@ public:
     void initialize();
     void run();
 
-    constexpr ALWAYS_INLINE
-    std::unique_ptr<core::Window>& window() {
+    [[nodiscard]] constexpr ALWAYS_INLINE core::Window* window() const {
         return m_window;
     }
 
-    constexpr ALWAYS_INLINE
-    std::unique_ptr<core::Engine>& engine() {
+    [[nodiscard]] constexpr ALWAYS_INLINE core::Engine* engine() const {
         return m_engine;
+    }
+
+    [[nodiscard]] constexpr ALWAYS_INLINE graphics::Renderer* renderer() const {
+        return m_renderer;
     }
 
 private:
@@ -28,6 +38,7 @@ private:
 
     core::Timer m_program_timer;
 
-    std::unique_ptr<core::Window> m_window;
-    std::unique_ptr<core::Engine> m_engine;
+    core::Window *m_window { nullptr };
+    core::Engine *m_engine { nullptr };
+    graphics::Renderer *m_renderer { nullptr };
 };

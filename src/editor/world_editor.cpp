@@ -25,7 +25,7 @@ namespace editor {
     }
 
     WorldEditor::WorldEditor()
-        : m_render_target(global.renderer->render_target())
+        : m_render_target(global.application->renderer()->render_target())
     {
     }
 }

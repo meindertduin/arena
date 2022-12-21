@@ -1,16 +1,12 @@
 #include "application.h"
 
-#include "engine.h"
-
-// Shared imports
 #include "../global.h"
 #include "../graphics/font.h"
-
-// Editor imports
 #include "../editor/editor.h"
 #include "../logging.h"
-
-// Game imports
+#include "window.h"
+#include "engine.h"
+#include "../graphics/renderer.h"
 
 Application::~Application() {
     if (m_initialized) {
@@ -40,8 +36,11 @@ void Application::initialize() {
             { 640, 480 },
     };
 
-    m_window = std::make_unique<core::Window>(window_options);
-    m_engine = std::make_unique<core::Engine>();
+    m_window = new core::Window(window_options);
+    m_engine = new core::Engine();
+
+    auto render_target = std::make_shared<graphics::RenderTarget>();
+    m_renderer = new graphics::Renderer(render_target);
 
     m_engine->initialize();
 

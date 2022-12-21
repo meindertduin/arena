@@ -12,7 +12,7 @@ namespace input {
     static float mouse_x_offset;
     static float mouse_y_offset;
 
-    void initialize_input(const std::unique_ptr<core::Window> &window) {
+    void initialize_input(core::Window *window) {
         keyboard_state.fill(0);
 
         glfwSetKeyCallback(window->window(),

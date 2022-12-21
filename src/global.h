@@ -8,31 +8,8 @@
 
 #include <memory>
 
-namespace assets {
-    class Cache;
-}
-
-namespace core {
-    class Window;
-}
-
-namespace game {
-    class GameState;
-}
-
 namespace graphics {
-    class Renderer;
-    class TerrainRenderer;
-    class TextRenderer;
-    class UIRenderer;
-    class Texture;
-    class Material;
     class GraphicOptions;
-}
-
-namespace entity {
-    class Ecs;
-    class SystemsCollection;
 }
 
 namespace editor {
@@ -50,10 +27,6 @@ public:
     editor::Editor *editor;
 
     input::InputManager input_manager;
-
-    graphics::Renderer *renderer;
-    graphics::TextRenderer *text_renderer;
-    graphics::UIRenderer *ui_renderer;
 
     graphics::GraphicOptions *graphic_options;
 
