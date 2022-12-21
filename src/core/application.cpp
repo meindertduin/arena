@@ -52,6 +52,8 @@ void Application::initialize() {
 }
 
 void Application::run() {
+    assert(m_initialized && m_window != nullptr);
+
     Logger::debug("Starting application");
 
     int lag;
