@@ -6,9 +6,8 @@
 #include "../game/scene.h"
 
 namespace graphics {
-    Renderer::Renderer(std::shared_ptr<RenderTarget> render_target)
-        :   m_render_target{std::move(render_target )}
-    {
+    void Renderer::set_render_target(std::shared_ptr<RenderTarget> render_target) {
+        m_render_target = std::move(render_target);
     }
 
     void Renderer::before_render() {

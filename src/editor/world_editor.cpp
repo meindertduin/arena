@@ -22,11 +22,13 @@ namespace editor {
             ImGui::EndChild();
         }
         ImGui::End();
+
     }
 
     WorldEditor::WorldEditor()
-        : m_render_target(global.application->renderer()->render_target())
+        : m_render_target(std::make_shared<graphics::RenderTarget>())
     {
+        global.application->renderer()->set_render_target(m_render_target);
     }
 }
 

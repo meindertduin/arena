@@ -38,9 +38,7 @@ void Application::initialize() {
 
     m_window = new core::Window(window_options);
     m_engine = new core::Engine();
-
-    auto render_target = std::make_shared<graphics::RenderTarget>();
-    m_renderer = new graphics::Renderer(render_target);
+    m_renderer = new graphics::Renderer();
 
     m_engine->initialize();
 
