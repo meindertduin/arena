@@ -15,6 +15,7 @@ namespace editor {
 
         // render the world editor
         m_world_editor.render();
+        m_scene_view.render();
 
         if (ImGui::BeginMainMenuBar())
         {
