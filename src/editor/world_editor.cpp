@@ -14,6 +14,8 @@ namespace editor {
                 break;
         }
 
+        ImGui::SetNextWindowPos(ImVec2(300, 20));
+        ImGui::SetNextWindowSize(ImVec2(640, 480));
         ImGui::Begin("World Editor");
         {
             ImGui::BeginChild("GameRender");
