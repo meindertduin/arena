@@ -35,6 +35,12 @@ namespace editor {
     private:
         Node *m_root;
 
+        bool m_popup_opened { false };
+        Node *m_popup_node { nullptr };
+
+        void open_popup(Node *node);
+        void close_popup();
+
         void render_node(Node *node);
     };
 }

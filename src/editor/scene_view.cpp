@@ -1,6 +1,7 @@
 #include <cstdint>
 #include "scene_view.h"
 #include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 
 namespace editor {
     SceneView::SceneView() {
@@ -15,11 +16,14 @@ namespace editor {
         ImGui::Begin("Scene", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize);
         {
             ImGui::Button("+");
-            ImGui::SetNextWindowPos(ImVec2(0, 20));
-            ImGui::SetNextWindowSize(ImVec2(300, 600));
+
             if (ImGui::TreeNode(m_root->label.c_str()))
             {
                 ImGui::Unindent(ImGui::GetTreeNodeToLabelSpacing());
+
+                if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+                    open_popup(m_root);
+                }
 
                 for (auto & child : m_root->children)
                 {
@@ -27,9 +31,21 @@ namespace editor {
                 }
 
                 ImGui::Indent(ImGui::GetTreeNodeToLabelSpacing());
+
                 ImGui::TreePop();
             }
         }
+
+        if (m_popup_opened) {
+            ImGui::OpenPopup(m_popup_node->label.c_str());
+            if (ImGui::BeginPopup(m_popup_node->label.c_str())) {
+                if (ImGui::MenuItem(m_popup_node->label.c_str())) {
+                    close_popup();
+                }
+            }
+            ImGui::EndPopup();
+        }
+
         ImGui::End();
     }
 
@@ -46,13 +62,17 @@ namespace editor {
 
             ImGui::TreeNodeEx((void*)(intptr_t)1, node_flags, node->label.c_str());
 
-            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+            if (ImGui::IsItemClicked(ImGuiMouseButton_Right))  {
+                open_popup(node);
+            } else if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
                 node->selected = !node->selected;
             }
         } else {
             bool node_open = ImGui::TreeNodeEx((void*)(intptr_t)1, node_flags, node->label.c_str());
 
-            if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
+            if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+                open_popup(node);
+            } else if (ImGui::IsItemClicked() && !ImGui::IsItemToggledOpen()) {
                 node->selected = !node->selected;
             }
 
@@ -64,5 +84,15 @@ namespace editor {
                 ImGui::TreePop();
             }
         }
+    }
+
+    void SceneView::open_popup(Node *node) {
+        m_popup_opened = true;
+        m_popup_node = node;
+    }
+
+    void SceneView::close_popup() {
+        m_popup_opened = false;
+        m_popup_node = nullptr;
     }
 }
