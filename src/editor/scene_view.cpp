@@ -1,7 +1,6 @@
 #include <cstdint>
 #include "scene_view.h"
 #include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
 
 namespace editor {
     SceneView::SceneView() {
@@ -37,14 +36,19 @@ namespace editor {
         }
 
         if (m_popup_opened) {
-            ImGui::OpenPopup(m_popup_node->label.c_str());
-            if (ImGui::BeginPopup(m_popup_node->label.c_str())) {
-                if (ImGui::MenuItem(m_popup_node->label.c_str())) {
-                    close_popup();
-                }
+            ImGui::OpenPopup("Entity right click");
+            m_popup_opened = false;
+        }
+
+        if (ImGui::BeginPopup("Entity right click"))
+        {
+            if (ImGui::Selectable("Add child")) {
+                close_popup();
             }
+
             ImGui::EndPopup();
         }
+
 
         ImGui::End();
     }
@@ -92,7 +96,7 @@ namespace editor {
     }
 
     void SceneView::close_popup() {
-        m_popup_opened = false;
         m_popup_node = nullptr;
+        ImGui::CloseCurrentPopup();
     }
 }
