@@ -12,8 +12,8 @@ namespace entity {
     DECL_COMPONENT_INIT(ECRigidBody) {}
 
     DECL_COMPONENT_INIT(ECFirstPersonCamera) {
-        ECFirstPersonCamera::_p->add_event_handler(&ECFirstPersonCamera::on_position_change);
-        ECFirstPersonCamera::_p->add_event_handler(&ECFirstPersonCamera::on_rotation_change);
+        Ecs::add_event_handler(&ECFirstPersonCamera::on_position_change);
+        Ecs::add_event_handler(&ECFirstPersonCamera::on_rotation_change);
     }
 
     DECL_COMPONENT_INIT(ECStaticModel) {}

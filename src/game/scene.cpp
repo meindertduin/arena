@@ -1,49 +1,40 @@
 #include "scene.h"
 #include "../global.h"
-#include "../entity/systems_collection.h"
 
 #include "../graphics/graphic_options.h"
+#include "../graphics/renderer.h"
 #include "../entity/ec_factory.h"
+#include "../entity/ec_control.h"
 
 namespace game {
-    void Scene::init() {
-        graphics::DirLight dir_light;
-        dir_light.direction = { 0, -1.0f, -1.0f };
-        dir_light.ambient = {0.05f, 0.05f, 0.05f};
-        dir_light.diffuse = {0.8f, 0.8f, 0.8f};
-        m_dir_lights.push_back(dir_light);
+    void Scene::initialize() {
+        m_ecs = std::make_unique<entity::Ecs>(this);
 
-        graphics::PointLight pointLight;
-        pointLight.position = { 2.0f, 2.0f, 0 };
-        pointLight.ambient = {0.2f, 0.2f, 0.2f};
-        pointLight.diffuse = {0.8f, 0.8f, 0.8f};
-        pointLight.specular = {0.5f, 0.5f, 0.5f};
-        pointLight.constant = 0.5f;
-        pointLight.linear = 0.09f;
-        pointLight.quadratic = 0.032f;
+        pm_physics_system = m_ecs->create_system<physics::PhysicsSystem>({ entity::ECRigidBody::_id });
+        pm_movement_system = m_ecs->create_system<entity::MovementSystem>({ entity::ECControl::_id, entity::ECTransform::_id });
 
-        m_point_lights.push_back(pointLight);
+        m_render_world = RenderWorld::create(*this, *global.application->renderer());
 
-        this->m_map = std::make_unique<Map>();
-
-        m_player = entity::ECFactory::create_player();
-        entity::ECFactory::create_tree();
+        m_player = entity::ECFactory::create_player(m_ecs->create_entity());
+        entity::ECFactory::create_tree(m_ecs->create_entity());
 
         m_static_octree.reset();
-        auto collision_objects = global.ecs->get_component_array<entity::ECCollisionObject>()->values();
+        auto collision_objects = m_ecs->get_component_array<entity::ECCollisionObject>()->values();
         m_static_octree.fill_with_objects(collision_objects);
     }
 
     void Scene::update() {
         m_dynamic_octree.reset();
-        auto collision_objects = global.ecs->get_component_array<entity::ECRigidBody>()->values();
+        auto collision_objects = m_ecs->get_component_array<entity::ECRigidBody>()->values();
         m_dynamic_octree.fill_with_objects(collision_objects);
+
+        // TODO remove
+        pm_movement_system->update();
+        pm_physics_system->update();
     }
 
     void Scene::render() {
-        m_map->render_background();
-        global.systems->render();
-        m_skybox.render();
+        m_render_world->update();
     }
 
     Scene::Scene() :

@@ -5,22 +5,28 @@
 #include "component_manager.h"
 #include "system.h"
 #include "../utils/types.h"
+#include "component_registry.h"
+
+namespace game {
+    class Scene;
+}
 
 namespace entity {
     class Ecs {
     public:
+        Ecs(game::Scene *scene) : m_scene{scene} {
+            component_manager = std::make_unique<ComponentManager>(component_registry);
+
+            systems_manager = std::make_unique<SystemsManager>();
+            entity_manager = std::make_unique<EntityManager>();
+
+            entity_manager->initialize_entities(this);
+        }
+
         Ecs(const Ecs &) = delete;
         Ecs(Ecs &&) = delete;
         Ecs& operator=(const Ecs &) = delete;
         Ecs& operator=(Ecs &&) = delete;
-        
-        static Ecs* instance() {
-            if (ecs == nullptr) {
-                ecs = new Ecs();
-            }
-
-            return ecs;
-        }
         
         Entity create_entity() {
             return entity_manager->create_entity();
@@ -33,13 +39,8 @@ namespace entity {
         }
 
         template<typename T>
-        static void register_component() {
-            T::_p = instance();
-            component_manager->register_component<T>();
-        }
-
-        template<typename T>
         void add_component(Entity entity, T component) {
+            component.scene = m_scene;
             component_manager->add_component<T>(entity, component);
 
             auto signature = entity_manager->get_signature(entity);
@@ -117,31 +118,27 @@ namespace entity {
             component_manager->dispatch_event(event);
         }
 
+        template<typename T>
+        static void register_component() {
+            component_registry->register_component<T>();
+        }
+
         template<
             typename F,
             typename M = types::member_function_traits<F>,
             typename C = typename M::instance_type,
             typename E = typename M::first_argument>
-        void add_event_handler(F &&f) {
-            component_manager->add_event_handler<C, E>(f);
-        }
-
-    protected:
-        Ecs() {
-            component_manager = std::make_unique<ComponentManager>();
-            systems_manager = std::make_unique<SystemsManager>();
-            entity_manager = std::make_unique<EntityManager>();
-
-            entity_manager->initialize_entities(this);
+        static void add_event_handler(F &&f) {
+            // TODO maybe use std::forward for f
+            component_registry->add_event_handler<C, E>(f);
         }
     private:
+        game::Scene *m_scene;
+
         std::unique_ptr<SystemsManager> systems_manager;
         std::unique_ptr<EntityManager> entity_manager;
-        static std::unique_ptr<ComponentManager> component_manager;
+        std::unique_ptr<ComponentManager> component_manager;
 
-        static Ecs *ecs;
+        static inline std::unique_ptr<ComponentRegistry> component_registry = std::make_unique<ComponentRegistry>();
     };
-
-    inline Ecs* Ecs::ecs;
-    inline std::unique_ptr<ComponentManager> Ecs::component_manager = std::make_unique<ComponentManager>();
 }

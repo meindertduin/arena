@@ -19,7 +19,5 @@ set(GRAPHICS_SOURCES
         src/graphics/geometry.cpp
         src/graphics/graphic_options.h
         src/graphics/graphic_options.cpp
-        src/graphics/ui_renderer.h
-        src/graphics/ui_renderer.cpp
         src/graphics/color.h
         src/graphics/color.cpp)

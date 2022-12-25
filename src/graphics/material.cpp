@@ -3,7 +3,6 @@
 
 #include "../lua/helpers.h"
 #include "../global.h"
-#include "../game/game_state.h"
 
 namespace graphics {
 namespace lua_api {
@@ -51,7 +50,7 @@ namespace lua_api {
         assets::FileReader file_reader { path().path() };
         auto file_content = file_reader.get_file_content();
 
-        auto root_state = global.game->lua_state();
+        auto root_state = global.application->engine()->lua_state();
         auto L = lua_newthread(root_state);
         const auto state_ref = luaL_ref(root_state, LUA_REGISTRYINDEX);
 

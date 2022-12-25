@@ -3,20 +3,16 @@
 #include "entity.h"
 #include "component_array.h"
 #include "../logging.h"
+#include "component_registry.h"
 
 namespace entity {
     class ComponentManager {
     public:
-        template<typename T>
-        void register_component() {
-            if (component_arrays.find(T::_id) != component_arrays.end()) {
-                THROW_ERROR("Registered Component of m_type: %s more than once.", typeid(T).name());
+        explicit ComponentManager(std::unique_ptr<ComponentRegistry> &component_registry) {
+            auto components_data = component_registry->components_data();
+            for (auto &[component_id, component_data] : components_data) {
+                component_arrays.insert({ component_id, component_data->create_component_array() });
             }
-
-            auto component_array = std::make_shared<ComponentArray<T>>();
-            component_arrays.insert({T::_id, component_array});
-
-            next_component_type++;
         }
 
         template<typename T>
@@ -63,11 +59,6 @@ namespace entity {
             }
         }
 
-        template<typename C, typename E, typename F>
-        void add_event_handler(F && f) {
-            get_component_array<C>()->template add_event_handler<E>(f);
-        }
-
         template<typename T>
         std::shared_ptr<ComponentArray<T>> get_component_array() {
             if (component_arrays.find(T::_id) == component_arrays.end()) {
@@ -78,7 +69,6 @@ namespace entity {
         }
     private:
         std::unordered_map<uint32_t, std::shared_ptr<IComponentArray>> component_arrays;
-        uint32_t next_component_type;
     };
 }
 

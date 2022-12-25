@@ -1,5 +1,4 @@
 #include "gpu_buffer.h"
-#include "shader.h"
 
 #include <glad/glad.h>
 #include <stdexcept>

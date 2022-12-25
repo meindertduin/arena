@@ -3,8 +3,8 @@
 namespace entity {
     class ECFactory {
     public:
-        static Entity create_player();
-        static Entity create_tree();
+        static Entity create_player(Entity e);
+        static Entity create_tree(Entity e);
     };
 }
 

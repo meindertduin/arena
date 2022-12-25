@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 
 #include "../global.h"
-#include "../game/game_state.h"
+#include "../assets/cache.h"
 
 constexpr static float quad_vertices[] = {
      -1.0f,  1.0f, 0.0f, 1.0f,
@@ -16,7 +16,8 @@ constexpr static float quad_vertices[] = {
 
 namespace graphics {
     RenderTarget::RenderTarget() {
-        m_shader = global.cache->get_resource<Shader>("scripts/screen_shader.lua");
+        auto cache = global.application->engine()->cache();
+        m_shader = cache->get_resource<Shader>("scripts/screen_shader.lua");
 
         screen_vertex_buffer.add_vertex_attribute({ 2, GL_FLOAT, sizeof(float), false });
         screen_vertex_buffer.add_vertex_attribute({ 2, GL_FLOAT, sizeof(float), false });
@@ -112,12 +113,13 @@ namespace graphics {
 
         m_shader->program().use();
         screen_array_buffer.set_data(0, sizeof(quad_vertices), &quad_vertices);
-        screen_vertex_buffer.bind();
+        // TODO output screen shader results to the screen texture
+        // screen_vertex_buffer.bind();
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture_color_buffer);
+        // glActiveTexture(GL_TEXTURE0);
+        // glBindTexture(GL_TEXTURE_2D, texture_color_buffer);
 
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        // glDrawArrays(GL_TRIANGLES, 0, 6);
     }
 
     void RenderTarget::enable_depth_test() {

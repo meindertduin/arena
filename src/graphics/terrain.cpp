@@ -1,8 +1,8 @@
 #include "terrain.h"
 
 #include "../global.h"
-#include "../game/game_state.h"
 #include "../assets/loaders.h"
+#include "../assets/cache.h"
 
 namespace graphics {
 
@@ -167,16 +167,17 @@ namespace graphics {
     }
 
     void Terrain::set_mesh_material(const TerrainFile &file) {
-        auto material = global.cache->get_resource<Material>("scripts/terrain_material.lua");
+        auto cache = global.application->engine()->cache();
+        auto material = cache->get_resource<Material>("scripts/terrain_material.lua");
 
-        material->add_texture(global.cache->get_resource<Texture>(file.background_texture));
-        material->add_texture(global.cache->get_resource<Texture>(file.blendmap));
+        material->add_texture(cache->get_resource<Texture>(file.background_texture));
+        material->add_texture(cache->get_resource<Texture>(file.blendmap));
 
-        material->add_texture(global.cache->get_resource<Texture>(file.r_texture));
-        material->add_texture(global.cache->get_resource<Texture>(file.g_texture));
-        material->add_texture(global.cache->get_resource<Texture>(file.b_texture));
+        material->add_texture(cache->get_resource<Texture>(file.r_texture));
+        material->add_texture(cache->get_resource<Texture>(file.g_texture));
+        material->add_texture(cache->get_resource<Texture>(file.b_texture));
 
-        auto shader = global.cache->get_resource<Shader>("scripts/terrain_shader.lua");
+        auto shader = cache->get_resource<Shader>("scripts/terrain_shader.lua");
         auto &program = shader->program();
         program.use();
 

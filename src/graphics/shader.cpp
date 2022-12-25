@@ -9,7 +9,8 @@
 #include "../lua/helpers.h"
 
 #include "../global.h"
-#include "../game/game_state.h"
+#include "../lua/lua_script.h"
+#include "../assets/cache.h"
 
 namespace graphics {
     uint32_t Uniform::size() const {
@@ -163,7 +164,8 @@ namespace lua_api {
     }
 
     void Shader::load() {
-        auto script = global.cache->get_resource<lua::LuaScript>(path().path());
+        auto cache = global.application->engine()->cache();
+        auto script = cache->get_resource<lua::LuaScript>(path().path());
 
         auto root_state = lua_api::get_shader_state();
         auto L = lua_newthread(root_state);
